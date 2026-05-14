@@ -57,7 +57,8 @@ Requirements:
 Commands:
 
 ```powershell
-cd A:\Coding\AI_Project\Sc2_Adjutant\02_application
+git clone https://github.com/DizerArt/Sc2_Adjutant.git
+cd Sc2_Adjutant\02_application
 npm install
 npm run dev
 ```
