@@ -372,9 +372,11 @@ export function AppShell() {
   }, [dashboardState.monitoring?.running, refreshRuntimeState]);
 
   useEffect(() => {
-    const unsubscribe = window.sc2Assistant?.onReplaySyncProgress((progress) => {
-      setReplaySyncResult(progress);
-    });
+    const unsubscribe = window.sc2Assistant?.onReplaySyncProgress(
+      (progress) => {
+        setReplaySyncResult(progress);
+      },
+    );
 
     return () => {
       unsubscribe?.();
@@ -900,7 +902,9 @@ export function AppShell() {
           <header className="top-bar">
             <div>
               <p className="eyebrow">
-                {infoEditorOpen ? t("header.opponentData") : headerEyebrow(activeView, t)}
+                {infoEditorOpen
+                  ? t("header.opponentData")
+                  : headerEyebrow(activeView, t)}
               </p>
               <div className="title-line">
                 <h2>
@@ -1234,9 +1238,7 @@ function MatchDetailsPanel({
     return (
       <div className="match-details-empty">
         <strong>{t("match.emptyDetails")}</strong>
-        <span>
-          {t("match.emptyDetailsHelp")}
-        </span>
+        <span>{t("match.emptyDetailsHelp")}</span>
       </div>
     );
   }
@@ -1304,7 +1306,9 @@ function MatchDetailsPanel({
       ) : null}
 
       {details?.parseError ? (
-        <p className="inline-warning">{t("match.parser")}: {details.parseError}</p>
+        <p className="inline-warning">
+          {t("match.parser")}: {details.parseError}
+        </p>
       ) : null}
 
       <div className="match-details-players">
@@ -1600,11 +1604,14 @@ function OpponentInfoEditor(props: OpponentInfoEditorProps) {
               </button>
             </div>
             <small className="field-limit">
-              {opponent.notes.length}/{MAX_OPPONENT_NOTES} {props.t("editor.notes").toLowerCase()},{" "}
-              {props.noteDraft.length}/{MAX_OPPONENT_NOTE_LENGTH} {props.t("editor.charsEach")}
+              {opponent.notes.length}/{MAX_OPPONENT_NOTES}{" "}
+              {props.t("editor.notes").toLowerCase()}, {props.noteDraft.length}/
+              {MAX_OPPONENT_NOTE_LENGTH} {props.t("editor.charsEach")}
             </small>
             {props.noteState === "error" ? (
-              <p className="inline-error">{props.t("editor.couldNotSaveNote")}</p>
+              <p className="inline-error">
+                {props.t("editor.couldNotSaveNote")}
+              </p>
             ) : null}
           </form>
 
@@ -1663,7 +1670,9 @@ function InfoView({ t }: { readonly t: Translator }) {
           </div>
           <p className="info-paragraph">{t("info.licenseBody")}</p>
           <div className="info-support">
-            <span className="info-support-label">{t("info.supportAuthor")}</span>
+            <span className="info-support-label">
+              {t("info.supportAuthor")}
+            </span>
             <div className="info-support-links">
               <a
                 className="info-support-link"
@@ -1736,7 +1745,8 @@ function InfoView({ t }: { readonly t: Translator }) {
           <li>
             <strong>{t("info.stepReplayTitle")}</strong>
             <span>
-              {t("info.stepReplayBody")} <code>Documents\StarCraft II\Accounts</code>
+              {t("info.stepReplayBody")}{" "}
+              <code>Documents\StarCraft II\Accounts</code>
             </span>
           </li>
           <li>
@@ -1829,7 +1839,9 @@ function DiagnosticsView(props: DiagnosticsViewProps) {
             <small>{props.rebuildStatsSummary}</small>
           ) : null}
           {props.rebuildStatsState === "error" ? (
-            <small className="inline-error">{props.t("diagnostics.failed")}</small>
+            <small className="inline-error">
+              {props.t("diagnostics.failed")}
+            </small>
           ) : null}
         </div>
 
@@ -1845,7 +1857,9 @@ function DiagnosticsView(props: DiagnosticsViewProps) {
               <DiagnosticDetails item={item} t={props.t} />
             </div>
           )) ?? (
-            <div className="empty-state">{props.t("diagnostics.notLoaded")}</div>
+            <div className="empty-state">
+              {props.t("diagnostics.notLoaded")}
+            </div>
           )}
         </div>
       </div>
@@ -1915,7 +1929,10 @@ function DiagnosticDetails({
           <span>{source.name}</span>
           <strong>{source.state}</strong>
           {source.cooldownUntil ? (
-            <small>{t("diagnostics.cooldownUntil")} {source.cooldownUntil.slice(11, 19)}</small>
+            <small>
+              {t("diagnostics.cooldownUntil")}{" "}
+              {source.cooldownUntil.slice(11, 19)}
+            </small>
           ) : null}
           {source.lastFailureMessage ? (
             <small>{source.lastFailureMessage}</small>
@@ -2148,7 +2165,9 @@ function OpponentProfileForm(props: OpponentProfileFormProps) {
           <span className="form-status">{props.t("settings.saved")}</span>
         ) : null}
         {props.state === "error" ? (
-          <span className="form-status error">{props.t("settings.saveFailed")}</span>
+          <span className="form-status error">
+            {props.t("settings.saveFailed")}
+          </span>
         ) : null}
       </div>
     </form>
@@ -2418,9 +2437,7 @@ function MatchHistoryList({
         {totalMatches === 0 ? (
           <div className="empty-state">{t("list.emptyMatches")}</div>
         ) : items.length === 0 ? (
-          <div className="empty-state">
-            {t("list.matchesNoResults")}
-          </div>
+          <div className="empty-state">{t("list.matchesNoResults")}</div>
         ) : (
           visibleItems.map((item) => {
             const { match, opponent } = item;
@@ -2529,7 +2546,7 @@ function formatOpponentRowMeta(opponent: Opponent): string {
   if (opponent.wins + opponent.losses > 0) {
     parts.push(`${opponent.wins}W/${opponent.losses}L`);
   }
-  return parts.join(" вЂў ");
+  return parts.join(" / ");
 }
 
 type SettingsViewProps = {
@@ -2767,7 +2784,9 @@ function SettingsView(props: SettingsViewProps) {
             <span className="form-status">{props.t("settings.saved")}</span>
           ) : null}
           {props.settingsState === "error" ? (
-            <span className="form-status error">{props.t("settings.saveFailed")}</span>
+            <span className="form-status error">
+              {props.t("settings.saveFailed")}
+            </span>
           ) : null}
           <button
             className="ghost-button"
@@ -2780,7 +2799,9 @@ function SettingsView(props: SettingsViewProps) {
               : props.t("settings.openLocalStorage")}
           </button>
           {props.storageOpenState === "error" ? (
-            <span className="form-status error">{props.t("settings.openFailed")}</span>
+            <span className="form-status error">
+              {props.t("settings.openFailed")}
+            </span>
           ) : null}
         </div>
       </form>
@@ -2791,9 +2812,7 @@ function SettingsView(props: SettingsViewProps) {
           <h3>{props.t("settings.importHistory")}</h3>
         </div>
 
-        <p className="settings-helper">
-          {props.t("settings.syncHelp")}
-        </p>
+        <p className="settings-helper">{props.t("settings.syncHelp")}</p>
 
         <label>
           {props.t("settings.syncMode")}
@@ -2863,25 +2882,43 @@ function SettingsView(props: SettingsViewProps) {
               : props.t("settings.sync")}
           </button>
           {props.replaySyncState === "error" ? (
-            <span className="form-status error">{props.t("settings.syncFailed")}</span>
+            <span className="form-status error">
+              {props.t("settings.syncFailed")}
+            </span>
           ) : null}
         </div>
 
         {props.replaySyncResult ? (
           <div className="sync-result" role="status">
-            <span>{props.t("sync.scanned")} {props.replaySyncResult.scannedCount}</span>
-            <span>{props.t("sync.inspected")} {props.replaySyncResult.inspectedCount}</span>
             <span>
-              {props.t("sync.processed")} {props.replaySyncResult.processedCount}/
+              {props.t("sync.scanned")} {props.replaySyncResult.scannedCount}
+            </span>
+            <span>
+              {props.t("sync.inspected")}{" "}
               {props.replaySyncResult.inspectedCount}
             </span>
-            <span>{props.t("sync.imported")} {props.replaySyncResult.importedCount}</span>
-            <span>{props.t("sync.linked")} {props.replaySyncResult.linkedCount}</span>
-            <span>{props.t("sync.skipped")} {props.replaySyncResult.skippedExistingCount}</span>
             <span>
-              {props.t("sync.unsupported")} {props.replaySyncResult.skippedUnsupportedCount}
+              {props.t("sync.processed")}{" "}
+              {props.replaySyncResult.processedCount}/
+              {props.replaySyncResult.inspectedCount}
             </span>
-            <span>{props.t("sync.failed")} {props.replaySyncResult.failedCount}</span>
+            <span>
+              {props.t("sync.imported")} {props.replaySyncResult.importedCount}
+            </span>
+            <span>
+              {props.t("sync.linked")} {props.replaySyncResult.linkedCount}
+            </span>
+            <span>
+              {props.t("sync.skipped")}{" "}
+              {props.replaySyncResult.skippedExistingCount}
+            </span>
+            <span>
+              {props.t("sync.unsupported")}{" "}
+              {props.replaySyncResult.skippedUnsupportedCount}
+            </span>
+            <span>
+              {props.t("sync.failed")} {props.replaySyncResult.failedCount}
+            </span>
           </div>
         ) : null}
       </section>
@@ -2909,7 +2946,9 @@ function SettingsView(props: SettingsViewProps) {
             <span className="form-status">{props.t("settings.cleared")}</span>
           ) : null}
           {props.clearStatsState === "error" ? (
-            <span className="form-status error">{props.t("settings.clearFailed")}</span>
+            <span className="form-status error">
+              {props.t("settings.clearFailed")}
+            </span>
           ) : null}
         </div>
       </section>
@@ -2920,11 +2959,31 @@ function SettingsView(props: SettingsViewProps) {
 function buildStatusItems(state: DashboardState, t: Translator) {
   if (state.loadState === "loading" || state.loadState === "idle") {
     return [
-      { label: t("diagnostics.sc2ClientApi"), value: t("diagnostics.checking"), tone: "idle" },
-      { label: t("diagnostics.localStorage"), value: t("diagnostics.checking"), tone: "idle" },
-      { label: t("diagnostics.liveMonitoring"), value: t("diagnostics.checking"), tone: "idle" },
-      { label: t("diagnostics.replayWatcher"), value: t("diagnostics.checking"), tone: "idle" },
-      { label: "External Sources", value: t("diagnostics.adaptersPending"), tone: "idle" },
+      {
+        label: t("diagnostics.sc2ClientApi"),
+        value: t("diagnostics.checking"),
+        tone: "idle",
+      },
+      {
+        label: t("diagnostics.localStorage"),
+        value: t("diagnostics.checking"),
+        tone: "idle",
+      },
+      {
+        label: t("diagnostics.liveMonitoring"),
+        value: t("diagnostics.checking"),
+        tone: "idle",
+      },
+      {
+        label: t("diagnostics.replayWatcher"),
+        value: t("diagnostics.checking"),
+        tone: "idle",
+      },
+      {
+        label: "External Sources",
+        value: t("diagnostics.adaptersPending"),
+        tone: "idle",
+      },
     ];
   }
 
@@ -2935,10 +2994,26 @@ function buildStatusItems(state: DashboardState, t: Translator) {
         value: state.errorMessage ?? t("diagnostics.unavailable"),
         tone: "error",
       },
-      { label: t("diagnostics.localStorage"), value: t("diagnostics.unknown"), tone: "warning" },
-      { label: t("diagnostics.liveMonitoring"), value: t("diagnostics.unknown"), tone: "warning" },
-      { label: t("diagnostics.replayWatcher"), value: t("diagnostics.unknown"), tone: "warning" },
-      { label: "External Sources", value: t("diagnostics.adaptersPending"), tone: "idle" },
+      {
+        label: t("diagnostics.localStorage"),
+        value: t("diagnostics.unknown"),
+        tone: "warning",
+      },
+      {
+        label: t("diagnostics.liveMonitoring"),
+        value: t("diagnostics.unknown"),
+        tone: "warning",
+      },
+      {
+        label: t("diagnostics.replayWatcher"),
+        value: t("diagnostics.unknown"),
+        tone: "warning",
+      },
+      {
+        label: "External Sources",
+        value: t("diagnostics.adaptersPending"),
+        tone: "idle",
+      },
     ];
   }
 
@@ -2957,7 +3032,9 @@ function buildStatusItems(state: DashboardState, t: Translator) {
     ),
     {
       label: t("diagnostics.liveMonitoring"),
-      value: state.monitoring?.running ? t("diagnostics.running") : t("diagnostics.stopped"),
+      value: state.monitoring?.running
+        ? t("diagnostics.running")
+        : t("diagnostics.stopped"),
       tone: state.monitoring?.running ? "ok" : "idle",
     },
     {
@@ -3009,7 +3086,11 @@ function headerEyebrow(view: ActiveView, t: Translator): string {
   return labels[view];
 }
 
-function headerTitle(view: ActiveView, opponentsTab: OpponentsTab, t: Translator): string {
+function headerTitle(
+  view: ActiveView,
+  opponentsTab: OpponentsTab,
+  t: Translator,
+): string {
   const labels: Record<ActiveView, string> = {
     match: t("header.currentMatchTitle"),
     opponents:
@@ -3032,7 +3113,10 @@ function formatConfidence(confidenceScore: number | undefined): string {
   return `${Math.round(confidenceScore * 100)}%`;
 }
 
-function replayWatcherStatusLabel(status: ReplayWatcherStatus | null, t?: Translator): string {
+function replayWatcherStatusLabel(
+  status: ReplayWatcherStatus | null,
+  t?: Translator,
+): string {
   if (!status) {
     return t ? t("diagnostics.unknown") : "Unknown";
   }
@@ -3042,8 +3126,12 @@ function replayWatcherStatusLabel(status: ReplayWatcherStatus | null, t?: Transl
   }
 
   return status.running
-    ? (t ? t("diagnostics.running") : "Running")
-    : (t ? t("diagnostics.stopped") : "Stopped");
+    ? t
+      ? t("diagnostics.running")
+      : "Running"
+    : t
+      ? t("diagnostics.stopped")
+      : "Stopped";
 }
 
 function filterAndSortOpponents(

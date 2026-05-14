@@ -244,7 +244,7 @@ const dictionary = {
     "sync.unsupported": "Unsupported",
   },
   ru: {
-    "app.createdBy": "Создано",
+    "app.createdBy": "Сделано в Германии",
     "app.online": "ОНЛАЙН",
     "app.window.close": "Закрыть окно",
     "app.window.minimize": "Свернуть окно",
@@ -291,9 +291,9 @@ const dictionary = {
       "SC2 Adjutant — это настольный помощник для StarCraft II: он отслеживает текущие матчи, определяет оппонентов и показывает накопленную информацию до первого контакта в игре. Приложение ведёт локальную базу рас, MMR, истории реплеев и ваших заметок, чтобы при следующей встрече с тем же игроком вы не начинали с нуля.",
     "info.aboutBody2":
       "Приложение работает локально на вашем компьютере. Без аккаунтов, облака и телеметрии.",
-    "info.authorTitle": "Создано ReTorieS",
+    "info.authorTitle": "ReTorieS",
     "info.authorBody":
-      "Разработано ReTorieS при помощи Codex CLI и Claude CLI как личный проект для сообщества StarCraft II. Вдохновлено Stardex от JuggernautJason.",
+      "Разработано чуваком с ником ReTorieS при помощи Codex CLI и Claude CLI как личный проект для сообщества StarCraft II. Вдохновлено Stardex от JuggernautJason.",
     "info.licenseTitle": "Бесплатно и открыто для использования",
     "info.licenseBody":
       "SC2 Adjutant распространяется бесплатно. Если приложение полезно и вы хотите добровольно поддержать дальнейшую разработку, это можно будет сделать по ссылке ниже. Оплата не требуется и не открывает дополнительных функций, сервисов или преимуществ.",
@@ -348,7 +348,7 @@ const dictionary = {
     "list.next": "Далее",
     "list.opponentsNoResults": "Оппоненты не найдены по текущим фильтрам.",
     "list.opponentSearch": "Поиск: имя, алиас, BattleTag",
-    "list.page": "Страница",
+    "list.page": "Стр.",
     "list.prev": "Назад",
     "list.race": "Раса",
     "list.removeFavorite": "Убрать из избранного",
