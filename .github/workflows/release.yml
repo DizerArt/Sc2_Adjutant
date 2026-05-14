@@ -1,0 +1,47 @@
+name: Release Windows Installer
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    name: Build and publish release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: 02_application/package-lock.json
+
+      - name: Install dependencies
+        working-directory: 02_application
+        run: npm ci
+
+      - name: Run tests
+        working-directory: 02_application
+        run: npm test
+
+      - name: Build Windows installer
+        working-directory: 02_application
+        run: npm run dist:win
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: SC2 Adjutant ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'alpha') || contains(github.ref_name, 'rc') }}
+          files: |
+            02_application/release/*.exe
+            02_application/release/*.blockmap

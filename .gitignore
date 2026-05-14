@@ -8,6 +8,7 @@ dist-renderer/
 dist-electron/
 release/
 02_application/release/
+installers/
 .vite/
 .next/
 out/
