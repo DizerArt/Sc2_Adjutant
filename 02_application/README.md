@@ -1,104 +1,35 @@
-# Main Application
+# SC2 Adjutant Application
 
-This folder contains the stable SC2 Assistant application code.
+This directory contains the Electron application for SC2 Adjutant.
 
-The current implementation is an Electron + React + TypeScript MVP shell with local StarCraft II Client API polling, persistent file storage, diagnostics, user settings, opponent notes, and a replay watcher foundation.
-
-```text
-src/
-|-- main/             # console PoC and Electron main process
-|-- renderer/         # React desktop UI
-|-- application/      # use cases and orchestration services
-|-- domain/           # entities, value objects, and ports
-|-- infrastructure/   # SC2 Client API, storage, HTTP adapters
-`-- shared/           # IPC contracts, shared errors, and types
-```
+The app is built with Electron, React, TypeScript, Vite, file-based local storage, StarCraft II Client API polling, replay parsing, SC2Pulse enrichment, and a replay synchronization pipeline.
 
 ## Requirements
 
-- Node.js 22 or newer.
-- StarCraft II running locally if you want to test the real `/game` endpoint.
+- Windows 10 or Windows 11.
+- Node.js 20 or newer.
+- npm.
+- StarCraft II installed for live-match detection and replay parsing.
 
 ## Install
 
-```bash
+```powershell
 npm install
 ```
 
-## Run Desktop Shell
+## Run
 
-```bash
+Start the renderer and Electron shell:
+
+```powershell
 npm run dev
 ```
 
-This starts the Vite renderer and then opens the Electron window.
-
-The Electron process must be launched through the `electron` binary. In development, `scripts/electron-dev.cjs` registers `tsx` and then loads the TypeScript Electron main process. Running `tsx src/main/electron/main.ts` directly uses plain Node.js and will fail because Electron-only APIs such as `ipcMain` are not available there.
-
-## Run SC2 Client API PoC
-
-```bash
-npm run dev:poc
-```
-
-Run one polling cycle and exit:
-
-```bash
-npm run dev:poc -- --once
-```
-
-Optional environment variables:
-
-```bash
-SC2_ASSISTANT_PLAYER_NAME=DizerArt
-SC2_ASSISTANT_POLL_INTERVAL_MS=1000
-SC2_ASSISTANT_DATA_DIR=D:\SC2AssistantData
-```
-
-The PoC polls:
-
-```text
-http://127.0.0.1:6119/game
-```
-
-When a new active 1v1 session is detected, it logs:
-
-```text
-New game detected: opponent name/race
-```
-
-It also saves primary local records:
-
-```text
-%APPDATA%\SC2 Assistant\data\opponents.csv
-%APPDATA%\SC2 Assistant\data\matches.csv
-%APPDATA%\SC2 Assistant\data\enrichment-candidates.json
-%APPDATA%\SC2 Assistant\data\opponent-source-fixtures.json
-%APPDATA%\SC2 Assistant\data\settings.json
-%APPDATA%\SC2 Assistant\data\storage-manifest.json
-```
-
-`SC2_ASSISTANT_DATA_DIR` can override the default storage directory.
-
-`opponent-source-fixtures.json` can be created manually to feed deterministic enrichment candidates during development:
-
-```json
-[
-  {
-    "source": "Local Fixture Source",
-    "nickname": "RobbyG",
-    "race": "Terran",
-    "aliases": ["Robby"],
-    "mmr": 4300,
-    "league": "Master",
-    "confidenceScore": 0.88
-  }
-]
-```
+The development command starts Vite first, waits for the renderer URL, and then launches Electron through `scripts/electron-dev.cjs`. Do not run `src/main/electron/main.ts` directly with plain Node.js, because Electron APIs such as `app`, `BrowserWindow`, and `ipcMain` are only available inside Electron.
 
 ## Verification
 
-```bash
+```powershell
 npm run typecheck
 npm test
 npm run build
@@ -107,91 +38,126 @@ npm run smoke:electron
 
 Run environment diagnostics:
 
-```bash
+```powershell
 npm run diagnostics
 ```
 
-## Package Windows Build
+## Packaging
 
-Create an unpacked Windows app directory for local inspection:
+Create an unpacked Windows build:
 
-```bash
+```powershell
 npm run pack:win
 ```
 
 Create portable and NSIS installer artifacts:
 
-```bash
+```powershell
 npm run dist:win
 ```
 
-Build outputs are written to:
+Build output is written to:
 
 ```text
-02_application/release/
+release/
 ```
 
-Diagnostics check:
+## Project Layout
 
-- local SC2 Client API availability;
-- local storage directory write access.
+```text
+src/
+|-- main/             # Electron main process, IPC wiring, diagnostics, console tools
+|-- renderer/         # React UI
+|-- application/      # use cases and orchestration services
+|-- domain/           # entities, value objects, and ports
+|-- infrastructure/   # SC2 API, storage, replay parsing, SC2Pulse, HTTP adapters
+`-- shared/           # IPC contracts, shared errors, and shared types
 
-## External Source Foundation
+tests/                # unit and integration-style tests
+scripts/              # build, development, and smoke-test scripts
+```
 
-External opponent enrichment should use `OpponentDataSourcePort`. Concrete sources such as SC2Pulse must be implemented in `src/infrastructure/` and should use the shared `HttpJsonClient` for timeout, retry, and rate-limit behavior.
+## Runtime Architecture
 
-Do not call external data sources directly from UI code.
+The renderer never reads application data files directly. UI actions call the preload IPC bridge, IPC handlers call application use cases, and use cases depend on domain ports instead of concrete storage or network adapters.
 
-`OpponentEnrichmentService` combines candidates from one or more sources, selects the best candidate by confidence score, and keeps source failures as warnings instead of breaking the whole flow.
+Main runtime flow:
 
-External web sources should also be wrapped with `CachedOpponentDataSource`. The wrapper caches successful, empty, and failing responses, opens a temporary cooldown after repeated source failures, and exposes a runtime snapshot for diagnostics. This is the required integration pattern for live source adapters: no direct UI calls, no retry storms, no CAPTCHA or anti-bot bypasses, and source failures must degrade into diagnostics/enrichment warnings.
+1. Settings are loaded from local storage.
+2. Live monitoring polls the local StarCraft II Client API.
+3. Detected 1v1 matches are normalized into domain entities.
+4. Opponent and match records are persisted through repository interfaces.
+5. Optional enrichment sources, such as SC2Pulse, update opponent identity and ladder data.
+6. Replay metadata can be linked to live matches or imported through replay synchronization.
 
-`HandleDetectedGame` is the application-level orchestration flow for the current PoC:
+## Replay Processing
 
-1. Register detected opponent and match.
-2. Optionally enrich the opponent through configured sources.
-3. Persist the final opponent state.
-4. Return enrichment warnings without failing the whole detection flow.
+Replay parsing is intentionally isolated from the Electron main process. The main process uses `ChildProcessReplayMetadataReader`, which delegates replay parsing to a worker process and falls back to sidecar metadata only when needed.
 
-The Electron app currently wires settings-aware SC2Pulse and local fixture source adapters into this flow. Live source adapters are memory-cached for the running app session. The local source reads `opponent-source-fixtures.json` from the app data directory. All are disabled when `externalSourcesEnabled` is false, and each source can also be toggled independently from Settings.
+This keeps large replay batches from retaining parser state in the main Electron heap and reduces the risk of out-of-memory crashes during synchronization.
 
-## Current Boundaries
+Relevant modules:
 
-- Electron shell and React renderer are wired through a preload IPC bridge.
-- The UI can start/stop live monitoring, refresh diagnostics, show the latest sampled SC2 session, search/filter/sort known opponents, show enrichment candidates, manually edit opponent profiles, list recent matches, add opponent notes, and save user settings.
-- The UI can start/stop replay watching when a replay directory is configured in Settings.
-- `settings.json` stores player name, region, default race, replay directory, polling interval, the global external-source toggle, and per-source toggles for SC2Pulse and local fixtures.
-- `enrichment-candidates.json` stores the latest candidate snapshots returned by opponent data sources for each opponent.
-- `opponent-source-fixtures.json` is read by the local fixture-backed source adapter when external sources are enabled.
-- Replay watcher recursively detects new `.SC2Replay` files and links them to the latest local match without a replay path.
-- `BinaryReplayMetadataReader` parses the actual `.SC2Replay` binary via `@replaysremastered/sc2readerjs` and extracts `mapTitle`, `playedAt`, and the user's per-player `result`.
-- Optional replay sidecar files named `<replay>.SC2Replay.json` are still consulted as a fallback when binary parsing throws.
-- SC2Pulse is implemented as the live external ladder source.
-- The PoC does not read game memory, intercept packets, inject into SC2, or automate gameplay.
+- `src/infrastructure/replay/child-process-replay-metadata-reader.ts`
+- `src/infrastructure/replay/replay-metadata-worker.ts`
+- `src/infrastructure/replay/sc2-replay-analysis-reader.ts`
+- `src/application/use-cases/sync-replay-archive.ts`
+- `src/application/use-cases/process-new-replay.ts`
 
-## Local Storage Foundation
+## Local Storage
 
-The application uses file-based repositories:
+The application uses file-based repositories for local records:
 
 - `FileOpponentRepository`
 - `FileMatchRepository`
 - `FileAppSettingsRepository`
 - `FileEnrichmentCandidateRepository`
 
-Opponent and match repositories support `csv` and `xml` formats and use atomic file replacement for writes. Settings, enrichment candidates, and fixture source data are stored as JSON. These repositories are infrastructure adapters behind domain repository interfaces, so application use cases should depend on the interfaces, not the concrete file classes.
+Opponent and match repositories support CSV and XML formats and write through atomic file replacement. Settings and source snapshots are JSON.
 
-The storage directory also contains `storage-manifest.json`, which records the current schema version and active file names.
-
-Match history is exposed through `ListMatchHistory` and the Electron IPC bridge. UI code reads match history from the application use case instead of reading CSV files directly.
-
-Default Windows data directory:
-
-```text
-%APPDATA%\SC2 Assistant\data
-```
-
-Open it from PowerShell:
+The active data directory can be opened from Settings in the app. For development, it can also be overridden with:
 
 ```powershell
-explorer "$env:APPDATA\SC2 Assistant\data"
+$env:SC2_ASSISTANT_DATA_DIR = "path\\to\\local-data"
 ```
+
+Primary local data files:
+
+```text
+opponents.csv
+matches.csv
+enrichment-candidates.json
+opponent-source-fixtures.json
+settings.json
+storage-manifest.json
+```
+
+## Environment Variables
+
+```text
+SC2_ASSISTANT_DATA_DIR              Override local data directory.
+SC2_ASSISTANT_PLAYER_NAME           Override configured player name.
+SC2_ASSISTANT_POLL_INTERVAL_MS      Override live polling interval.
+SC2_ASSISTANT_RENDERER_URL          Override renderer URL used by Electron dev mode.
+SC2_ASSISTANT_SMOKE_EXIT_MS         Auto-exit delay for smoke tests.
+SC2_ASSISTANT_AUTOSTART_CHECK_MS    Delay used by monitoring autostart checks.
+```
+
+## External Data Sources
+
+External opponent enrichment must go through `OpponentDataSourcePort`. Concrete adapters belong in `src/infrastructure/`, and application code should use `OpponentEnrichmentService` instead of calling external services directly.
+
+SC2Pulse integration is settings-aware and cache-wrapped:
+
+- `SettingsAwareOpponentDataSource` respects global and per-source settings.
+- `CachedOpponentDataSource` caches successful, empty, and failing responses.
+- Repeated source failures open a temporary cooldown instead of retrying aggressively.
+- Source errors are returned as warnings and should not break match detection.
+
+## Development Notes
+
+- Keep UI code behind IPC boundaries.
+- Keep replay parsing isolated from the Electron main process.
+- Prefer use cases in `src/application/` for behavior that reads or mutates local records.
+- Keep network adapters replaceable behind domain ports.
+- Avoid adding local machine paths, personal names, or generated build artifacts to documentation or source control.
