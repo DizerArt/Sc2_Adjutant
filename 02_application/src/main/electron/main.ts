@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, screen } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, screen, shell } from "electron";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { registerIpcHandlers } from "./ipc-handlers.js";
@@ -39,6 +39,7 @@ async function createMainWindow(): Promise<void> {
     }
   });
   mainWindowRef = mainWindow;
+  registerExternalNavigation(mainWindow);
   attachSmokeLifecycleIfRequested(mainWindow);
   registerWindowControlHandlers(mainWindow);
 
@@ -195,6 +196,7 @@ async function ensureOverlayWindow(positionOverride?: OverlayPosition): Promise<
       backgroundThrottling: false
     }
   });
+  registerExternalNavigation(overlay);
 
   // Discord-style: overlay never receives mouse input — every click falls
   // through to whatever is behind it (the SC2 client in fullscreen).
@@ -279,6 +281,32 @@ function registerWindowControlHandlers(window: BrowserWindow): void {
       repositionOverlay(overlayWindowRef, position);
     }
   });
+}
+
+function registerExternalNavigation(window: BrowserWindow): void {
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    if (isExternalUrl(url)) {
+      void shell.openExternal(url);
+    }
+    return { action: "deny" };
+  });
+
+  window.webContents.on("will-navigate", (event, url) => {
+    if (!isExternalUrl(url)) {
+      return;
+    }
+    event.preventDefault();
+    void shell.openExternal(url);
+  });
+}
+
+function isExternalUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
 }
 
 function attachSmokeLifecycleIfRequested(mainWindow: BrowserWindow): void {

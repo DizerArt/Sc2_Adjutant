@@ -1499,11 +1499,25 @@ h3 {
   text-shadow: 0 0 6px rgba(255, 216, 107, 0.35);
 }
 
+.info-support-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
 .info-support-link {
-  color: #c7d5e6;
+  color: #f6e19a;
   font-size: 0.82rem;
-  font-style: italic;
   letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(255, 216, 107, 0.25);
+}
+
+.info-support-link:hover,
+.info-support-link:focus-visible {
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .info-stack-list,

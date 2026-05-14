@@ -1664,7 +1664,24 @@ function InfoView({ t }: { readonly t: Translator }) {
           <p className="info-paragraph">{t("info.licenseBody")}</p>
           <div className="info-support">
             <span className="info-support-label">{t("info.supportAuthor")}</span>
-            <span className="info-support-link">{t("info.linkComingSoon")}</span>
+            <div className="info-support-links">
+              <a
+                className="info-support-link"
+                href="https://paypal.me/ArturioDiz"
+                rel="noreferrer"
+                target="_blank"
+              >
+                PayPal
+              </a>
+              <a
+                className="info-support-link"
+                href="https://www.donationalerts.com/r/retories"
+                rel="noreferrer"
+                target="_blank"
+              >
+                DonationAlerts
+              </a>
+            </div>
           </div>
         </div>
       </div>
