@@ -1,0 +1,80 @@
+{
+  "name": "sc2-assistant-application",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Desktop-first SC2 opponent analysis application foundation.",
+  "main": "dist-electron/main/electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite --host 127.0.0.1 --port 5173",
+    "dev:electron": "wait-on http://127.0.0.1:5173 && electron scripts/electron-dev.cjs",
+    "dev:poc": "tsx src/main/console-poc.ts",
+    "diagnostics": "tsx src/main/diagnostics.ts",
+    "build": "tsc --noEmit && npm run build:main && vite build",
+    "build:main": "tsc -p tsconfig.electron.json && node scripts/copy-electron-assets.cjs",
+    "pack:win": "npm run build && electron-builder --win --dir",
+    "dist:win": "npm run build && electron-builder --win",
+    "smoke:electron": "node scripts/electron-smoke.cjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "build": {
+    "appId": "com.dizerart.sc2companion",
+    "productName": "SC2 Adjutant",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist-electron/**/*",
+      "dist-renderer/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "dist-electron/main/electron/main.js"
+    },
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "dependencies": {
+    "@replaysremastered/sc2readerjs": "^0.1.9",
+    "csv-parse": "^6.2.1",
+    "csv-stringify": "^6.7.0",
+    "fast-xml-parser": "^5.7.2",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "concurrently": "^9.2.1",
+    "electron": "^41.5.0",
+    "electron-builder": "^26.8.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vite": "^7.3.2",
+    "vitest": "^3.1.2",
+    "wait-on": "^9.0.5"
+  }
+}

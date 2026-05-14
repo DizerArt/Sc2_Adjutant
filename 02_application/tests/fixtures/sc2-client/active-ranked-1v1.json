@@ -1,0 +1,18 @@
+{
+  "displayTime": 4,
+  "isReplay": false,
+  "players": [
+    {
+      "name": "DizerArt",
+      "race": "Terran",
+      "result": "Undecided",
+      "isUser": true
+    },
+    {
+      "name": "HiveMindX",
+      "race": "Zerg",
+      "result": "Undecided"
+    }
+  ]
+}
+

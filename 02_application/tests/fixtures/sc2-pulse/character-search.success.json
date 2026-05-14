@@ -1,0 +1,62 @@
+[
+  {
+    "leagueMax": 6,
+    "ratingMax": 7548,
+    "totalGamesPlayed": 5039,
+    "previousStats": { "rating": 7210, "gamesPlayed": 134, "rank": 1 },
+    "currentStats": { "rating": 7019, "gamesPlayed": 51, "rank": 2 },
+    "members": {
+      "zergGamesPlayed": 5039,
+      "character": {
+        "realm": 1,
+        "name": "Serral#769",
+        "id": 236695,
+        "accountId": 236695,
+        "region": "EU",
+        "battlenetId": 315071,
+        "tag": "Serral",
+        "discriminator": 769
+      },
+      "account": {
+        "battleTag": "Serral#2587",
+        "id": 236695,
+        "partition": "GLOBAL",
+        "tag": "Serral",
+        "discriminator": 2587
+      },
+      "clan": { "tag": "BASKGG", "id": 86448, "region": "EU", "name": "basilisk" },
+      "proId": 1,
+      "proNickname": "Serral",
+      "proTeam": "BSLSK",
+      "raceGames": { "ZERG": 5039 }
+    }
+  },
+  {
+    "leagueMax": 5,
+    "ratingMax": 4991,
+    "totalGamesPlayed": 213,
+    "previousStats": { "rating": 4963, "gamesPlayed": 1, "rank": 1705 },
+    "currentStats": { "rating": 4956, "gamesPlayed": 1, "rank": 1142 },
+    "members": {
+      "terranGamesPlayed": 213,
+      "character": {
+        "realm": 1,
+        "name": "Serralike#123",
+        "id": 999111,
+        "accountId": 999111,
+        "region": "US",
+        "battlenetId": 5550,
+        "tag": "Serralike",
+        "discriminator": 123
+      },
+      "account": {
+        "battleTag": "Serralike#1000",
+        "id": 999111,
+        "partition": "GLOBAL",
+        "tag": "Serralike",
+        "discriminator": 1000
+      },
+      "raceGames": { "TERRAN": 213 }
+    }
+  }
+]

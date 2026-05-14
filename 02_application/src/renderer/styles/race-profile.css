@@ -1,0 +1,4062 @@
+.race-profile {
+  --race-primary: #79d8ff;
+  --race-secondary: #ffd86b;
+  --race-emblem-color: #79d8ff;
+  --race-panel-bg: rgba(7, 14, 22, 0.92);
+  --race-panel-border: rgba(121, 207, 255, 0.32);
+  --race-grid: rgba(121, 207, 255, 0.05);
+
+  display: grid;
+  grid-template-columns: 314px minmax(0, 1fr);
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid var(--race-panel-border);
+  border-radius: 10px;
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.04), transparent 60%),
+    var(--race-panel-bg);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.3), 0 0 22px rgba(0, 0, 0, 0.18);
+}
+
+.race-profile.theme-terran {
+  --race-primary: #17d9ff;
+  --race-secondary: #ff9a2f;
+  --race-emblem-color: #4fc7ff;
+  --race-panel-bg: rgba(9, 18, 31, 0.92);
+  --race-panel-border: rgba(23, 217, 255, 0.32);
+  --race-grid: rgba(23, 217, 255, 0.06);
+}
+
+.race-profile.theme-zerg {
+  --race-primary: #b968ff;
+  --race-secondary: #93ff37;
+  --race-emblem-color: #b968ff;
+  --race-panel-bg: rgba(22, 10, 25, 0.94);
+  --race-panel-border: rgba(185, 104, 255, 0.36);
+  --race-grid: rgba(185, 104, 255, 0.05);
+  box-shadow: inset 0 0 28px rgba(185, 104, 255, 0.08), 0 0 24px rgba(185, 104, 255, 0.08);
+}
+
+.race-profile.theme-protoss {
+  --race-primary: #56d8ff;
+  --race-secondary: #ffd86b;
+  --race-emblem-color: #ffd15d;
+  --race-panel-bg: rgba(8, 19, 35, 0.94);
+  --race-panel-border: rgba(255, 216, 107, 0.34);
+  --race-grid: rgba(86, 216, 255, 0.05);
+  box-shadow: inset 0 0 30px rgba(86, 216, 255, 0.08), 0 0 24px rgba(255, 216, 107, 0.09);
+}
+
+.race-profile.theme-random {
+  --race-primary: #79d8ff;
+  --race-secondary: #c4ff8f;
+  --race-emblem-color: #c1d6e8;
+}
+
+.race-profile-left,
+.race-profile-right {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent),
+    rgba(0, 0, 0, 0.32);
+}
+
+.race-profile-left {
+  align-content: space-between;
+  text-align: center;
+}
+
+.race-profile .panel-title {
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--race-panel-border);
+  color: var(--race-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.race-profile-right .panel-title {
+  color: var(--race-secondary);
+  border-color: var(--race-panel-border);
+}
+
+.race-stage {
+  display: grid;
+  place-items: center;
+  height: clamp(92px, 16vh, 126px);
+  border: 1px solid var(--race-panel-border);
+  border-radius: 6px;
+  background:
+    radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--race-primary) 18%, transparent), transparent 28%),
+    linear-gradient(var(--race-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--race-grid) 1px, transparent 1px),
+    rgba(4, 10, 18, 0.72);
+  background-size: auto, 30px 30px, 30px 30px, auto;
+}
+
+.race-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  color: var(--race-emblem-color);
+}
+
+.race-emblem .emblem-ring {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0.5;
+  box-shadow: inset 0 0 22px currentColor, 0 0 18px currentColor;
+}
+
+.race-emblem .emblem-ring::before,
+.race-emblem .emblem-ring::after {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.55;
+}
+
+.race-emblem .emblem-ring::after {
+  inset: 32%;
+  opacity: 0.32;
+}
+
+.race-emblem .terran-star {
+  width: 56%;
+  height: 56%;
+  background: currentColor;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 56%, 79% 92%, 50% 70%, 21% 92%, 32% 56%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.race-emblem .zerg-sigil {
+  position: relative;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, transparent 0 28%, currentColor 30% 36%, transparent 38%),
+    conic-gradient(from 22deg, transparent 0 13%, currentColor 13% 24%, transparent 24% 38%, currentColor 38% 48%, transparent 48% 62%, currentColor 62% 74%, transparent 74% 100%);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.race-emblem .zerg-sigil::before,
+.race-emblem .zerg-sigil::after {
+  content: "";
+  position: absolute;
+  inset: 18% 42% 12% 42%;
+  border-radius: 80% 20% 80% 20%;
+  background: currentColor;
+  transform: rotate(42deg);
+}
+
+.race-emblem .zerg-sigil::after {
+  transform: rotate(-42deg);
+}
+
+.race-emblem .protoss-crystal {
+  position: relative;
+  width: 42%;
+  height: 74%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), currentColor 55%, rgba(255, 255, 255, 0.18));
+  clip-path: polygon(50% 0%, 84% 18%, 70% 86%, 50% 100%, 30% 86%, 16% 18%);
+  filter: drop-shadow(0 0 16px currentColor);
+}
+
+.race-emblem .random-mark {
+  width: 56%;
+  height: 56%;
+  background: currentColor;
+  clip-path: polygon(50% 5%, 95% 50%, 50% 95%, 5% 50%);
+  opacity: 0.76;
+  filter: drop-shadow(0 0 14px currentColor);
+}
+
+.race-label {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--race-panel-border);
+  color: var(--race-primary);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--race-primary) 50%, transparent);
+}
+
+.profile-identity {
+  display: grid;
+  gap: 8px;
+}
+
+.profile-identity .identity-label {
+  margin: 0;
+  color: #93a8bd;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.profile-identity .identity-name {
+  margin: 0;
+  color: #f6fdff;
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+  font-weight: 650;
+}
+
+.profile-identity .identity-mmr {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 4px 0 0;
+  color: var(--race-secondary);
+}
+
+.profile-identity .identity-battletag {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  color: #9fb3ce;
+}
+
+.profile-identity .identity-battletag span {
+  color: #93a8bd;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.profile-identity .identity-battletag strong {
+  color: #9affc7;
+  font-size: 0.9rem;
+}
+
+.profile-identity .identity-mmr span {
+  color: #93a8bd;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.profile-identity .identity-mmr > strong {
+  color: #fff5d8;
+  font-size: 1.25rem;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  text-shadow: 0 0 14px color-mix(in srgb, var(--race-secondary) 40%, transparent);
+}
+
+.profile-identity .identity-mmr small {
+  color: var(--race-primary);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.profile-identity .identity-total-games {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.profile-identity .identity-total-games strong {
+  color: #fff5d8;
+  font-size: 0.86rem;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  text-shadow: 0 0 10px color-mix(in srgb, var(--race-secondary) 30%, transparent);
+}
+
+.profile-identity .identity-league-label {
+  margin-right: 6px;
+  color: #93a8bd;
+}
+
+.profile-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.profile-stat-cards .stat-card {
+  display: grid;
+  gap: 5px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: 1px solid var(--race-panel-border);
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 70%),
+    rgba(5, 12, 21, 0.72);
+}
+
+.profile-stat-cards .stat-card .stat-label {
+  color: var(--race-primary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.profile-stat-cards .stat-card .stat-value {
+  font-size: 1.22rem;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.profile-stat-cards .stat-card.encounters .stat-value {
+  color: var(--race-primary);
+}
+
+.profile-stat-cards .stat-card.wins .stat-value {
+  color: #9affc7;
+}
+
+.profile-stat-cards .stat-card.losses .stat-value {
+  color: #ff9a9a;
+}
+
+.playstyle-analysis {
+  display: grid;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--race-panel-border);
+  border-radius: 6px;
+  background: rgba(6, 12, 24, 0.58);
+}
+
+.playstyle-analysis .analysis-title {
+  margin: 0;
+  color: #b99cff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.playstyle-analysis .analysis-hint {
+  display: none;
+  margin: 0;
+  color: #7e93a8;
+  font-size: 0.75rem;
+}
+
+.race-profile .bar-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 42px;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.race-profile .bar-label {
+  color: #9ceeff;
+  font-size: 0.85rem;
+}
+
+.race-profile .progress-track {
+  position: relative;
+  height: 12px;
+  border: 1px solid rgba(90, 142, 173, 0.26);
+  background: rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+}
+
+.race-profile .progress-fill {
+  display: block;
+  height: 100%;
+  background-size: 22px 100%;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, #ff7575, #ff9a2f);
+}
+
+.race-profile .progress-fill.economy {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, #ffd86b, #9affc7);
+}
+
+.race-profile .progress-fill.unpredictable {
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, #b968ff, #ff77cc);
+}
+
+.race-profile .bar-rating {
+  color: #d2e9ff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.profile-tags {
+  display: grid;
+  gap: 5px;
+  min-height: 88px;
+  max-height: 104px;
+  overflow: hidden;
+}
+
+.profile-tags .tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-tags .tag-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 150px;
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 4px;
+  border: 1px solid var(--race-panel-border);
+  background: color-mix(in srgb, var(--race-primary) 8%, transparent);
+  color: #d4f3ff;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-tags .tag-chip-overflow {
+  min-width: 42px;
+  justify-content: center;
+  color: #93a8bd;
+}
+
+.profile-tags .tag-chip[data-race="zerg"] {
+  border-color: rgba(135, 255, 55, 0.42);
+  background: rgba(135, 255, 55, 0.08);
+  color: #c4ff8f;
+}
+
+.profile-tags .tag-chip[data-race="protoss"] {
+  border-color: rgba(255, 216, 107, 0.42);
+  background: rgba(255, 216, 107, 0.08);
+  color: #ffe9a0;
+}
+
+.profile-tags .tags-empty {
+  margin: 0;
+  color: #7e93a8;
+  font-size: 0.78rem;
+}
+
+.profile-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.profile-meta div {
+  display: grid;
+  gap: 4px;
+  min-height: 48px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-meta span {
+  color: #7e93a8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.profile-meta strong {
+  color: #f6fdff;
+  font-size: 0.9rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 0;
+}
+
+.profile-actions .primary-button {
+  flex-shrink: 0;
+}
+
+.race-profile .primary-button {
+  min-height: 38px;
+  padding: 0 18px;
+  border: 1px solid var(--race-primary);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, transparent 0 6%, color-mix(in srgb, var(--race-primary) 14%, transparent) 6% 94%, transparent 94%),
+    linear-gradient(180deg, color-mix(in srgb, var(--race-primary) 22%, #062138) 0%, rgba(5, 22, 38, 0.92) 100%);
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--race-primary) 35%, transparent),
+    inset 0 0 28px color-mix(in srgb, var(--race-primary) 14%, transparent);
+  color: #ecfbff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.race-profile .primary-button:hover {
+  box-shadow:
+    0 0 32px color-mix(in srgb, var(--race-primary) 55%, transparent),
+    inset 0 0 32px color-mix(in srgb, var(--race-primary) 22%, transparent);
+}
+
+.race-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 34px);
+  gap: 6px;
+}
+
+.race-tab {
+  display: grid;
+  width: 34px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--race-panel-border);
+  border-radius: 5px;
+  background: rgba(5, 12, 21, 0.72);
+  color: #dceaff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.race-tab[data-active="true"] {
+  border-color: var(--race-primary);
+  color: var(--race-primary);
+  box-shadow: inset 0 0 14px color-mix(in srgb, var(--race-primary) 18%, transparent);
+}
+
+/* Generic helpers used across themes. The zerg theme overrides them heavily;
+   other themes hide the decorative elements so nothing changes for them. */
+.race-stage-meta {
+  display: none;
+}
+
+.race-stage-frame {
+  display: none;
+}
+
+.race-stage-portrait {
+  display: none;
+}
+
+.race-label-glyph {
+  display: none;
+}
+
+.identity-icon,
+.stat-icon {
+  display: none;
+}
+
+.identity-mmr-label {
+  display: contents;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  ZERG THEME — heavy organic biomass styling that mimics the mockup at     */
+/*  01_prototype/mock-data/zerg_interface/.                                  */
+/* ------------------------------------------------------------------------- */
+
+.race-profile.theme-zerg {
+  --zerg-purple: #b968ff;
+  --zerg-violet: #8b35d6;
+  --zerg-green: #93ff37;
+  --zerg-orange: #ffb663;
+  --zerg-red: #ff5e5e;
+  --zerg-bone: #d3a472;
+  --zerg-deep: rgba(8, 4, 14, 0.96);
+  --zerg-frame: rgba(96, 48, 28, 0.55);
+  --zerg-frame-strong: rgba(170, 110, 70, 0.7);
+
+  position: relative;
+  gap: 10px;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(185, 104, 255, 0.18), transparent 35%),
+    radial-gradient(circle at 95% 95%, rgba(116, 255, 45, 0.08), transparent 40%),
+    radial-gradient(circle at 90% 0%, rgba(255, 100, 60, 0.08), transparent 30%),
+    linear-gradient(140deg, rgba(40, 20, 30, 0.78), rgba(7, 4, 9, 0.94));
+  box-shadow:
+    inset 0 0 0 2px rgba(60, 30, 18, 0.85),
+    inset 0 0 0 4px rgba(20, 10, 14, 0.95),
+    inset 0 0 36px rgba(185, 104, 255, 0.16),
+    inset 0 0 90px rgba(0, 0, 0, 0.62),
+    0 0 28px rgba(185, 104, 255, 0.18);
+  isolation: isolate;
+}
+
+.race-profile.theme-zerg::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  pointer-events: none;
+  border-radius: 9px;
+  border: 1px solid rgba(190, 130, 90, 0.3);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    inset 0 0 70px rgba(185, 104, 255, 0.06);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
+    radial-gradient(circle at 100% 0%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
+    radial-gradient(circle at 0% 100%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
+    radial-gradient(circle at 100% 100%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px);
+}
+
+.race-profile.theme-zerg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(255, 200, 150, 0.05), transparent 50%),
+    radial-gradient(ellipse at -10% 50%, rgba(190, 110, 70, 0.05), transparent 40%),
+    radial-gradient(ellipse at 110% 50%, rgba(190, 110, 70, 0.05), transparent 40%);
+  z-index: -1;
+}
+
+/* === Left and right inner panels  ======================================== */
+
+.race-profile.theme-zerg .race-profile-left,
+.race-profile.theme-zerg .race-profile-right {
+  position: relative;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(170, 110, 70, 0.45);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(185, 104, 255, 0.1), transparent 35%),
+    radial-gradient(circle at 100% 100%, rgba(116, 255, 45, 0.06), transparent 40%),
+    linear-gradient(180deg, rgba(28, 14, 28, 0.94), rgba(8, 4, 12, 0.96));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.7),
+    inset 0 0 60px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Let the portrait stage flex into all the vertical space the right panel
+   carves out: panel-title pinned at the top, race-label pinned at the bottom,
+   and the stage stretches to fill what's left. Flexbox is more reliable than
+   grid 1fr here because IMG children with height:100% inside grid 1fr cells
+   sometimes fall back to the natural intrinsic size instead of stretching. */
+.race-profile.theme-zerg .race-profile-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.race-profile.theme-zerg .race-profile-left::before,
+.race-profile.theme-zerg .race-profile-right::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 230, 200, 0.05);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.5);
+}
+
+/* === Panel titles ======================================================== */
+
+.race-profile.theme-zerg .panel-title {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border: none;
+  border-bottom: 1px dashed rgba(170, 110, 70, 0.5);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-align: center;
+  color: #f3d6ff;
+  text-shadow:
+    0 0 10px rgba(185, 104, 255, 0.45),
+    0 0 22px rgba(185, 104, 255, 0.18);
+}
+
+.race-profile.theme-zerg .race-profile-right .panel-title {
+  text-align: left;
+  letter-spacing: 0.22em;
+  color: var(--zerg-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.4),
+    0 0 20px rgba(255, 154, 47, 0.15);
+}
+
+/* === Left panel: meta header, stage and label ============================ */
+
+/* Decorative meta header from the prototype mockup ("ZERG MULTI-PLY DATABASE
+   / //ID / //STATUS") — hidden because it overlapped the RACE panel title and
+   added visual noise without conveying useful information. */
+.race-profile.theme-zerg .race-stage-meta {
+  display: none;
+}
+
+.race-profile.theme-zerg .race-stage {
+  position: relative;
+  align-self: stretch;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid var(--zerg-bone);
+  border-radius: 6px;
+  overflow: hidden;
+  /* Beveled chitin-plate shape — cut corners read as carved bone, not chrome. */
+  clip-path: polygon(
+    8% 0%, 92% 0%,
+    100% 4%, 100% 96%,
+    92% 100%, 8% 100%,
+    0% 96%, 0% 4%
+  );
+  background:
+    radial-gradient(circle at 50% 55%, rgba(185, 104, 255, 0.4), transparent 55%),
+    radial-gradient(circle at 50% 100%, rgba(116, 255, 45, 0.1), transparent 60%),
+    /* Biomass vein webbing — diagonal lines fading into the corners. */
+    repeating-linear-gradient(45deg, rgba(190, 130, 90, 0.08) 0 1px, transparent 1px 18px),
+    repeating-linear-gradient(-45deg, rgba(190, 130, 90, 0.06) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(0deg, rgba(185, 104, 255, 0.07) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(90deg, rgba(185, 104, 255, 0.06) 0 1px, transparent 1px 26px),
+    radial-gradient(circle at 50% 50%, rgba(35, 12, 38, 1), rgba(8, 4, 12, 1));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.85),
+    inset 0 0 36px rgba(185, 104, 255, 0.32),
+    inset 0 0 90px rgba(0, 0, 0, 0.7),
+    0 0 18px rgba(185, 104, 255, 0.28);
+}
+
+.race-profile.theme-zerg .race-stage-frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  /* Concentric sonar rings, kept from the previous pass — they read as a
+     tactical overlay inside the chitin frame. */
+  background:
+    radial-gradient(circle at 50% 50%, transparent 38%, rgba(185, 104, 255, 0.16) 38%, rgba(185, 104, 255, 0.16) 38.4%, transparent 39%),
+    radial-gradient(circle at 50% 50%, transparent 28%, rgba(185, 104, 255, 0.14) 28%, rgba(185, 104, 255, 0.14) 28.4%, transparent 29%),
+    radial-gradient(circle at 50% 50%, transparent 18%, rgba(185, 104, 255, 0.12) 18%, rgba(185, 104, 255, 0.12) 18.4%, transparent 19%);
+}
+
+.race-profile.theme-zerg .race-stage-frame::before {
+  /* Outer chitin border: a beveled bone-coloured outline traced 4 px inside
+     the stage edge, mirroring the stage's clip-path so it reads as carved
+     plating around the portrait. */
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(190, 130, 90, 0.7);
+  clip-path: polygon(
+    8% 0%, 92% 0%,
+    100% 5%, 100% 95%,
+    92% 100%, 8% 100%,
+    0% 95%, 0% 5%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 8, 16, 0.9),
+    inset 0 0 18px rgba(185, 104, 255, 0.22),
+    0 0 8px rgba(190, 130, 90, 0.4);
+}
+
+.race-profile.theme-zerg .race-stage-frame::after {
+  /* Corner glyph clusters + side biomass spikes. The dots cluster in every
+     corner like alien runes; the side spikes are small triangular nubs at
+     the mid-edges, mimicking horns on a chitin plate. */
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  background:
+    /* Side biomass nubs */
+    linear-gradient(135deg, var(--zerg-bone) 0 50%, transparent 50%) left center / 12px 12px no-repeat,
+    linear-gradient(-45deg, var(--zerg-bone) 0 50%, transparent 50%) right center / 12px 12px no-repeat,
+    /* Corner alien glyph clusters */
+    radial-gradient(circle at 6% 6%, rgba(255, 220, 190, 0.55) 0 2px, transparent 3px),
+    radial-gradient(circle at 14% 6%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 6% 14%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 94% 6%, rgba(255, 220, 190, 0.55) 0 2px, transparent 3px),
+    radial-gradient(circle at 86% 6%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 94% 14%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
+    radial-gradient(circle at 6% 94%, rgba(255, 220, 190, 0.5) 0 2px, transparent 3px),
+    radial-gradient(circle at 94% 94%, rgba(255, 220, 190, 0.5) 0 2px, transparent 3px),
+    /* Subtle vertical scanning highlight */
+    linear-gradient(180deg, transparent 0%, rgba(185, 104, 255, 0.05) 50%, transparent 100%);
+  filter: drop-shadow(0 0 6px rgba(190, 130, 90, 0.5));
+}
+
+.race-profile.theme-zerg .race-stage-portrait {
+  display: block;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  /* Stretch edge-to-edge while preserving the source aspect — the chitin
+     border on the stage carries the framing, the image just fills it. */
+  object-fit: cover;
+  object-position: center 30%;
+  filter: drop-shadow(0 0 22px rgba(185, 104, 255, 0.45)) drop-shadow(0 0 48px rgba(185, 104, 255, 0.2));
+}
+
+.race-profile.theme-zerg .race-stage::after {
+  /* Glowing portal disc under the portrait */
+  content: "";
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  width: 64%;
+  height: 14%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(185, 104, 255, 0.55), rgba(185, 104, 255, 0.15) 50%, transparent 70%);
+  filter: blur(2px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.race-profile.theme-zerg .race-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 8px 0 2px;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: #f3d6ff;
+  text-shadow:
+    0 0 10px rgba(185, 104, 255, 0.55),
+    0 0 22px rgba(185, 104, 255, 0.25);
+}
+
+.race-profile.theme-zerg .race-label-text {
+  position: relative;
+}
+
+.race-profile.theme-zerg .race-label-glyph {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, rgba(185, 104, 255, 0.85) 30%, rgba(185, 104, 255, 0.15) 60%, transparent 75%);
+  box-shadow: 0 0 10px rgba(185, 104, 255, 0.65);
+}
+
+/* === Right panel: identity, stat cards, playstyle ======================== */
+
+.race-profile.theme-zerg .race-tabs {
+  margin-bottom: 8px;
+  grid-template-columns: repeat(4, 28px);
+  gap: 4px;
+}
+
+.race-profile.theme-zerg .race-tab {
+  width: 28px;
+  height: 26px;
+  font-size: 0.72rem;
+}
+
+.race-profile.theme-zerg .race-tab {
+  border: 1px solid rgba(185, 104, 255, 0.32);
+  background: rgba(20, 8, 28, 0.85);
+  color: #d4b1ee;
+  text-shadow: 0 0 10px rgba(185, 104, 255, 0.3);
+}
+
+.race-profile.theme-zerg .race-tab[data-active="true"] {
+  border-color: rgba(185, 104, 255, 0.85);
+  color: #f3d6ff;
+  background:
+    linear-gradient(180deg, rgba(75, 30, 100, 0.9), rgba(20, 8, 28, 0.95));
+  box-shadow:
+    0 0 14px rgba(185, 104, 255, 0.4),
+    inset 0 0 14px rgba(185, 104, 255, 0.25);
+}
+
+.race-profile.theme-zerg .profile-identity {
+  gap: 6px;
+}
+
+.race-profile.theme-zerg .identity-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 32%, rgba(185, 104, 255, 0.85) 32% 38%, transparent 39%),
+    conic-gradient(from 25deg,
+      transparent 0 12%,
+      rgba(185, 104, 255, 0.95) 12% 22%,
+      transparent 22% 38%,
+      rgba(185, 104, 255, 0.95) 38% 48%,
+      transparent 48% 62%,
+      rgba(185, 104, 255, 0.95) 62% 72%,
+      transparent 72% 88%,
+      rgba(185, 104, 255, 0.95) 88% 100%);
+  filter: drop-shadow(0 0 6px rgba(185, 104, 255, 0.6));
+}
+
+.race-profile.theme-zerg .identity-icon[data-icon="mmr"] {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 154, 47, 0.95) 0 14%, transparent 16%),
+    conic-gradient(from 0deg,
+      rgba(255, 154, 47, 0.95) 0 8%,
+      transparent 8% 18%,
+      rgba(255, 154, 47, 0.95) 18% 28%,
+      transparent 28% 38%,
+      rgba(255, 154, 47, 0.95) 38% 50%,
+      transparent 50% 62%,
+      rgba(255, 154, 47, 0.95) 62% 75%,
+      transparent 75% 100%);
+  filter: drop-shadow(0 0 6px rgba(255, 154, 47, 0.55));
+}
+
+.race-profile.theme-zerg .identity-icon[data-icon="tags"] {
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(185, 104, 255, 0.9) 0 60%, transparent 60% 100%),
+    rgba(185, 104, 255, 0.2);
+  clip-path: polygon(20% 0, 100% 0, 100% 70%, 80% 100%, 0 100%, 0 30%);
+}
+
+.race-profile.theme-zerg .identity-label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: var(--zerg-orange);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-zerg .identity-name {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f6fdff;
+  letter-spacing: 0.02em;
+}
+
+.race-profile.theme-zerg .identity-mmr {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.race-profile.theme-zerg .identity-mmr-label {
+  display: inline-flex;
+  color: var(--zerg-orange);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-zerg .identity-mmr > strong {
+  font-size: 1.25rem;
+  color: var(--zerg-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.4),
+    0 0 22px rgba(255, 154, 47, 0.18);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-zerg .identity-mmr small {
+  color: #f3d6ff;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+}
+
+.race-profile.theme-zerg .identity-battletag {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+}
+
+.race-profile.theme-zerg .identity-battletag {
+  gap: 8px;
+}
+
+.race-profile.theme-zerg .identity-battletag span {
+  color: rgba(195, 150, 220, 0.7);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-zerg .identity-battletag strong {
+  color: #d4b1ee;
+}
+
+/* Stat cards: encounters / wins / losses */
+
+.race-profile.theme-zerg .profile-stat-cards {
+  gap: 8px;
+  margin-top: 0;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  gap: 0 10px;
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid rgba(185, 104, 255, 0.4);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(185, 104, 255, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(50, 22, 70, 0.55), rgba(15, 6, 18, 0.92));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.5),
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    0 0 12px rgba(185, 104, 255, 0.15);
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card .stat-icon {
+  display: block;
+  grid-area: icon;
+  align-self: center;
+  width: 22px;
+  height: 22px;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card .stat-label {
+  grid-area: label;
+  color: var(--zerg-orange);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card .stat-value {
+  grid-area: value;
+  font-size: 1.45rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card.encounters {
+  border-color: rgba(185, 104, 255, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.5),
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(185, 104, 255, 0.18);
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.encounters .stat-value {
+  color: #d4b1ee;
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.encounters .stat-icon {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 30%, rgba(185, 104, 255, 0.95) 30% 38%, transparent 40%),
+    conic-gradient(from 30deg,
+      transparent 0 8%,
+      rgba(185, 104, 255, 0.95) 8% 22%,
+      transparent 22% 36%,
+      rgba(185, 104, 255, 0.95) 36% 50%,
+      transparent 50% 64%,
+      rgba(185, 104, 255, 0.95) 64% 78%,
+      transparent 78% 92%,
+      rgba(185, 104, 255, 0.95) 92% 100%);
+  filter: drop-shadow(0 0 6px rgba(185, 104, 255, 0.55));
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card.wins {
+  border-color: rgba(135, 255, 55, 0.55);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.92));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.5),
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(135, 255, 55, 0.18);
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.wins .stat-label {
+  color: #c4ff8f;
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.wins .stat-value {
+  color: #c4ff8f;
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.wins .stat-icon {
+  background:
+    linear-gradient(180deg, rgba(255, 220, 80, 0.95) 0%, rgba(180, 130, 30, 0.85) 100%);
+  clip-path: polygon(50% 0%, 65% 30%, 100% 35%, 75% 60%, 85% 100%, 50% 78%, 15% 100%, 25% 60%, 0 35%, 35% 30%);
+  filter: drop-shadow(0 0 6px rgba(255, 220, 80, 0.5));
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card.losses {
+  border-color: rgba(255, 94, 94, 0.55);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.92));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.5),
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(255, 94, 94, 0.18);
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.losses .stat-label {
+  color: #ff9a9a;
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.losses .stat-value {
+  color: #ff9a9a;
+}
+.race-profile.theme-zerg .profile-stat-cards .stat-card.losses .stat-icon {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 94, 94, 0.9) 0 30%, transparent 32%),
+    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    linear-gradient(180deg, rgba(255, 94, 94, 0.9), rgba(120, 30, 30, 0.85));
+  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  filter: drop-shadow(0 0 6px rgba(255, 94, 94, 0.45));
+}
+
+/* Playstyle analysis: segmented (cell-based) bars */
+
+.race-profile.theme-zerg .playstyle-analysis {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(170, 110, 70, 0.5);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(36, 16, 36, 0.7), rgba(8, 4, 12, 0.92));
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 30, 22, 0.5),
+    inset 0 0 22px rgba(0, 0, 0, 0.55);
+}
+
+.race-profile.theme-zerg .playstyle-analysis .analysis-title {
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(170, 110, 70, 0.4);
+  color: var(--zerg-orange);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+}
+
+.race-profile.theme-zerg .playstyle-analysis .analysis-hint {
+  display: none;
+}
+
+.race-profile.theme-zerg .bar-row {
+  grid-template-columns: 110px minmax(0, 1fr) 40px;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.race-profile.theme-zerg .bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #f3d6ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.race-profile.theme-zerg .bar-label::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  filter: drop-shadow(0 0 5px currentColor);
+  flex: 0 0 auto;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label {
+  color: #ff7575;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label::before {
+  /* Lightning bolt for aggression */
+  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label {
+  color: #93ff37;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label::before {
+  clip-path: circle(48% at 50% 50%);
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label {
+  color: #b968ff;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label::before {
+  /* Trending zigzag */
+  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label,
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label,
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label {
+  /* Keep label readable; only the icon (before) carries the colour. */
+  color: #f3d6ff;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label::before { color: #ff7575; }
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label::before { color: #93ff37; }
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label::before { color: #b968ff; }
+
+.race-profile.theme-zerg .progress-track {
+  position: relative;
+  height: 14px;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(40, 20, 30, 0.85) 0 11px,
+    transparent 11px 13px
+  );
+  background-size: 13px 100%;
+  -webkit-mask: repeating-linear-gradient(
+    90deg,
+    #000 0 11px,
+    transparent 11px 13px
+  );
+          mask: repeating-linear-gradient(
+            90deg,
+            #000 0 11px,
+            transparent 11px 13px
+          );
+}
+
+.race-profile.theme-zerg .progress-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(80, 50, 90, 0.2) 0 11px,
+    transparent 11px 13px
+  );
+  pointer-events: none;
+}
+
+.race-profile.theme-zerg .progress-fill {
+  height: 100%;
+  background-image: linear-gradient(90deg, #ff5252, #ff9a2f);
+  box-shadow: 0 0 10px rgba(255, 100, 80, 0.5);
+}
+
+.race-profile.theme-zerg .progress-fill.economy {
+  background-image: linear-gradient(90deg, #d6ff5d, #93ff37);
+  box-shadow: 0 0 10px rgba(135, 255, 55, 0.5);
+}
+
+.race-profile.theme-zerg .progress-fill.unpredictable {
+  background-image: linear-gradient(90deg, #b968ff, #d68bff);
+  box-shadow: 0 0 10px rgba(185, 104, 255, 0.55);
+}
+
+.race-profile.theme-zerg .bar-rating {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-rating {
+  color: #ff9a9a;
+}
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-rating {
+  color: #ffd86b;
+}
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-rating {
+  color: #d4b1ee;
+}
+
+/* Tags: rounded biomass pills */
+
+.race-profile.theme-zerg .profile-tags {
+  gap: 5px;
+  min-height: 88px;
+  max-height: 104px;
+}
+
+.race-profile.theme-zerg .profile-tags .section-label {
+  display: flex;
+  align-items: center;
+  color: var(--zerg-orange);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  margin-top: 0;
+}
+
+.race-profile.theme-zerg .profile-tags .tags-row {
+  gap: 6px;
+}
+
+.race-profile.theme-zerg .tag-chip {
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(135, 255, 55, 0.5);
+  background:
+    linear-gradient(180deg, rgba(40, 70, 18, 0.85), rgba(8, 14, 8, 0.92));
+  color: #c4ff8f;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  box-shadow:
+    inset 0 0 0 1px rgba(60, 80, 30, 0.6),
+    inset 0 0 10px rgba(135, 255, 55, 0.18),
+    0 0 8px rgba(135, 255, 55, 0.18);
+}
+
+.race-profile.theme-zerg .tags-empty {
+  color: rgba(195, 150, 220, 0.6);
+  font-style: italic;
+}
+
+/* Bottom meta row */
+
+.race-profile.theme-zerg .profile-meta {
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.race-profile.theme-zerg .profile-meta div {
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid rgba(170, 110, 70, 0.4);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(185, 104, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(28, 14, 28, 0.85), rgba(8, 4, 12, 0.92));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.race-profile.theme-zerg .profile-meta span {
+  color: rgba(195, 150, 220, 0.7);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-zerg .profile-meta strong {
+  color: #f3d6ff;
+  font-size: 0.85rem;
+}
+
+/* Action button: heavy bevelled purple ADD INFO */
+
+.race-profile.theme-zerg .profile-actions {
+  justify-content: stretch;
+  margin-top: 6px;
+}
+
+.race-profile.theme-zerg .primary-button {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 42px;
+  border-radius: 9px;
+  border: 2px solid rgba(190, 130, 90, 0.85);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(185, 104, 255, 0.55), rgba(80, 30, 130, 0.9) 60%, rgba(20, 8, 28, 1) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 220, 200, 0.18),
+    inset 0 0 18px rgba(255, 220, 200, 0.08),
+    inset 0 0 40px rgba(185, 104, 255, 0.4),
+    0 0 18px rgba(185, 104, 255, 0.35);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.28em;
+  text-shadow: 0 0 10px rgba(185, 104, 255, 0.6);
+  text-transform: uppercase;
+  clip-path: polygon(2% 50%, 6% 8%, 94% 8%, 98% 50%, 94% 92%, 6% 92%);
+}
+
+.race-profile.theme-zerg .primary-button::before,
+.race-profile.theme-zerg .primary-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  background: rgba(255, 240, 220, 0.85);
+  filter: drop-shadow(0 0 6px rgba(185, 104, 255, 0.6));
+}
+
+.race-profile.theme-zerg .primary-button::before {
+  left: 14px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+}
+
+.race-profile.theme-zerg .primary-button::after {
+  right: 14px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+}
+
+.race-profile.theme-zerg .primary-button:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 220, 200, 0.32),
+    inset 0 0 24px rgba(255, 220, 200, 0.16),
+    inset 0 0 60px rgba(185, 104, 255, 0.55),
+    0 0 26px rgba(185, 104, 255, 0.55);
+}
+
+.race-profile.theme-zerg .race-stage {
+  height: clamp(92px, 16vh, 126px);
+  min-height: 0;
+}
+
+.race-profile.theme-zerg .race-label {
+  margin-top: 2px;
+  padding-top: 4px;
+  font-size: 0.86rem;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card {
+  min-height: 56px;
+  padding: 8px 10px;
+}
+
+.race-profile.theme-zerg .profile-stat-cards .stat-card .stat-value {
+  font-size: 1.22rem;
+}
+
+.race-profile.theme-zerg .playstyle-analysis {
+  margin-top: 0;
+  padding: 8px 10px;
+}
+
+.race-profile.theme-zerg .playstyle-analysis .analysis-title {
+  margin-bottom: 0;
+  padding-bottom: 4px;
+  font-size: 0.78rem;
+}
+
+.race-profile.theme-zerg .profile-actions {
+  margin-top: 0;
+}
+
+.race-profile.theme-zerg .primary-button {
+  min-height: 36px;
+  font-size: 0.82rem;
+}
+
+/* ------------------------------------------------------------------------- */
+/*  TERRAN THEME — heavy industrial / military tactical styling that mimics  */
+/*  the mockup at 01_prototype/mock-data/terran_interface/.                  */
+/* ------------------------------------------------------------------------- */
+
+.race-profile.theme-terran {
+  --terran-cyan: #17d9ff;
+  --terran-cyan-soft: #4fc7ff;
+  --terran-orange: #ff9a2f;
+  --terran-orange-soft: #ffb663;
+  --terran-yellow: #ffd86b;
+  --terran-green: #93ff37;
+  --terran-red: #ff6160;
+  --terran-rust: #c46b2a;
+  --terran-rust-deep: #6b3014;
+  --terran-grime: rgba(20, 14, 8, 0.8);
+  --terran-gunmetal-deep: rgba(6, 12, 20, 0.96);
+  --terran-gunmetal: rgba(14, 28, 44, 0.95);
+  --terran-edge: rgba(60, 100, 140, 0.55);
+  --terran-edge-strong: rgba(90, 150, 200, 0.75);
+  --terran-rivet: rgba(28, 50, 72, 0.95);
+
+  position: relative;
+  gap: 10px;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  /* Dirty weathered metal: dark base + tactical glows + scratch striations
+     + rust blotches + scorch marks + grain noise. */
+  background:
+    /* Random rust blotches scattered around the plate */
+    radial-gradient(ellipse 60px 20px at 18% 88%, rgba(196, 107, 42, 0.22), transparent 70%),
+    radial-gradient(ellipse 35px 14px at 78% 12%, rgba(196, 107, 42, 0.16), transparent 70%),
+    radial-gradient(ellipse 22px 50px at 96% 64%, rgba(107, 48, 20, 0.28), transparent 75%),
+    radial-gradient(ellipse 18px 18px at 4% 32%, rgba(107, 48, 20, 0.22), transparent 75%),
+    /* Scorch marks — dark soot patches */
+    radial-gradient(circle at 88% 92%, rgba(0, 0, 0, 0.55), transparent 12%),
+    radial-gradient(circle at 6% 8%, rgba(0, 0, 0, 0.45), transparent 10%),
+    radial-gradient(ellipse 30px 6px at 50% 4%, rgba(0, 0, 0, 0.4), transparent 70%),
+    /* Diagonal scratch striations */
+    repeating-linear-gradient(118deg, transparent 0 22px, rgba(255, 255, 255, 0.02) 22px 23px, transparent 23px 80px),
+    repeating-linear-gradient(62deg, transparent 0 31px, rgba(0, 0, 0, 0.18) 31px 32px, transparent 32px 95px),
+    /* Heavier brushed metal grain */
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 3px, rgba(0, 0, 0, 0.06) 3px 4px, transparent 4px 7px),
+    /* Original tactical glows */
+    radial-gradient(circle at 12% 10%, rgba(23, 217, 255, 0.1), transparent 35%),
+    radial-gradient(circle at 90% 90%, rgba(23, 217, 255, 0.06), transparent 40%),
+    linear-gradient(140deg, rgba(20, 36, 52, 0.78), rgba(6, 12, 20, 0.96));
+  box-shadow:
+    /* Outer chipped armor edge */
+    inset 0 0 0 2px rgba(40, 60, 86, 0.85),
+    inset 0 0 0 3px rgba(20, 14, 8, 0.7),
+    inset 0 0 0 4px rgba(12, 22, 34, 0.95),
+    inset 0 0 32px rgba(23, 217, 255, 0.1),
+    inset 0 0 90px rgba(0, 0, 0, 0.62),
+    0 0 24px rgba(23, 217, 255, 0.14);
+  isolation: isolate;
+}
+
+.race-profile.theme-terran::before {
+  /* Outer riveted frame ring with corner bolt plates and edge bolts along
+     the rails — reads as battle-worn armor plating. */
+  content: "";
+  position: absolute;
+  inset: 3px;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 1px solid rgba(60, 100, 140, 0.4);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.55),
+    inset 0 0 60px rgba(23, 217, 255, 0.04);
+  background:
+    /* Big corner bolt plates */
+    radial-gradient(circle at 0% 0%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
+    radial-gradient(circle at 100% 0%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
+    radial-gradient(circle at 0% 100%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
+    radial-gradient(circle at 100% 100%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
+    /* Small hex-bolts spaced along the top rail */
+    radial-gradient(circle at 25% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 50% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 75% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    /* Bottom rail bolts */
+    radial-gradient(circle at 25% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 50% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 75% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    /* Side rail bolts */
+    radial-gradient(circle at 0% 30%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 0% 70%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 100% 30%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(circle at 100% 70%, var(--terran-rivet) 0 2.5px, transparent 4px);
+}
+
+.race-profile.theme-terran::after {
+  /* Hazard stripe corner tape + cyan tactical accent strips. The hazard
+     tape is the signature Terran "yellow-and-black" warning band painted
+     onto the corners of the chassis. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 6px;
+  background:
+    /* Top-left hazard wedge */
+    repeating-linear-gradient(45deg,
+      rgba(255, 209, 93, 0.55) 0 4px,
+      rgba(20, 14, 8, 0.85) 4px 8px) top left / 56px 8px no-repeat,
+    /* Top-right hazard wedge */
+    repeating-linear-gradient(-45deg,
+      rgba(255, 209, 93, 0.55) 0 4px,
+      rgba(20, 14, 8, 0.85) 4px 8px) top right / 56px 8px no-repeat,
+    /* Bottom-left hazard wedge */
+    repeating-linear-gradient(-45deg,
+      rgba(255, 209, 93, 0.55) 0 4px,
+      rgba(20, 14, 8, 0.85) 4px 8px) bottom left / 56px 8px no-repeat,
+    /* Bottom-right hazard wedge */
+    repeating-linear-gradient(45deg,
+      rgba(255, 209, 93, 0.55) 0 4px,
+      rgba(20, 14, 8, 0.85) 4px 8px) bottom right / 56px 8px no-repeat,
+    /* Cyan tactical ticks (kept from the previous pass) */
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) 76px 6px / 26px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-orange) 0 100%) right 76px top 6px / 32px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) 76px bottom 6px / 18px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) right 76px bottom 6px / 18px 2px no-repeat;
+  z-index: -1;
+  filter: drop-shadow(0 0 6px rgba(23, 217, 255, 0.5));
+}
+
+/* === Inner left and right panels  ======================================== */
+
+.race-profile.theme-terran .race-profile-left,
+.race-profile.theme-terran .race-profile-right {
+  position: relative;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid rgba(60, 100, 140, 0.45);
+  border-radius: 4px;
+  background:
+    /* Local rust streak running down the inner edge */
+    radial-gradient(ellipse 16px 60px at 100% 50%, rgba(196, 107, 42, 0.18), transparent 75%),
+    radial-gradient(ellipse 8px 40px at 0% 70%, rgba(107, 48, 20, 0.22), transparent 80%),
+    /* Soot smudge near the top */
+    radial-gradient(ellipse 50px 8px at 70% 0%, rgba(0, 0, 0, 0.35), transparent 75%),
+    /* Brushed-metal striations replace the clean blueprint grid */
+    repeating-linear-gradient(0deg,
+      rgba(255, 255, 255, 0.018) 0 1px,
+      transparent 1px 2px,
+      rgba(0, 0, 0, 0.06) 2px 3px,
+      transparent 3px 5px),
+    /* Heavy diagonal scratch — long, sparse */
+    repeating-linear-gradient(108deg, transparent 0 38px, rgba(255, 255, 255, 0.025) 38px 39px, transparent 39px 110px),
+    repeating-linear-gradient(72deg, transparent 0 50px, rgba(0, 0, 0, 0.18) 50px 51px, transparent 51px 130px),
+    /* Faint cyan tactical wash */
+    radial-gradient(circle at 8% 0%, rgba(23, 217, 255, 0.08), transparent 40%),
+    /* Dirty gunmetal base — slightly desaturated, more brown-tinged */
+    linear-gradient(180deg, rgba(20, 26, 32, 0.95), rgba(8, 10, 14, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 38, 56, 0.85),
+    inset 0 0 50px rgba(0, 0, 0, 0.6),
+    0 0 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Inner double-frame: thin secondary outline a few px inside, plus tiny
+   cyan "active" markers at the top-left and bottom-right corners. */
+.race-profile.theme-terran .race-profile-left::before,
+.race-profile.theme-terran .race-profile-right::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border-radius: 3px;
+  border: 1px solid rgba(40, 70, 96, 0.6);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.45);
+  background:
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) left 0 top 0 / 14px 1px no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) left 0 top 0 / 1px 14px no-repeat,
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 14px 1px no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 1px 14px no-repeat;
+}
+
+/* Match the zerg panel: stage flexes into the leftover vertical space. */
+.race-profile.theme-terran .race-profile-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Panel titles ======================================================== */
+
+.race-profile.theme-terran .panel-title {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border: none;
+  border-bottom: 1px solid rgba(40, 70, 96, 0.6);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-align: center;
+  color: var(--terran-cyan);
+  text-shadow:
+    0 0 10px rgba(23, 217, 255, 0.55),
+    0 0 22px rgba(23, 217, 255, 0.22);
+}
+
+.race-profile.theme-terran .race-profile-right .panel-title {
+  text-align: left;
+  letter-spacing: 0.22em;
+  color: var(--terran-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.5),
+    0 0 22px rgba(255, 154, 47, 0.18);
+}
+
+/* === Left panel: hide meta header, fill stage, label band ================ */
+
+/* The decorative database meta from the mockup overlaps the panel title in
+   our compact layout, mirroring the zerg pass. */
+.race-profile.theme-terran .race-stage-meta {
+  display: none;
+}
+
+.race-profile.theme-terran .race-stage {
+  position: relative;
+  align-self: stretch;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid var(--terran-edge-strong);
+  border-radius: 4px;
+  overflow: hidden;
+  /* Industrial cut-corner plate. */
+  clip-path: polygon(
+    6% 0%, 94% 0%,
+    100% 4%, 100% 96%,
+    94% 100%, 6% 100%,
+    0% 96%, 0% 4%
+  );
+  background:
+    /* Battle-damage soot patches near the corners */
+    radial-gradient(circle at 8% 92%, rgba(0, 0, 0, 0.55), transparent 18%),
+    radial-gradient(circle at 92% 14%, rgba(0, 0, 0, 0.45), transparent 12%),
+    /* Rust streaks bleeding from edges */
+    radial-gradient(ellipse 12px 36px at 0% 38%, rgba(196, 107, 42, 0.22), transparent 75%),
+    radial-gradient(ellipse 10px 28px at 100% 70%, rgba(107, 48, 20, 0.28), transparent 75%),
+    /* Tactical concentric rings */
+    radial-gradient(circle at 50% 50%, transparent 38%, rgba(23, 217, 255, 0.12) 38%, rgba(23, 217, 255, 0.12) 38.4%, transparent 39%),
+    radial-gradient(circle at 50% 50%, transparent 28%, rgba(23, 217, 255, 0.1) 28%, rgba(23, 217, 255, 0.1) 28.4%, transparent 29%),
+    /* Brushed-metal vertical striations */
+    repeating-linear-gradient(0deg,
+      rgba(255, 255, 255, 0.022) 0 1px,
+      transparent 1px 2px,
+      rgba(0, 0, 0, 0.08) 2px 3px,
+      transparent 3px 6px),
+    /* Sparse diagonal scratch lines */
+    repeating-linear-gradient(125deg, transparent 0 28px, rgba(255, 255, 255, 0.04) 28px 29px, transparent 29px 90px),
+    repeating-linear-gradient(55deg, transparent 0 36px, rgba(0, 0, 0, 0.22) 36px 37px, transparent 37px 110px),
+    /* Vignette + dirty base */
+    radial-gradient(circle at 50% 55%, rgba(23, 217, 255, 0.18), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(14, 18, 24, 1), rgba(4, 6, 10, 1));
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 38, 56, 0.85),
+    inset 0 0 30px rgba(23, 217, 255, 0.16),
+    inset 0 0 90px rgba(0, 0, 0, 0.78),
+    0 0 18px rgba(23, 217, 255, 0.22);
+}
+
+.race-profile.theme-terran .race-stage-frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  /* Sonar / radar sweep rings + a thin scanline pulse band. */
+  background:
+    radial-gradient(circle at 50% 50%, transparent 18%, rgba(23, 217, 255, 0.2) 18%, rgba(23, 217, 255, 0.2) 18.4%, transparent 19%),
+    radial-gradient(circle at 50% 50%, transparent 9%, rgba(23, 217, 255, 0.15) 9%, rgba(23, 217, 255, 0.15) 9.4%, transparent 10%);
+}
+
+.race-profile.theme-terran .race-stage-frame::before {
+  /* Inner gunmetal border traced 4 px inside the stage edge with the same
+     beveled shape — reads as a riveted secondary plate around the portrait. */
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(70, 120, 160, 0.55);
+  clip-path: polygon(
+    6% 0%, 94% 0%,
+    100% 5%, 100% 95%,
+    94% 100%, 6% 100%,
+    0% 95%, 0% 5%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(8, 16, 26, 0.9),
+    inset 0 0 18px rgba(23, 217, 255, 0.18),
+    0 0 8px rgba(23, 217, 255, 0.35);
+}
+
+.race-profile.theme-terran .race-stage-frame::after {
+  /* Yellow targeting brackets at top/bottom plus mid-edge tick marks. */
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  background:
+    /* Mid-edge yellow ticks (left + right) */
+    linear-gradient(90deg, var(--terran-yellow) 0 100%) left center / 14px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-yellow) 0 100%) right center / 14px 2px no-repeat,
+    /* Top + bottom centred ticks (orange) */
+    linear-gradient(90deg, var(--terran-orange) 0 100%) center top / 18px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-orange) 0 100%) center bottom / 18px 2px no-repeat,
+    /* Cyan corner dots */
+    radial-gradient(circle at 4% 4%, var(--terran-cyan) 0 2px, transparent 3px),
+    radial-gradient(circle at 96% 4%, var(--terran-cyan) 0 2px, transparent 3px),
+    radial-gradient(circle at 4% 96%, var(--terran-cyan) 0 2px, transparent 3px),
+    radial-gradient(circle at 96% 96%, var(--terran-cyan) 0 2px, transparent 3px),
+    /* Subtle horizontal scanline pulse */
+    linear-gradient(180deg, transparent 0%, rgba(23, 217, 255, 0.05) 50%, transparent 100%);
+  filter: drop-shadow(0 0 5px rgba(23, 217, 255, 0.45));
+}
+
+.race-profile.theme-terran .race-stage-portrait {
+  display: block;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  /* The marine stands inside the disc — center on his torso so head and
+     shoulders stay framed when the stage gets tall. */
+  object-fit: cover;
+  object-position: center 35%;
+  filter: drop-shadow(0 0 18px rgba(23, 217, 255, 0.4)) drop-shadow(0 0 38px rgba(23, 217, 255, 0.18));
+}
+
+/* Drop the zerg's purple under-glow disc here; the marine's own back-glow
+   already carries the visual weight. */
+.race-profile.theme-terran .race-stage::after {
+  content: none;
+}
+
+.race-profile.theme-terran .race-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 8px 10px 4px;
+  border: none;
+  border-top: 1px solid rgba(40, 70, 96, 0.55);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  color: var(--terran-cyan);
+  text-shadow:
+    0 0 10px rgba(23, 217, 255, 0.65),
+    0 0 26px rgba(23, 217, 255, 0.25);
+}
+
+.race-profile.theme-terran .race-label-text {
+  position: relative;
+}
+
+.race-profile.theme-terran .race-label-glyph {
+  display: block;
+  width: 18px;
+  height: 4px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, transparent 0 10%, var(--terran-cyan) 10% 50%, transparent 50% 60%, var(--terran-cyan) 60% 100%);
+  box-shadow: 0 0 8px rgba(23, 217, 255, 0.7);
+}
+
+/* === Right panel ========================================================= */
+
+.race-profile.theme-terran .race-tabs {
+  margin-bottom: 8px;
+  grid-template-columns: repeat(4, 28px);
+  gap: 4px;
+}
+
+.race-profile.theme-terran .race-tab {
+  width: 28px;
+  height: 26px;
+  font-size: 0.72rem;
+  border: 1px solid rgba(60, 100, 140, 0.55);
+  background: rgba(10, 22, 36, 0.85);
+  color: var(--terran-cyan-soft);
+  text-shadow: 0 0 8px rgba(23, 217, 255, 0.3);
+}
+
+.race-profile.theme-terran .race-tab[data-active="true"] {
+  border-color: var(--terran-cyan);
+  color: var(--terran-cyan);
+  background: linear-gradient(180deg, rgba(20, 60, 95, 0.85), rgba(8, 20, 32, 0.95));
+  box-shadow:
+    0 0 12px rgba(23, 217, 255, 0.45),
+    inset 0 0 14px rgba(23, 217, 255, 0.25);
+}
+
+/* Identity */
+
+.race-profile.theme-terran .profile-identity {
+  gap: 6px;
+}
+
+.race-profile.theme-terran .identity-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--terran-cyan);
+  /* Stylised silhouette icon — looks like a head + shoulders. */
+  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  filter: drop-shadow(0 0 5px rgba(23, 217, 255, 0.55));
+}
+
+.race-profile.theme-terran .identity-icon[data-icon="mmr"] {
+  /* Trophy / chevron silhouette in orange. */
+  background: var(--terran-orange);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
+}
+
+.race-profile.theme-terran .identity-icon[data-icon="tags"] {
+  background: var(--terran-cyan);
+  clip-path: polygon(15% 0, 100% 0, 100% 70%, 75% 100%, 0 100%, 0 25%);
+}
+
+.race-profile.theme-terran .identity-label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: var(--terran-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-terran .identity-name {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f6fdff;
+  letter-spacing: 0.02em;
+}
+
+.race-profile.theme-terran .identity-mmr {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.race-profile.theme-terran .identity-mmr-label {
+  display: inline-flex;
+  color: var(--terran-cyan);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-terran .identity-mmr > strong {
+  font-size: 1.25rem;
+  color: var(--terran-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.45),
+    0 0 22px rgba(255, 154, 47, 0.18);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-terran .identity-mmr small {
+  color: var(--terran-cyan-soft);
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+}
+
+.race-profile.theme-terran .identity-battletag {
+  gap: 8px;
+}
+
+.race-profile.theme-terran .identity-battletag span {
+  color: rgba(120, 170, 210, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-terran .identity-battletag strong {
+  color: var(--terran-cyan-soft);
+}
+
+/* Stat cards */
+
+.race-profile.theme-terran .profile-stat-cards {
+  gap: 8px;
+  margin-top: 0;
+}
+
+.race-profile.theme-terran .profile-stat-cards .stat-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  gap: 0 10px;
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(60, 100, 140, 0.55);
+  background:
+    /* Hazard stripe in the bottom-right corner — small but iconic */
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(23, 217, 255, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 40, 60, 0.65), rgba(8, 16, 26, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 38, 56, 0.7),
+    inset 0 0 24px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(23, 217, 255, 0.12);
+}
+
+.race-profile.theme-terran .profile-stat-cards .stat-card .stat-icon {
+  display: block;
+  grid-area: icon;
+  align-self: center;
+  width: 22px;
+  height: 22px;
+}
+
+.race-profile.theme-terran .profile-stat-cards .stat-card .stat-label {
+  grid-area: label;
+  color: var(--terran-cyan);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-terran .profile-stat-cards .stat-card .stat-value {
+  grid-area: value;
+  font-size: 1.45rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* Encounters: cyan crosshair */
+.race-profile.theme-terran .profile-stat-cards .stat-card.encounters {
+  border-color: rgba(23, 217, 255, 0.55);
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.encounters .stat-value {
+  color: #d4f3ff;
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.encounters .stat-icon {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 32%, var(--terran-cyan) 32% 40%, transparent 41%),
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) center / 100% 2px no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) center / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 6px rgba(23, 217, 255, 0.55));
+}
+
+/* Wins: green trophy */
+.race-profile.theme-terran .profile-stat-cards .stat-card.wins {
+  border-color: rgba(135, 255, 55, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.wins .stat-label {
+  color: var(--terran-green);
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.wins .stat-value {
+  color: var(--terran-green);
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.wins .stat-icon {
+  background: var(--terran-green);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
+}
+
+/* Losses: red skull */
+.race-profile.theme-terran .profile-stat-cards .stat-card.losses {
+  border-color: rgba(255, 97, 96, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.losses .stat-label {
+  color: var(--terran-red);
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.losses .stat-value {
+  color: var(--terran-red);
+}
+.race-profile.theme-terran .profile-stat-cards .stat-card.losses .stat-icon {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 38%, var(--terran-red) 0 30%, transparent 32%),
+    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    linear-gradient(180deg, var(--terran-red), rgba(120, 30, 30, 0.85));
+  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
+}
+
+/* Playstyle analysis */
+
+.race-profile.theme-terran .playstyle-analysis {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(60, 100, 140, 0.55);
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(0deg, rgba(23, 217, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(23, 217, 255, 0.04) 0 1px, transparent 1px 24px),
+    linear-gradient(180deg, rgba(16, 30, 46, 0.85), rgba(6, 12, 20, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 38, 56, 0.6),
+    inset 0 0 22px rgba(0, 0, 0, 0.55);
+}
+
+.race-profile.theme-terran .playstyle-analysis .analysis-title {
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(60, 100, 140, 0.55);
+  color: var(--terran-cyan);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+}
+
+.race-profile.theme-terran .playstyle-analysis .analysis-hint {
+  display: none;
+}
+
+.race-profile.theme-terran .bar-row {
+  grid-template-columns: 110px minmax(0, 1fr) 40px;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.race-profile.theme-terran .bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d4f3ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.race-profile.theme-terran .bar-label::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  filter: drop-shadow(0 0 5px currentColor);
+  flex: 0 0 auto;
+}
+
+.race-profile.theme-terran .bar-row:nth-of-type(1) .bar-label::before {
+  color: #ff7575;
+  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+}
+
+.race-profile.theme-terran .bar-row:nth-of-type(2) .bar-label::before {
+  color: var(--terran-yellow);
+  /* Dollar sign approximation: vertical bar through a stylised S. */
+  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+}
+
+.race-profile.theme-terran .bar-row:nth-of-type(3) .bar-label::before {
+  color: #b968ff;
+  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+}
+
+.race-profile.theme-terran .progress-track {
+  position: relative;
+  height: 14px;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(20, 36, 52, 0.85) 0 11px,
+    transparent 11px 13px
+  );
+  background-size: 13px 100%;
+  -webkit-mask: repeating-linear-gradient(
+    90deg,
+    #000 0 11px,
+    transparent 11px 13px
+  );
+          mask: repeating-linear-gradient(
+            90deg,
+            #000 0 11px,
+            transparent 11px 13px
+          );
+}
+
+.race-profile.theme-terran .progress-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(50, 80, 100, 0.2) 0 11px,
+    transparent 11px 13px
+  );
+  pointer-events: none;
+}
+
+.race-profile.theme-terran .progress-fill {
+  height: 100%;
+  background-image: linear-gradient(90deg, #ff5252, var(--terran-orange));
+  box-shadow: 0 0 10px rgba(255, 100, 80, 0.5);
+}
+
+.race-profile.theme-terran .progress-fill.economy {
+  background-image: linear-gradient(90deg, var(--terran-yellow), var(--terran-green));
+  box-shadow: 0 0 10px rgba(255, 216, 107, 0.45);
+}
+
+.race-profile.theme-terran .progress-fill.unpredictable {
+  background-image: linear-gradient(90deg, #b968ff, #d68bff);
+  box-shadow: 0 0 10px rgba(185, 104, 255, 0.55);
+}
+
+.race-profile.theme-terran .bar-rating {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-terran .bar-row:nth-of-type(1) .bar-rating {
+  color: var(--terran-orange-soft);
+}
+.race-profile.theme-terran .bar-row:nth-of-type(2) .bar-rating {
+  color: var(--terran-yellow);
+}
+.race-profile.theme-terran .bar-row:nth-of-type(3) .bar-rating {
+  color: #d4b1ee;
+}
+
+/* Tags: bracket-cap cyan pills */
+
+.race-profile.theme-terran .profile-tags {
+  gap: 6px;
+}
+
+.race-profile.theme-terran .profile-tags .section-label {
+  display: flex;
+  align-items: center;
+  color: var(--terran-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  margin-top: 0;
+}
+
+.race-profile.theme-terran .profile-tags .tags-row {
+  gap: 6px;
+}
+
+.race-profile.theme-terran .tag-chip {
+  position: relative;
+  min-height: 26px;
+  padding: 0 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(23, 217, 255, 0.55);
+  background:
+    linear-gradient(180deg, rgba(20, 50, 70, 0.85), rgba(8, 18, 28, 0.95));
+  color: var(--terran-cyan-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 38, 56, 0.7),
+    inset 0 0 10px rgba(23, 217, 255, 0.15),
+    0 0 8px rgba(23, 217, 255, 0.18);
+  clip-path: polygon(
+    6% 0%, 94% 0%,
+    100% 50%,
+    94% 100%, 6% 100%,
+    0% 50%
+  );
+}
+
+/* Profile meta row */
+
+.race-profile.theme-terran .profile-meta {
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.race-profile.theme-terran .profile-meta div {
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid rgba(60, 100, 140, 0.55);
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(23, 217, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(16, 30, 46, 0.85), rgba(6, 12, 20, 0.95));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.race-profile.theme-terran .profile-meta span {
+  color: rgba(120, 170, 210, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-terran .profile-meta strong {
+  color: #e8f9ff;
+  font-size: 0.85rem;
+}
+
+/* Action button: cyan trapezoidal ADD INFO */
+
+.race-profile.theme-terran .profile-actions {
+  justify-content: stretch;
+  margin-top: 6px;
+}
+
+.race-profile.theme-terran .primary-button {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 42px;
+  border-radius: 4px;
+  border: 2px solid rgba(70, 130, 170, 0.85);
+  background:
+    linear-gradient(180deg, rgba(28, 96, 140, 0.92), rgba(10, 36, 60, 1) 70%, rgba(6, 18, 30, 1) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 230, 255, 0.18),
+    inset 0 0 18px rgba(120, 200, 240, 0.15),
+    inset 0 0 40px rgba(23, 217, 255, 0.35),
+    0 0 22px rgba(23, 217, 255, 0.4);
+  color: #ecfbff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-shadow: 0 0 10px rgba(23, 217, 255, 0.7);
+  text-transform: uppercase;
+  clip-path: polygon(2% 50%, 8% 8%, 92% 8%, 98% 50%, 92% 92%, 8% 92%);
+}
+
+.race-profile.theme-terran .primary-button::before,
+.race-profile.theme-terran .primary-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%) rotate(45deg);
+  background: rgba(220, 245, 255, 0.85);
+  filter: drop-shadow(0 0 6px rgba(23, 217, 255, 0.7));
+}
+
+.race-profile.theme-terran .primary-button::before {
+  left: 14px;
+}
+
+.race-profile.theme-terran .primary-button::after {
+  right: 14px;
+}
+
+.race-profile.theme-terran .primary-button:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(180, 230, 255, 0.32),
+    inset 0 0 28px rgba(120, 200, 240, 0.24),
+    inset 0 0 60px rgba(23, 217, 255, 0.55),
+    0 0 28px rgba(23, 217, 255, 0.6);
+}
+
+/* ------------------------------------------------------------------------- */
+/*  PROTOSS THEME — gold-trimmed Khalai panelling with sapphire crystal       */
+/*  accents that mimics the mockup at 01_prototype/mock-data/protos_interface/. */
+/* ------------------------------------------------------------------------- */
+
+.race-profile.theme-protoss {
+  --protoss-cyan: #5cdcff;
+  --protoss-cyan-soft: #9beaff;
+  --protoss-gold: #ffd15d;
+  --protoss-gold-soft: #ffe39a;
+  --protoss-gold-deep: #b6862a;
+  --protoss-sapphire: #3aa8ff;
+  --protoss-sapphire-deep: #1665c8;
+  --protoss-orange: #ff9a2f;
+  --protoss-green: #93ff37;
+  --protoss-red: #ff6160;
+  --protoss-night-deep: rgba(4, 12, 26, 0.97);
+  --protoss-night: rgba(8, 22, 44, 0.95);
+  --protoss-edge: rgba(120, 90, 30, 0.55);
+  --protoss-edge-strong: rgba(220, 180, 80, 0.85);
+
+  position: relative;
+  gap: 10px;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(92, 220, 255, 0.14), transparent 38%),
+    radial-gradient(circle at 88% 90%, rgba(255, 209, 93, 0.08), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(58, 168, 255, 0.06), transparent 60%),
+    linear-gradient(140deg, rgba(14, 30, 56, 0.85), rgba(4, 12, 24, 0.97));
+  box-shadow:
+    /* Outer gold trim — two layered rings to read as carved bullion edge */
+    inset 0 0 0 2px rgba(220, 180, 80, 0.85),
+    inset 0 0 0 4px rgba(70, 50, 18, 0.95),
+    inset 0 0 0 5px rgba(255, 230, 160, 0.4),
+    inset 0 0 36px rgba(92, 220, 255, 0.12),
+    inset 0 0 110px rgba(0, 0, 0, 0.65),
+    0 0 28px rgba(92, 220, 255, 0.18),
+    0 0 12px rgba(255, 209, 93, 0.16);
+  isolation: isolate;
+}
+
+.race-profile.theme-protoss::before {
+  /* Inner gilt frame ring with corner sapphire gem mounts. The diamonds are
+     drawn as four bright cyan/blue radial gradients clipped into rhombus
+     shapes through the corner offsets. */
+  content: "";
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 220, 130, 0.55);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    inset 0 0 80px rgba(58, 168, 255, 0.05),
+    0 0 6px rgba(220, 180, 80, 0.35);
+  background:
+    /* Corner sapphire gems */
+    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 100% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 0% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px);
+  filter: drop-shadow(0 0 6px rgba(58, 168, 255, 0.7));
+}
+
+.race-profile.theme-protoss::after {
+  /* Mid-edge sapphire markers (top + bottom + sides). Match the studded
+     diamonds along the gilt frame in the mockup. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 6px, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at 50% calc(100% - 6px), rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at 6px 50%, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at calc(100% - 6px) 50%, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px);
+  filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.8));
+  z-index: -1;
+}
+
+/* === Inner left and right panels  ======================================== */
+
+.race-profile.theme-protoss .race-profile-left,
+.race-profile.theme-protoss .race-profile-right {
+  position: relative;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  border-radius: 5px;
+  background:
+    /* Faint Khalai script suggestion — vertical thin bars on the right edge */
+    linear-gradient(90deg, transparent 0 92%, rgba(92, 220, 255, 0.05) 92% 92.4%, transparent 92.4% 94%, rgba(92, 220, 255, 0.05) 94% 94.4%, transparent 94.4% 96%, rgba(92, 220, 255, 0.05) 96% 96.4%, transparent),
+    radial-gradient(circle at 12% 0%, rgba(92, 220, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(255, 209, 93, 0.06), transparent 40%),
+    linear-gradient(180deg, rgba(10, 26, 50, 0.95), rgba(4, 12, 26, 0.97));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 220, 130, 0.25),
+    inset 0 0 60px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(0, 0, 0, 0.4);
+}
+
+/* Inner gold filigree ring with corner gem stubs. */
+.race-profile.theme-protoss .race-profile-left::before,
+.race-profile.theme-protoss .race-profile-right::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 180, 80, 0.35);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.55);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 100% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 0% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px);
+  filter: drop-shadow(0 0 5px rgba(58, 168, 255, 0.7));
+}
+
+/* Match terran/zerg: stage absorbs leftover vertical space. */
+.race-profile.theme-protoss .race-profile-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Panel titles ======================================================== */
+
+.race-profile.theme-protoss .panel-title {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border: none;
+  border-bottom: 1px solid rgba(220, 180, 80, 0.4);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-align: center;
+  color: var(--protoss-cyan);
+  text-shadow:
+    0 0 12px rgba(92, 220, 255, 0.6),
+    0 0 26px rgba(92, 220, 255, 0.25);
+}
+
+.race-profile.theme-protoss .race-profile-right .panel-title {
+  text-align: left;
+  letter-spacing: 0.22em;
+  color: var(--protoss-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.5),
+    0 0 22px rgba(255, 154, 47, 0.18);
+}
+
+/* === Left panel: hide meta header, fill stage, label band ================ */
+
+.race-profile.theme-protoss .race-stage-meta {
+  display: none;
+}
+
+.race-profile.theme-protoss .race-stage {
+  position: relative;
+  align-self: stretch;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid var(--protoss-edge-strong);
+  border-radius: 4px;
+  overflow: hidden;
+  /* Slight bevel — Khalai panels have softer cuts than terran's industrial
+     plate but cleaner than zerg's organic chitin. */
+  clip-path: polygon(
+    5% 0%, 95% 0%,
+    100% 5%, 100% 95%,
+    95% 100%, 5% 100%,
+    0% 95%, 0% 5%
+  );
+  background:
+    /* Concentric blue/gold tactical rings */
+    radial-gradient(circle at 50% 50%, transparent 38%, rgba(255, 209, 93, 0.16) 38%, rgba(255, 209, 93, 0.16) 38.4%, transparent 39%),
+    radial-gradient(circle at 50% 50%, transparent 26%, rgba(92, 220, 255, 0.18) 26%, rgba(92, 220, 255, 0.18) 26.4%, transparent 27%),
+    radial-gradient(circle at 50% 50%, transparent 16%, rgba(92, 220, 255, 0.14) 16%, rgba(92, 220, 255, 0.14) 16.4%, transparent 17%),
+    /* Khalai blueprint micro-grid */
+    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
+    /* Star-field highlight — small bright pinpoints scattered for the
+       deep-space templar aesthetic */
+    radial-gradient(circle at 18% 22%, rgba(180, 230, 255, 0.3) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 68%, rgba(180, 230, 255, 0.24) 0 1px, transparent 2px),
+    radial-gradient(circle at 26% 78%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 18%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
+    /* Vignette */
+    radial-gradient(circle at 50% 60%, rgba(58, 168, 255, 0.22), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(8, 24, 46, 1), rgba(2, 8, 18, 1));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.85),
+    inset 0 0 36px rgba(92, 220, 255, 0.22),
+    inset 0 0 110px rgba(0, 0, 0, 0.7),
+    0 0 18px rgba(58, 168, 255, 0.32);
+}
+
+.race-profile.theme-protoss .race-stage-frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    /* Subtle blueprint cross-hair through the centre */
+    linear-gradient(90deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%),
+    linear-gradient(180deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%);
+}
+
+.race-profile.theme-protoss .race-stage-frame::before {
+  /* Gold ornamental inner trim that traces the bevelled silhouette. */
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(220, 180, 80, 0.7);
+  clip-path: polygon(
+    5% 0%, 95% 0%,
+    100% 6%, 100% 94%,
+    95% 100%, 5% 100%,
+    0% 94%, 0% 6%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(8, 14, 26, 0.9),
+    inset 0 0 18px rgba(58, 168, 255, 0.22),
+    0 0 8px rgba(220, 180, 80, 0.5);
+}
+
+.race-profile.theme-protoss .race-stage-frame::after {
+  /* Sapphire diamond accents at the four cardinal mid-edges and tiny
+     star-glyph pinpoints inside each corner. */
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  background:
+    /* Mid-edge diamonds */
+    radial-gradient(circle at 50% 0%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
+    radial-gradient(circle at 50% 100%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
+    radial-gradient(circle at 0% 50%, rgba(180, 230, 255, 0.9) 0 2.5px, rgba(58, 168, 255, 0.6) 2.5px 5px, transparent 7px),
+    radial-gradient(circle at 100% 50%, rgba(180, 230, 255, 0.9) 0 2.5px, rgba(58, 168, 255, 0.6) 2.5px 5px, transparent 7px),
+    /* Corner star pinpoints */
+    radial-gradient(circle at 6% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 94% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 6% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 94% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    /* Soft vertical light wash */
+    linear-gradient(180deg, transparent 0%, rgba(92, 220, 255, 0.06) 50%, transparent 100%);
+  filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.55));
+}
+
+.race-profile.theme-protoss .race-stage-portrait {
+  display: block;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  /* Templar's head sits in the upper third of the source — bias the crop so
+     the helm and shoulders stay framed when the stage is tall. */
+  object-fit: cover;
+  object-position: center 32%;
+  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45)) drop-shadow(0 0 44px rgba(255, 209, 93, 0.16));
+}
+
+.race-profile.theme-protoss .race-stage::after {
+  /* Soft cyan portal disc beneath the templar — already part of the
+     character's render, so we keep this faint and additive. */
+  content: "";
+  position: absolute;
+  bottom: 4%;
+  left: 50%;
+  width: 60%;
+  height: 12%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(58, 168, 255, 0.5), rgba(58, 168, 255, 0.12) 50%, transparent 70%);
+  filter: blur(2px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.race-profile.theme-protoss .race-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 8px 0 0;
+  padding: 10px 12px 4px;
+  border: none;
+  border-top: 1px solid rgba(220, 180, 80, 0.5);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  color: var(--protoss-cyan);
+  text-shadow:
+    0 0 12px rgba(92, 220, 255, 0.7),
+    0 0 28px rgba(92, 220, 255, 0.3);
+}
+
+.race-profile.theme-protoss .race-label-text {
+  position: relative;
+}
+
+.race-profile.theme-protoss .race-label-glyph {
+  /* Diamond crystal glyph on either side of the race name. */
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 50% 35%, rgba(180, 230, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.75) 35% 60%, rgba(22, 100, 200, 0.7) 70% 100%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  box-shadow: 0 0 10px rgba(58, 168, 255, 0.7);
+}
+
+/* === Right panel ========================================================= */
+
+.race-profile.theme-protoss .race-tabs {
+  margin-bottom: 8px;
+  grid-template-columns: repeat(4, 28px);
+  gap: 4px;
+}
+
+.race-profile.theme-protoss .race-tab {
+  width: 28px;
+  height: 26px;
+  font-size: 0.72rem;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  background: rgba(8, 22, 44, 0.85);
+  color: var(--protoss-cyan-soft);
+  text-shadow: 0 0 8px rgba(92, 220, 255, 0.3);
+}
+
+.race-profile.theme-protoss .race-tab[data-active="true"] {
+  border-color: var(--protoss-gold);
+  color: var(--protoss-gold-soft);
+  background: linear-gradient(180deg, rgba(50, 32, 8, 0.92), rgba(8, 22, 44, 0.95));
+  box-shadow:
+    0 0 12px rgba(255, 209, 93, 0.4),
+    inset 0 0 14px rgba(92, 220, 255, 0.25);
+}
+
+/* Identity */
+
+.race-profile.theme-protoss .profile-identity {
+  gap: 6px;
+}
+
+.race-profile.theme-protoss .identity-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--protoss-cyan);
+  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  filter: drop-shadow(0 0 5px rgba(92, 220, 255, 0.6));
+}
+
+.race-profile.theme-protoss .identity-icon[data-icon="mmr"] {
+  background: var(--protoss-orange);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
+}
+
+.race-profile.theme-protoss .identity-icon[data-icon="tags"] {
+  background: var(--protoss-gold);
+  clip-path: polygon(15% 0, 100% 0, 100% 70%, 75% 100%, 0 100%, 0 25%);
+}
+
+.race-profile.theme-protoss .identity-label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: var(--protoss-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-protoss .identity-name {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f6fdff;
+  letter-spacing: 0.02em;
+}
+
+.race-profile.theme-protoss .identity-mmr {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.race-profile.theme-protoss .identity-mmr-label {
+  display: inline-flex;
+  color: var(--protoss-cyan);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-protoss .identity-mmr > strong {
+  font-size: 1.25rem;
+  color: var(--protoss-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.45),
+    0 0 22px rgba(255, 154, 47, 0.18);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-protoss .identity-mmr small {
+  color: var(--protoss-cyan-soft);
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+}
+
+.race-profile.theme-protoss .identity-battletag {
+  gap: 8px;
+}
+
+.race-profile.theme-protoss .identity-battletag span {
+  color: rgba(150, 200, 220, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-protoss .identity-battletag strong {
+  color: var(--protoss-cyan-soft);
+}
+
+/* Stat cards */
+
+.race-profile.theme-protoss .profile-stat-cards {
+  gap: 8px;
+  margin-top: 0;
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  gap: 0 10px;
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(220, 180, 80, 0.55);
+  background:
+    /* Hazard stripe corner accent */
+    linear-gradient(135deg, transparent 0 80%, rgba(92, 220, 255, 0.45) 80% 86%, transparent 86% 92%, rgba(92, 220, 255, 0.45) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 40, 70, 0.65), rgba(6, 14, 26, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.7),
+    inset 0 0 24px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(92, 220, 255, 0.12);
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card .stat-icon {
+  display: block;
+  grid-area: icon;
+  align-self: center;
+  width: 22px;
+  height: 22px;
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card .stat-label {
+  grid-area: label;
+  color: var(--protoss-cyan);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card .stat-value {
+  grid-area: value;
+  font-size: 1.45rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card.encounters {
+  border-color: rgba(92, 220, 255, 0.55);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.encounters .stat-value {
+  color: var(--protoss-cyan-soft);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.encounters .stat-icon {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 32%, var(--protoss-cyan) 32% 40%, transparent 41%),
+    linear-gradient(90deg, var(--protoss-cyan) 0 100%) center / 100% 2px no-repeat,
+    linear-gradient(180deg, var(--protoss-cyan) 0 100%) center / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 6px rgba(92, 220, 255, 0.55));
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card.wins {
+  border-color: rgba(135, 255, 55, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.wins .stat-label {
+  color: var(--protoss-green);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.wins .stat-value {
+  color: var(--protoss-green);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.wins .stat-icon {
+  background: var(--protoss-green);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
+}
+
+.race-profile.theme-protoss .profile-stat-cards .stat-card.losses {
+  border-color: rgba(255, 97, 96, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.losses .stat-label {
+  color: var(--protoss-red);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.losses .stat-value {
+  color: var(--protoss-red);
+}
+.race-profile.theme-protoss .profile-stat-cards .stat-card.losses .stat-icon {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 38%, var(--protoss-red) 0 30%, transparent 32%),
+    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    linear-gradient(180deg, var(--protoss-red), rgba(120, 30, 30, 0.85));
+  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
+}
+
+/* Playstyle analysis */
+
+.race-profile.theme-protoss .playstyle-analysis {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(220, 180, 80, 0.55);
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
+    linear-gradient(180deg, rgba(14, 28, 50, 0.85), rgba(4, 12, 22, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.6),
+    inset 0 0 22px rgba(0, 0, 0, 0.55);
+}
+
+.race-profile.theme-protoss .playstyle-analysis .analysis-title {
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(220, 180, 80, 0.55);
+  color: var(--protoss-cyan);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+}
+
+.race-profile.theme-protoss .playstyle-analysis .analysis-hint {
+  display: none;
+}
+
+.race-profile.theme-protoss .bar-row {
+  grid-template-columns: 110px minmax(0, 1fr) 40px;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.race-profile.theme-protoss .bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d4f3ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.race-profile.theme-protoss .bar-label::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  filter: drop-shadow(0 0 5px currentColor);
+  flex: 0 0 auto;
+}
+
+.race-profile.theme-protoss .bar-row:nth-of-type(1) .bar-label::before {
+  color: #ff7575;
+  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+}
+
+.race-profile.theme-protoss .bar-row:nth-of-type(2) .bar-label::before {
+  color: var(--protoss-gold);
+  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+}
+
+.race-profile.theme-protoss .bar-row:nth-of-type(3) .bar-label::before {
+  color: #b968ff;
+  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+}
+
+.race-profile.theme-protoss .progress-track {
+  position: relative;
+  height: 14px;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(20, 36, 60, 0.85) 0 11px,
+    transparent 11px 13px
+  );
+  background-size: 13px 100%;
+  -webkit-mask: repeating-linear-gradient(
+    90deg,
+    #000 0 11px,
+    transparent 11px 13px
+  );
+          mask: repeating-linear-gradient(
+            90deg,
+            #000 0 11px,
+            transparent 11px 13px
+          );
+}
+
+.race-profile.theme-protoss .progress-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(50, 80, 110, 0.2) 0 11px,
+    transparent 11px 13px
+  );
+  pointer-events: none;
+}
+
+.race-profile.theme-protoss .progress-fill {
+  height: 100%;
+  background-image: linear-gradient(90deg, #ff5252, var(--protoss-orange));
+  box-shadow: 0 0 10px rgba(255, 100, 80, 0.5);
+}
+
+.race-profile.theme-protoss .progress-fill.economy {
+  background-image: linear-gradient(90deg, var(--protoss-gold), var(--protoss-green));
+  box-shadow: 0 0 10px rgba(255, 209, 93, 0.5);
+}
+
+.race-profile.theme-protoss .progress-fill.unpredictable {
+  background-image: linear-gradient(90deg, #b968ff, #d68bff);
+  box-shadow: 0 0 10px rgba(185, 104, 255, 0.55);
+}
+
+.race-profile.theme-protoss .bar-rating {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-protoss .bar-row:nth-of-type(1) .bar-rating {
+  color: var(--protoss-orange);
+}
+.race-profile.theme-protoss .bar-row:nth-of-type(2) .bar-rating {
+  color: var(--protoss-gold-soft);
+}
+.race-profile.theme-protoss .bar-row:nth-of-type(3) .bar-rating {
+  color: #d4b1ee;
+}
+
+/* Tags: gold-trimmed crystal pills */
+
+.race-profile.theme-protoss .profile-tags {
+  gap: 6px;
+}
+
+.race-profile.theme-protoss .profile-tags .section-label {
+  display: flex;
+  align-items: center;
+  color: var(--protoss-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  margin-top: 0;
+}
+
+.race-profile.theme-protoss .profile-tags .tags-row {
+  gap: 6px;
+}
+
+.race-profile.theme-protoss .tag-chip {
+  position: relative;
+  min-height: 26px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 180, 80, 0.6);
+  background:
+    linear-gradient(180deg, rgba(40, 28, 8, 0.85), rgba(10, 24, 44, 0.95));
+  color: var(--protoss-gold-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.7),
+    inset 0 0 10px rgba(92, 220, 255, 0.18),
+    0 0 8px rgba(255, 209, 93, 0.18);
+  clip-path: polygon(
+    8% 0%, 92% 0%,
+    100% 50%,
+    92% 100%, 8% 100%,
+    0% 50%
+  );
+}
+
+/* Profile meta row */
+
+.race-profile.theme-protoss .profile-meta {
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.race-profile.theme-protoss .profile-meta div {
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(14, 28, 50, 0.85), rgba(4, 12, 22, 0.95));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.race-profile.theme-protoss .profile-meta span {
+  color: rgba(150, 200, 220, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-protoss .profile-meta strong {
+  color: #e8f9ff;
+  font-size: 0.85rem;
+}
+
+/* Action button: gold-trimmed sapphire ADD INFO */
+
+.race-profile.theme-protoss .profile-actions {
+  justify-content: stretch;
+  margin-top: 6px;
+}
+
+.race-profile.theme-protoss .primary-button {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 44px;
+  border-radius: 5px;
+  border: 2px solid rgba(220, 180, 80, 0.85);
+  background:
+    /* Inner sapphire wash */
+    radial-gradient(ellipse at 50% 50%, rgba(92, 220, 255, 0.6), rgba(22, 100, 200, 0.85) 60%, rgba(8, 22, 44, 1) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 230, 160, 0.45),
+    inset 0 0 20px rgba(180, 230, 255, 0.18),
+    inset 0 0 50px rgba(58, 168, 255, 0.4),
+    0 0 24px rgba(58, 168, 255, 0.45),
+    0 0 14px rgba(255, 209, 93, 0.25);
+  color: #f4fbff;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-shadow: 0 0 12px rgba(180, 230, 255, 0.85);
+  text-transform: uppercase;
+  clip-path: polygon(2% 50%, 8% 6%, 92% 6%, 98% 50%, 92% 94%, 8% 94%);
+}
+
+.race-profile.theme-protoss .primary-button::before,
+.race-profile.theme-protoss .primary-button::after {
+  /* Sapphire diamond endcaps. */
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%) rotate(45deg);
+  background: radial-gradient(circle at 50% 30%, rgba(220, 245, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.7) 35% 65%, rgba(22, 100, 200, 0.7) 70% 100%);
+  filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.85));
+}
+
+.race-profile.theme-protoss .primary-button::before {
+  left: 14px;
+}
+
+.race-profile.theme-protoss .primary-button::after {
+  right: 14px;
+}
+
+.race-profile.theme-protoss .primary-button:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 230, 160, 0.65),
+    inset 0 0 28px rgba(180, 230, 255, 0.32),
+    inset 0 0 70px rgba(58, 168, 255, 0.6),
+    0 0 32px rgba(58, 168, 255, 0.7),
+    0 0 18px rgba(255, 209, 93, 0.4);
+}
+
+/* === Random theme ======================================================== */
+/* Random is a tri-race fusion: protoss-style gold-trimmed sapphire frame,
+   zerg-style purple tendril accents, cyan tactical rings, and a "?" glyph.
+   Structure mirrors the protoss theme; only the palette and a few decorative
+   layers shift toward a violet/blue/gold blend to match the random mockup. */
+
+.race-profile.theme-random {
+  --random-cyan: #5cdcff;
+  --random-cyan-soft: #9beaff;
+  --random-gold: #ffd15d;
+  --random-gold-soft: #ffe39a;
+  --random-violet: #b968ff;
+  --random-violet-soft: #d68bff;
+  --random-sapphire: #3aa8ff;
+  --random-sapphire-deep: #1665c8;
+  --random-orange: #ff9a2f;
+  --random-green: #93ff37;
+  --random-red: #ff6160;
+
+  position: relative;
+  gap: 10px;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(92, 220, 255, 0.14), transparent 38%),
+    radial-gradient(circle at 88% 90%, rgba(185, 104, 255, 0.12), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(58, 168, 255, 0.06), transparent 60%),
+    linear-gradient(140deg, rgba(18, 18, 50, 0.85), rgba(6, 8, 22, 0.97));
+  box-shadow:
+    inset 0 0 0 2px rgba(220, 180, 80, 0.85),
+    inset 0 0 0 4px rgba(70, 50, 18, 0.95),
+    inset 0 0 0 5px rgba(255, 230, 160, 0.4),
+    inset 0 0 36px rgba(92, 220, 255, 0.12),
+    inset 0 0 110px rgba(0, 0, 0, 0.65),
+    0 0 24px rgba(92, 220, 255, 0.18),
+    0 0 16px rgba(185, 104, 255, 0.18),
+    0 0 12px rgba(255, 209, 93, 0.16);
+  isolation: isolate;
+}
+
+.race-profile.theme-random::before {
+  /* Inner gilt frame ring with corner sapphire/violet gem mounts. */
+  content: "";
+  position: absolute;
+  inset: 6px;
+  pointer-events: none;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 220, 130, 0.55);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.55),
+    inset 0 0 80px rgba(58, 168, 255, 0.05),
+    0 0 6px rgba(220, 180, 80, 0.35);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 100% 0%, rgba(220, 180, 255, 0.95) 0 4px, rgba(185, 104, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 0% 100%, rgba(220, 180, 255, 0.95) 0 4px, rgba(185, 104, 255, 0.75) 4px 8px, transparent 11px),
+    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px);
+  filter: drop-shadow(0 0 6px rgba(140, 130, 240, 0.7));
+}
+
+.race-profile.theme-random::after {
+  /* Mid-edge gem markers — alternating sapphire (top/bottom) and violet
+     (sides) to read as the multi-race frame ornaments in the mockup. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 6px, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at 50% calc(100% - 6px), rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at 6px 50%, rgba(220, 180, 255, 0.9) 0 3px, rgba(185, 104, 255, 0.65) 3px 6px, transparent 8px),
+    radial-gradient(circle at calc(100% - 6px) 50%, rgba(220, 180, 255, 0.9) 0 3px, rgba(185, 104, 255, 0.65) 3px 6px, transparent 8px);
+  filter: drop-shadow(0 0 8px rgba(120, 130, 240, 0.8));
+  z-index: -1;
+}
+
+/* === Inner left and right panels ========================================= */
+
+.race-profile.theme-random .race-profile-left,
+.race-profile.theme-random .race-profile-right {
+  position: relative;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  border-radius: 5px;
+  background:
+    linear-gradient(90deg, transparent 0 92%, rgba(185, 104, 255, 0.05) 92% 92.4%, transparent 92.4% 94%, rgba(92, 220, 255, 0.05) 94% 94.4%, transparent 94.4% 96%, rgba(185, 104, 255, 0.05) 96% 96.4%, transparent),
+    radial-gradient(circle at 12% 0%, rgba(92, 220, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 100% 100%, rgba(185, 104, 255, 0.08), transparent 40%),
+    linear-gradient(180deg, rgba(16, 14, 44, 0.95), rgba(6, 6, 22, 0.97));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 220, 130, 0.25),
+    inset 0 0 60px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(0, 0, 0, 0.4);
+}
+
+.race-profile.theme-random .race-profile-left::before,
+.race-profile.theme-random .race-profile-right::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 180, 80, 0.35);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.55);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 100% 0%, rgba(220, 180, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 0% 100%, rgba(220, 180, 255, 0.7) 0 2px, transparent 4px),
+    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px);
+  filter: drop-shadow(0 0 5px rgba(120, 130, 240, 0.7));
+}
+
+.race-profile.theme-random .race-profile-left {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Panel titles ======================================================== */
+
+.race-profile.theme-random .panel-title {
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border: none;
+  border-bottom: 1px solid rgba(220, 180, 80, 0.4);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-align: center;
+  color: var(--random-cyan);
+  text-shadow:
+    0 0 12px rgba(92, 220, 255, 0.6),
+    0 0 26px rgba(92, 220, 255, 0.25);
+}
+
+.race-profile.theme-random .race-profile-right .panel-title {
+  text-align: left;
+  letter-spacing: 0.22em;
+  color: var(--random-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.5),
+    0 0 22px rgba(255, 154, 47, 0.18);
+}
+
+/* === Left panel: meta header, stage, label band ========================== */
+
+.race-profile.theme-random .race-stage-meta {
+  display: none;
+}
+
+.race-profile.theme-random .race-stage {
+  position: relative;
+  align-self: stretch;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid rgba(220, 180, 80, 0.85);
+  border-radius: 4px;
+  overflow: hidden;
+  clip-path: polygon(
+    5% 0%, 95% 0%,
+    100% 5%, 100% 95%,
+    95% 100%, 5% 100%,
+    0% 95%, 0% 5%
+  );
+  background:
+    /* Outer violet ring */
+    radial-gradient(circle at 50% 50%, transparent 44%, rgba(185, 104, 255, 0.16) 44%, rgba(185, 104, 255, 0.16) 44.4%, transparent 45%),
+    /* Gold ring */
+    radial-gradient(circle at 50% 50%, transparent 38%, rgba(255, 209, 93, 0.16) 38%, rgba(255, 209, 93, 0.16) 38.4%, transparent 39%),
+    /* Cyan rings */
+    radial-gradient(circle at 50% 50%, transparent 26%, rgba(92, 220, 255, 0.18) 26%, rgba(92, 220, 255, 0.18) 26.4%, transparent 27%),
+    radial-gradient(circle at 50% 50%, transparent 16%, rgba(92, 220, 255, 0.14) 16%, rgba(92, 220, 255, 0.14) 16.4%, transparent 17%),
+    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
+    radial-gradient(circle at 18% 22%, rgba(180, 230, 255, 0.3) 0 1px, transparent 2px),
+    radial-gradient(circle at 80% 68%, rgba(220, 180, 255, 0.24) 0 1px, transparent 2px),
+    radial-gradient(circle at 26% 78%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 76% 18%, rgba(220, 180, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(circle at 50% 60%, rgba(58, 168, 255, 0.22), transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(12, 14, 38, 1), rgba(2, 4, 14, 1));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.85),
+    inset 0 0 36px rgba(92, 220, 255, 0.22),
+    inset 0 0 110px rgba(0, 0, 0, 0.7),
+    0 0 18px rgba(58, 168, 255, 0.32);
+}
+
+.race-profile.theme-random .race-stage-frame {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background:
+    linear-gradient(90deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%),
+    linear-gradient(180deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%);
+}
+
+.race-profile.theme-random .race-stage-frame::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+  border: 1px solid rgba(220, 180, 80, 0.7);
+  clip-path: polygon(
+    5% 0%, 95% 0%,
+    100% 6%, 100% 94%,
+    95% 100%, 5% 100%,
+    0% 94%, 0% 6%
+  );
+  box-shadow:
+    inset 0 0 0 1px rgba(8, 14, 26, 0.9),
+    inset 0 0 18px rgba(58, 168, 255, 0.22),
+    0 0 8px rgba(220, 180, 80, 0.5);
+}
+
+.race-profile.theme-random .race-stage-frame::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  background:
+    /* Mid-edge gems: cyan top/bottom, violet sides */
+    radial-gradient(circle at 50% 0%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
+    radial-gradient(circle at 50% 100%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
+    radial-gradient(circle at 0% 50%, rgba(220, 180, 255, 0.9) 0 2.5px, rgba(185, 104, 255, 0.6) 2.5px 5px, transparent 7px),
+    radial-gradient(circle at 100% 50%, rgba(220, 180, 255, 0.9) 0 2.5px, rgba(185, 104, 255, 0.6) 2.5px 5px, transparent 7px),
+    radial-gradient(circle at 6% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 94% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 6% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 94% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    linear-gradient(180deg, transparent 0%, rgba(92, 220, 255, 0.06) 50%, transparent 100%);
+  filter: drop-shadow(0 0 8px rgba(120, 130, 240, 0.55));
+}
+
+.race-profile.theme-random .race-stage-portrait {
+  display: block;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  object-fit: cover;
+  object-position: center 38%;
+  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45)) drop-shadow(0 0 44px rgba(185, 104, 255, 0.22));
+}
+
+.race-profile.theme-random .race-stage::after {
+  content: "";
+  position: absolute;
+  bottom: 4%;
+  left: 50%;
+  width: 60%;
+  height: 12%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(58, 168, 255, 0.5), rgba(185, 104, 255, 0.2) 50%, transparent 70%);
+  filter: blur(2px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.race-profile.theme-random .race-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 8px 0 0;
+  padding: 10px 12px 4px;
+  border: none;
+  border-top: 1px solid rgba(220, 180, 80, 0.5);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.4em;
+  color: var(--random-cyan);
+  text-shadow:
+    0 0 12px rgba(92, 220, 255, 0.7),
+    0 0 28px rgba(92, 220, 255, 0.3);
+}
+
+.race-profile.theme-random .race-label-text {
+  position: relative;
+}
+
+.race-profile.theme-random .race-label-glyph {
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 50% 35%, rgba(220, 230, 255, 0.95) 0 30%, rgba(120, 150, 240, 0.78) 35% 60%, rgba(58, 50, 160, 0.7) 70% 100%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  box-shadow: 0 0 10px rgba(120, 130, 240, 0.7);
+}
+
+/* === Right panel ========================================================= */
+
+.race-profile.theme-random .race-tabs {
+  margin-bottom: 8px;
+  grid-template-columns: repeat(4, 28px);
+  gap: 4px;
+}
+
+.race-profile.theme-random .race-tab {
+  width: 28px;
+  height: 26px;
+  font-size: 0.72rem;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  background: rgba(12, 12, 36, 0.85);
+  color: var(--random-cyan-soft);
+  text-shadow: 0 0 8px rgba(92, 220, 255, 0.3);
+}
+
+.race-profile.theme-random .race-tab[data-active="true"] {
+  border-color: var(--random-gold);
+  color: var(--random-gold-soft);
+  background: linear-gradient(180deg, rgba(50, 32, 8, 0.92), rgba(20, 16, 50, 0.95));
+  box-shadow:
+    0 0 12px rgba(255, 209, 93, 0.4),
+    inset 0 0 14px rgba(185, 104, 255, 0.25);
+}
+
+/* Identity */
+
+.race-profile.theme-random .profile-identity {
+  gap: 6px;
+}
+
+.race-profile.theme-random .identity-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: var(--random-cyan);
+  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  filter: drop-shadow(0 0 5px rgba(92, 220, 255, 0.6));
+}
+
+.race-profile.theme-random .identity-icon[data-icon="mmr"] {
+  background: var(--random-orange);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
+}
+
+.race-profile.theme-random .identity-icon[data-icon="tags"] {
+  background: var(--random-gold);
+  clip-path: polygon(15% 0, 100% 0, 100% 70%, 75% 100%, 0 100%, 0 25%);
+}
+
+.race-profile.theme-random .identity-label {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  color: var(--random-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-random .identity-name {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f6fdff;
+  letter-spacing: 0.02em;
+}
+
+.race-profile.theme-random .identity-mmr {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin: 2px 0 0;
+}
+
+.race-profile.theme-random .identity-mmr-label {
+  display: inline-flex;
+  color: var(--random-cyan);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-random .identity-mmr > strong {
+  font-size: 1.25rem;
+  color: var(--random-orange);
+  text-shadow:
+    0 0 10px rgba(255, 154, 47, 0.45),
+    0 0 22px rgba(255, 154, 47, 0.18);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-random .identity-mmr small {
+  color: var(--random-cyan-soft);
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+}
+
+.race-profile.theme-random .identity-battletag {
+  gap: 8px;
+}
+
+.race-profile.theme-random .identity-battletag span {
+  color: rgba(180, 200, 230, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-random .identity-battletag strong {
+  color: var(--random-cyan-soft);
+}
+
+/* Stat cards */
+
+.race-profile.theme-random .profile-stat-cards {
+  gap: 8px;
+  margin-top: 0;
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  grid-template-areas:
+    "icon label"
+    "icon value";
+  gap: 0 10px;
+  min-height: 60px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(220, 180, 80, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(185, 104, 255, 0.45) 80% 86%, transparent 86% 92%, rgba(185, 104, 255, 0.45) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 22, 60, 0.65), rgba(6, 8, 22, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.7),
+    inset 0 0 24px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(92, 220, 255, 0.12);
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card .stat-icon {
+  display: block;
+  grid-area: icon;
+  align-self: center;
+  width: 22px;
+  height: 22px;
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card .stat-label {
+  grid-area: label;
+  color: var(--random-cyan);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card .stat-value {
+  grid-area: value;
+  font-size: 1.45rem;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card.encounters {
+  border-color: rgba(92, 220, 255, 0.55);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.encounters .stat-value {
+  color: var(--random-cyan-soft);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.encounters .stat-icon {
+  background:
+    radial-gradient(circle at 50% 50%, transparent 32%, var(--random-cyan) 32% 40%, transparent 41%),
+    linear-gradient(90deg, var(--random-cyan) 0 100%) center / 100% 2px no-repeat,
+    linear-gradient(180deg, var(--random-cyan) 0 100%) center / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 6px rgba(92, 220, 255, 0.55));
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card.wins {
+  border-color: rgba(135, 255, 55, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.wins .stat-label {
+  color: var(--random-green);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.wins .stat-value {
+  color: var(--random-green);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.wins .stat-icon {
+  background: var(--random-green);
+  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
+}
+
+.race-profile.theme-random .profile-stat-cards .stat-card.losses {
+  border-color: rgba(255, 97, 96, 0.55);
+  background:
+    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
+    linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.losses .stat-label {
+  color: var(--random-red);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.losses .stat-value {
+  color: var(--random-red);
+}
+.race-profile.theme-random .profile-stat-cards .stat-card.losses .stat-icon {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 38%, var(--random-red) 0 30%, transparent 32%),
+    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    linear-gradient(180deg, var(--random-red), rgba(120, 30, 30, 0.85));
+  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
+}
+
+/* Playstyle analysis */
+
+.race-profile.theme-random .playstyle-analysis {
+  margin-top: 2px;
+  padding: 10px 12px;
+  border: 1px solid rgba(220, 180, 80, 0.55);
+  border-radius: 5px;
+  background:
+    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(90deg, rgba(185, 104, 255, 0.04) 0 1px, transparent 1px 24px),
+    linear-gradient(180deg, rgba(16, 18, 50, 0.85), rgba(4, 6, 22, 0.95));
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.6),
+    inset 0 0 22px rgba(0, 0, 0, 0.55);
+}
+
+.race-profile.theme-random .playstyle-analysis .analysis-title {
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(220, 180, 80, 0.55);
+  color: var(--random-cyan);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+}
+
+.race-profile.theme-random .playstyle-analysis .analysis-hint {
+  display: none;
+}
+
+.race-profile.theme-random .bar-row {
+  grid-template-columns: 110px minmax(0, 1fr) 40px;
+  gap: 10px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.race-profile.theme-random .bar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d4f3ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.race-profile.theme-random .bar-label::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: currentColor;
+  filter: drop-shadow(0 0 5px currentColor);
+  flex: 0 0 auto;
+}
+
+.race-profile.theme-random .bar-row:nth-of-type(1) .bar-label::before {
+  color: #ff7575;
+  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+}
+
+.race-profile.theme-random .bar-row:nth-of-type(2) .bar-label::before {
+  color: var(--random-gold);
+  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+}
+
+.race-profile.theme-random .bar-row:nth-of-type(3) .bar-label::before {
+  color: var(--random-violet);
+  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+}
+
+.race-profile.theme-random .progress-track {
+  position: relative;
+  height: 14px;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(20, 24, 60, 0.85) 0 11px,
+    transparent 11px 13px
+  );
+  background-size: 13px 100%;
+  -webkit-mask: repeating-linear-gradient(
+    90deg,
+    #000 0 11px,
+    transparent 11px 13px
+  );
+          mask: repeating-linear-gradient(
+            90deg,
+            #000 0 11px,
+            transparent 11px 13px
+          );
+}
+
+.race-profile.theme-random .progress-track::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(60, 60, 110, 0.2) 0 11px,
+    transparent 11px 13px
+  );
+  pointer-events: none;
+}
+
+.race-profile.theme-random .progress-fill {
+  height: 100%;
+  background-image: linear-gradient(90deg, #ff5252, var(--random-orange));
+  box-shadow: 0 0 10px rgba(255, 100, 80, 0.5);
+}
+
+.race-profile.theme-random .progress-fill.economy {
+  background-image: linear-gradient(90deg, var(--random-gold), var(--random-green));
+  box-shadow: 0 0 10px rgba(255, 209, 93, 0.5);
+}
+
+.race-profile.theme-random .progress-fill.unpredictable {
+  background-image: linear-gradient(90deg, var(--random-violet), var(--random-violet-soft));
+  box-shadow: 0 0 10px rgba(185, 104, 255, 0.55);
+}
+
+.race-profile.theme-random .bar-rating {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-random .bar-row:nth-of-type(1) .bar-rating {
+  color: var(--random-orange);
+}
+.race-profile.theme-random .bar-row:nth-of-type(2) .bar-rating {
+  color: var(--random-gold-soft);
+}
+.race-profile.theme-random .bar-row:nth-of-type(3) .bar-rating {
+  color: var(--random-violet-soft);
+}
+
+/* Tags: gold-trimmed crystal pills with violet glow */
+
+.race-profile.theme-random .profile-tags {
+  gap: 6px;
+}
+
+.race-profile.theme-random .profile-tags .section-label {
+  display: flex;
+  align-items: center;
+  color: var(--random-cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  margin-top: 0;
+}
+
+.race-profile.theme-random .profile-tags .tags-row {
+  gap: 6px;
+}
+
+.race-profile.theme-random .tag-chip {
+  position: relative;
+  min-height: 26px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 180, 80, 0.6);
+  background:
+    linear-gradient(180deg, rgba(40, 28, 8, 0.85), rgba(16, 16, 50, 0.95));
+  color: var(--random-gold-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  box-shadow:
+    inset 0 0 0 1px rgba(80, 50, 14, 0.7),
+    inset 0 0 10px rgba(185, 104, 255, 0.18),
+    0 0 8px rgba(255, 209, 93, 0.18);
+  clip-path: polygon(
+    8% 0%, 92% 0%,
+    100% 50%,
+    92% 100%, 8% 100%,
+    0% 50%
+  );
+}
+
+/* Profile meta row */
+
+.race-profile.theme-random .profile-meta {
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.race-profile.theme-random .profile-meta div {
+  gap: 4px;
+  padding: 6px 8px;
+  border: 1px solid rgba(220, 180, 80, 0.45);
+  border-radius: 4px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.08), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(185, 104, 255, 0.06), transparent 55%),
+    linear-gradient(180deg, rgba(16, 20, 50, 0.85), rgba(4, 6, 18, 0.95));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.race-profile.theme-random .profile-meta span {
+  color: rgba(180, 200, 230, 0.75);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+}
+
+.race-profile.theme-random .profile-meta strong {
+  color: #e8f9ff;
+  font-size: 0.85rem;
+}
+
+/* Action button: gold-trimmed sapphire ADD INFO with violet halo */
+
+.race-profile.theme-random .profile-actions {
+  justify-content: stretch;
+  margin-top: 6px;
+}
+
+.race-profile.theme-random .primary-button {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 44px;
+  border-radius: 5px;
+  border: 2px solid rgba(220, 180, 80, 0.85);
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(92, 220, 255, 0.6), rgba(22, 100, 200, 0.85) 60%, rgba(8, 14, 44, 1) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 230, 160, 0.45),
+    inset 0 0 20px rgba(180, 230, 255, 0.18),
+    inset 0 0 50px rgba(58, 168, 255, 0.4),
+    0 0 24px rgba(58, 168, 255, 0.45),
+    0 0 18px rgba(185, 104, 255, 0.28),
+    0 0 14px rgba(255, 209, 93, 0.25);
+  color: #f4fbff;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-shadow: 0 0 12px rgba(180, 230, 255, 0.85);
+  text-transform: uppercase;
+  clip-path: polygon(2% 50%, 8% 6%, 92% 6%, 98% 50%, 92% 94%, 8% 94%);
+}
+
+.race-profile.theme-random .primary-button::before,
+.race-profile.theme-random .primary-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translateY(-50%) rotate(45deg);
+  background: radial-gradient(circle at 50% 30%, rgba(220, 245, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.7) 35% 65%, rgba(22, 100, 200, 0.7) 70% 100%);
+  filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.85));
+}
+
+.race-profile.theme-random .primary-button::before {
+  left: 14px;
+}
+
+.race-profile.theme-random .primary-button::after {
+  right: 14px;
+}
+
+.race-profile.theme-random .primary-button:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 230, 160, 0.65),
+    inset 0 0 28px rgba(180, 230, 255, 0.32),
+    inset 0 0 70px rgba(58, 168, 255, 0.6),
+    0 0 32px rgba(58, 168, 255, 0.7),
+    0 0 22px rgba(185, 104, 255, 0.4),
+    0 0 18px rgba(255, 209, 93, 0.4);
+}
+
+.race-profile:not(.theme-zerg) .profile-tags[data-has-tags="false"] {
+  min-height: 46px;
+  max-height: 56px;
+}
+
+.race-profile:not(.theme-zerg) .profile-tags[data-has-tags="true"] {
+  min-height: 88px;
+  max-height: 104px;
+}
+
+.race-profile:not(.theme-zerg) .profile-actions {
+  justify-content: center;
+  min-height: 36px;
+  margin-top: 0;
+}
+
+.race-profile:not(.theme-zerg) .primary-button {
+  flex: 0 1 auto;
+  width: min(92%, 920px);
+  min-height: 36px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .race-profile {
+    grid-template-columns: 1fr;
+  }
+
+  .race-profile-left {
+    grid-template-columns: auto minmax(120px, 1fr) auto;
+    align-items: center;
+  }
+
+  .race-stage {
+    height: 110px;
+  }
+
+  .profile-stat-cards,
+  .profile-meta {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .profile-stat-cards,
+  .profile-meta,
+  .race-profile .bar-row {
+    grid-template-columns: 1fr;
+  }
+
+  .race-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .race-tab {
+    width: auto;
+  }
+}

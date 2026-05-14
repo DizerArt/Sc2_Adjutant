@@ -1,0 +1,307 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #eef4ff;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.overlay-body {
+  width: 100vw;
+  height: 100vh;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.overlay-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  padding: 10px 14px 10px 10px;
+  background:
+    linear-gradient(140deg, rgba(14, 22, 34, 0.78), rgba(8, 12, 18, 0.78));
+  border: 1px solid rgba(220, 180, 80, 0.4);
+  box-shadow:
+    inset 0 0 0 1px rgba(121, 207, 255, 0.14),
+    0 6px 18px rgba(0, 0, 0, 0.55);
+  border-radius: 6px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay-card.theme-terran {
+  border-color: rgba(255, 132, 56, 0.45);
+}
+.overlay-card.theme-zerg {
+  border-color: rgba(168, 75, 226, 0.45);
+}
+.overlay-card.theme-protoss {
+  border-color: rgba(255, 209, 93, 0.45);
+}
+.overlay-card.theme-random {
+  border-color: rgba(121, 207, 255, 0.45);
+}
+
+.overlay-card--empty {
+  grid-template-columns: 1fr;
+  padding: 12px 18px;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  border-color: rgba(121, 207, 255, 0.4);
+}
+
+.overlay-portrait {
+  position: relative;
+  width: 86px;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 28%,
+      rgba(121, 207, 255, 0.14),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(8, 14, 22, 0.4), rgba(2, 4, 8, 0.65));
+  border: 1px solid rgba(220, 180, 80, 0.2);
+  border-radius: 4px;
+}
+
+.overlay-portrait-image {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 145%;
+  height: auto;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+}
+
+.overlay-portrait-glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(238, 244, 255, 0.6);
+}
+
+.overlay-portrait-glyph-tag {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: rgba(10, 14, 22, 0.78);
+  border: 1px solid rgba(220, 180, 80, 0.38);
+  border-radius: 3px;
+  color: #ffd15d;
+  z-index: 1;
+}
+
+.overlay-portrait-glyph-tag.race-terran {
+  color: #ff8438;
+  border-color: rgba(255, 132, 56, 0.55);
+}
+.overlay-portrait-glyph-tag.race-zerg {
+  color: #c879ff;
+  border-color: rgba(168, 75, 226, 0.55);
+}
+.overlay-portrait-glyph-tag.race-protoss {
+  color: #ffd15d;
+  border-color: rgba(255, 209, 93, 0.55);
+}
+.overlay-portrait-glyph-tag.race-random {
+  color: #79cfff;
+  border-color: rgba(121, 207, 255, 0.55);
+}
+
+.overlay-body-content {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 6px;
+  min-width: 0;
+}
+
+.overlay-header {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.overlay-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(238, 244, 255, 0.5);
+}
+
+.overlay-nickname {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  color: #eef4ff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+.overlay-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.overlay-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 0;
+  border: 1px solid rgba(121, 207, 255, 0.16);
+  background: rgba(8, 14, 22, 0.55);
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.overlay-stat-label {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(238, 244, 255, 0.55);
+  text-transform: uppercase;
+}
+
+.overlay-stat-value {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 3px;
+  color: #eef4ff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.overlay-stat-wins .overlay-stat-value {
+  color: #88e6a8;
+}
+.overlay-stat-losses .overlay-stat-value {
+  color: #ff7575;
+}
+.overlay-stat-rate .overlay-stat-value {
+  color: #ffd15d;
+}
+
+.overlay-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  align-self: end;
+}
+
+.overlay-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #eef4ff;
+  background: rgba(15, 22, 32, 0.7);
+  border: 1px solid rgba(121, 207, 255, 0.22);
+  border-radius: 3px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overlay-tag[data-race="terran"] {
+  border-color: rgba(255, 132, 56, 0.4);
+  color: #ffb083;
+}
+.overlay-tag[data-race="zerg"] {
+  border-color: rgba(168, 75, 226, 0.4);
+  color: #d8a4ff;
+}
+.overlay-tag[data-race="protoss"] {
+  border-color: rgba(255, 209, 93, 0.4);
+  color: #ffe39a;
+}
+.overlay-tag[data-race="random"] {
+  border-color: rgba(121, 207, 255, 0.4);
+  color: #b6e3ff;
+}
+
+.overlay-tag--empty {
+  border-style: dashed;
+  color: rgba(238, 244, 255, 0.4);
+  letter-spacing: 0.1em;
+}
+
+.overlay-tag--overflow {
+  background: rgba(20, 30, 44, 0.85);
+  color: rgba(238, 244, 255, 0.65);
+}
+
+.overlay-empty-state {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.overlay-empty-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(238, 244, 255, 0.82);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+
+.overlay-empty-sub {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(238, 244, 255, 0.5);
+}

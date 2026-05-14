@@ -1,0 +1,17 @@
+{
+  "displayTime": 211,
+  "isReplay": true,
+  "players": [
+    {
+      "name": "PlayerOne",
+      "race": "Protoss",
+      "result": "Victory"
+    },
+    {
+      "name": "PlayerTwo",
+      "race": "Terran",
+      "result": "Defeat"
+    }
+  ]
+}
+

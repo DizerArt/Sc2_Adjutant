@@ -1,0 +1,20 @@
+{
+  "isReplay": false,
+  "displayTime": 139,
+  "players": [
+    {
+      "id": 1,
+      "name": "SilverPure",
+      "type": "user",
+      "race": "Prot",
+      "result": "Undecided"
+    },
+    {
+      "id": 2,
+      "name": "RetorieS",
+      "type": "user",
+      "race": "Terr",
+      "result": "Undecided"
+    }
+  ]
+}

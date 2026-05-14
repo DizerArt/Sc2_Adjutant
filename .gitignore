@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+build/
+dist-renderer/
+dist-electron/
+release/
+02_application/release/
+.vite/
+.next/
+out/
+coverage/
+test-results/
+playwright-report/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Cache
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+
+# Local app data
+local-data/
+02_application/local-data/
+
+# IDE
+.claude/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
