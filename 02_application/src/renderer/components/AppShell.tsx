@@ -2479,7 +2479,7 @@ function MatchHistoryList({
                     >
                       {match.durationSeconds
                         ? formatDuration(match.durationSeconds)
-                        : "вЂ”"}
+                        : "\u2014"}
                     </span>
                     <span className="match-row-time">
                       {formatShortDateTime(match.playedAt)}
@@ -2507,7 +2507,7 @@ function MatchHistoryList({
                   }
                   type="button"
                 >
-                  в…
+                  {"\u2605"}
                 </button>
               </div>
             );

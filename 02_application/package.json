@@ -1,6 +1,6 @@
 {
   "name": "sc2-assistant-application",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "Desktop-first SC2 opponent analysis application foundation.",
