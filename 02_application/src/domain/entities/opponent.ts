@@ -35,6 +35,7 @@ export type OpponentRaceProfileData = {
   readonly league?: string;
   readonly totalGamesAtLastMatch?: number;
   readonly strategyTags?: readonly string[];
+  readonly notes?: readonly string[];
   readonly confidenceScore?: number;
   readonly updatedAt: string;
 };
@@ -112,20 +113,55 @@ export function updateOpponentMatchResult(opponent: Opponent, previous: MatchRes
   };
 }
 
-export function addOpponentNote(opponent: Opponent, note: string): Opponent {
+export function addOpponentNote(opponent: Opponent, note: string, race?: Race): Opponent {
   const normalizedNote = note.trim().slice(0, MAX_OPPONENT_NOTE_LENGTH);
   if (!normalizedNote) {
     return opponent;
   }
 
+  const targetRace = race ? normalizeRace(race) : "Unknown";
+  const now = new Date().toISOString();
+
+  if (targetRace !== "Unknown") {
+    const currentNotes = opponent.raceProfiles?.[targetRace]?.notes ?? [];
+
+    return {
+      ...opponent,
+      raceProfiles: upsertRaceProfile(opponent.raceProfiles, targetRace, {
+        notes: [...currentNotes, normalizedNote].slice(-MAX_OPPONENT_NOTES),
+        updatedAt: now
+      }),
+      updatedAt: now
+    };
+  }
+
   return {
     ...opponent,
     notes: [...opponent.notes, normalizedNote].slice(-MAX_OPPONENT_NOTES),
-    updatedAt: new Date().toISOString()
+    updatedAt: now
   };
 }
 
-export function removeOpponentNote(opponent: Opponent, noteIndex: number): Opponent {
+export function removeOpponentNote(opponent: Opponent, noteIndex: number, race?: Race): Opponent {
+  const targetRace = race ? normalizeRace(race) : "Unknown";
+
+  if (targetRace !== "Unknown") {
+    const currentNotes = opponent.raceProfiles?.[targetRace]?.notes ?? [];
+    if (!Number.isInteger(noteIndex) || noteIndex < 0 || noteIndex >= currentNotes.length) {
+      return opponent;
+    }
+
+    const now = new Date().toISOString();
+    return {
+      ...opponent,
+      raceProfiles: upsertRaceProfile(opponent.raceProfiles, targetRace, {
+        notes: currentNotes.filter((_note, index) => index !== noteIndex),
+        updatedAt: now
+      }),
+      updatedAt: now
+    };
+  }
+
   if (!Number.isInteger(noteIndex) || noteIndex < 0 || noteIndex >= opponent.notes.length) {
     return opponent;
   }
@@ -224,6 +260,7 @@ export function enrichOpponentFromCandidate(
       league: candidate.league ?? opponent.raceProfiles?.[race]?.league,
       totalGamesAtLastMatch: sourceTotalGames(candidate) ?? opponent.raceProfiles?.[race]?.totalGamesAtLastMatch,
       strategyTags: opponent.raceProfiles?.[race]?.strategyTags ?? [],
+      notes: opponent.raceProfiles?.[race]?.notes ?? [],
       confidenceScore: candidate.confidenceScore,
       updatedAt: now
     }),
@@ -245,6 +282,7 @@ function createRaceProfiles(input: CreateOpponentInput, now: string): Opponent["
     mmrAtLastMatch: input.mmrAtLastMatch,
     league: normalizeOptionalString(input.league),
     strategyTags: input.strategyTags ?? [],
+    notes: input.notes ?? [],
     confidenceScore: input.confidenceScore,
     updatedAt: now
   });

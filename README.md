@@ -30,6 +30,12 @@ Windows SmartScreen may warn about the installer because the build is not code-s
 - English and Russian interface support.
 - SC2-themed race cards and UI.
 
+## Data Accuracy
+
+SC2 Adjutant enriches opponent profiles with data from SC2Pulse and local replay analysis. MMR and league are selected for the observed race when that data is available.
+
+`Total games` is an estimate from SC2Pulse ladder/profile aggregates, not the exact `Total Career Games` value shown inside the Blizzard client. For some accounts it can be significantly lower, sometimes by roughly half. Treat it as contextual scouting data rather than an authoritative career total.
+
 ## Run from Source
 
 Use this path if you want to clone the repository and run the app locally.

@@ -362,6 +362,7 @@ function parseRaceProfiles(value: string | undefined): Opponent["raceProfiles"] 
       league: emptyToUndefined(stringValue(profileRecord.league)),
       totalGamesAtLastMatch: parseOptionalNumber(stringValue(profileRecord.totalGamesAtLastMatch)),
       strategyTags: parseJsonStringArray(JSON.stringify(toArray(profileRecord.strategyTags))),
+      notes: parseJsonStringArray(JSON.stringify(toArray(profileRecord.notes))),
       confidenceScore: parseOptionalNumber(stringValue(profileRecord.confidenceScore)),
       updatedAt: updatedAt || new Date(0).toISOString()
     };

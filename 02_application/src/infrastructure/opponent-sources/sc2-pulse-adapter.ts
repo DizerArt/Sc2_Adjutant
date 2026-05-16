@@ -174,10 +174,8 @@ export class Sc2PulseAdapter implements OpponentDataSourcePort {
 
     const top = entries[0];
     const needsRaceSpecificLookup =
-      isProfileLookup(query.nickname) &&
       query.race !== undefined &&
-      query.race !== "Unknown" &&
-      query.race !== "Random";
+      query.race !== "Unknown";
 
     if (typeof top.candidate.mmr === "number" && !needsRaceSpecificLookup) {
       return;
@@ -189,8 +187,8 @@ export class Sc2PulseAdapter implements OpponentDataSourcePort {
     }
 
     // SC2Pulse's `/characters` search returns a single aggregate for the
-    // character. Barcode profile lookups can be against an off-race replay, so
-    // use `/character/{id}/common` to pick the 1v1 team for the observed race.
+    // character. Use `/character/{id}/common` to pick the 1v1 team for the
+    // observed race whenever the current match tells us that race.
     const summary = await this.fetchCharacterCommonSummary(characterId, query.race);
     if (!summary) {
       return;
@@ -273,21 +271,24 @@ function mapEntryToCandidate(
   const currentRating = numberValue(entry.currentStats?.rating);
   const previousRating = numberValue(entry.previousStats?.rating);
   const ratingMax = numberValue(entry.ratingMax);
+  const isRequestedRaceSpecific =
+    query.race !== undefined &&
+    query.race !== "Unknown";
   const shouldPreferCommonStats =
     commonSummary !== undefined &&
-    isProfileLookup(query.nickname) &&
-    query.race !== undefined &&
-    query.race !== "Unknown" &&
-    query.race !== "Random";
-  const mmr = shouldPreferCommonStats
+    isRequestedRaceSpecific;
+  const shouldSuppressAggregateStats = commonSummary === undefined && query.race === "Random";
+  const mmr = shouldSuppressAggregateStats
+    ? undefined
+    : shouldPreferCommonStats
     ? commonSummary.rating ?? currentRating ?? previousRating ?? ratingMax
     : currentRating ?? previousRating ?? ratingMax ?? commonSummary?.rating;
-  const league = shouldPreferCommonStats
+  const league = shouldSuppressAggregateStats
+    ? undefined
+    : shouldPreferCommonStats
     ? leagueLabel(commonSummary.leagueType) ?? leagueLabel(numberValue(entry.leagueMax))
     : leagueLabel(numberValue(entry.leagueMax)) ?? leagueLabel(commonSummary?.leagueType);
-  const totalGames = shouldPreferCommonStats
-    ? commonSummary.totalGames ?? totalGamesPlayed(entry, members)
-    : totalGamesPlayed(entry, members) ?? commonSummary?.totalGames;
+  const totalGames = totalGamesPlayed(entry, members) ?? commonSummary?.totalGames;
   const profileUrl = profileUrlFromCharacter(character);
 
   const baseHasRecentStats =
@@ -360,9 +361,12 @@ function summarizeCharacterCommon(payload: unknown, requestedRace?: Race): Chara
     return null;
   }
 
-  const raceSpecificTeams = requestedRace && requestedRace !== "Unknown" && requestedRace !== "Random"
+  const raceSpecificTeams = requestedRace && requestedRace !== "Unknown"
     ? usableTeams.filter((entry) => entry.race === requestedRace)
     : [];
+  if (requestedRace === "Random" && raceSpecificTeams.length === 0) {
+    return null;
+  }
   const best = [...(raceSpecificTeams.length > 0 ? raceSpecificTeams : usableTeams)]
     .sort((first, second) => second.lastPlayed - first.lastPlayed)[0];
   const bestTeam = best?.team;

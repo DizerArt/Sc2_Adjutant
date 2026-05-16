@@ -4060,3 +4060,59 @@
     width: auto;
   }
 }
+
+
+.profile-notes-button {
+  position: absolute;
+  top: 72px;
+  right: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 112px;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--race-panel-border);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(6, 15, 28, 0.92), rgba(4, 9, 16, 0.96));
+  color: #eef8ff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--race-primary) 22%, transparent),
+    0 0 14px color-mix(in srgb, var(--race-primary) 18%, transparent);
+}
+
+.profile-notes-button:hover {
+  color: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--race-primary) 55%, transparent),
+    inset 0 0 18px color-mix(in srgb, var(--race-primary) 18%, transparent),
+    0 0 18px color-mix(in srgb, var(--race-primary) 42%, transparent);
+}
+
+.profile-notes-button strong {
+  display: inline-grid;
+  min-width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--race-primary) 28%, rgba(5, 10, 18, 0.92));
+  color: #fff5d8;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+}
+
+@media (max-width: 760px) {
+  .profile-notes-button {
+    position: static;
+    justify-self: start;
+    width: max-content;
+  }
+}

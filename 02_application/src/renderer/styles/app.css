@@ -2813,3 +2813,65 @@ h3 {
     gap: 2px;
   }
 }
+
+
+.race-notes-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 28px;
+  background: rgba(0, 0, 0, 0.56);
+  backdrop-filter: blur(4px);
+}
+
+.race-notes-dialog {
+  display: grid;
+  gap: 14px;
+  width: min(520px, calc(100vw - 48px));
+  max-height: min(620px, calc(100vh - 72px));
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid rgba(220, 180, 80, 0.48);
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(121, 207, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(14, 22, 34, 0.98), rgba(5, 10, 18, 0.98));
+  box-shadow:
+    inset 0 0 0 1px rgba(121, 207, 255, 0.18),
+    0 22px 60px rgba(0, 0, 0, 0.58);
+}
+
+.race-notes-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(220, 180, 80, 0.32);
+}
+
+.race-notes-header h3 {
+  margin: 2px 0 4px;
+  color: #f6fdff;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.race-notes-header span {
+  color: #9fb3ce;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.race-notes-dialog .note-form {
+  min-height: auto;
+}
+
+.race-notes-list {
+  max-height: 260px;
+  overflow-y: auto;
+}

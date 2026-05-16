@@ -151,6 +151,7 @@ export function AppShell() {
   );
   const [profileState, setProfileState] = useState<LoadState>("idle");
   const [infoEditorOpen, setInfoEditorOpen] = useState(false);
+  const [notesModalRace, setNotesModalRace] = useState<Race | null>(null);
   const [opponentsTab, setOpponentsTab] = useState<OpponentsTab>("known");
   const [opponentFilters, setOpponentFilters] = useState<OpponentListFilters>({
     query: "",
@@ -447,6 +448,7 @@ export function AppShell() {
       setStickyMatchOpponentId(currentMatchOpponent.id);
       setActiveView("match");
       setInfoEditorOpen(false);
+      setNotesModalRace(null);
     }
   }, [currentMatchOpponent?.id]);
 
@@ -479,6 +481,7 @@ export function AppShell() {
   useEffect(() => {
     setProfileDraft(opponentProfileDraftFromOpponent(activeOpponent));
     setProfileState("idle");
+    setNotesModalRace(null);
   }, [activeOpponent?.id]);
 
   useEffect(() => {
@@ -596,6 +599,7 @@ export function AppShell() {
   }
 
   function openInfoEditor(race?: Race) {
+    setNotesModalRace(null);
     setProfileDraft(
       opponentProfileDraftFromOpponent(
         activeOpponent,
@@ -607,14 +611,31 @@ export function AppShell() {
     setInfoEditorOpen(true);
   }
 
+  function openRaceNotes(race: Race) {
+    setNoteDraft("");
+    setNoteState("idle");
+    setNotesModalRace(race);
+  }
+
+  function closeRaceNotes() {
+    setNoteDraft("");
+    setNoteState("idle");
+    setNotesModalRace(null);
+  }
+
   async function submitOpponentNote(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    const noteRace = notesModalRace ?? undefined;
+    const currentNotes = activeOpponent && noteRace
+      ? notesForOpponentRace(activeOpponent, noteRace)
+      : activeOpponent?.notes ?? [];
 
     if (
       !window.sc2Assistant ||
       !activeOpponent ||
       !noteDraft.trim() ||
-      activeOpponent.notes.length >= MAX_OPPONENT_NOTES
+      currentNotes.length >= MAX_OPPONENT_NOTES
     ) {
       return;
     }
@@ -625,6 +646,7 @@ export function AppShell() {
       await window.sc2Assistant.addOpponentNote({
         opponentId: activeOpponent.id,
         note: noteDraft.slice(0, MAX_OPPONENT_NOTE_LENGTH),
+        race: noteRace,
       });
 
       setNoteDraft("");
@@ -646,6 +668,7 @@ export function AppShell() {
       const response = await window.sc2Assistant.removeOpponentNote({
         opponentId: activeOpponent.id,
         noteIndex,
+        race: notesModalRace ?? undefined,
       });
 
       setDashboardState((current) => ({
@@ -978,6 +1001,7 @@ export function AppShell() {
               opponentFilters={opponentFilters}
               opponentsTab={opponentsTab}
               onAddInfo={openInfoEditor}
+              onOpenNotes={openRaceNotes}
               onMatchFiltersChange={setMatchFilters}
               onMatchSelect={selectMatch}
               onMatchFavoriteToggle={toggleMatchFavorite}
@@ -993,12 +1017,135 @@ export function AppShell() {
               t={t}
             />
           )}
+          {notesModalRace && activeOpponent ? (
+            <RaceNotesDialog
+              noteDraft={noteDraft}
+              noteState={noteState}
+              notes={notesForOpponentRace(activeOpponent, notesModalRace)}
+              onClose={closeRaceNotes}
+              onNoteChange={setNoteDraft}
+              onNoteDelete={deleteOpponentNote}
+              onNoteSubmit={submitOpponentNote}
+              opponent={activeOpponent}
+              race={notesModalRace}
+              t={t}
+            />
+          ) : null}
         </section>
       </main>
     </div>
   );
 }
 
+function notesForOpponentRace(opponent: Opponent, race: Race): readonly string[] {
+  return opponent.raceProfiles?.[race]?.notes ?? (race === opponent.race ? opponent.notes : []);
+}
+
+type RaceNotesDialogProps = {
+  readonly noteDraft: string;
+  readonly noteState: LoadState;
+  readonly notes: readonly string[];
+  readonly opponent: Opponent;
+  readonly race: Race;
+  readonly onClose: () => void;
+  readonly onNoteChange: (value: string) => void;
+  readonly onNoteDelete: (noteIndex: number) => void | Promise<void>;
+  readonly onNoteSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  readonly t: Translator;
+};
+
+function RaceNotesDialog(props: RaceNotesDialogProps) {
+  const notesLimitReached = props.notes.length >= MAX_OPPONENT_NOTES;
+
+  return (
+    <div
+      className="race-notes-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          props.onClose();
+        }
+      }}
+      role="presentation"
+    >
+      <section
+        aria-label={props.t("profile.raceNotes")}
+        aria-modal="true"
+        className="race-notes-dialog"
+        role="dialog"
+      >
+        <header className="race-notes-header">
+          <div>
+            <p className="eyebrow">{props.t("profile.raceNotes")}</p>
+            <h3>{formatOpponentDisplayName(props.opponent)}</h3>
+            <span>{props.race}</span>
+          </div>
+          <button className="ghost-button" onClick={props.onClose} type="button">
+            {props.t("profile.closeNotes")}
+          </button>
+        </header>
+
+        <form className="note-form" onSubmit={props.onNoteSubmit}>
+          <label htmlFor="race-opponent-note">{props.t("profile.notes")}</label>
+          <div className="note-input-row">
+            <input
+              disabled={props.noteState === "loading" || notesLimitReached}
+              id="race-opponent-note"
+              maxLength={MAX_OPPONENT_NOTE_LENGTH}
+              onChange={(event) =>
+                props.onNoteChange(
+                  event.currentTarget.value.slice(0, MAX_OPPONENT_NOTE_LENGTH),
+                )
+              }
+              placeholder={props.t("profile.notePlaceholder")}
+              value={props.noteDraft}
+            />
+            <button
+              className="action-button"
+              disabled={
+                !props.noteDraft.trim() ||
+                props.noteState === "loading" ||
+                notesLimitReached
+              }
+              type="submit"
+            >
+              {props.noteState === "loading"
+                ? props.t("settings.saving")
+                : props.t("editor.addNote")}
+            </button>
+          </div>
+          <small className="field-limit">
+            {props.notes.length}/{MAX_OPPONENT_NOTES} {props.t("editor.notes").toLowerCase()},{" "}
+            {props.noteDraft.length}/{MAX_OPPONENT_NOTE_LENGTH} {props.t("editor.charsEach")}
+          </small>
+          {props.noteState === "error" ? (
+            <p className="inline-error">{props.t("editor.couldNotSaveNote")}</p>
+          ) : null}
+        </form>
+
+        <div className="notes-list race-notes-list">
+          {props.notes.length === 0 ? (
+            <p>{props.t("profile.noRaceNotes")}</p>
+          ) : (
+            props.notes.map((note, index) => (
+              <div className="note-item" key={`${props.opponent.id}-${props.race}-note-${index}`}>
+                <p title={note}>{note}</p>
+                <button
+                  aria-label={`${props.t("editor.deleteNote")} ${index + 1}`}
+                  className="icon-button delete-note-button"
+                  disabled={props.noteState === "loading"}
+                  onClick={() => void props.onNoteDelete(index)}
+                  type="button"
+                >
+                  x
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
 function WindowTitleBar({ t }: { readonly t: Translator }) {
   function minimize(): void {
     void window.sc2Assistant?.minimizeWindow();
@@ -1053,6 +1200,7 @@ type OpponentWorkspaceProps = {
   readonly opponentFilters: OpponentListFilters;
   readonly opponentsTab: OpponentsTab;
   readonly onAddInfo: (race: Race) => void;
+  readonly onOpenNotes: (race: Race) => void;
   readonly onMatchFiltersChange: (filters: MatchHistoryFilters) => void;
   readonly onMatchSelect: (item: MatchHistoryItem) => void | Promise<void>;
   readonly onMatchFavoriteToggle: (matchId: string) => void | Promise<void>;
@@ -1127,6 +1275,7 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
             latestMatch={latestMatch}
             matches={props.dashboardState.matches}
             onAddInfoClick={props.onAddInfo}
+            onOpenNotesClick={props.onOpenNotes}
             opponent={props.primaryOpponent}
             t={props.t}
           />

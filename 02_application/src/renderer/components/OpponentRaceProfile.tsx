@@ -599,6 +599,7 @@ export type OpponentRaceProfileProps = {
   readonly latestMatch: MatchHistoryItem | undefined;
   readonly matches: readonly MatchHistoryItem[];
   readonly onAddInfoClick: (race: Race) => void;
+  readonly onOpenNotesClick: (race: Race) => void;
   readonly t?: Translator;
 };
 
@@ -620,6 +621,7 @@ type VisibleRaceProfile = {
   readonly league?: string;
   readonly totalGamesAtLastMatch?: number;
   readonly strategyTags: readonly string[];
+  readonly notes: readonly string[];
   readonly confidenceScore?: number;
 };
 
@@ -630,6 +632,7 @@ export function OpponentRaceProfile({
   latestMatch,
   matches,
   onAddInfoClick,
+  onOpenNotesClick,
   t = createTranslator("en"),
 }: OpponentRaceProfileProps) {
   const initialRace = visibleRace(
@@ -718,6 +721,17 @@ export function OpponentRaceProfile({
             </button>
           ))}
         </div>
+
+        <button
+          className="profile-notes-button"
+          onClick={() => onOpenNotesClick(selectedRace)}
+          type="button"
+        >
+          <span>{t("profile.notes")}</span>
+          {visibleProfile.notes.length > 0 ? (
+            <strong>{visibleProfile.notes.length}</strong>
+          ) : null}
+        </button>
 
         <div className="profile-identity">
           <p className="identity-label">
@@ -888,6 +902,7 @@ function visibleRaceProfile(
       league: raceProfile.league,
       totalGamesAtLastMatch: raceProfile.totalGamesAtLastMatch,
       strategyTags: raceProfile.strategyTags ?? [],
+      notes: raceProfile.notes ?? (race === opponent.race ? opponent.notes : []),
       confidenceScore: raceProfile.confidenceScore,
     };
   }
@@ -897,12 +912,14 @@ function visibleRaceProfile(
       mmrAtLastMatch: opponent.mmrAtLastMatch,
       league: opponent.league,
       strategyTags: opponent.strategyTags,
+      notes: opponent.notes,
       confidenceScore: opponent.confidenceScore,
     };
   }
 
   return {
     strategyTags: [],
+    notes: [],
   };
 }
 

@@ -19,6 +19,7 @@ import type {
 } from "../../domain/entities/app-settings.js";
 import type { EnrichmentCandidateSnapshot } from "../../domain/entities/enrichment-candidate-snapshot.js";
 import type { Opponent, UpdateOpponentProfileInput } from "../../domain/entities/opponent.js";
+import type { Race } from "../../domain/value-objects/race.js";
 
 export type RendererDiagnosticsResponse = DiagnosticsReport;
 
@@ -35,6 +36,7 @@ export type RendererOpponentsResponse = {
 export type AddOpponentNoteRequest = {
   readonly opponentId: string;
   readonly note: string;
+  readonly race?: Race;
 };
 
 export type AddOpponentNoteResponse = {
@@ -44,6 +46,7 @@ export type AddOpponentNoteResponse = {
 export type RemoveOpponentNoteRequest = {
   readonly opponentId: string;
   readonly noteIndex: number;
+  readonly race?: Race;
 };
 
 export type RemoveOpponentNoteResponse = {

@@ -133,8 +133,9 @@ export function OverlayShell() {
     losses: opponent.losses
   };
   const winRateLabel = winRateFor(stats);
-  const tags = opponent.strategyTags.slice(0, MAX_TAG_COUNT);
-  const overflowCount = Math.max(0, opponent.strategyTags.length - tags.length);
+  const strategyTags = strategyTagsForRace(opponent, race);
+  const tags = strategyTags.slice(0, MAX_TAG_COUNT);
+  const overflowCount = Math.max(0, strategyTags.length - tags.length);
   const displayName = formatOpponentDisplayName(opponent);
 
   return (
@@ -235,6 +236,11 @@ function winRateFor(stats: RaceStats): string {
     return "—";
   }
   return `${Math.round((stats.wins / total) * 100)}%`;
+}
+
+function strategyTagsForRace(opponent: Opponent, race: Race): readonly string[] {
+  const raceTags = opponent.raceProfiles?.[race]?.strategyTags ?? [];
+  return raceTags.length > 0 ? raceTags : opponent.strategyTags;
 }
 
 function findCurrentMatchOpponent(

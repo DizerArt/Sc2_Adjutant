@@ -26,6 +26,34 @@ describe("AddOpponentNote", () => {
     });
   });
 
+  it("persists a note on the selected race profile", async () => {
+    const repository = new InMemoryOpponentRepository([
+      opponent({
+        id: "opponent_001",
+        raceProfiles: {
+          Protoss: {
+            strategyTags: [],
+            notes: ["Opens oracle"],
+            updatedAt: "2026-05-01T00:00:00.000Z"
+          }
+        }
+      })
+    ]);
+    const useCase = new AddOpponentNote(repository);
+
+    const result = await useCase.execute({
+      opponentId: "opponent_001",
+      note: "  Delays third  ",
+      race: "Protoss"
+    });
+
+    expect(result.opponent.notes).toEqual([]);
+    expect(result.opponent.raceProfiles?.Protoss?.notes).toEqual([
+      "Opens oracle",
+      "Delays third"
+    ]);
+  });
+
   it("rejects unknown opponents", async () => {
     const useCase = new AddOpponentNote(new InMemoryOpponentRepository([]));
 

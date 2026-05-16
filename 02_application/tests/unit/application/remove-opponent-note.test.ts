@@ -22,6 +22,31 @@ describe("RemoveOpponentNote", () => {
     });
   });
 
+  it("removes a note from the selected race profile", async () => {
+    const repository = new InMemoryOpponentRepository([
+      opponent({
+        id: "opponent_001",
+        raceProfiles: {
+          Zerg: {
+            strategyTags: [],
+            notes: ["pool first", "roach follow-up"],
+            updatedAt: "2026-05-01T00:00:00.000Z"
+          }
+        }
+      })
+    ]);
+    const useCase = new RemoveOpponentNote(repository);
+
+    const result = await useCase.execute({
+      opponentId: "opponent_001",
+      noteIndex: 0,
+      race: "Zerg"
+    });
+
+    expect(result.opponent.notes).toEqual([]);
+    expect(result.opponent.raceProfiles?.Zerg?.notes).toEqual(["roach follow-up"]);
+  });
+
   it("rejects unknown opponents", async () => {
     const useCase = new RemoveOpponentNote(new InMemoryOpponentRepository([]));
 

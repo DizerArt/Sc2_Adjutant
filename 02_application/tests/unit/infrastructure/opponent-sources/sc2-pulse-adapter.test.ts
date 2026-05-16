@@ -644,6 +644,64 @@ describe("Sc2PulseAdapter", () => {
       expect(candidates[0]?.mmr).toBe(4286);
     });
 
+    it("uses the requested race MMR for normal nickname lookups with multiple 1v1 teams", async () => {
+      const search = [
+        {
+          leagueMax: 5,
+          ratingMax: 4834,
+          totalGamesPlayed: 9208,
+          currentStats: { rating: 4834, gamesPlayed: 120 },
+          members: {
+            character: { id: 424242, region: "EU", tag: "NEGOD" },
+            account: { battleTag: "Negod#21630", tag: "NEGOD" },
+            raceGames: { TERRAN: 120, PROTOSS: 20 }
+          }
+        }
+      ];
+      const commonPayload = {
+        teams: [
+          {
+            rating: 4834,
+            wins: 70,
+            losses: 50,
+            league: { type: 5, queueType: 201, teamType: 0 },
+            lastPlayed: "2026-05-14T12:00:00Z",
+            members: [{ terranGamesPlayed: 120, raceGames: { TERRAN: 120 } }]
+          },
+          {
+            rating: 4200,
+            wins: 10,
+            losses: 10,
+            league: { type: 4, queueType: 201, teamType: 0 },
+            lastPlayed: "2026-05-15T12:00:00Z",
+            members: [{ protossGamesPlayed: 20, raceGames: { PROTOSS: 20 } }]
+          }
+        ]
+      };
+      const fetchImpl = buildRoutedFetchImpl({
+        search: () => new Response(JSON.stringify(search), { status: 200 }),
+        common: (url) => {
+          expect(url).toBe("https://example.test/sc2/api/character/424242/common");
+          return new Response(JSON.stringify(commonPayload), { status: 200 });
+        }
+      });
+      const adapter = new Sc2PulseAdapter({
+        baseUrl: "https://example.test/sc2/api",
+        httpClient: buildClient(fetchImpl)
+      });
+
+      const candidates = await adapter.searchOpponent({ nickname: "NEGOD", race: "Protoss", region: "EU" });
+
+      expect(fetchImpl).toHaveBeenCalledTimes(2);
+      expect(candidates[0]).toMatchObject({
+        nickname: "NEGOD",
+        battleTag: "Negod#21630",
+        race: "Protoss",
+        mmr: 4200,
+        league: "Diamond",
+        totalGames: 9208
+      });
+    });
     it("uses the requested replay race MMR for profile-link barcode lookups with multiple 1v1 teams", async () => {
       const search = [
         {
@@ -710,8 +768,114 @@ describe("Sc2PulseAdapter", () => {
         race: "Zerg",
         mmr: 4014,
         league: "Diamond",
-        totalGames: 121
+        totalGames: 89
       });
+    });
+
+    it("uses the requested random MMR instead of another race aggregate", async () => {
+      const search = [
+        {
+          leagueMax: 5,
+          ratingMax: 4800,
+          totalGamesPlayed: 300,
+          currentStats: { rating: 4800, gamesPlayed: 100 },
+          members: {
+            character: { id: 515151, region: "EU", tag: "RandomMain" },
+            account: { battleTag: "RandomMain#1234", tag: "RandomMain" },
+            raceGames: { TERRAN: 100, RANDOM: 20 }
+          }
+        }
+      ];
+      const commonPayload = {
+        teams: [
+          {
+            rating: 4800,
+            wins: 60,
+            losses: 40,
+            league: { type: 5, queueType: 201, teamType: 0 },
+            lastPlayed: "2026-05-15T12:00:00Z",
+            members: [{ terranGamesPlayed: 100, raceGames: { TERRAN: 100 } }]
+          },
+          {
+            rating: 4210,
+            wins: 12,
+            losses: 8,
+            league: { type: 4, queueType: 201, teamType: 0 },
+            lastPlayed: "2026-05-14T12:00:00Z",
+            members: [{ randomGamesPlayed: 20, raceGames: { RANDOM: 20 } }]
+          }
+        ]
+      };
+      const fetchImpl = buildRoutedFetchImpl({
+        search: () => new Response(JSON.stringify(search), { status: 200 }),
+        common: (url) => {
+          expect(url).toBe("https://example.test/sc2/api/character/515151/common");
+          return new Response(JSON.stringify(commonPayload), { status: 200 });
+        }
+      });
+      const adapter = new Sc2PulseAdapter({
+        baseUrl: "https://example.test/sc2/api",
+        httpClient: buildClient(fetchImpl)
+      });
+
+      const candidates = await adapter.searchOpponent({ nickname: "RandomMain", race: "Random", region: "EU" });
+
+      expect(fetchImpl).toHaveBeenCalledTimes(2);
+      expect(candidates[0]).toMatchObject({
+        nickname: "RandomMain",
+        battleTag: "RandomMain#1234",
+        race: "Random",
+        mmr: 4210,
+        league: "Diamond",
+        totalGames: 300
+      });
+    });
+
+    it("does not display another race MMR when a random 1v1 team is missing", async () => {
+      const search = [
+        {
+          leagueMax: 5,
+          ratingMax: 4800,
+          totalGamesPlayed: 100,
+          currentStats: { rating: 4800, gamesPlayed: 100 },
+          members: {
+            character: { id: 616161, region: "EU", tag: "Randomless" },
+            account: { battleTag: "Randomless#1234", tag: "Randomless" },
+            raceGames: { TERRAN: 100 }
+          }
+        }
+      ];
+      const commonPayload = {
+        teams: [
+          {
+            rating: 4800,
+            wins: 60,
+            losses: 40,
+            league: { type: 5, queueType: 201, teamType: 0 },
+            lastPlayed: "2026-05-15T12:00:00Z",
+            members: [{ terranGamesPlayed: 100, raceGames: { TERRAN: 100 } }]
+          }
+        ]
+      };
+      const fetchImpl = buildRoutedFetchImpl({
+        search: () => new Response(JSON.stringify(search), { status: 200 }),
+        common: () => new Response(JSON.stringify(commonPayload), { status: 200 })
+      });
+      const adapter = new Sc2PulseAdapter({
+        baseUrl: "https://example.test/sc2/api",
+        httpClient: buildClient(fetchImpl)
+      });
+
+      const candidates = await adapter.searchOpponent({ nickname: "Randomless", race: "Random", region: "EU" });
+
+      expect(fetchImpl).toHaveBeenCalledTimes(2);
+      expect(candidates[0]).toMatchObject({
+        nickname: "Randomless",
+        battleTag: "Randomless#1234",
+        totalGames: 100
+      });
+      expect(candidates[0]?.mmr).toBeUndefined();
+      expect(candidates[0]?.league).toBeUndefined();
     });
 
     it("skips the fallback when the top candidate has no character id", async () => {
