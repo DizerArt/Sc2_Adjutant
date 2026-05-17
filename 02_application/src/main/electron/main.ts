@@ -250,12 +250,35 @@ function hideOverlay(): void {
   }
 }
 
+type WindowBounds = { x: number; y: number; width: number; height: number };
+
+function isEnterCompactRequest(
+  value: unknown
+): value is { compact: true; offsetX: number; offsetY: number; width: number; height: number } {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const request = value as Record<string, unknown>;
+  return (
+    request.compact === true &&
+    typeof request.offsetX === "number" &&
+    typeof request.offsetY === "number" &&
+    typeof request.width === "number" &&
+    typeof request.height === "number"
+  );
+}
+
 function registerWindowControlHandlers(window: BrowserWindow): void {
   ipcMain.removeHandler("window:minimize");
   ipcMain.removeHandler("window:close");
+  ipcMain.removeHandler("window:set-compact");
   ipcMain.removeHandler("overlay:show");
   ipcMain.removeHandler("overlay:hide");
   ipcMain.removeHandler("overlay:set-position");
+
+  // Bounds captured before entering compact mode, restored on exit.
+  let compactRestoreBounds: WindowBounds | null = null;
+
   ipcMain.handle("window:minimize", () => {
     if (!window.isDestroyed()) {
       window.minimize();
@@ -265,6 +288,52 @@ function registerWindowControlHandlers(window: BrowserWindow): void {
     if (!window.isDestroyed()) {
       window.close();
     }
+  });
+  ipcMain.handle("window:set-compact", (_event, request: unknown) => {
+    if (window.isDestroyed()) {
+      return;
+    }
+
+    if (isEnterCompactRequest(request)) {
+      // Shrink the window to exactly the information block and shift it so the
+      // block keeps its on-screen position — the chrome appears to melt away.
+      const width = Math.max(320, Math.round(request.width));
+      const height = Math.max(200, Math.round(request.height));
+      const current = window.getBounds();
+      compactRestoreBounds = {
+        x: current.x,
+        y: current.y,
+        width: current.width,
+        height: current.height
+      };
+      // The window is created non-resizable with a locked min/max size, and
+      // Windows ignores programmatic resizes on a non-resizable window — so
+      // re-enable resizing, relax min before max so the shrink is not clamped,
+      // apply the compact bounds, then lock the window down again.
+      window.setResizable(true);
+      window.setMinimumSize(width, height);
+      window.setMaximumSize(width, height);
+      window.setBounds({
+        x: Math.round(current.x + request.offsetX),
+        y: Math.round(current.y + request.offsetY),
+        width,
+        height
+      });
+      window.setResizable(false);
+      return;
+    }
+
+    // Exit compact mode: raise max before min, then restore the full window.
+    window.setResizable(true);
+    window.setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    window.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    if (compactRestoreBounds) {
+      window.setBounds(compactRestoreBounds);
+    } else {
+      window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    }
+    window.setResizable(false);
+    compactRestoreBounds = null;
   });
   ipcMain.handle("overlay:show", async () => {
     await persistOverlayEnabled(true);

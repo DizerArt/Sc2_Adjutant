@@ -37,6 +37,7 @@ body {
 }
 
 .app-frame {
+  position: relative;
   display: grid;
   grid-template-rows: 34px minmax(0, 1fr);
   height: 100vh;
@@ -44,6 +45,88 @@ body {
   box-shadow:
     inset 0 0 0 1px rgba(121, 207, 255, 0.18),
     inset 0 0 32px rgba(8, 14, 22, 0.6);
+}
+
+/* Compact mode — the main process shrinks the OS window to the exact bounds
+   of the information block, and these rules collapse every layer of chrome
+   around it (title bar, sidebar, content header, frame border and padding) so
+   the block fills the resized window 1:1. Restored via the bookmark tab
+   pinned to the top-right edge. */
+.app-frame-compact {
+  grid-template-rows: minmax(0, 1fr);
+  border: 0;
+  box-shadow: none;
+}
+
+.app-frame-compact .window-titlebar,
+.app-frame-compact .sidebar,
+.app-frame-compact .top-bar {
+  display: none;
+}
+
+.app-frame-compact .app-shell {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.app-frame-compact .content-area {
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+}
+
+/* The compact window is narrower than the docked viewport, which would trip
+   the responsive @media rule and stack the panels into a single column. Pin
+   the workspace to its desktop column layout so the block stays pixel-
+   identical to the docked view — nothing reflows. */
+.app-frame-compact .workspace {
+  grid-template-columns: minmax(0, 1fr) 328px;
+}
+
+.app-frame-compact .workspace-current-match {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* The frameless compact window has no title bar to grab, so the panel
+   headings double as drag handles for repositioning it. */
+.app-frame-compact .panel-heading {
+  -webkit-app-region: drag;
+}
+
+.compact-exit-tab {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 0;
+  right: 16px;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 30px;
+  padding: 0 0 6px;
+  border: 1px solid rgba(220, 180, 80, 0.5);
+  border-top: 0;
+  background:
+    linear-gradient(180deg, rgba(13, 22, 34, 0.97), rgba(6, 11, 18, 0.97)),
+    radial-gradient(circle at 50% 0%, rgba(255, 209, 93, 0.16), transparent 72%);
+  color: #cdd9eb;
+  cursor: pointer;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 70%, 0 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.compact-exit-tab:hover {
+  background:
+    linear-gradient(180deg, rgba(20, 32, 48, 0.98), rgba(9, 16, 26, 0.98)),
+    radial-gradient(circle at 50% 0%, rgba(255, 209, 93, 0.28), transparent 72%);
+  color: #f4faff;
+}
+
+.compact-exit-tab svg {
+  width: 12px;
+  height: 12px;
 }
 
 .window-titlebar {

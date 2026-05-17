@@ -26,6 +26,7 @@ const IPC_CHANNELS = {
   replayWatcherStatus: "replay-watcher:status",
   windowMinimize: "window:minimize",
   windowClose: "window:close",
+  windowSetCompact: "window:set-compact",
   overlayShow: "overlay:show",
   overlayHide: "overlay:hide",
   overlaySetPosition: "overlay:set-position"
@@ -62,6 +63,7 @@ contextBridge.exposeInMainWorld("sc2Assistant", {
   getReplayWatcherStatus: () => ipcRenderer.invoke(IPC_CHANNELS.replayWatcherStatus),
   minimizeWindow: () => ipcRenderer.invoke(IPC_CHANNELS.windowMinimize),
   closeWindow: () => ipcRenderer.invoke(IPC_CHANNELS.windowClose),
+  setCompactWindow: (request) => ipcRenderer.invoke(IPC_CHANNELS.windowSetCompact, request),
   showOverlay: () => ipcRenderer.invoke(IPC_CHANNELS.overlayShow),
   hideOverlay: () => ipcRenderer.invoke(IPC_CHANNELS.overlayHide),
   setOverlayPosition: (position) => ipcRenderer.invoke(IPC_CHANNELS.overlaySetPosition, position)

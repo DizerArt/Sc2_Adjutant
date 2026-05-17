@@ -118,6 +118,7 @@ type OpponentProfileDraft = {
 
 export function AppShell() {
   const [activeView, setActiveView] = useState<ActiveView>("match");
+  const [compactMode, setCompactMode] = useState(false);
   const [dashboardState, setDashboardState] = useState<DashboardState>({
     diagnostics: null,
     opponents: [],
@@ -862,9 +863,40 @@ export function AppShell() {
     }
   }
 
+  const workspaceVisible =
+    !infoEditorOpen && (activeView === "match" || activeView === "opponents");
+
+  const enterCompactMode = useCallback(() => {
+    // Measure the information block, then ask the main process to shrink the
+    // window to those exact bounds — the block stays put, the chrome vanishes.
+    const block = document.querySelector(".workspace");
+    if (!block) {
+      return;
+    }
+    const rect = block.getBoundingClientRect();
+    setCompactMode(true);
+    void window.sc2Assistant?.setCompactWindow({
+      compact: true,
+      offsetX: rect.left,
+      offsetY: rect.top,
+      width: rect.width,
+      height: rect.height,
+    });
+  }, []);
+
+  const exitCompactMode = useCallback(() => {
+    setCompactMode(false);
+    void window.sc2Assistant?.setCompactWindow({ compact: false });
+  }, []);
+
   return (
-    <div className="app-frame">
-      <WindowTitleBar t={t} />
+    <div className={`app-frame${compactMode ? " app-frame-compact" : ""}`}>
+      <WindowTitleBar
+        compactDisabled={!workspaceVisible}
+        compactMode={compactMode}
+        onToggleCompact={compactMode ? exitCompactMode : enterCompactMode}
+        t={t}
+      />
       <main className="app-shell">
         <aside className="sidebar" aria-label="Primary navigation">
           <div className="brand-block">
@@ -1033,6 +1065,29 @@ export function AppShell() {
           ) : null}
         </section>
       </main>
+      {/* Rendered last so its no-drag region is resolved after the panel
+          headings' drag regions — otherwise the overlapping part of the tab
+          gets re-claimed as draggable and stops responding to clicks. */}
+      {compactMode ? (
+        <button
+          aria-label={t("app.window.expand")}
+          className="compact-exit-tab"
+          onClick={exitCompactMode}
+          title={t("app.window.expand")}
+          type="button"
+        >
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path
+              d="M1.5 4.5 L1.5 1.5 L4.5 1.5 M10.5 7.5 L10.5 10.5 L7.5 10.5"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      ) : null}
     </div>
   );
 }
@@ -1146,7 +1201,17 @@ function RaceNotesDialog(props: RaceNotesDialogProps) {
     </div>
   );
 }
-function WindowTitleBar({ t }: { readonly t: Translator }) {
+function WindowTitleBar({
+  compactDisabled,
+  compactMode,
+  onToggleCompact,
+  t,
+}: {
+  readonly compactDisabled: boolean;
+  readonly compactMode: boolean;
+  readonly onToggleCompact: () => void;
+  readonly t: Translator;
+}) {
   function minimize(): void {
     void window.sc2Assistant?.minimizeWindow();
   }
@@ -1161,6 +1226,26 @@ function WindowTitleBar({ t }: { readonly t: Translator }) {
         <span className="window-titlebar-title">SC2 Adjutant</span>
       </div>
       <div className="window-titlebar-controls" aria-label="Window controls">
+        <button
+          aria-label={t("app.window.compact")}
+          aria-pressed={compactMode}
+          className="window-titlebar-button"
+          disabled={compactDisabled}
+          onClick={onToggleCompact}
+          title={t("app.window.compact")}
+          type="button"
+        >
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path
+              d="M4.5 1.5 L4.5 4.5 L1.5 4.5 M7.5 10.5 L7.5 7.5 L10.5 7.5"
+              stroke="currentColor"
+              strokeWidth="1.3"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
         <button
           aria-label={t("app.window.minimize")}
           className="window-titlebar-button"
@@ -1702,9 +1787,6 @@ function OpponentInfoEditor(props: OpponentInfoEditorProps) {
             <p className="eyebrow">{props.t("header.opponentData")}</p>
             <h3>{formatOpponentDisplayName(opponent)}</h3>
           </div>
-          <button className="ghost-button" onClick={props.onBack} type="button">
-            {props.t("editor.cancelBack")}
-          </button>
         </div>
 
         <div className="editor-context-grid">
@@ -1713,6 +1795,7 @@ function OpponentInfoEditor(props: OpponentInfoEditorProps) {
 
         <OpponentProfileForm
           draft={props.profileDraft}
+          onBack={props.onBack}
           onChange={props.onProfileDraftChange}
           onSubmit={props.onProfileSubmit}
           state={props.profileState}
@@ -2172,6 +2255,7 @@ type OpponentProfileFormProps = {
   readonly state: LoadState;
   readonly onChange: (draft: OpponentProfileDraft) => void;
   readonly onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  readonly onBack: () => void;
   readonly t: Translator;
 };
 
@@ -2309,6 +2393,9 @@ function OpponentProfileForm(props: OpponentProfileFormProps) {
           {props.state === "loading"
             ? props.t("settings.saving")
             : props.t("editor.saveProfile")}
+        </button>
+        <button className="ghost-button" onClick={props.onBack} type="button">
+          {props.t("editor.cancelBack")}
         </button>
         {props.state === "ready" ? (
           <span className="form-status">{props.t("settings.saved")}</span>

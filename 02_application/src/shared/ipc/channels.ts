@@ -24,6 +24,7 @@ export const IPC_CHANNELS = {
   replayWatcherStatus: "replay-watcher:status",
   windowMinimize: "window:minimize",
   windowClose: "window:close",
+  windowSetCompact: "window:set-compact",
   overlayShow: "overlay:show",
   overlayHide: "overlay:hide",
   overlaySetPosition: "overlay:set-position"

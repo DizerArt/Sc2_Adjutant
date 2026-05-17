@@ -134,6 +134,21 @@ export type ReplayWatcherStatus = {
   readonly lastError?: string;
 };
 
+/**
+ * Compact-mode window request. When `compact` is true the main process shrinks
+ * the window to the given content size and shifts it by `offsetX`/`offsetY` so
+ * the information block stays pinned exactly where it was rendered on screen.
+ */
+export type SetCompactWindowRequest =
+  | { readonly compact: false }
+  | {
+      readonly compact: true;
+      readonly offsetX: number;
+      readonly offsetY: number;
+      readonly width: number;
+      readonly height: number;
+    };
+
 export type Sc2AssistantBridge = {
   readonly version: string;
   readonly getDiagnostics: () => Promise<RendererDiagnosticsResponse>;
@@ -161,6 +176,7 @@ export type Sc2AssistantBridge = {
   readonly getReplayWatcherStatus: () => Promise<ReplayWatcherStatus>;
   readonly minimizeWindow: () => Promise<void>;
   readonly closeWindow: () => Promise<void>;
+  readonly setCompactWindow: (request: SetCompactWindowRequest) => Promise<void>;
   readonly showOverlay: () => Promise<void>;
   readonly hideOverlay: () => Promise<void>;
   readonly setOverlayPosition: (position: OverlayPosition) => Promise<void>;
