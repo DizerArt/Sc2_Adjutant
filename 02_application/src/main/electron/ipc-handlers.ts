@@ -1,5 +1,7 @@
-import { ipcMain, shell } from "electron";
-import { join } from "node:path";
+import { app, ipcMain, shell } from "electron";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { AddOpponentNote } from "../../application/use-cases/add-opponent-note.js";
 import { BackfillOpponentProfilesFromCandidates } from "../../application/use-cases/backfill-opponent-profiles-from-candidates.js";
 import { BackfillReplayMetadata } from "../../application/use-cases/backfill-replay-metadata.js";
@@ -48,6 +50,7 @@ import { IPC_CHANNELS } from "../../shared/ipc/channels.js";
 import type {
   AddOpponentNoteRequest,
   AddOpponentNoteResponse,
+  AppVersionResponse,
   RemoveOpponentNoteRequest,
   RemoveOpponentNoteResponse,
   ClearStatsResponse,
@@ -73,6 +76,69 @@ import type {
 } from "../../shared/ipc/contracts.js";
 import { MonitoringController } from "./monitoring-controller.js";
 import { ReplayWatcherController, resolveReplayDirectory } from "./replay-watcher-controller.js";
+
+const APPLICATION_PACKAGE_NAME = "sc2-assistant-application";
+
+type PackageMetadata = {
+  readonly name?: unknown;
+  readonly version?: unknown;
+};
+
+function resolveApplicationVersion(): string {
+  for (const packageJsonPath of applicationPackageJsonCandidates()) {
+    const version = readApplicationVersion(packageJsonPath);
+    if (version) {
+      return version;
+    }
+  }
+
+  return app.getVersion();
+}
+
+function applicationPackageJsonCandidates(): string[] {
+  const candidates = new Set<string>();
+
+  addPackageJsonAncestors(candidates, process.cwd());
+  addPackageJsonAncestors(candidates, app.getAppPath());
+  addPackageJsonAncestors(candidates, dirname(fileURLToPath(import.meta.url)));
+
+  return [...candidates];
+}
+
+function addPackageJsonAncestors(candidates: Set<string>, startDirectory: string): void {
+  let currentDirectory = startDirectory;
+
+  while (true) {
+    candidates.add(join(currentDirectory, "package.json"));
+
+    const parentDirectory = dirname(currentDirectory);
+    if (parentDirectory === currentDirectory) {
+      return;
+    }
+    currentDirectory = parentDirectory;
+  }
+}
+
+function readApplicationVersion(packageJsonPath: string): string | null {
+  if (!existsSync(packageJsonPath)) {
+    return null;
+  }
+
+  try {
+    const metadata = JSON.parse(readFileSync(packageJsonPath, "utf8")) as PackageMetadata;
+    if (
+      metadata.name === APPLICATION_PACKAGE_NAME &&
+      typeof metadata.version === "string" &&
+      metadata.version.trim().length > 0
+    ) {
+      return metadata.version;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
 
 export async function registerIpcHandlers(): Promise<void> {
   const dataDir = resolveAppDataDirectory();
@@ -163,6 +229,10 @@ export async function registerIpcHandlers(): Promise<void> {
     enrichmentCandidateRepository
   });
   startRuntimeWhenSc2IsReachable(sc2Client, monitoringController, replayWatcherController);
+
+  ipcMain.handle(IPC_CHANNELS.appVersion, async (): Promise<AppVersionResponse> => {
+    return { version: resolveApplicationVersion() };
+  });
 
   ipcMain.handle(IPC_CHANNELS.diagnosticsGet, async (): Promise<RendererDiagnosticsResponse> => {
     const currentSettings = await settingsRepository.read();

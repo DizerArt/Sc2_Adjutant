@@ -47,6 +47,8 @@ const dictionary = {
     "info.goodToKnow": "Good to know",
     "info.license": "License",
     "info.quickStart": "Quick start",
+    "info.update": "Update",
+    "info.version": "Version",
     "info.aboutBody1":
       "SC2 Adjutant is a desktop companion for StarCraft II that watches your live matches, identifies opponents, and surfaces what you have learned about them before the first engagement. It builds a local database of races, MMR, replay history, and your own notes so the next time you face the same player you are not starting from zero.",
     "info.aboutBody2":
@@ -296,6 +298,8 @@ const dictionary = {
     "info.goodToKnow": "Полезно знать",
     "info.license": "Лицензия",
     "info.quickStart": "Быстрый старт",
+    "info.update": "Обновить",
+    "info.version": "Версия",
     "info.aboutBody1":
       "SC2 Adjutant — это настольный помощник для StarCraft II: он отслеживает текущие матчи, определяет оппонентов и показывает накопленную информацию до первого контакта в игре. Приложение ведёт локальную базу рас, MMR, истории реплеев и ваших заметок, чтобы при следующей встрече с тем же игроком вы не начинали с нуля.",
     "info.aboutBody2":

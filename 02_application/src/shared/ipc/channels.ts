@@ -1,4 +1,5 @@
 export const IPC_CHANNELS = {
+  appVersion: "app:version",
   diagnosticsGet: "diagnostics:get",
   settingsGet: "settings:get",
   settingsSave: "settings:save",

@@ -118,6 +118,7 @@ type OpponentProfileDraft = {
 
 export function AppShell() {
   const [activeView, setActiveView] = useState<ActiveView>("match");
+  const [appVersion, setAppVersion] = useState<string | null>(null);
   const [compactMode, setCompactMode] = useState(false);
   const [dashboardState, setDashboardState] = useState<DashboardState>({
     diagnostics: null,
@@ -314,6 +315,27 @@ export function AppShell() {
   useEffect(() => {
     void loadDashboard();
   }, [loadDashboard]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    void window.sc2Assistant
+      ?.getAppVersion()
+      .then((response) => {
+        if (isMounted) {
+          setAppVersion(response.version);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setAppVersion(null);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!selectedMatchId || !window.sc2Assistant) {
@@ -937,6 +959,21 @@ export function AppShell() {
               </button>
             ))}
           </nav>
+
+          <div className="sidebar-version-row" aria-label={t("info.version")}>
+            <span className="sidebar-version-label">
+              {t("info.version")}{" "}
+              <strong>{appVersion ?? t("profile.unknown")}</strong>
+            </span>
+            <a
+              className="sidebar-update-link"
+              href={LATEST_RELEASE_URL}
+              rel="noreferrer"
+              target="_blank"
+            >
+              {t("info.update")}
+            </a>
+          </div>
 
           {dashboardState.monitoring?.lastError ? (
             <div className="sidebar-monitoring-error" role="status">
@@ -1874,6 +1911,9 @@ function OpponentInfoEditor(props: OpponentInfoEditorProps) {
   );
 }
 
+const LATEST_RELEASE_URL =
+  "https://github.com/DizerArt/Sc2_Adjutant/releases/latest";
+
 function InfoView({ t }: { readonly t: Translator }) {
   return (
     <section className="info-layout">
@@ -2000,6 +2040,7 @@ function InfoView({ t }: { readonly t: Translator }) {
           <li>{t("info.tipReadonly")}</li>
         </ul>
       </div>
+
     </section>
   );
 }

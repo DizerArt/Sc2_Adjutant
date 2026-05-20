@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 const IPC_CHANNELS = {
+  appVersion: "app:version",
   diagnosticsGet: "diagnostics:get",
   settingsGet: "settings:get",
   settingsSave: "settings:save",
@@ -34,6 +35,7 @@ const IPC_CHANNELS = {
 
 contextBridge.exposeInMainWorld("sc2Assistant", {
   version: "0.1.0",
+  getAppVersion: () => ipcRenderer.invoke(IPC_CHANNELS.appVersion),
   getDiagnostics: () => ipcRenderer.invoke(IPC_CHANNELS.diagnosticsGet),
   getSettings: () => ipcRenderer.invoke(IPC_CHANNELS.settingsGet),
   saveSettings: (request) => ipcRenderer.invoke(IPC_CHANNELS.settingsSave, request),

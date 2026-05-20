@@ -1,11 +1,11 @@
-# SC2 Adjutant 1.0.4
+# SC2 Adjutant 1.0.5
 
 ## What's new
 
-- Fixed live MMR capture from the SC2 Client API when MMR appears on a later poll of the same match.
-- Fixed barcode/random opponent identity handling so local player profile links and BattleTags cannot overwrite the opponent card.
-- Improved local player name matching when StarCraft II appends a clan tag, such as `RetorieS <RTS>`.
-- Made the `ADD INFO` button thinner so it stays inside the opponent card after tags are added.
+- Added the current app version to the sidebar under `Info`.
+- Added a short `Update` button that opens the latest GitHub release.
+- Fixed version detection in development builds so the UI shows the SC2 Adjutant version instead of the Electron runtime version.
+- Bumped the application version to `1.0.5`.
 
 ## Notes
 

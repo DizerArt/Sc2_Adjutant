@@ -23,6 +23,10 @@ import type { Race } from "../../domain/value-objects/race.js";
 
 export type RendererDiagnosticsResponse = DiagnosticsReport;
 
+export type AppVersionResponse = {
+  readonly version: string;
+};
+
 export type RendererSettingsResponse = {
   readonly settings: AppSettings;
 };
@@ -151,6 +155,7 @@ export type SetCompactWindowRequest =
 
 export type Sc2AssistantBridge = {
   readonly version: string;
+  readonly getAppVersion: () => Promise<AppVersionResponse>;
   readonly getDiagnostics: () => Promise<RendererDiagnosticsResponse>;
   readonly getSettings: () => Promise<RendererSettingsResponse>;
   readonly saveSettings: (request: SaveSettingsRequest) => Promise<RendererSettingsResponse>;
