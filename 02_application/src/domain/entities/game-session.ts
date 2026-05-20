@@ -130,6 +130,7 @@ function startedAtFromPayload(payload: Sc2ClientGamePayload, detectedAt: string)
 function normalizePlayerIdentityName(value: string | undefined): string {
   return (value ?? "")
     .replace(/^(?:<[^>]+>\s*)+/, "")
+    .replace(/(?:\s*<[^>]+>)+$/, "")
     .replace(/#\d+$/, "")
     .trim()
     .toLowerCase();

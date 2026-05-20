@@ -62,9 +62,10 @@ export class HandleDetectedGame {
     }
 
     const detectedOpponent = input.opponent ?? findOpponent(input.session, input.userName);
+    const userPlayer = findUserPlayer(input.session, input.userName);
     const enrichment = await this.dependencies.enrichmentService.enrich(registered.opponent, {
       nickname: registered.opponent.nickname,
-      profileLink: detectedOpponent?.profileLink,
+      profileLink: safeOpponentProfileLink(detectedOpponent?.profileLink, userPlayer?.profileLink),
       race: registered.opponent.race,
       region: input.region,
       excludedNicknames: localPlayerIdentityNames(input)
@@ -104,4 +105,21 @@ function localPlayerIdentityNames(input: HandleDetectedGameInput): readonly stri
   }
 
   return [...names];
+}
+
+function safeOpponentProfileLink(
+  opponentProfileLink: string | undefined,
+  userProfileLink: string | undefined
+): string | undefined {
+  const normalizedOpponentProfileLink = normalizeProfileLink(opponentProfileLink);
+  if (!normalizedOpponentProfileLink) {
+    return undefined;
+  }
+
+  const normalizedUserProfileLink = normalizeProfileLink(userProfileLink);
+  return normalizedOpponentProfileLink === normalizedUserProfileLink ? undefined : opponentProfileLink;
+}
+
+function normalizeProfileLink(value: string | undefined): string {
+  return value?.trim().toLowerCase() ?? "";
 }

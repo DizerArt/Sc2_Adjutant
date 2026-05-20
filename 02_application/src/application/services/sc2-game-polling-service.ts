@@ -234,7 +234,7 @@ function buildActiveGameKey(session: GameSession): string {
 
 function buildActiveGameResultKey(session: GameSession): string {
   return session.players
-    .map((player) => `${player.name.trim().toLowerCase()}:${player.result ?? "Unknown"}`)
+    .map((player) => `${player.name.trim().toLowerCase()}:${player.result ?? "Unknown"}:${player.mmr ?? "no-mmr"}`)
     .sort()
     .join("|");
 }

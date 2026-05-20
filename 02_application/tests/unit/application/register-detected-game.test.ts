@@ -63,6 +63,39 @@ describe("RegisterDetectedGame", () => {
     expect(matches).toHaveLength(1);
   });
 
+  it("updates the existing live opponent profile when client MMR appears on a later sample", async () => {
+    const opponentRepository = new InMemoryOpponentRepository();
+    const matchRepository = new InMemoryMatchRepository();
+    const useCase = new RegisterDetectedGame({
+      opponentRepository,
+      matchRepository,
+      clock: () => "2026-05-03T01:00:00.000Z"
+    });
+
+    await useCase.execute({ session: activeSession(), userName: "RetorieS" });
+    await useCase.execute({
+      session: {
+        ...activeSession(),
+        players: [
+          { name: "SilverPure", race: "Protoss", result: "Undecided", mmr: 4227 },
+          { name: "RetorieS", race: "Terran", result: "Undecided", isUser: true }
+        ]
+      },
+      userName: "RetorieS"
+    });
+
+    const opponents = await opponentRepository.findAll();
+    const matches = await matchRepository.findAll();
+
+    expect(matches).toHaveLength(1);
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0]).toMatchObject({
+      encounters: 1,
+      mmrAtLastMatch: 4227
+    });
+    expect(opponents[0]?.raceProfiles?.Protoss?.mmrAtLastMatch).toBe(4227);
+  });
+
   it("reuses an unresolved live match after monitoring restarts during the same game", async () => {
     const opponentRepository = new InMemoryOpponentRepository();
     const matchRepository = new InMemoryMatchRepository();

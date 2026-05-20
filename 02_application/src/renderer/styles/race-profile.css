@@ -4014,15 +4014,34 @@
 
 .race-profile:not(.theme-zerg) .profile-actions {
   justify-content: center;
-  min-height: 36px;
+  min-height: 26px;
   margin-top: 0;
 }
 
 .race-profile:not(.theme-zerg) .primary-button {
   flex: 0 1 auto;
   width: min(92%, 920px);
-  min-height: 36px;
-  font-size: 0.82rem;
+  min-height: 26px;
+  padding: 0 16px;
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
+.race-profile.theme-zerg .profile-actions {
+  min-height: 26px;
+}
+
+.race-profile.theme-zerg .primary-button {
+  min-height: 26px;
+  padding: 0 16px;
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
+.race-profile .primary-button::before,
+.race-profile .primary-button::after {
+  width: 10px;
+  height: 10px;
 }
 
 @media (max-width: 760px) {

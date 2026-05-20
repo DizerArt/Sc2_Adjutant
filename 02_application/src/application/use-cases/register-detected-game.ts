@@ -59,12 +59,13 @@ export class RegisterDetectedGame {
       return null;
     }
 
+    const opponentSample = sanitizeOpponentPlayerProfileLink(opponentPlayer, player);
     const now = this.clock();
-    const opponentId = buildOpponentId(opponentPlayer, input.session);
+    const opponentId = buildOpponentId(opponentSample, input.session);
     const firstExistingOpponent = await findExistingOpponent(
       this.dependencies.opponentRepository,
       opponentId,
-      opponentPlayer
+      opponentSample
     );
     const firstEffectiveOpponentId = firstExistingOpponent?.id ?? opponentId;
     const result = resultFromPlayer(player.result);
@@ -73,7 +74,7 @@ export class RegisterDetectedGame {
       opponentId: firstEffectiveOpponentId,
       playedAt: input.session.startedAt ?? input.session.detectedAt,
       playerRace: player.race,
-      opponentRace: opponentPlayer.race,
+      opponentRace: opponentSample.race,
       result,
       now
     });
@@ -83,7 +84,7 @@ export class RegisterDetectedGame {
         this.dependencies.matchRepository,
         this.dependencies.opponentRepository,
         detectedMatch,
-        opponentPlayer
+        opponentSample
       ));
     const matchOpponent =
       existingMatch && existingMatch.opponentId !== firstEffectiveOpponentId
@@ -93,12 +94,12 @@ export class RegisterDetectedGame {
     const createdOpponent = existingOpponent === null;
     const effectiveOpponentId = existingMatch?.opponentId ?? existingOpponent?.id ?? opponentId;
     const baseOpponent = existingOpponent
-      ? mergeLocalOpponentSample(existingOpponent, opponentPlayer, now)
+      ? mergeLocalOpponentSample(existingOpponent, opponentSample, now)
       : createOpponent({
         id: effectiveOpponentId,
-        nickname: opponentPlayer.name,
-        race: opponentPlayer.race,
-        mmrAtLastMatch: opponentPlayer.mmr,
+        nickname: opponentSample.name,
+        race: opponentSample.race,
+        mmrAtLastMatch: opponentSample.mmr,
         now
       });
     const match =
@@ -112,7 +113,7 @@ export class RegisterDetectedGame {
     const nextMatch = existingMatch ? mergeDetectedMatch(existingMatch, match, now) : match;
     const updatedOpponent =
       existingMatch === null
-        ? recordOpponentMatch(baseOpponent, nextMatch.result, nextMatch.playedAt, opponentPlayer.mmr)
+        ? recordOpponentMatch(baseOpponent, nextMatch.result, nextMatch.playedAt, opponentSample.mmr)
         : updateOpponentMatchResult(baseOpponent, existingMatch.result, nextMatch.result);
 
     await this.dependencies.opponentRepository.save(updatedOpponent);
@@ -147,6 +148,20 @@ function isLocalPlayer(
     Boolean(normalizedPlayer && normalizedOpponent === normalizedPlayer) ||
     Boolean(normalizedUserName && normalizedOpponent === normalizedUserName)
   );
+}
+
+function sanitizeOpponentPlayerProfileLink(
+  opponent: GameSessionPlayer,
+  player: GameSessionPlayer
+): GameSessionPlayer {
+  const opponentProfileLink = normalizeProfileLink(opponent.profileLink);
+  if (!opponentProfileLink) {
+    return opponent;
+  }
+
+  return opponentProfileLink === normalizeProfileLink(player.profileLink)
+    ? { ...opponent, profileLink: undefined }
+    : opponent;
 }
 
 async function findReusableLiveMatch(
@@ -270,9 +285,14 @@ function buildMatchId(session: GameSession): string {
 function normalizePlayerIdentityName(value: string | undefined): string {
   return (value ?? "")
     .replace(/^(?:<[^>]+>\s*)+/, "")
+    .replace(/(?:\s*<[^>]+>)+$/, "")
     .replace(/#\d+$/, "")
     .trim()
     .toLowerCase();
+}
+
+function normalizeProfileLink(value: string | undefined): string {
+  return value?.trim().toLowerCase() ?? "";
 }
 
 function opponentMatchesPlayerIdentity(opponent: Opponent, playerName: string): boolean {

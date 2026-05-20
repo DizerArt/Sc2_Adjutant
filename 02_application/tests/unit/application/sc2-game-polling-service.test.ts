@@ -150,6 +150,41 @@ describe("Sc2GamePollingService", () => {
     expect(detectedResults).toEqual(["Unknown", "Defeat"]);
   });
 
+  it("emits the same active game again when opponent MMR appears after the first sample", async () => {
+    const sessions: GameSession[] = [
+      activeRankedSession("raw-1", true, "2026-05-03T00:00:00.000Z"),
+      {
+        ...activeRankedSession("raw-1-mmr", true, "2026-05-03T00:00:01.000Z"),
+        players: [
+          { name: "DizerArt", race: "Terran", isUser: true },
+          { name: "HiveMindX", race: "Zerg", mmr: 4227 }
+        ]
+      }
+    ];
+    let index = 0;
+    const client: Sc2ClientPort = {
+      async getCurrentGame() {
+        return sessions[index++] ?? sessions[sessions.length - 1]!;
+      }
+    };
+
+    const service = new Sc2GamePollingService(client, {
+      intervalMs: 1000,
+      userName: "DizerArt"
+    });
+
+    const detectedOpponentMmr: Array<number | undefined> = [];
+    service.on("newGameDetected", ({ opponent }) => {
+      detectedOpponentMmr.push(opponent.mmr);
+    });
+
+    await service.pollOnce();
+    await service.pollOnce();
+    await service.pollOnce();
+
+    expect(detectedOpponentMmr).toEqual([undefined, 4227]);
+  });
+
   it("emits a new stable id for a quick rematch against the same player without an idle sample", async () => {
     const sessions: GameSession[] = [
       activeRankedSession("raw-1", true, "2026-05-03T00:00:10.000Z", "2026-05-03T00:00:00.000Z"),

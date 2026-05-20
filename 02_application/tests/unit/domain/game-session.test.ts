@@ -24,6 +24,19 @@ describe("game session mapping", () => {
     expect(opponent?.name).toBe("HiveMindX");
   });
 
+  it("finds the opponent when SC2 appends the local player's clan tag", () => {
+    const session = toGameSession({
+      players: [
+        { name: "RetorieS <RTS>", race: "Terran", result: "Victory" },
+        { name: "Secret", race: "Random", result: "Defeat" }
+      ]
+    });
+
+    const opponent = findOpponent(session, "RetorieS");
+
+    expect(opponent?.name).toBe("Secret");
+  });
+
   it("does not guess an opponent when the local player cannot be identified", () => {
     const session = toGameSession({
       players: [

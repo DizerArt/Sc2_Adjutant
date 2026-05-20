@@ -1,11 +1,11 @@
-# SC2 Adjutant 1.0.3
+# SC2 Adjutant 1.0.4
 
 ## What's new
 
-- Added compact window mode for the main match/opponent workspace.
-- The compact mode keeps the information block in place, hides the window chrome, sidebar, and header, and lets the panel heading act as a drag handle.
-- Added a small restore tab in compact mode to return to the full application window.
-- Moved the profile editor back/cancel action next to the save action for a clearer editing flow.
+- Fixed live MMR capture from the SC2 Client API when MMR appears on a later poll of the same match.
+- Fixed barcode/random opponent identity handling so local player profile links and BattleTags cannot overwrite the opponent card.
+- Improved local player name matching when StarCraft II appends a clan tag, such as `RetorieS <RTS>`.
+- Made the `ADD INFO` button thinner so it stays inside the opponent card after tags are added.
 
 ## Notes
 

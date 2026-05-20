@@ -172,6 +172,7 @@ function compareCandidates(first: OpponentDataCandidate, second: OpponentDataCan
 function normalizePlayerIdentityName(value: string | undefined): string {
   return (value ?? "")
     .replace(/^(?:<[^>]+>\s*)+/, "")
+    .replace(/(?:\s*<[^>]+>)+$/, "")
     .replace(/#\d+$/, "")
     .trim()
     .toLowerCase();

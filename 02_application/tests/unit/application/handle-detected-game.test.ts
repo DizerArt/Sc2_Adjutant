@@ -377,6 +377,80 @@ describe("HandleDetectedGame", () => {
     expect(storedOpponent?.nickname).toBe("Neo");
     expect(storedCandidates).toEqual([]);
   });
+
+  it("does not use the local player's profile link or BattleTag for a barcode opponent", async () => {
+    const opponentRepository = new InMemoryOpponentRepository();
+    const enrichmentCandidateRepository = new InMemoryEnrichmentCandidateRepository();
+    const source = new FakeSource("SelfPollutedSource", [
+      {
+        source: "SelfPollutedSource",
+        nickname: "RetorieS",
+        race: "Terran",
+        battleTag: "RetorieS#2321",
+        aliases: ["LLLLLLLLLL"],
+        mmr: 5178,
+        league: "Master",
+        confidenceScore: 0.99
+      }
+    ]);
+    const localProfileLink = "battlenet:://starcraft/profile/2/123456789";
+    const useCase = new HandleDetectedGame({
+      opponentRepository,
+      matchRepository: new InMemoryMatchRepository(),
+      enrichmentCandidateRepository,
+      clock: () => "2026-05-03T04:00:00.000Z",
+      enrichmentService: new OpponentEnrichmentService([source])
+    });
+
+    const result = await useCase.execute({
+      session: {
+        id: "RetorieS:Terran|LLLLLLLLLL:Random:0",
+        isActive: true,
+        mode: "ranked-1v1",
+        detectedAt: "2026-05-03T04:00:00.000Z",
+        players: [
+          {
+            name: "RetorieS <RTS>",
+            race: "Terran",
+            result: "Victory",
+            isUser: true,
+            profileLink: localProfileLink
+          },
+          {
+            name: "LLLLLLLLLL",
+            race: "Random",
+            result: "Defeat",
+            mmr: 4577,
+            profileLink: localProfileLink
+          }
+        ]
+      },
+      userName: "RetorieS"
+    });
+
+    const storedOpponent = result ? await opponentRepository.findById(result.opponent.id) : null;
+    const storedCandidates = result
+      ? await enrichmentCandidateRepository.findByOpponentId(result.opponent.id)
+      : [];
+
+    expect(source.queries).toEqual([
+      {
+        nickname: "LLLLLLLLLL",
+        race: "Random",
+        region: undefined
+      }
+    ]);
+    expect(result?.enrichmentApplied).toBe(false);
+    expect(result?.enrichedOpponent).toMatchObject({
+      nickname: "LLLLLLLLLL",
+      battleTag: undefined,
+      mmrAtLastMatch: 4577
+    });
+    expect(result?.enrichedOpponent.revealedNickname).toBeUndefined();
+    expect(storedOpponent?.nickname).toBe("LLLLLLLLLL");
+    expect(storedOpponent?.battleTag).toBeUndefined();
+    expect(storedCandidates).toEqual([]);
+  });
 });
 
 function activeSession(): GameSession {

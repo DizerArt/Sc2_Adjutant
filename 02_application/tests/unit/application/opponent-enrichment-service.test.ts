@@ -278,6 +278,36 @@ describe("OpponentEnrichmentService", () => {
     expect(result.candidates.map((candidate) => candidate.nickname)).toEqual(["Neo"]);
   });
 
+  it("rejects local player candidates when SC2 reports the user name with a clan suffix", async () => {
+    const opponent = createOpponent({
+      id: "opponent_barcode",
+      nickname: "LLLLLLLLLL",
+      race: "Random",
+      now: "2026-05-03T18:00:00.000Z"
+    });
+
+    const service = new OpponentEnrichmentService([
+      new FakeSource("ExternalProfile", [
+        candidate({
+          source: "ExternalProfile",
+          nickname: "RetorieS",
+          battleTag: "RetorieS#2321",
+          aliases: ["LLLLLLLLLL"],
+          confidenceScore: 0.99,
+          mmr: 5178
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      excludedNicknames: ["RetorieS <RTS>"]
+    });
+
+    expect(result.bestCandidate).toBeNull();
+    expect(result.opponent).toEqual(opponent);
+    expect(result.candidates).toEqual([]);
+  });
+
   it("can limit enrichment to explicitly allowed sources", async () => {
     const opponent = createOpponent({
       id: "opponent_barcode",
