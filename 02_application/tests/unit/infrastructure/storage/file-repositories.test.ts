@@ -50,7 +50,7 @@ describe.each<FileStorageFormat>(["csv", "xml"])("file repositories using %s", (
     expect(found?.raceProfiles?.Zerg).toMatchObject({
       mmrAtLastMatch: 3912,
       league: "Diamond",
-      strategyTags: ["roach-pressure"],
+      strategyTags: ["roach-press"],
       confidenceScore: 0.82
     });
     expect(found?.notes).toEqual(["Roach pressure at 5:00", "Weak third base defense"]);

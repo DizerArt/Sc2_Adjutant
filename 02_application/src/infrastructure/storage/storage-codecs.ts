@@ -2,7 +2,7 @@ import { parse } from "csv-parse/sync";
 import { stringify } from "csv-stringify/sync";
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 import type { Match, MatchResult } from "../../domain/entities/match.js";
-import type { Opponent } from "../../domain/entities/opponent.js";
+import { OPPONENT_MARKERS, type Opponent, type OpponentMarker } from "../../domain/entities/opponent.js";
 import { normalizeRace, type Race } from "../../domain/value-objects/race.js";
 
 type CsvRecord = Record<string, string>;
@@ -24,6 +24,7 @@ const csvColumns = {
     "lastMatchDate",
     "notes",
     "strategyTags",
+    "markers",
     "confidenceScore",
     "createdAt",
     "updatedAt"
@@ -138,6 +139,7 @@ function opponentToCsvRecord(opponent: Opponent): CsvRecord {
     lastMatchDate: opponent.lastMatchDate ?? "",
     notes: JSON.stringify(opponent.notes),
     strategyTags: JSON.stringify(opponent.strategyTags),
+    markers: JSON.stringify(opponent.markers ?? []),
     confidenceScore: numberToString(opponent.confidenceScore),
     createdAt: opponent.createdAt,
     updatedAt: opponent.updatedAt
@@ -161,6 +163,7 @@ function opponentFromCsvRecord(record: CsvRecord): Opponent {
     lastMatchDate: emptyToUndefined(record.lastMatchDate),
     notes: parseJsonStringArray(record.notes),
     strategyTags: parseJsonStringArray(record.strategyTags),
+    markers: parseOpponentMarkers(record.markers),
     confidenceScore: parseOptionalNumber(record.confidenceScore),
     createdAt: record.createdAt,
     updatedAt: record.updatedAt
@@ -219,6 +222,7 @@ function opponentToXmlRecord(opponent: Opponent): object {
     lastMatchDate: opponent.lastMatchDate ?? "",
     notes: { item: opponent.notes },
     strategyTags: { item: opponent.strategyTags },
+    markers: { item: opponent.markers ?? [] },
     confidenceScore: opponent.confidenceScore ?? ""
   };
 }
@@ -242,6 +246,7 @@ function opponentFromXmlRecord(value: unknown): Opponent {
     lastMatchDate: emptyToUndefined(stringValue(record.lastMatchDate)),
     notes: xmlItems(record.notes),
     strategyTags: xmlItems(record.strategyTags),
+    markers: parseOpponentMarkers(JSON.stringify(xmlItems(record.markers))),
     confidenceScore: parseOptionalNumber(stringValue(record.confidenceScore)),
     createdAt: stringValue(record.createdAt),
     updatedAt: stringValue(record.updatedAt)
@@ -337,6 +342,22 @@ function parseJsonStringArray(value: string | undefined): readonly string[] {
 
   const parsed = JSON.parse(value) as unknown;
   return toArray(parsed).map(stringValue).filter(Boolean);
+}
+
+function parseOpponentMarkers(value: string | undefined): readonly OpponentMarker[] {
+  const markers = new Set<OpponentMarker>();
+
+  for (const marker of parseJsonStringArray(value)) {
+    if (isOpponentMarker(marker)) {
+      markers.add(marker);
+    }
+  }
+
+  return [...markers];
+}
+
+function isOpponentMarker(value: string): value is OpponentMarker {
+  return OPPONENT_MARKERS.includes(value as OpponentMarker);
 }
 
 function parseRaceProfiles(value: string | undefined): Opponent["raceProfiles"] {

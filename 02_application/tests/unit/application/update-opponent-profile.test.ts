@@ -86,7 +86,7 @@ describe("UpdateOpponentProfile", () => {
       opponentId: "opponent_001",
       race: "Terran",
       strategyTags: Array.from({ length: MAX_OPPONENT_STRATEGY_TAGS + 3 }, (_value, index) =>
-        `very-long-tag-${index}-extra`
+        `tag-${index.toString().padStart(2, "0")}-very-long-extra-value`
       )
     });
 

@@ -120,6 +120,7 @@ function mergeOpponentGroup(group: readonly Opponent[], matches: readonly Match[
     aliases: mergeStrings(group.flatMap((opponent) => opponent.aliases)),
     notes: mergeStrings(group.flatMap((opponent) => opponent.notes)),
     strategyTags: mergeStrings(group.flatMap((opponent) => opponent.strategyTags)),
+    markers: mergeStrings(group.flatMap((opponent) => opponent.markers ?? [])) as Opponent["markers"],
     battleTag: firstDefined(group.map((opponent) => opponent.battleTag)),
     mmrAtLastMatch: firstDefined(group.map((opponent) => opponent.mmrAtLastMatch)),
     league: firstDefined(group.map((opponent) => opponent.league)),

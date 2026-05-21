@@ -35,6 +35,13 @@ describe("playstyleFromTags", () => {
     expect(score.aggression).toBeGreaterThan(score.unpredictable);
   });
 
+  it("recognizes compact versions of long playstyle tags", () => {
+    const score = playstyleFromTags(["battlecruis", "static defe", "dark templa"]);
+    expect(score.aggression).toBeGreaterThan(0);
+    expect(score.economy).toBeGreaterThan(0);
+    expect(score.unpredictable).toBeGreaterThan(0);
+  });
+
   it("scores macro tags higher on the economy bar", () => {
     const score = playstyleFromTags(["macro", "turtle", "rush"]);
     expect(score.economy).toBeGreaterThan(score.aggression);

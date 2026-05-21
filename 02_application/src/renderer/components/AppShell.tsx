@@ -22,7 +22,9 @@ import {
   MAX_OPPONENT_NOTE_LENGTH,
   MAX_OPPONENT_STRATEGY_TAG_LENGTH,
   MAX_OPPONENT_STRATEGY_TAGS,
+  OPPONENT_MARKERS,
   type Opponent,
+  type OpponentMarker,
 } from "../../domain/entities/opponent.js";
 import type { Race } from "../../domain/value-objects/race.js";
 import type {
@@ -92,9 +94,16 @@ type ReplaySyncDraft = {
 
 const DEFAULT_REPLAY_SYNC_LIMIT = "25";
 
+const OPPONENT_MARKER_SYMBOLS: Record<OpponentMarker, string> = {
+  skull: "☠",
+  heart: "♥",
+  blocked: "⊘",
+};
+
 type OpponentListFilters = {
   readonly query: string;
   readonly race: RaceFilter;
+  readonly markers: readonly OpponentMarker[];
   readonly sortBy: OpponentSortKey;
 };
 
@@ -158,6 +167,7 @@ export function AppShell() {
   const [opponentFilters, setOpponentFilters] = useState<OpponentListFilters>({
     query: "",
     race: "All",
+    markers: [],
     sortBy: "lastSeen",
   });
   const [matchFilters, setMatchFilters] = useState<MatchHistoryFilters>({
@@ -543,6 +553,12 @@ export function AppShell() {
     await selectOpponent(item.match.opponentId);
   }
 
+  async function openProfileHistoryMatch(item: MatchHistoryItem) {
+    setActiveView("opponents");
+    setOpponentsTab("history");
+    await selectMatch(item);
+  }
+
   async function openOpponentFromMatch(opponentId: string) {
     setSelectedMatchId(null);
     setOpponentsTab("known");
@@ -752,6 +768,94 @@ export function AppShell() {
     } catch {
       setProfileState("error");
     }
+  }
+
+  async function toggleOpponentMarker(marker: OpponentMarker) {
+    if (!window.sc2Assistant || !activeOpponent) {
+      return;
+    }
+
+    const currentMarkers = new Set(activeOpponent.markers ?? []);
+    if (currentMarkers.has(marker)) {
+      currentMarkers.delete(marker);
+    } else {
+      currentMarkers.add(marker);
+    }
+
+    const response = await window.sc2Assistant.updateOpponentProfile({
+      opponentId: activeOpponent.id,
+      markers: OPPONENT_MARKERS.filter((item) => currentMarkers.has(item)),
+    });
+
+    setDashboardState((current) => ({
+      ...current,
+      opponents: current.opponents.map((opponent) =>
+        opponent.id === response.opponent.id ? response.opponent : opponent,
+      ),
+      loadState: "ready",
+    }));
+  }
+
+  async function addOpponentStrategyTag(
+    race: Race,
+    currentTags: readonly string[],
+    tag: string,
+  ) {
+    if (!window.sc2Assistant || !activeOpponent) {
+      return;
+    }
+
+    const normalizedTag = tag
+      .trim()
+      .slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH);
+    if (!normalizedTag || currentTags.length >= MAX_OPPONENT_STRATEGY_TAGS) {
+      return;
+    }
+
+    const response = await window.sc2Assistant.updateOpponentProfile({
+      opponentId: activeOpponent.id,
+      race,
+      strategyTags: [...currentTags, normalizedTag].slice(
+        0,
+        MAX_OPPONENT_STRATEGY_TAGS,
+      ),
+    });
+
+    setDashboardState((current) => ({
+      ...current,
+      opponents: current.opponents.map((opponent) =>
+        opponent.id === response.opponent.id ? response.opponent : opponent,
+      ),
+      loadState: "ready",
+    }));
+  }
+
+  async function removeOpponentStrategyTag(
+    race: Race,
+    currentTags: readonly string[],
+    tagIndex: number,
+  ) {
+    if (!window.sc2Assistant || !activeOpponent) {
+      return;
+    }
+
+    if (tagIndex < 0 || tagIndex >= currentTags.length) {
+      return;
+    }
+
+    const response = await window.sc2Assistant.updateOpponentProfile({
+      opponentId: activeOpponent.id,
+      race,
+      strategyTags: currentTags.filter((_, index) => index !== tagIndex),
+    });
+
+    setDashboardState((current) => ({
+      ...current,
+      opponents: current.opponents.map((opponent) =>
+        opponent.id === response.opponent.id ? response.opponent : opponent,
+      ),
+      loadState: "ready",
+    }));
   }
 
   const [clearStatsState, setClearStatsState] = useState<LoadState>("idle");
@@ -999,11 +1103,13 @@ export function AppShell() {
                   : headerEyebrow(activeView, t)}
               </p>
               <div className="title-line">
-                <h2>
-                  {infoEditorOpen
-                    ? t("header.infoEditor")
-                    : headerTitle(activeView, opponentsTab, t)}
-                </h2>
+                {activeView === "opponents" && !infoEditorOpen ? null : (
+                  <h2>
+                    {infoEditorOpen
+                      ? t("header.infoEditor")
+                      : headerTitle(activeView, t)}
+                  </h2>
+                )}
                 {!infoEditorOpen && activeView === "match" ? (
                   <RuntimeIndicator
                     monitoring={dashboardState.monitoring}
@@ -1077,8 +1183,12 @@ export function AppShell() {
               onOpenOpponentFromMatch={openOpponentFromMatch}
               onOpponentFiltersChange={setOpponentFilters}
               onOpponentSelect={selectOpponent}
+              onOpponentMarkerToggle={toggleOpponentMarker}
               onOpponentsTabChange={setOpponentsTab}
+              onProfileHistoryMatchSelect={openProfileHistoryMatch}
               onRevealReplay={revealReplay}
+              onStrategyTagAdd={addOpponentStrategyTag}
+              onStrategyTagRemove={removeOpponentStrategyTag}
               primaryOpponent={activeOpponent}
               selectedMatch={selectedMatch}
               selectedMatchId={selectedMatchId ?? undefined}
@@ -1331,8 +1441,22 @@ type OpponentWorkspaceProps = {
   ) => void | Promise<void>;
   readonly onOpponentFiltersChange: (filters: OpponentListFilters) => void;
   readonly onOpponentSelect: (opponentId: string) => void | Promise<void>;
+  readonly onOpponentMarkerToggle: (marker: OpponentMarker) => void | Promise<void>;
   readonly onOpponentsTabChange: (tab: OpponentsTab) => void;
+  readonly onProfileHistoryMatchSelect: (
+    item: MatchHistoryItem,
+  ) => void | Promise<void>;
   readonly onRevealReplay: (replayPath: string) => void | Promise<void>;
+  readonly onStrategyTagAdd: (
+    race: Race,
+    currentTags: readonly string[],
+    tag: string,
+  ) => void | Promise<void>;
+  readonly onStrategyTagRemove: (
+    race: Race,
+    currentTags: readonly string[],
+    tagIndex: number,
+  ) => void | Promise<void>;
   readonly primaryOpponent: Opponent | undefined;
   readonly selectedMatch: MatchHistoryItem | undefined;
   readonly selectedMatchId: string | undefined;
@@ -1397,7 +1521,11 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
             latestMatch={latestMatch}
             matches={props.dashboardState.matches}
             onAddInfoClick={props.onAddInfo}
+            onMarkerToggle={props.onOpponentMarkerToggle}
             onOpenNotesClick={props.onOpenNotes}
+            onHistoryMatchSelect={props.onProfileHistoryMatchSelect}
+            onStrategyTagAdd={props.onStrategyTagAdd}
+            onStrategyTagRemove={props.onStrategyTagRemove}
             opponent={props.primaryOpponent}
             t={props.t}
           />
@@ -1414,15 +1542,6 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
 
       {props.activeView === "opponents" ? (
         <div className="panel secondary-panel">
-          <div className="panel-heading">
-            <p className="eyebrow">{props.t("header.localDatabase")}</p>
-            <h3>
-              {props.opponentsTab === "known"
-                ? props.t("header.knownOpponents")
-                : props.t("header.matchHistory")}
-            </h3>
-          </div>
-
           <div
             className="tab-switcher"
             role="tablist"
@@ -1466,7 +1585,6 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
               onToggleFavorite={props.onMatchFavoriteToggle}
               onSelectMatch={props.onMatchSelect}
               selectedMatchId={props.selectedMatchId}
-              selectedOpponentId={props.selectedOpponentId}
               totalMatches={props.dashboardState.matches.length}
               t={props.t}
             />
@@ -2074,11 +2192,6 @@ function DiagnosticsView(props: DiagnosticsViewProps) {
       </section>
 
       <div className="panel diagnostics-panel">
-        <div className="panel-heading">
-          <p className="eyebrow">{props.t("diagnostics.actions")}</p>
-          <h3>{props.t("diagnostics.title")}</h3>
-        </div>
-
         <div className="diagnostic-actions">
           <button
             className="action-button"
@@ -2301,12 +2414,6 @@ type OpponentProfileFormProps = {
 };
 
 function OpponentProfileForm(props: OpponentProfileFormProps) {
-  const tagCount = splitDraftList(
-    props.draft.strategyTags,
-    MAX_OPPONENT_STRATEGY_TAGS,
-    MAX_OPPONENT_STRATEGY_TAG_LENGTH,
-  ).length;
-
   return (
     <form className="profile-edit-form" onSubmit={props.onSubmit}>
       <span className="section-label">{props.t("editor.manualProfile")}</span>
@@ -2405,26 +2512,6 @@ function OpponentProfileForm(props: OpponentProfileFormProps) {
           value={props.draft.aliases}
         />
       </label>
-      <label>
-        {props.t("profile.tags")}
-        <input
-          maxLength={
-            MAX_OPPONENT_STRATEGY_TAGS * (MAX_OPPONENT_STRATEGY_TAG_LENGTH + 2)
-          }
-          onChange={(event) =>
-            props.onChange({
-              ...props.draft,
-              strategyTags: event.currentTarget.value,
-            })
-          }
-          placeholder="cheese, macro, air"
-          value={props.draft.strategyTags}
-        />
-        <small className="field-limit">
-          {tagCount}/{MAX_OPPONENT_STRATEGY_TAGS} {props.t("editor.tagsLimit")},{" "}
-          {MAX_OPPONENT_STRATEGY_TAG_LENGTH} {props.t("editor.charsEach")}
-        </small>
-      </label>
       <div className="form-actions">
         <button
           className="action-button"
@@ -2462,12 +2549,27 @@ type OpponentListViewProps = {
 };
 
 function OpponentListView(props: OpponentListViewProps) {
-  const pageSize = 9;
+  const pageSize = 11;
   const [page, setPage] = useState(0);
 
   useEffect(() => {
     setPage(0);
-  }, [props.filters.query, props.filters.race, props.filters.sortBy]);
+  }, [
+    props.filters.query,
+    props.filters.race,
+    props.filters.markers,
+    props.filters.sortBy,
+  ]);
+
+  function toggleFilterMarker(marker: OpponentMarker) {
+    const active = props.filters.markers.includes(marker);
+    props.onFiltersChange({
+      ...props.filters,
+      markers: active
+        ? props.filters.markers.filter((item) => item !== marker)
+        : [...props.filters.markers, marker],
+    });
+  }
 
   const totalPages = Math.max(1, Math.ceil(props.opponents.length / pageSize));
   const safePage = Math.min(page, totalPages - 1);
@@ -2520,6 +2622,26 @@ function OpponentListView(props: OpponentListViewProps) {
           <option value="race">{props.t("list.race")}</option>
           <option value="confidence">{props.t("list.confidence")}</option>
         </select>
+        <div
+          className="opponent-marker-filter"
+          aria-label={props.t("list.markerFilter")}
+        >
+          {OPPONENT_MARKERS.map((marker) => (
+            <button
+              aria-label={opponentMarkerLabel(marker, props.t)}
+              data-active={
+                props.filters.markers.includes(marker) ? "true" : "false"
+              }
+              data-marker={marker}
+              key={marker}
+              onClick={() => toggleFilterMarker(marker)}
+              title={opponentMarkerLabel(marker, props.t)}
+              type="button"
+            >
+              {OPPONENT_MARKER_SYMBOLS[marker]}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="list-count">
@@ -2576,6 +2698,7 @@ function OpponentListView(props: OpponentListViewProps) {
               </span>
               <strong>{formatOpponentDisplayName(opponent)}</strong>
               <small>{formatOpponentRowMeta(opponent)}</small>
+              <OpponentMarkerStrip markers={opponent.markers ?? []} t={props.t} />
             </button>
           ))
         )}
@@ -2591,7 +2714,6 @@ function MatchHistoryList({
   onSelectMatch,
   onToggleFavorite,
   selectedMatchId,
-  selectedOpponentId,
   t,
   totalMatches,
 }: {
@@ -2601,11 +2723,10 @@ function MatchHistoryList({
   readonly onSelectMatch: (item: MatchHistoryItem) => void | Promise<void>;
   readonly onToggleFavorite: (matchId: string) => void | Promise<void>;
   readonly selectedMatchId: string | undefined;
-  readonly selectedOpponentId: string | undefined;
   readonly totalMatches: number;
   readonly t: Translator;
 }) {
-  const pageSize = 8;
+  const pageSize = 9;
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -2723,12 +2844,7 @@ function MatchHistoryList({
               <div
                 className="match-row"
                 data-result={match.result}
-                data-selected={
-                  match.id === selectedMatchId ||
-                  match.opponentId === selectedOpponentId
-                    ? "true"
-                    : "false"
-                }
+                data-selected={match.id === selectedMatchId ? "true" : "false"}
                 key={match.id}
               >
                 <span className="result-chip" aria-hidden="true">
@@ -3365,15 +3481,11 @@ function headerEyebrow(view: ActiveView, t: Translator): string {
 
 function headerTitle(
   view: ActiveView,
-  opponentsTab: OpponentsTab,
   t: Translator,
 ): string {
   const labels: Record<ActiveView, string> = {
     match: t("header.currentMatchTitle"),
-    opponents:
-      opponentsTab === "history"
-        ? t("header.matchHistory")
-        : t("header.knownOpponents"),
+    opponents: t("header.localDatabase"),
     diagnostics: t("diagnostics.title"),
     settings: t("header.settingsTitle"),
     info: t("header.aboutTitle"),
@@ -3421,6 +3533,9 @@ function filterAndSortOpponents(
     .filter(
       (opponent) => filters.race === "All" || opponent.race === filters.race,
     )
+    .filter((opponent) =>
+      filters.markers.every((marker) => (opponent.markers ?? []).includes(marker)),
+    )
     .filter((opponent) => {
       if (!query) {
         return true;
@@ -3434,6 +3549,40 @@ function filterAndSortOpponents(
       ].some((value) => value.toLowerCase().includes(query));
     })
     .sort((first, second) => compareOpponents(first, second, filters.sortBy));
+}
+
+function OpponentMarkerStrip({
+  markers,
+  t,
+}: {
+  readonly markers: readonly OpponentMarker[];
+  readonly t: Translator;
+}) {
+  return (
+    <span className="opponent-marker-strip" aria-label={t("list.markers")}>
+      {OPPONENT_MARKERS.map((marker) => (
+        <span
+          aria-label={opponentMarkerLabel(marker, t)}
+          data-active={markers.includes(marker) ? "true" : "false"}
+          data-marker={marker}
+          key={marker}
+          title={opponentMarkerLabel(marker, t)}
+        >
+          {OPPONENT_MARKER_SYMBOLS[marker]}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function opponentMarkerLabel(marker: OpponentMarker, t: Translator): string {
+  if (marker === "skull") {
+    return t("opponentMarker.skull");
+  }
+  if (marker === "heart") {
+    return t("opponentMarker.heart");
+  }
+  return t("opponentMarker.blocked");
 }
 
 function compareOpponents(

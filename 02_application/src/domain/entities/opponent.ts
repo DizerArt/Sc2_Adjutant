@@ -6,8 +6,11 @@ import type { MatchResult } from "./match.js";
 
 export const MAX_OPPONENT_NOTES = 5;
 export const MAX_OPPONENT_NOTE_LENGTH = 96;
-export const MAX_OPPONENT_STRATEGY_TAGS = 10;
-export const MAX_OPPONENT_STRATEGY_TAG_LENGTH = 18;
+export const MAX_OPPONENT_STRATEGY_TAGS = 12;
+export const MAX_OPPONENT_STRATEGY_TAG_LENGTH = 11;
+export const OPPONENT_MARKERS = ["skull", "heart", "blocked"] as const;
+
+export type OpponentMarker = (typeof OPPONENT_MARKERS)[number];
 
 export type Opponent = {
   readonly id: EntityId;
@@ -25,6 +28,7 @@ export type Opponent = {
   readonly lastMatchDate?: string;
   readonly notes: readonly string[];
   readonly strategyTags: readonly string[];
+  readonly markers?: readonly OpponentMarker[];
   readonly confidenceScore?: number;
   readonly createdAt: string;
   readonly updatedAt: string;
@@ -50,6 +54,7 @@ export type CreateOpponentInput = {
   readonly league?: string;
   readonly notes?: readonly string[];
   readonly strategyTags?: readonly string[];
+  readonly markers?: readonly OpponentMarker[];
   readonly confidenceScore?: number;
   readonly now?: string;
 };
@@ -62,6 +67,7 @@ export type UpdateOpponentProfileInput = {
   readonly mmrAtLastMatch?: number;
   readonly league?: string;
   readonly strategyTags?: readonly string[];
+  readonly markers?: readonly OpponentMarker[];
   readonly confidenceScore?: number;
 };
 
@@ -81,7 +87,8 @@ export function createOpponent(input: CreateOpponentInput): Opponent {
     wins: 0,
     losses: 0,
     notes: input.notes ?? [],
-    strategyTags: input.strategyTags ?? [],
+    strategyTags: normalizeStrategyTags(input.strategyTags ?? []),
+    markers: normalizeMarkers(input.markers),
     confidenceScore: input.confidenceScore,
     createdAt: now,
     updatedAt: now
@@ -184,26 +191,36 @@ export function updateOpponentProfile(
     : opponent.mmrAtLastMatch;
   const nextLeague = hasOwn(input, "league") ? normalizeOptionalString(input.league) : opponent.league;
   const nextTags = hasOwn(input, "strategyTags") && input.strategyTags
-    ? normalizeStringArray(input.strategyTags)
+    ? normalizeStrategyTags(input.strategyTags)
     : opponent.strategyTags;
   const nextConfidence = hasOwn(input, "confidenceScore") ? normalizeConfidence(input.confidenceScore) : opponent.confidenceScore;
+  const nextMarkers = hasOwn(input, "markers") ? normalizeMarkers(input.markers) : opponent.markers;
+  const shouldUpdateRaceProfile =
+    hasOwn(input, "race") ||
+    hasOwn(input, "mmrAtLastMatch") ||
+    hasOwn(input, "league") ||
+    hasOwn(input, "strategyTags") ||
+    hasOwn(input, "confidenceScore");
 
   return {
     ...opponent,
     nickname: hasOwn(input, "nickname") ? normalizeOptionalString(input.nickname) ?? opponent.nickname : opponent.nickname,
     race: targetRace,
-    raceProfiles: upsertRaceProfile(opponent.raceProfiles, targetRace, {
-      mmrAtLastMatch: nextMmr,
-      league: nextLeague,
-      strategyTags: nextTags,
-      confidenceScore: nextConfidence,
-      updatedAt: now
-    }),
+    raceProfiles: shouldUpdateRaceProfile
+      ? upsertRaceProfile(opponent.raceProfiles, targetRace, {
+          mmrAtLastMatch: nextMmr,
+          league: nextLeague,
+          strategyTags: nextTags,
+          confidenceScore: nextConfidence,
+          updatedAt: now
+        })
+      : opponent.raceProfiles,
     battleTag: hasOwn(input, "battleTag") ? normalizeOptionalString(input.battleTag) : opponent.battleTag,
     aliases: hasOwn(input, "aliases") && input.aliases ? normalizeStringArray(input.aliases) : opponent.aliases,
     mmrAtLastMatch: nextMmr,
     league: nextLeague,
     strategyTags: nextTags,
+    markers: nextMarkers,
     confidenceScore: nextConfidence,
     updatedAt: now
   };
@@ -281,7 +298,7 @@ function createRaceProfiles(input: CreateOpponentInput, now: string): Opponent["
   return upsertRaceProfile(undefined, input.race, {
     mmrAtLastMatch: input.mmrAtLastMatch,
     league: normalizeOptionalString(input.league),
-    strategyTags: input.strategyTags ?? [],
+    strategyTags: normalizeStrategyTags(input.strategyTags ?? []),
     notes: input.notes ?? [],
     confidenceScore: input.confidenceScore,
     updatedAt: now
@@ -327,10 +344,26 @@ function mergeUniqueStrings(first: readonly string[], second: readonly string[])
 }
 
 function normalizeStringArray(values: readonly string[]): readonly string[] {
+  return mergeUniqueStrings([], values);
+}
+
+function normalizeStrategyTags(values: readonly string[]): readonly string[] {
   return mergeUniqueStrings([], values.map((value) => value.slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH))).slice(
     0,
     MAX_OPPONENT_STRATEGY_TAGS
   );
+}
+
+function normalizeMarkers(values: readonly OpponentMarker[] | undefined): readonly OpponentMarker[] {
+  const markers = new Set<OpponentMarker>();
+
+  for (const value of values ?? []) {
+    if (OPPONENT_MARKERS.includes(value)) {
+      markers.add(value);
+    }
+  }
+
+  return [...markers];
 }
 
 function normalizeOptionalNumber(value: number | undefined): number | undefined {

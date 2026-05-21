@@ -1,9 +1,17 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  type ChangeEvent,
+  type FormEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import type { MatchHistoryItem } from "../../application/use-cases/list-match-history.js";
 import {
   MAX_OPPONENT_STRATEGY_TAG_LENGTH,
   MAX_OPPONENT_STRATEGY_TAGS,
+  OPPONENT_MARKERS,
   type Opponent,
+  type OpponentMarker,
 } from "../../domain/entities/opponent.js";
 import type { Race } from "../../domain/value-objects/race.js";
 import protossModelUrl from "../assets/protoss-model.png";
@@ -599,7 +607,19 @@ export type OpponentRaceProfileProps = {
   readonly latestMatch: MatchHistoryItem | undefined;
   readonly matches: readonly MatchHistoryItem[];
   readonly onAddInfoClick: (race: Race) => void;
+  readonly onHistoryMatchSelect: (item: MatchHistoryItem) => void | Promise<void>;
+  readonly onMarkerToggle: (marker: OpponentMarker) => void | Promise<void>;
   readonly onOpenNotesClick: (race: Race) => void;
+  readonly onStrategyTagAdd: (
+    race: Race,
+    currentTags: readonly string[],
+    tag: string,
+  ) => void | Promise<void>;
+  readonly onStrategyTagRemove: (
+    race: Race,
+    currentTags: readonly string[],
+    tagIndex: number,
+  ) => void | Promise<void>;
   readonly t?: Translator;
 };
 
@@ -626,13 +646,28 @@ type VisibleRaceProfile = {
 };
 
 const RACE_TABS: readonly Race[] = ["Terran", "Protoss", "Zerg", "Random"];
+const TAG_INPUT_FALLBACK_WIDTH_PX = 102;
+const TAG_INPUT_EDGE_PADDING_PX = 2;
+const OPPONENT_HISTORY_PAGE_SIZE = 5;
+
+let tagMeasureCanvas: HTMLCanvasElement | undefined;
+
+const OPPONENT_MARKER_SYMBOLS: Record<OpponentMarker, string> = {
+  skull: "☠",
+  heart: "♥",
+  blocked: "⊘",
+};
 
 export function OpponentRaceProfile({
   opponent,
   latestMatch,
   matches,
   onAddInfoClick,
+  onHistoryMatchSelect,
+  onMarkerToggle,
   onOpenNotesClick,
+  onStrategyTagAdd,
+  onStrategyTagRemove,
   t = createTranslator("en"),
 }: OpponentRaceProfileProps) {
   const initialRace = visibleRace(
@@ -647,6 +682,10 @@ export function OpponentRaceProfile({
   const raceStats = useMemo(
     () => opponentRaceStats(opponent, matches, selectedRace),
     [matches, opponent, selectedRace],
+  );
+  const opponentHistory = useMemo(
+    () => opponentMatches(opponent, matches),
+    [matches, opponent],
   );
   const visibleProfile = visibleRaceProfile(opponent, selectedRace, raceStats);
   const theme = raceThemeFor(selectedRace);
@@ -665,6 +704,89 @@ export function OpponentRaceProfile({
     0,
     visibleProfile.strategyTags.length - visibleTags.length,
   );
+  const [isAddingTag, setIsAddingTag] = useState(false);
+  const [tagDraft, setTagDraft] = useState("");
+  const [isSavingTag, setIsSavingTag] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [historyPage, setHistoryPage] = useState(0);
+  const canAddTag =
+    visibleProfile.strategyTags.length < MAX_OPPONENT_STRATEGY_TAGS;
+  const historyPageCount = Math.max(
+    1,
+    Math.ceil(opponentHistory.length / OPPONENT_HISTORY_PAGE_SIZE),
+  );
+  const visibleHistory = opponentHistory.slice(
+    historyPage * OPPONENT_HISTORY_PAGE_SIZE,
+    historyPage * OPPONENT_HISTORY_PAGE_SIZE + OPPONENT_HISTORY_PAGE_SIZE,
+  );
+
+  useEffect(() => {
+    setIsAddingTag(false);
+    setTagDraft("");
+    setIsSavingTag(false);
+    setIsHistoryOpen(false);
+    setHistoryPage(0);
+  }, [opponent.id, selectedRace]);
+
+  useEffect(() => {
+    setHistoryPage((currentPage) =>
+      Math.min(currentPage, historyPageCount - 1),
+    );
+  }, [historyPageCount]);
+
+  async function submitStrategyTag(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const tagInput = event.currentTarget.elements.namedItem("strategy-tag");
+    const fittedTag =
+      tagInput instanceof HTMLInputElement
+        ? fitTagDraftToInput(tagDraft, tagInput)
+        : tagDraft.slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH);
+    const normalizedTag = fittedTag.trim();
+    if (!normalizedTag || !canAddTag || isSavingTag) {
+      return;
+    }
+
+    setIsSavingTag(true);
+    try {
+      await onStrategyTagAdd(
+        selectedRace,
+        visibleProfile.strategyTags,
+        normalizedTag,
+      );
+      setTagDraft("");
+      setIsAddingTag(false);
+    } catch {
+      // Keep the inline editor open so the user can retry.
+    } finally {
+      setIsSavingTag(false);
+    }
+  }
+
+  function updateTagDraft(event: ChangeEvent<HTMLInputElement>) {
+    setTagDraft(
+      fitTagDraftToInput(event.currentTarget.value, event.currentTarget),
+    );
+  }
+
+  async function removeStrategyTag(tagIndex: number) {
+    if (isSavingTag) {
+      return;
+    }
+
+    setIsSavingTag(true);
+    try {
+      await onStrategyTagRemove(
+        selectedRace,
+        visibleProfile.strategyTags,
+        tagIndex,
+      );
+    } catch {
+      // Leave current UI intact if persistence fails.
+    } finally {
+      setIsSavingTag(false);
+    }
+  }
 
   return (
     <article className={`race-profile theme-${theme}`} data-race={theme}>
@@ -701,50 +823,52 @@ export function OpponentRaceProfile({
       </aside>
 
       <section className="race-profile-right">
-        <header className="panel-title">{t("profile.opponent")}</header>
-        <div
-          className="race-tabs"
-          role="tablist"
-          aria-label={t("profile.opponentAria")}
-        >
-          {RACE_TABS.map((race) => (
-            <button
-              aria-selected={race === selectedRace}
-              className="race-tab"
-              data-active={race === selectedRace ? "true" : "false"}
-              key={race}
-              onClick={() => setSelectedRace(race)}
-              role="tab"
-              type="button"
-            >
-              {race.slice(0, 1)}
-            </button>
-          ))}
+        <div className="opponent-title-row">
+          <header className="panel-title">{t("profile.opponent")}</header>
+          <div
+            className="profile-marker-controls"
+            aria-label={t("profile.markers")}
+          >
+            {OPPONENT_MARKERS.map((marker) => (
+              <button
+                aria-label={opponentMarkerLabel(marker, t)}
+                data-active={
+                  (opponent.markers ?? []).includes(marker) ? "true" : "false"
+                }
+                data-marker={marker}
+                key={marker}
+                onClick={() => void onMarkerToggle(marker)}
+                title={opponentMarkerLabel(marker, t)}
+                type="button"
+              >
+                {OPPONENT_MARKER_SYMBOLS[marker]}
+              </button>
+            ))}
+          </div>
         </div>
-
-        <button
-          className="profile-notes-button"
-          onClick={() => onOpenNotesClick(selectedRace)}
-          type="button"
-        >
-          <span>{t("profile.notes")}</span>
-          {visibleProfile.notes.length > 0 ? (
-            <strong>{visibleProfile.notes.length}</strong>
-          ) : null}
-        </button>
-
         <div className="profile-identity">
-          <p className="identity-label">
-            <span
-              className="identity-icon"
-              data-icon="nickname"
-              aria-hidden="true"
-            />
-            {t("profile.nickname")}
-          </p>
           <h3 className="identity-name">
             {formatOpponentDisplayName(opponent)}
           </h3>
+          <div
+            className="race-tabs"
+            role="tablist"
+            aria-label={t("profile.opponentAria")}
+          >
+            {RACE_TABS.map((race) => (
+              <button
+                aria-selected={race === selectedRace}
+                className="race-tab"
+                data-active={race === selectedRace ? "true" : "false"}
+                key={race}
+                onClick={() => setSelectedRace(race)}
+                role="tab"
+                type="button"
+              >
+                {race.slice(0, 1)}
+              </button>
+            ))}
+          </div>
           {opponent.battleTag ? (
             <p className="identity-battletag">
               <span>{t("profile.battleTag")}</span>
@@ -775,6 +899,87 @@ export function OpponentRaceProfile({
             ) : null}
           </p>
         </div>
+
+        <button
+          className="profile-notes-button"
+          onClick={() => onOpenNotesClick(selectedRace)}
+          type="button"
+        >
+          <span>{t("profile.notes")}</span>
+          {visibleProfile.notes.length > 0 ? (
+            <strong>{visibleProfile.notes.length}</strong>
+          ) : null}
+        </button>
+        <button
+          className="profile-history-button"
+          data-active={isHistoryOpen ? "true" : "false"}
+          onClick={() => setIsHistoryOpen((current) => !current)}
+          type="button"
+        >
+          <span>{t("profile.matchHistory")}</span>
+          <strong>{opponentHistory.length}</strong>
+        </button>
+        {isHistoryOpen ? (
+          <section className="profile-history-popover">
+            <header>
+              <span>{t("profile.matchHistory")}</span>
+              <strong>{opponentHistory.length}</strong>
+            </header>
+            {visibleHistory.length > 0 ? (
+              <ul role="list">
+                {visibleHistory.map((item) => (
+                  <li data-result={item.match.result} key={item.match.id}>
+                    <button
+                      className="profile-history-row"
+                      onClick={() => void onHistoryMatchSelect(item)}
+                      type="button"
+                    >
+                      <span className={`history-race race-${raceThemeFor(item.match.opponentRace)}`}>
+                        {item.match.opponentRace.slice(0, 1)}
+                      </span>
+                      <div>
+                        <strong>{matchResultLabel(item.match.result)}</strong>
+                        <small>
+                          {formatHistoryDate(item.match.playedAt)}
+                          {" / "}
+                          {item.match.durationSeconds
+                            ? formatHistoryDuration(item.match.durationSeconds)
+                            : "--"}
+                        </small>
+                        {item.match.map ? <em title={item.match.map}>{item.match.map}</em> : null}
+                      </div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>{t("profile.noMatchHistory")}</p>
+            )}
+            <footer>
+              <button
+                disabled={historyPage <= 0}
+                onClick={() => setHistoryPage((page) => Math.max(0, page - 1))}
+                type="button"
+              >
+                {t("list.prev")}
+              </button>
+              <span>
+                {t("list.page")} {historyPage + 1} / {historyPageCount}
+              </span>
+              <button
+                disabled={historyPage >= historyPageCount - 1}
+                onClick={() =>
+                  setHistoryPage((page) =>
+                    Math.min(historyPageCount - 1, page + 1),
+                  )
+                }
+                type="button"
+              >
+                {t("list.next")}
+              </button>
+            </footer>
+          </section>
+        ) : null}
 
         <div className="profile-stat-cards">
           <article className="stat-card encounters">
@@ -828,26 +1033,47 @@ export function OpponentRaceProfile({
             visibleProfile.strategyTags.length > 0 ? "true" : "false"
           }
         >
-          <span className="section-label">
-            <span
-              className="identity-icon"
-              data-icon="tags"
-              aria-hidden="true"
-            />
-            {t("profile.tags")}
-          </span>
-          {visibleProfile.strategyTags.length === 0 ? (
-            <p className="tags-empty">{t("profile.noTags")}</p>
-          ) : (
+          <div className="tags-heading">
+            <span className="section-label">
+              <span
+                className="identity-icon"
+                data-icon="tags"
+                aria-hidden="true"
+              />
+              {t("profile.tags")}
+            </span>
+            <button
+              aria-label={t("profile.addTag")}
+              className="tag-add-toggle"
+              disabled={!canAddTag}
+              onClick={() => setIsAddingTag(true)}
+              title={t("profile.addTag")}
+              type="button"
+            >
+              +
+            </button>
+            <span className="tag-limit-counter">
+              {visibleProfile.strategyTags.length}/{MAX_OPPONENT_STRATEGY_TAGS}
+            </span>
+          </div>
+          {visibleProfile.strategyTags.length > 0 || (isAddingTag && canAddTag) ? (
             <ul className="tags-row" role="list">
-              {visibleTags.map((tag) => (
+              {visibleTags.map((tag, index) => (
                 <li
                   className="tag-chip"
                   data-race={theme}
-                  key={tag}
+                  key={`${tag}-${index}`}
                   title={tag}
                 >
-                  {formatTagLabel(tag)}
+                  <span>{formatTagLabel(tag)}</span>
+                  <button
+                    aria-label={`Remove ${tag}`}
+                    disabled={isSavingTag}
+                    onClick={() => void removeStrategyTag(index)}
+                    type="button"
+                  >
+                    x
+                  </button>
                 </li>
               ))}
               {hiddenTagCount > 0 ? (
@@ -855,7 +1081,36 @@ export function OpponentRaceProfile({
                   +{hiddenTagCount}
                 </li>
               ) : null}
+              {isAddingTag && canAddTag ? (
+                <li className="tag-add-item">
+                  <form className="tag-add-form" onSubmit={submitStrategyTag}>
+                    <input
+                      aria-label={t("profile.addTag")}
+                      autoFocus
+                      maxLength={MAX_OPPONENT_STRATEGY_TAG_LENGTH}
+                      name="strategy-tag"
+                      onChange={updateTagDraft}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") {
+                          setTagDraft("");
+                          setIsAddingTag(false);
+                        }
+                      }}
+                      placeholder={t("profile.addTagPlaceholder")}
+                      value={tagDraft}
+                    />
+                    <button
+                      disabled={!tagDraft.trim() || isSavingTag}
+                      type="submit"
+                    >
+                      +
+                    </button>
+                  </form>
+                </li>
+              ) : null}
             </ul>
+          ) : (
+            <p className="tags-empty">{t("profile.noTags")}</p>
           )}
         </section>
 
@@ -888,6 +1143,16 @@ export function OpponentRaceProfile({
       </section>
     </article>
   );
+}
+
+function opponentMarkerLabel(marker: OpponentMarker, t: Translator): string {
+  if (marker === "skull") {
+    return t("opponentMarker.skull");
+  }
+  if (marker === "heart") {
+    return t("opponentMarker.heart");
+  }
+  return t("opponentMarker.blocked");
 }
 
 function visibleRaceProfile(
@@ -1018,11 +1283,19 @@ function countMatches(
   tags: readonly string[],
   patterns: readonly string[],
 ): number {
+  const compactPatterns = patterns.map(compactPlaystylePattern);
+
   return tags.reduce(
     (count, tag) =>
-      patterns.some((pattern) => tag.includes(pattern)) ? count + 1 : count,
+      compactPatterns.some((pattern) => tag.includes(pattern))
+        ? count + 1
+        : count,
     0,
   );
+}
+
+function compactPlaystylePattern(pattern: string): string {
+  return pattern.trim().slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH);
 }
 
 function clampUnit(value: number): number {
@@ -1057,6 +1330,46 @@ function opponentRaceStats(
   };
 }
 
+function opponentMatches(
+  opponent: Opponent,
+  matches: readonly MatchHistoryItem[],
+): readonly MatchHistoryItem[] {
+  return matches
+    .filter((item) => item.match.opponentId === opponent.id)
+    .sort((first, second) =>
+      second.match.playedAt.localeCompare(first.match.playedAt),
+    );
+}
+
+function matchResultLabel(result: MatchHistoryItem["match"]["result"]): string {
+  if (result === "win") {
+    return "WIN";
+  }
+  if (result === "loss") {
+    return "LOSS";
+  }
+  return "UNK";
+}
+
+function formatHistoryDate(playedAt: string): string {
+  const date = new Date(playedAt);
+  if (Number.isNaN(date.getTime())) {
+    return playedAt.slice(0, 10);
+  }
+
+  return date.toLocaleDateString(undefined, {
+    month: "2-digit",
+    day: "2-digit",
+    year: "2-digit",
+  });
+}
+
+function formatHistoryDuration(durationSeconds: number): string {
+  const minutes = Math.floor(durationSeconds / 60);
+  const seconds = Math.floor(durationSeconds % 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
 function winRateFor(stats: RaceStats, t: Translator): string {
   const total = stats.wins + stats.losses;
   if (total === 0) {
@@ -1087,6 +1400,51 @@ function formatTotalGames(value: number | undefined, t: Translator): string {
 function formatTagLabel(tag: string): string {
   const normalized = tag.trim().slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH);
   return normalized.toUpperCase();
+}
+
+function fitTagDraftToInput(value: string, input: HTMLInputElement): string {
+  const nextValue = value.slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH);
+  const styles = window.getComputedStyle(input);
+  const font = [
+    styles.fontStyle,
+    styles.fontVariant,
+    styles.fontWeight,
+    styles.fontSize,
+    styles.fontFamily,
+  ].join(" ");
+  const letterSpacing = Number.parseFloat(styles.letterSpacing);
+  const spacing = Number.isFinite(letterSpacing) ? letterSpacing : 0;
+  const inputWidth =
+    input.clientWidth > 0 ? input.clientWidth : TAG_INPUT_FALLBACK_WIDTH_PX;
+  const maxWidth = Math.max(1, inputWidth - TAG_INPUT_EDGE_PADDING_PX);
+
+  let fittedValue = nextValue;
+  while (
+    fittedValue.length > 0 &&
+    measureTagTextWidth(fittedValue.toUpperCase(), font, spacing) > maxWidth
+  ) {
+    fittedValue = fittedValue.slice(0, -1);
+  }
+
+  return fittedValue;
+}
+
+function measureTagTextWidth(
+  text: string,
+  font: string,
+  letterSpacing: number,
+): number {
+  tagMeasureCanvas ??= document.createElement("canvas");
+  const context = tagMeasureCanvas.getContext("2d");
+  if (!context) {
+    return text.length * 8;
+  }
+
+  context.font = font;
+  return (
+    context.measureText(text).width +
+    Math.max(0, text.length - 1) * letterSpacing
+  );
 }
 
 function lastMatchLabel(playedAt: string | undefined, t: Translator): string {
