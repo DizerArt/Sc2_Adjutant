@@ -190,7 +190,11 @@ export async function registerIpcHandlers(): Promise<void> {
       undefined,
       {
         enrichmentService,
-        enrichmentCandidateRepository
+        enrichmentCandidateRepository,
+        resolveLocalPlayerNames: async () => {
+          const currentSettings = await settingsRepository.read();
+          return currentSettings.playerName ? [currentSettings.playerName] : [];
+        }
       }
     ),
     maxItems: 100

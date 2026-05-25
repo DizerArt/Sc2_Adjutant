@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { MergeDuplicateOpponents } from "../../../src/application/use-cases/merge-duplicate-opponents.js";
+import type { EnrichmentCandidateSnapshot } from "../../../src/domain/entities/enrichment-candidate-snapshot.js";
 import { createMatch, type Match } from "../../../src/domain/entities/match.js";
 import { createOpponent, type Opponent } from "../../../src/domain/entities/opponent.js";
+import type { EnrichmentCandidateRepository } from "../../../src/domain/repositories/enrichment-candidate-repository.js";
 import type { MatchRepository } from "../../../src/domain/repositories/match-repository.js";
 import type { OpponentRepository } from "../../../src/domain/repositories/opponent-repository.js";
 import type { EntityId } from "../../../src/domain/value-objects/entity-id.js";
@@ -150,6 +152,59 @@ describe("MergeDuplicateOpponents", () => {
       "opponent_https-starcraft2-blizzard-com-profile-2-1-10540305"
     ]);
   });
+
+  it("merges resolved barcode duplicates by selected SC2 profile URL", async () => {
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_barcode-game-1",
+          nickname: "IIIIIIIIIIII",
+          race: "Terran",
+          notes: ["first"],
+          now: "2026-05-05T19:17:00.000Z"
+        }),
+        lastMatchDate: "2026-05-05T19:17:00.000Z"
+      },
+      {
+        ...createOpponent({
+          id: "opponent_barcode-game-2",
+          nickname: "llllllllllll",
+          race: "Terran",
+          strategyTags: ["proxy"],
+          now: "2026-05-05T01:15:00.000Z"
+        }),
+        lastMatchDate: "2026-05-05T01:15:00.000Z"
+      }
+    ]);
+    const matchRepository = new InMemoryMatchRepository([
+      match("match_b1", "opponent_barcode-game-1", "Terran", "2026-05-05T19:17:00.000Z"),
+      match("match_b2", "opponent_barcode-game-2", "Terran", "2026-05-05T01:15:00.000Z")
+    ]);
+    const candidateRepository = new InMemoryEnrichmentCandidateRepository([
+      candidate("candidate_1", "opponent_barcode-game-1", "https://starcraft2.blizzard.com/profile/2/1/10540305"),
+      candidate("candidate_2", "opponent_barcode-game-2", "https://starcraft2.blizzard.com/profile/2/1/10540305")
+    ]);
+
+    await new MergeDuplicateOpponents({
+      opponentRepository,
+      matchRepository,
+      enrichmentCandidateRepository: candidateRepository,
+      clock: () => "2026-05-05T20:00:00.000Z"
+    }).execute();
+
+    const opponents = await opponentRepository.findAll();
+    const matches = await matchRepository.findAll();
+
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0]).toMatchObject({
+      id: "opponent_barcode-game-1",
+      notes: ["first"],
+      strategyTags: ["proxy"]
+    });
+    expect(matches.map((item) => item.opponentId)).toEqual(["opponent_barcode-game-1", "opponent_barcode-game-1"]);
+    await expect(candidateRepository.findByOpponentId("opponent_barcode-game-1")).resolves.toHaveLength(1);
+    await expect(candidateRepository.findByOpponentId("opponent_barcode-game-2")).resolves.toEqual([]);
+  });
 });
 
 function match(id: EntityId, opponentId: EntityId, opponentRace: Match["opponentRace"], playedAt: string): Match {
@@ -161,6 +216,21 @@ function match(id: EntityId, opponentId: EntityId, opponentRace: Match["opponent
     opponentRace,
     now: playedAt
   });
+}
+
+function candidate(id: EntityId, opponentId: EntityId, profileUrl: string): EnrichmentCandidateSnapshot {
+  return {
+    id,
+    opponentId,
+    source: "sc2pulse",
+    nickname: "IIIIIIIIIIII",
+    race: "Terran",
+    aliases: [],
+    profileUrl,
+    confidenceScore: 0.9,
+    selected: true,
+    capturedAt: "2026-05-05T19:17:00.000Z"
+  };
 }
 
 class InMemoryOpponentRepository implements OpponentRepository {
@@ -220,5 +290,31 @@ class InMemoryMatchRepository implements MatchRepository {
 
   async clear(): Promise<void> {
     this.matches = [];
+  }
+}
+
+class InMemoryEnrichmentCandidateRepository implements EnrichmentCandidateRepository {
+  private candidates: EnrichmentCandidateSnapshot[];
+
+  constructor(candidates: readonly EnrichmentCandidateSnapshot[]) {
+    this.candidates = [...candidates];
+  }
+
+  async findByOpponentId(opponentId: EntityId): Promise<readonly EnrichmentCandidateSnapshot[]> {
+    return this.candidates.filter((candidate) => candidate.opponentId === opponentId);
+  }
+
+  async replaceForOpponent(
+    opponentId: EntityId,
+    candidates: readonly EnrichmentCandidateSnapshot[]
+  ): Promise<void> {
+    this.candidates = [
+      ...this.candidates.filter((candidate) => candidate.opponentId !== opponentId),
+      ...candidates
+    ];
+  }
+
+  async clear(): Promise<void> {
+    this.candidates = [];
   }
 }

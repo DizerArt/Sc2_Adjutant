@@ -45,7 +45,11 @@ export class ReplayWatcherController {
         undefined,
         {
           enrichmentService: options.enrichmentService,
-          enrichmentCandidateRepository: options.enrichmentCandidateRepository
+          enrichmentCandidateRepository: options.enrichmentCandidateRepository,
+          resolveLocalPlayerNames: async () => {
+            const settings = await options.settingsRepository.read();
+            return settings.playerName ? [settings.playerName] : [];
+          }
         }
       ),
       {

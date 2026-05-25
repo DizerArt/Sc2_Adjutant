@@ -83,12 +83,35 @@ function toGameSessionPlayer(player: unknown): GameSessionPlayer | null {
 
   return {
     name: rawName.trim(),
-    race: normalizeRace(player.race ?? player.type),
+    race: extractPlayerRace(player),
     mmr: extractOptionalMmr(player),
     profileLink: extractProfileLink(player),
     result: normalizeResult(rawResult),
     isUser: typeof player.isUser === "boolean" ? player.isUser : undefined
   };
+}
+
+function extractPlayerRace(player: Record<string, unknown>): Race {
+  return firstKnownRace(
+    player.race,
+    player.playedRace,
+    player.actualRace,
+    player.raceActual,
+    player.selectedRace,
+    player.raceSelected,
+    player.type
+  );
+}
+
+function firstKnownRace(...values: readonly unknown[]): Race {
+  for (const value of values) {
+    const race = normalizeRace(value);
+    if (race !== "Unknown") {
+      return race;
+    }
+  }
+
+  return "Unknown";
 }
 
 function normalizeResult(value: string | undefined): GameSessionPlayer["result"] {

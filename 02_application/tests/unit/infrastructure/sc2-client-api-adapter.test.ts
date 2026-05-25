@@ -32,6 +32,31 @@ describe("Sc2ClientApiAdapter", () => {
     expect(session.players[1]?.mmr).toBe(3872);
   });
 
+  it("prefers concrete played race fields when the generic race is unknown", async () => {
+    const adapter = new Sc2ClientApiAdapter({
+      fetchImpl: async () =>
+        new Response(
+          JSON.stringify({
+            players: [
+              { name: "RetorieS", race: "Terran", isUser: true },
+              {
+                name: "IIIIIIIIII",
+                race: "Unknown",
+                playedRace: "Protoss",
+                ladder: { mmr: 5014 }
+              }
+            ]
+          }),
+          { status: 200 }
+        )
+    });
+
+    const session = await adapter.getCurrentGame();
+
+    expect(session.players[1]?.race).toBe("Protoss");
+    expect(session.players[1]?.mmr).toBe(5014);
+  });
+
   it("throws a source error when the endpoint fails", async () => {
     const adapter = new Sc2ClientApiAdapter({
       fetchImpl: async () => new Response("offline", { status: 503 })

@@ -1514,6 +1514,7 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
             item={props.selectedMatch}
             onOpenOpponent={props.onOpenOpponentFromMatch}
             onRevealReplay={props.onRevealReplay}
+            onToggleFavorite={props.onMatchFavoriteToggle}
             t={props.t}
           />
         ) : props.primaryOpponent ? (
@@ -1600,12 +1601,14 @@ function MatchDetailsPanel({
   item,
   onOpenOpponent,
   onRevealReplay,
+  onToggleFavorite,
   t,
 }: {
   readonly detailsState: MatchDetailsState;
   readonly item: MatchHistoryItem | undefined;
   readonly onOpenOpponent: (opponentId: string) => void | Promise<void>;
   readonly onRevealReplay: (replayPath: string) => void | Promise<void>;
+  readonly onToggleFavorite: (matchId: string) => void | Promise<void>;
   readonly t: Translator;
 }) {
   const [activeGraphId, setActiveGraphId] = useState("armyValue");
@@ -1633,6 +1636,7 @@ function MatchDetailsPanel({
   }
 
   const match = details?.match ?? item.match;
+  const matchFavorite = item.match.favorite;
   const opponent = details?.opponent ?? item.opponent;
   const mapName = details?.mapName ?? match.map ?? t("match.unknownMap");
   const buildOrders = details?.buildOrders ?? [];
@@ -1653,16 +1657,36 @@ function MatchDetailsPanel({
             {match.opponentRace} / {match.result.toUpperCase()}
           </span>
         </div>
-        <button
-          className="ghost-button"
-          disabled={!match.replayPath}
-          onClick={() =>
-            match.replayPath ? void onRevealReplay(match.replayPath) : undefined
-          }
-          type="button"
-        >
-          {t("match.replayFile")}
-        </button>
+        <div className="match-details-actions">
+          <button
+            aria-label={
+              matchFavorite
+                ? t("list.removeFavorite")
+                : t("list.addFavorite")
+            }
+            className="match-favorite-button match-details-favorite-button"
+            data-active={matchFavorite ? "true" : "false"}
+            onClick={() => void onToggleFavorite(match.id)}
+            title={
+              matchFavorite
+                ? t("list.removeFavorite")
+                : t("list.addFavorite")
+            }
+            type="button"
+          >
+            {"\u2605"}
+          </button>
+          <button
+            className="ghost-button"
+            disabled={!match.replayPath}
+            onClick={() =>
+              match.replayPath ? void onRevealReplay(match.replayPath) : undefined
+            }
+            type="button"
+          >
+            {t("match.replayFile")}
+          </button>
+        </div>
       </div>
 
       <div className="match-details-stats">

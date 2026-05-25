@@ -125,6 +125,7 @@ export class SyncReplayArchive {
     await new MergeDuplicateOpponents({
       opponentRepository: this.dependencies.opponentRepository,
       matchRepository: this.dependencies.matchRepository,
+      enrichmentCandidateRepository: this.dependencies.enrichmentCandidateRepository,
       clock: this.clock
     }).execute();
     await new RebuildOpponentStats({

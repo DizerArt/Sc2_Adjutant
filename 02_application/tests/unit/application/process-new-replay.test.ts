@@ -125,6 +125,56 @@ describe("ProcessNewReplay", () => {
     });
   });
 
+  it("infers a disconnect loss from the local replay player when live result stayed unknown", async () => {
+    const matchRepository = new InMemoryMatchRepository([
+      {
+        ...match("match_001", "2026-05-23T03:04:00.000Z"),
+        result: "unknown",
+      },
+    ]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_001",
+          nickname: "DrDre",
+          race: "Zerg",
+          now: "2026-05-23T03:04:00.000Z",
+        }),
+        encounters: 1,
+      },
+    ]);
+    const useCase = new ProcessNewReplay(
+      matchRepository,
+      opponentRepository,
+      () => "2026-05-23T03:30:00.000Z",
+      {
+        resolveLocalPlayerNames: () => ["RetorieS"],
+      },
+    );
+
+    const result = await useCase.execute({
+      replayPath: "A:\\Replays\\disconnect-loss.SC2Replay",
+      playedAt: "2026-05-23T03:04:00.000Z",
+      map: "Tourmaline LE",
+      players: [
+        { name: "RetorieS", race: "Terran", result: "loss" },
+        { name: "DrDre", race: "Zerg" },
+      ],
+    });
+
+    expect(result?.match).toMatchObject({
+      id: "match_001",
+      result: "loss",
+      map: "Tourmaline LE",
+    });
+    await expect(
+      opponentRepository.findById("opponent_001"),
+    ).resolves.toMatchObject({
+      wins: 0,
+      losses: 1,
+    });
+  });
+
   it("repairs a match that already has the same replay path but missing result metadata", async () => {
     const replayPath = "A:\\Replays\\Mothership.SC2Replay";
     const matchRepository = new InMemoryMatchRepository([
@@ -288,6 +338,185 @@ describe("ProcessNewReplay", () => {
         capturedAt: "2026-05-03T11:00:00.000Z",
       },
     ]);
+  });
+
+  it("does not enrich a barcode opponent from a non-barcode replay player", async () => {
+    const matchRepository = new InMemoryMatchRepository([
+      {
+        ...match("match_001", "2026-05-03T10:00:00.000Z"),
+        opponentRace: "Unknown",
+        result: "loss",
+      },
+    ]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_001",
+          nickname: "llllllllll",
+          race: "Unknown",
+          mmrAtLastMatch: 4723,
+          now: "2026-05-03T10:00:00.000Z",
+        }),
+        encounters: 1,
+      },
+    ]);
+    const source = new FakeOpponentDataSource([
+      {
+        source: "SC2Pulse",
+        nickname: "LifeForAiur",
+        race: "Zerg",
+        battleTag: "LifeForAiur#1234",
+        aliases: ["LifeForAiur"],
+        mmr: 4723,
+        league: "Grandmaster",
+        confidenceScore: 0.99,
+      },
+    ]);
+    const useCase = new ProcessNewReplay(
+      matchRepository,
+      opponentRepository,
+      () => "2026-05-03T11:00:00.000Z",
+      {
+        enrichmentService: new OpponentEnrichmentService([source]),
+        resolveLocalPlayerNames: () => ["LifeForAiur"],
+      },
+    );
+
+    await useCase.execute({
+      replayPath: "A:\\Replays\\wrong-local.SC2Replay",
+      playedAt: "2026-05-03T10:05:00.000Z",
+      players: [
+        { name: "LifeForAiur", race: "Zerg", result: "win", toon: "2-S2-1-999" },
+        { name: "UnknownOpponent", race: "Protoss", result: "loss" },
+      ],
+    });
+
+    expect(source.queries).toEqual([]);
+    const storedOpponent = await opponentRepository.findById("opponent_001");
+    expect(storedOpponent).toMatchObject({
+      nickname: "llllllllll",
+      mmrAtLastMatch: 4723,
+    });
+    expect(storedOpponent?.revealedNickname).toBeUndefined();
+    expect(storedOpponent?.battleTag).toBeUndefined();
+  });
+
+  it("filters local player candidates when barcode replay enrichment queries SC2 Pulse", async () => {
+    const matchRepository = new InMemoryMatchRepository([
+      {
+        ...match("match_001", "2026-05-03T10:00:00.000Z"),
+        opponentRace: "Zerg",
+      },
+    ]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_001",
+          nickname: "llllllllll",
+          race: "Zerg",
+          mmrAtLastMatch: 4723,
+          now: "2026-05-03T10:00:00.000Z",
+        }),
+        encounters: 1,
+      },
+    ]);
+    const source = new FakeOpponentDataSource([
+      {
+        source: "SC2Pulse",
+        nickname: "LifeForAiur",
+        race: "Zerg",
+        battleTag: "LifeForAiur#1234",
+        aliases: ["llllllllll"],
+        mmr: 4723,
+        league: "Grandmaster",
+        confidenceScore: 0.99,
+      },
+    ]);
+    const candidateRepository = new InMemoryEnrichmentCandidateRepository();
+    const useCase = new ProcessNewReplay(
+      matchRepository,
+      opponentRepository,
+      () => "2026-05-03T11:00:00.000Z",
+      {
+        enrichmentService: new OpponentEnrichmentService([source]),
+        enrichmentCandidateRepository: candidateRepository,
+        resolveLocalPlayerNames: () => ["LifeForAiur"],
+      },
+    );
+
+    await useCase.execute({
+      replayPath: "A:\\Replays\\local-candidate.SC2Replay",
+      playedAt: "2026-05-03T10:05:00.000Z",
+      players: [
+        { name: "LifeForAiur", race: "Protoss", result: "loss", toon: "2-S2-1-999" },
+        { name: "llllllllll", race: "Zerg", result: "win", toon: "2-S2-1-5501280" },
+      ],
+    });
+
+    expect(source.queries).toHaveLength(1);
+    const storedOpponent = await opponentRepository.findById("opponent_001");
+    expect(storedOpponent).toMatchObject({
+      nickname: "llllllllll",
+      mmrAtLastMatch: 4723,
+    });
+    expect(storedOpponent?.revealedNickname).toBeUndefined();
+    expect(storedOpponent?.battleTag).toBeUndefined();
+    await expect(candidateRepository.findByOpponentId("opponent_001")).resolves.toEqual([]);
+  });
+
+  it("repairs unknown barcode race from replay and keeps client api mmr on the real race profile", async () => {
+    const matchRepository = new InMemoryMatchRepository([
+      {
+        ...match("match_001", "2026-05-03T10:00:00.000Z"),
+        opponentRace: "Unknown",
+      },
+    ]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_001",
+          nickname: "llllllllll",
+          race: "Unknown",
+          mmrAtLastMatch: 4662,
+          now: "2026-05-03T10:00:00.000Z",
+        }),
+        encounters: 1,
+      },
+    ]);
+    const useCase = new ProcessNewReplay(
+      matchRepository,
+      opponentRepository,
+      () => "2026-05-03T11:00:00.000Z",
+    );
+
+    const result = await useCase.execute({
+      replayPath: "A:\\Replays\\barcode-unknown.SC2Replay",
+      playedAt: "2026-05-03T10:05:00.000Z",
+      players: [
+        { name: "RetorieS", race: "Terran", result: "loss" },
+        { name: "llllllllll", race: "Protoss", result: "win" },
+      ],
+    });
+
+    expect(result?.match).toMatchObject({
+      opponentRace: "Protoss",
+      playerRace: "Terran",
+      result: "loss",
+    });
+    await expect(matchRepository.findById("match_001")).resolves.toMatchObject({
+      opponentRace: "Protoss",
+      playerRace: "Terran",
+    });
+    await expect(opponentRepository.findById("opponent_001")).resolves.toMatchObject({
+      nickname: "llllllllll",
+      race: "Protoss",
+      mmrAtLastMatch: 4662,
+      raceProfiles: {
+        Protoss: {
+          mmrAtLastMatch: 4662,
+        },
+      },
+    });
   });
 
   it("returns null when all games already have replay paths", async () => {

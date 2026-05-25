@@ -1,6 +1,8 @@
 import type { Match } from "../../domain/entities/match.js";
+import type { EnrichmentCandidateSnapshot } from "../../domain/entities/enrichment-candidate-snapshot.js";
 import type { Opponent } from "../../domain/entities/opponent.js";
 import type { MatchRepository } from "../../domain/repositories/match-repository.js";
+import type { EnrichmentCandidateRepository } from "../../domain/repositories/enrichment-candidate-repository.js";
 import type { OpponentRepository } from "../../domain/repositories/opponent-repository.js";
 import { isBarcodeNickname } from "../../domain/value-objects/barcode.js";
 import { createStableEntityId, type EntityId } from "../../domain/value-objects/entity-id.js";
@@ -14,6 +16,7 @@ export type MergeDuplicateOpponentsResult = {
 export type MergeDuplicateOpponentsDependencies = {
   readonly opponentRepository: OpponentRepository;
   readonly matchRepository: MatchRepository;
+  readonly enrichmentCandidateRepository?: EnrichmentCandidateRepository;
   readonly clock?: () => string;
 };
 
@@ -29,9 +32,14 @@ export class MergeDuplicateOpponents {
       this.dependencies.opponentRepository.findAll(),
       this.dependencies.matchRepository.findAll()
     ]);
-    const groups = groupOpponentsByIdentity(opponents);
+    const candidatesByOpponentId = await loadCandidatesByOpponentId(
+      opponents,
+      this.dependencies.enrichmentCandidateRepository
+    );
+    const groups = groupOpponentsByIdentity(opponents, candidatesByOpponentId);
     const nextOpponents: Opponent[] = [];
     const opponentIdMap = new Map<EntityId, EntityId>();
+    const candidateIdMap = new Map<EntityId, EntityId>();
     let mergedCount = 0;
 
     for (const group of groups.values()) {
@@ -46,6 +54,7 @@ export class MergeDuplicateOpponents {
 
       for (const opponent of group) {
         opponentIdMap.set(opponent.id, canonical.id);
+        candidateIdMap.set(opponent.id, canonical.id);
       }
     }
 
@@ -66,6 +75,12 @@ export class MergeDuplicateOpponents {
       await this.dependencies.matchRepository.save(remapMatchOpponent(match, opponentIdMap));
     }
 
+    await remapCandidateSnapshots(
+      this.dependencies.enrichmentCandidateRepository,
+      candidatesByOpponentId,
+      candidateIdMap
+    );
+
     return {
       inspectedCount: opponents.length,
       mergedCount
@@ -73,7 +88,10 @@ export class MergeDuplicateOpponents {
   }
 }
 
-function groupOpponentsByIdentity(opponents: readonly Opponent[]): Map<string, Opponent[]> {
+function groupOpponentsByIdentity(
+  opponents: readonly Opponent[],
+  candidatesByOpponentId: ReadonlyMap<EntityId, readonly EnrichmentCandidateSnapshot[]>
+): Map<string, Opponent[]> {
   const groups = new Map<string, Opponent[]>();
 
   for (const opponent of opponents) {
@@ -86,9 +104,19 @@ function groupOpponentsByIdentity(opponents: readonly Opponent[]): Map<string, O
       continue;
     }
 
+    const profileUrlKey = selectedProfileUrlKey(candidatesByOpponentId.get(opponent.id) ?? []);
+    if (profileUrlKey) {
+      const key = `profile:${profileUrlKey}`;
+      const group = groups.get(key) ?? [];
+      group.push(opponent);
+      groups.set(key, group);
+      continue;
+    }
+
     // Barcode nicknames are not unique across players: many unrelated opponents
     // share the same glyphs (`IIIIIII`, `lllll`, ...). Keep unresolved barcodes
-    // separate; resolved barcode duplicates are grouped above by BattleTag.
+    // separate; resolved barcode duplicates are grouped above by BattleTag or
+    // by selected SC2 profile URL from enrichment snapshots.
     if (isBarcodeNickname(opponent.nickname)) {
       groups.set(`barcode:${opponent.id}`, [opponent]);
       continue;
@@ -162,6 +190,96 @@ function selectRace(group: readonly Opponent[]): Race {
 function remapMatchOpponent(match: Match, opponentIdMap: ReadonlyMap<EntityId, EntityId>): Match {
   const opponentId = opponentIdMap.get(match.opponentId);
   return opponentId ? { ...match, opponentId } : match;
+}
+
+async function loadCandidatesByOpponentId(
+  opponents: readonly Opponent[],
+  repository: EnrichmentCandidateRepository | undefined
+): Promise<ReadonlyMap<EntityId, readonly EnrichmentCandidateSnapshot[]>> {
+  const result = new Map<EntityId, readonly EnrichmentCandidateSnapshot[]>();
+
+  if (!repository) {
+    return result;
+  }
+
+  await Promise.all(
+    opponents.map(async (opponent) => {
+      result.set(opponent.id, await repository.findByOpponentId(opponent.id));
+    })
+  );
+
+  return result;
+}
+
+async function remapCandidateSnapshots(
+  repository: EnrichmentCandidateRepository | undefined,
+  candidatesByOpponentId: ReadonlyMap<EntityId, readonly EnrichmentCandidateSnapshot[]>,
+  opponentIdMap: ReadonlyMap<EntityId, EntityId>
+): Promise<void> {
+  if (!repository || opponentIdMap.size === 0) {
+    return;
+  }
+
+  const groupedCandidates = new Map<EntityId, EnrichmentCandidateSnapshot[]>();
+  for (const [sourceOpponentId, candidates] of candidatesByOpponentId.entries()) {
+    const targetOpponentId = opponentIdMap.get(sourceOpponentId);
+    if (!targetOpponentId) {
+      continue;
+    }
+
+    const current = groupedCandidates.get(targetOpponentId) ?? [];
+    groupedCandidates.set(targetOpponentId, [
+      ...current,
+      ...candidates.map((candidate) => ({
+        ...candidate,
+        opponentId: targetOpponentId
+      }))
+    ]);
+  }
+
+  for (const [targetOpponentId, candidates] of groupedCandidates.entries()) {
+    await repository.replaceForOpponent(targetOpponentId, dedupeCandidateSnapshots(candidates));
+  }
+
+  for (const [sourceOpponentId, targetOpponentId] of opponentIdMap.entries()) {
+    if (sourceOpponentId !== targetOpponentId) {
+      await repository.replaceForOpponent(sourceOpponentId, []);
+    }
+  }
+}
+
+function dedupeCandidateSnapshots(
+  candidates: readonly EnrichmentCandidateSnapshot[]
+): readonly EnrichmentCandidateSnapshot[] {
+  const result = new Map<string, EnrichmentCandidateSnapshot>();
+
+  for (const candidate of candidates) {
+    const key = [
+      normalizeIdentityKey(candidate.source),
+      normalizeIdentityKey(candidate.profileUrl),
+      normalizeIdentityKey(candidate.battleTag),
+      normalizeIdentityKey(candidate.nickname),
+      candidate.race
+    ].join("|");
+    const current = result.get(key);
+    if (!current || candidateRank(candidate) > candidateRank(current)) {
+      result.set(key, candidate);
+    }
+  }
+
+  return [...result.values()];
+}
+
+function selectedProfileUrlKey(candidates: readonly EnrichmentCandidateSnapshot[]): string {
+  const reliableCandidate = candidates
+    .filter((candidate) => candidate.selected && candidate.profileUrl)
+    .sort((first, second) => candidateRank(second) - candidateRank(first))[0];
+
+  return normalizeIdentityKey(reliableCandidate?.profileUrl);
+}
+
+function candidateRank(candidate: EnrichmentCandidateSnapshot): number {
+  return (candidate.selected ? 1 : 0) + candidate.confidenceScore;
 }
 
 function mergeStrings(values: readonly string[]): readonly string[] {

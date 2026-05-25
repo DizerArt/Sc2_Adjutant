@@ -242,6 +242,19 @@ export function enrichOpponentFromCandidate(
   const fallbackRace = normalizeRace(candidate.race);
   const requestedRace = targetRace ? normalizeRace(targetRace) : "Unknown";
   const race = requestedRace === "Unknown" ? fallbackRace : requestedRace;
+  const localRaceProfile = opponent.raceProfiles?.[race];
+  const observedRaceProfile = opponent.raceProfiles?.[requestedRace];
+  const unknownRaceProfile = opponent.raceProfiles?.Unknown;
+  const localMmr =
+    localRaceProfile?.mmrAtLastMatch ??
+    observedRaceProfile?.mmrAtLastMatch ??
+    unknownRaceProfile?.mmrAtLastMatch ??
+    opponent.mmrAtLastMatch;
+  const localLeague =
+    localRaceProfile?.league ??
+    observedRaceProfile?.league ??
+    unknownRaceProfile?.league ??
+    opponent.league;
 
   // When the stored nickname is a barcode and SC2Pulse resolves it to a real
   // player name (e.g. via the profile-link lookup that surfaces `proNickname`),
@@ -273,18 +286,18 @@ export function enrichOpponentFromCandidate(
     revealedNickname: nextRevealedNickname,
     race: hasObservedRace || opponent.race === "Unknown" || race === "Random" ? race : opponent.race,
     raceProfiles: upsertRaceProfile(opponent.raceProfiles, race, {
-      mmrAtLastMatch: candidate.mmr ?? opponent.raceProfiles?.[race]?.mmrAtLastMatch,
-      league: candidate.league ?? opponent.raceProfiles?.[race]?.league,
-      totalGamesAtLastMatch: sourceTotalGames(candidate) ?? opponent.raceProfiles?.[race]?.totalGamesAtLastMatch,
-      strategyTags: opponent.raceProfiles?.[race]?.strategyTags ?? [],
-      notes: opponent.raceProfiles?.[race]?.notes ?? [],
+      mmrAtLastMatch: candidate.mmr ?? localMmr,
+      league: candidate.league ?? localLeague,
+      totalGamesAtLastMatch: sourceTotalGames(candidate) ?? localRaceProfile?.totalGamesAtLastMatch,
+      strategyTags: localRaceProfile?.strategyTags ?? [],
+      notes: localRaceProfile?.notes ?? [],
       confidenceScore: candidate.confidenceScore,
       updatedAt: now
     }),
     battleTag: candidate.battleTag ?? opponent.battleTag,
     aliases: mergeUniqueStrings(aliasBase, candidate.aliases),
-    mmrAtLastMatch: candidate.mmr ?? opponent.mmrAtLastMatch,
-    league: candidate.league ?? opponent.league,
+    mmrAtLastMatch: candidate.mmr ?? localMmr,
+    league: candidate.league ?? localLeague,
     confidenceScore: candidate.confidenceScore,
     updatedAt: now
   };
