@@ -71,6 +71,69 @@ describe("Sc2PulseAdapter", () => {
     expect(first?.confidenceScore).toBeLessThanOrEqual(1);
   });
 
+  it("rejects same-name candidates when a trusted BattleTag does not match", async () => {
+    const payload = [
+      {
+        leagueMax: 5,
+        ratingMax: 5824,
+        currentStats: { rating: 5824, gamesPlayed: 140 },
+        members: {
+          character: { id: 9001, region: "EU", tag: "Showtime" },
+          account: { battleTag: "ShoWTimE#9999", tag: "ShoWTimE" },
+          raceGames: { ZERG: 140 }
+        }
+      }
+    ];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    const adapter = new Sc2PulseAdapter({
+      baseUrl: "https://example.test/sc2/api",
+      httpClient: buildClient(fetchImpl)
+    });
+
+    const candidates = await adapter.searchOpponent({
+      nickname: "Showtime",
+      battleTag: "Showtime#2619",
+      race: "Zerg",
+      region: "EU"
+    });
+
+    expect(candidates).toEqual([]);
+  });
+
+  it("keeps same-name candidates when the trusted BattleTag matches", async () => {
+    const payload = [
+      {
+        leagueMax: 4,
+        ratingMax: 3929,
+        currentStats: { rating: 3929, gamesPlayed: 140 },
+        members: {
+          character: { id: 9002, region: "EU", tag: "Showtime" },
+          account: { battleTag: "Showtime#2619", tag: "Showtime" },
+          raceGames: { ZERG: 140 }
+        }
+      }
+    ];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    const adapter = new Sc2PulseAdapter({
+      baseUrl: "https://example.test/sc2/api",
+      httpClient: buildClient(fetchImpl)
+    });
+
+    const candidates = await adapter.searchOpponent({
+      nickname: "Showtime",
+      battleTag: "Showtime#2619",
+      race: "Zerg",
+      region: "EU"
+    });
+
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0]).toMatchObject({
+      nickname: "Showtime",
+      battleTag: "Showtime#2619",
+      mmr: 3929
+    });
+  });
+
   it("returns an empty list when the endpoint returns an empty array", async () => {
     const fixture = await loadFixture("character-search.empty.json");
     const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(fixture), { status: 200 }));
@@ -185,7 +248,13 @@ describe("Sc2PulseAdapter", () => {
         totalGamesPlayed: 285,
         currentStats: { rating: 6566, gamesPlayed: 345 },
         members: {
-          character: { id: 341260293, region: "EU", tag: "llllllllll", name: "llllllllll#21725" },
+          character: {
+            id: 341260293,
+            region: "EU",
+            tag: "llllllllll",
+            name: "llllllllll#21725",
+            battlenetId: "11321696610171224064"
+          },
           account: { battleTag: "forte#11934", tag: "forte" },
           proNickname: "Oliveira",
           raceGames: { TERRAN: 345 }
@@ -229,7 +298,13 @@ describe("Sc2PulseAdapter", () => {
         totalGamesPlayed: 20515,
         previousStats: { rating: 3872, gamesPlayed: 5 },
         members: {
-          character: { id: 200, region: "EU", tag: "llllllllllll", name: "llllllllllll#7576" },
+          character: {
+            id: 200,
+            region: "EU",
+            tag: "llllllllllll",
+            name: "llllllllllll#7576",
+            battlenetId: "10220887502839873536"
+          },
           account: { battleTag: "SuperMage#22387", tag: "SuperMage" },
           raceGames: { ZERG: 20515 }
         }
@@ -264,6 +339,35 @@ describe("Sc2PulseAdapter", () => {
     });
   });
 
+  it("rejects profile-link candidates with a different Blizzard profile id", async () => {
+    const payload = [
+      {
+        leagueMax: 5,
+        ratingMax: 4415,
+        currentStats: { rating: 4415, gamesPlayed: 271 },
+        members: {
+          character: { id: 341228100, region: "EU", tag: "Asyl", battlenetId: "11111111111111111111" },
+          account: { battleTag: "Rod#2146", tag: "Rod" },
+          raceGames: { PROTOSS: 271 }
+        }
+      }
+    ];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    const adapter = new Sc2PulseAdapter({
+      baseUrl: "https://example.test/sc2/api",
+      httpClient: buildClient(fetchImpl)
+    });
+
+    const candidates = await adapter.searchOpponent({
+      nickname: "Asyl",
+      profileLink: "battlenet:://starcraft/profile/2/16215737210316521472",
+      race: "Protoss",
+      region: "EU"
+    });
+
+    expect(candidates).toEqual([]);
+  });
+
   it("accepts SC2Pulse singleton profile-link responses for barcode lookups", async () => {
     const payload = {
       leagueMax: 5,
@@ -276,6 +380,7 @@ describe("Sc2PulseAdapter", () => {
           id: 176014,
           realm: 1,
           region: "EU",
+          battlenetId: "10220887502839873536",
           tag: "llllllllllll",
           name: "llllllllllll#7576"
         },
@@ -366,7 +471,13 @@ describe("Sc2PulseAdapter", () => {
         currentStats: null,
         previousStats: null,
         members: {
-          character: { id: 201, region: "EU", tag: "llllllll", name: "llllllll#912" },
+          character: {
+            id: 201,
+            region: "EU",
+            tag: "llllllll",
+            name: "llllllll#912",
+            battlenetId: "17368182634978476032"
+          },
           account: { battleTag: "Höllenhund#21562", tag: "Höllenhund" },
           raceGames: null
         }
@@ -713,6 +824,7 @@ describe("Sc2PulseAdapter", () => {
             character: {
               id: 341377320,
               region: "EU",
+              realm: 1,
               battlenetId: 11197848,
               tag: "llllllllllll",
               name: "llllllllllll#23179"

@@ -239,6 +239,99 @@ describe("SyncReplayArchive", () => {
     );
   });
 
+  it("reconciles an already imported normal replay through its Battle.net profile link", async () => {
+    const wrongOpponent = createOpponent({
+      id: "opponent_showtime",
+      nickname: "Showtime",
+      race: "Protoss",
+      battleTag: "ShoWTimE#2619",
+      mmrAtLastMatch: 5824,
+      now: "2026-05-27T20:12:00.000Z"
+    });
+    const existing = createMatch({
+      id: "match_existing_showtime",
+      opponentId: wrongOpponent.id,
+      playedAt: "2026-05-27T20:12:00.000Z",
+      playerRace: "Terran",
+      opponentRace: "Zerg",
+      result: "loss",
+      replayPath: "A:\\replays\\showtime.SC2Replay",
+      now: "2026-05-27T20:12:00.000Z"
+    });
+    const matchRepository = new InMemoryMatchRepository([existing]);
+    const opponentRepository = new InMemoryOpponentRepository([wrongOpponent]);
+    const source = new FakeSource("SC2Pulse", [
+      {
+        source: "SC2Pulse",
+        nickname: "Showtime",
+        race: "Zerg",
+        region: "EU",
+        battleTag: "Showtime#9999",
+        aliases: [],
+        profileUrl: "https://starcraft2.blizzard.com/profile/2/1/7777777",
+        mmr: 3929,
+        league: "Diamond",
+        totalGames: 873,
+        confidenceScore: 1
+      }
+    ]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: new FakeReplayScanner([
+        replayFile("A:\\replays\\showtime.SC2Replay", "2026-05-27T20:12:00.000Z")
+      ]),
+      replayMetadataReader: new FakeReplayMetadataReader({
+        "A:\\replays\\showtime.SC2Replay": {
+          replayPath: "A:\\replays\\showtime.SC2Replay",
+          playedAt: "2026-05-27T20:12:00.000Z",
+          map: "Celestial Enclave LE",
+          result: "loss",
+          durationSeconds: 711,
+          players: [
+            { name: "RetorieS", race: "Terran", result: "loss", toon: "2-S2-1-100" },
+            { name: "Showtime", race: "Zerg", result: "win", toon: "2-S2-1-7777777" }
+          ]
+        }
+      }),
+      matchRepository,
+      opponentRepository,
+      enrichmentService: new OpponentEnrichmentService([source]),
+      clock: () => "2026-05-27T20:20:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full",
+      region: "EU"
+    });
+
+    const matches = await matchRepository.findAll();
+    const opponents = await opponentRepository.findAll();
+
+    expect(source.queries).toMatchObject([
+      {
+        nickname: "Showtime",
+        profileLink: "https://starcraft2.blizzard.com/profile/2/1/7777777",
+        race: "Zerg",
+        region: "EU"
+      }
+    ]);
+    expect(matches[0]).toMatchObject({
+      opponentId: "opponent_https-starcraft2-blizzard-com-profile-2-1-7777777",
+      opponentRace: "Zerg"
+    });
+    expect(opponents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "opponent_https-starcraft2-blizzard-com-profile-2-1-7777777",
+          nickname: "Showtime",
+          battleTag: "Showtime#9999",
+          mmrAtLastMatch: 3929
+        })
+      ])
+    );
+    expect(opponents.some((opponent) => opponent.id === "opponent_showtime")).toBe(false);
+  });
+
   it("moves an already linked barcode replay back to the opponent id derived from its own profile link", async () => {
     const wrongOpponent = {
       ...createOpponent({
@@ -454,6 +547,128 @@ describe("SyncReplayArchive", () => {
     });
     expect(opponents[0]?.raceProfiles?.Zerg?.mmrAtLastMatch).toBe(3872);
     expect(opponents[0]?.raceProfiles?.Zerg?.totalGamesAtLastMatch).toBe(20515);
+  });
+
+  it("resolves normal replay-sync opponents through their replay profile id instead of nickname only", async () => {
+    const scanner = new FakeReplayScanner([
+      replayFile("A:\\replays\\asyl.SC2Replay", "2026-05-27T20:12:00.000Z")
+    ]);
+    const reader = new FakeReplayMetadataReader({
+      "A:\\replays\\asyl.SC2Replay": {
+        replayPath: "A:\\replays\\asyl.SC2Replay",
+        playedAt: "2026-05-27T20:12:00.000Z",
+        map: "Ghost River LE",
+        result: "loss",
+        durationSeconds: 422,
+        players: [
+          { name: "RetorieS", race: "Terran", result: "loss", toon: "2-S2-1-100" },
+          { name: "Asyl", race: "Protoss", result: "win", toon: "2-S2-1-16215737210316521472" }
+        ]
+      }
+    });
+    const opponentRepository = new InMemoryOpponentRepository([]);
+    const source = new FakeSource("SC2Pulse", [
+      {
+        source: "SC2Pulse",
+        nickname: "Asyl",
+        race: "Protoss",
+        region: "EU",
+        battleTag: "Asyl#878",
+        aliases: [],
+        profileUrl: "https://starcraft2.blizzard.com/profile/2/1/16215737210316521472",
+        mmr: 4081,
+        league: "Diamond",
+        totalGames: 2971,
+        confidenceScore: 1
+      }
+    ]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: scanner,
+      replayMetadataReader: reader,
+      matchRepository: new InMemoryMatchRepository([]),
+      opponentRepository,
+      enrichmentService: new OpponentEnrichmentService([source]),
+      clock: () => "2026-05-27T20:20:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full",
+      region: "EU"
+    });
+
+    const opponents = await opponentRepository.findAll();
+
+    expect(source.queries).toMatchObject([
+      {
+        nickname: "Asyl",
+        profileLink: "https://starcraft2.blizzard.com/profile/2/1/16215737210316521472",
+        race: "Protoss",
+        region: "EU"
+      }
+    ]);
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0]).toMatchObject({
+      id: "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+      nickname: "Asyl",
+      battleTag: "Asyl#878",
+      mmrAtLastMatch: 4081,
+      league: "Diamond"
+    });
+  });
+
+  it("does not merge same-name replay-sync opponents when a replay profile id is available", async () => {
+    const existing = createOpponent({
+      id: "opponent_asyl",
+      nickname: "Asyl",
+      race: "Protoss",
+      now: "2026-05-26T20:00:00.000Z"
+    });
+    const existingMatch = createMatch({
+      id: "match_existing_asyl",
+      opponentId: existing.id,
+      playedAt: "2026-05-26T20:00:00.000Z",
+      playerRace: "Terran",
+      opponentRace: "Protoss",
+      result: "win",
+      replayPath: "A:\\replays\\old-asyl.SC2Replay",
+      now: "2026-05-26T20:00:00.000Z"
+    });
+    const opponentRepository = new InMemoryOpponentRepository([existing]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: new FakeReplayScanner([
+        replayFile("A:\\replays\\asyl.SC2Replay", "2026-05-27T20:12:00.000Z")
+      ]),
+      replayMetadataReader: new FakeReplayMetadataReader({
+        "A:\\replays\\asyl.SC2Replay": {
+          replayPath: "A:\\replays\\asyl.SC2Replay",
+          playedAt: "2026-05-27T20:12:00.000Z",
+          map: "Ghost River LE",
+          result: "loss",
+          durationSeconds: 422,
+          players: [
+            { name: "RetorieS", race: "Terran", result: "loss", toon: "2-S2-1-100" },
+            { name: "Asyl", race: "Protoss", result: "win", toon: "2-S2-1-16215737210316521472" }
+          ]
+        }
+      }),
+      matchRepository: new InMemoryMatchRepository([existingMatch]),
+      opponentRepository,
+      clock: () => "2026-05-27T20:20:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full",
+      region: "EU"
+    });
+
+    const opponents = await opponentRepository.findAll();
+
+    expect(opponents.map((opponent) => opponent.id).sort()).toEqual([
+      "opponent_asyl",
+      "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472"
+    ]);
   });
 
   it("computes the SC2Pulse Battle.net profile query from a replay toon for sparse barcode profiles", async () => {

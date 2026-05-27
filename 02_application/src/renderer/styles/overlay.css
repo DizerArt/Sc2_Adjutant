@@ -185,8 +185,8 @@ body {
 
 .overlay-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: 1.05fr 1.15fr 0.9fr 0.9fr 1fr;
+  gap: 5px;
 }
 
 .overlay-stat {
@@ -208,7 +208,7 @@ body {
 }
 
 .overlay-stat-value {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   margin-top: 3px;
   color: #eef4ff;
@@ -217,6 +217,9 @@ body {
 
 .overlay-stat-wins .overlay-stat-value {
   color: #88e6a8;
+}
+.overlay-stat-mmr .overlay-stat-value {
+  color: #79cfff;
 }
 .overlay-stat-losses .overlay-stat-value {
   color: #ff7575;

@@ -156,9 +156,11 @@ export class CachedOpponentDataSource implements OpponentDataSourcePort {
 function cacheKeyFor(query: OpponentSearchQuery): string {
   return JSON.stringify({
     nickname: query.nickname.trim().toLowerCase(),
+    battleTag: query.battleTag?.trim().toLowerCase() ?? "",
     profileLink: query.profileLink?.trim().toLowerCase() ?? "",
     race: query.race ?? "",
     region: query.region ?? "",
-    season: query.season ?? ""
+    season: query.season ?? "",
+    observedMmr: query.observedMmr ?? ""
   });
 }

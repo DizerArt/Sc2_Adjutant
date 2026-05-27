@@ -4,6 +4,7 @@ import type {
   OpponentSearchQuery
 } from "../../domain/ports/opponent-data-source-port.js";
 import { isBarcodeNickname, isExactBarcodeCandidate } from "../../domain/value-objects/barcode.js";
+import { battleTagsMatch, normalizeBattleTagKey } from "../../domain/value-objects/battle-tag.js";
 import { normalizeRace, type Race } from "../../domain/value-objects/race.js";
 import { ExternalSourceError } from "../../shared/errors/external-source-error.js";
 import { HttpJsonClient } from "../http/http-json-client.js";
@@ -28,6 +29,10 @@ type Sc2PulseStats = {
 
 type Sc2PulseCharacter = {
   readonly id?: number | null;
+  readonly battlenetId?: number | string | null;
+  readonly battleNetId?: number | string | null;
+  readonly bnetId?: number | string | null;
+  readonly profileId?: number | string | null;
   readonly name?: string | null;
   readonly tag?: string | null;
   readonly region?: string | null;
@@ -155,6 +160,12 @@ export class Sc2PulseAdapter implements OpponentDataSourcePort {
       if (isBarcodeQuery && !isSafeBarcodeCandidate(trimmedNickname, candidate)) {
         continue;
       }
+      if (!matchesRequestedProfileLink(entry, trimmedProfileLink)) {
+        continue;
+      }
+      if (!matchesRequestedBattleTag(candidate, query.battleTag)) {
+        continue;
+      }
       entries.push({ entry, candidate });
     }
 
@@ -214,6 +225,106 @@ export class Sc2PulseAdapter implements OpponentDataSourcePort {
       return null;
     }
   }
+}
+
+function matchesRequestedBattleTag(candidate: OpponentDataCandidate, requestedBattleTag: string | undefined): boolean {
+  if (!normalizeBattleTagKey(requestedBattleTag)) {
+    return true;
+  }
+
+  return battleTagsMatch(candidate.battleTag, requestedBattleTag);
+}
+
+type RequestedProfileIdentity = {
+  readonly region: NonNullable<OpponentDataCandidate["region"]>;
+  readonly realm?: number;
+  readonly profileId: string;
+};
+
+function matchesRequestedProfileLink(
+  entry: Sc2PulseLadderDistinctCharacter,
+  requestedProfileLink: string | undefined
+): boolean {
+  const requested = parseRequestedProfileLink(requestedProfileLink);
+  if (!requested) {
+    return true;
+  }
+
+  const character = entry.members?.character;
+  if (!character) {
+    return false;
+  }
+
+  const candidateProfileId = characterProfileId(character);
+  if (!candidateProfileId || candidateProfileId !== requested.profileId) {
+    return false;
+  }
+
+  const candidateRegion = normalizeCandidateRegion(character.region);
+  if (candidateRegion !== requested.region) {
+    return false;
+  }
+
+  const candidateRealm = numberValue(character.realm);
+  return requested.realm === undefined || candidateRealm === requested.realm;
+}
+
+function parseRequestedProfileLink(value: string | undefined): RequestedProfileIdentity | null {
+  const trimmed = value?.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const battlenetMatch = trimmed.match(/^battlenet::\/\/starcraft\/profile\/(\d+)\/(\d+)$/i);
+  if (battlenetMatch) {
+    const region = regionFromProfileRegionId(battlenetMatch[1]);
+    const profileId = battlenetMatch[2];
+    return region && profileId ? { region, profileId } : null;
+  }
+
+  const webMatch = trimmed.match(/^https?:\/\/starcraft2\.blizzard\.com\/profile\/(\d+)\/(\d+)\/(\d+)/i);
+  if (webMatch) {
+    const region = regionFromProfileRegionId(webMatch[1]);
+    const realm = Number(webMatch[2]);
+    const profileId = webMatch[3];
+    return region && Number.isInteger(realm) && profileId ? { region, realm, profileId } : null;
+  }
+
+  return null;
+}
+
+function regionFromProfileRegionId(value: string | undefined): NonNullable<OpponentDataCandidate["region"]> | null {
+  switch (value) {
+    case "1":
+      return "US";
+    case "2":
+      return "EU";
+    case "3":
+      return "KR";
+    case "5":
+      return "CN";
+    default:
+      return null;
+  }
+}
+
+function characterProfileId(character: Sc2PulseCharacter): string | undefined {
+  return profileIdValue(character.battlenetId) ??
+    profileIdValue(character.battleNetId) ??
+    profileIdValue(character.bnetId) ??
+    profileIdValue(character.profileId);
+}
+
+function profileIdValue(value: unknown): string | undefined {
+  if (typeof value === "string" && /^\d+$/.test(value.trim())) {
+    return value.trim();
+  }
+
+  if (typeof value === "number" && Number.isFinite(value) && value >= 0) {
+    return Math.trunc(value).toString();
+  }
+
+  return undefined;
 }
 
 function normalizeCharacterSearchResponse(

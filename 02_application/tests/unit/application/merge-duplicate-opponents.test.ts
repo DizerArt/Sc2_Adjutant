@@ -103,6 +103,107 @@ describe("MergeDuplicateOpponents", () => {
     ]);
   });
 
+  it("does not merge profile-id opponents by nickname when BattleTag is not known yet", async () => {
+    const opponentRepository = new InMemoryOpponentRepository([
+      createOpponent({
+        id: "opponent_showtime",
+        nickname: "Showtime",
+        race: "Protoss",
+        now: "2026-05-26T20:00:00.000Z"
+      }),
+      createOpponent({
+        id: "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+        nickname: "Showtime",
+        race: "Zerg",
+        now: "2026-05-27T20:00:00.000Z"
+      })
+    ]);
+    const matchRepository = new InMemoryMatchRepository([
+      match("match_001", "opponent_showtime", "Protoss", "2026-05-26T20:00:00.000Z"),
+      match(
+        "match_002",
+        "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+        "Zerg",
+        "2026-05-27T20:00:00.000Z"
+      )
+    ]);
+
+    await new MergeDuplicateOpponents({
+      opponentRepository,
+      matchRepository,
+      clock: () => "2026-05-27T21:00:00.000Z"
+    }).execute();
+
+    const opponents = await opponentRepository.findAll();
+    const matches = await matchRepository.findAll();
+
+    expect(opponents.map((opponent) => opponent.id).sort()).toEqual([
+      "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+      "opponent_showtime"
+    ]);
+    expect(matches.map((item) => item.opponentId)).toEqual([
+      "opponent_showtime",
+      "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472"
+    ]);
+  });
+
+  it("removes stale zero-match duplicates when a same-name profile already has matches", async () => {
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_asyl",
+          nickname: "Asyl",
+          race: "Protoss",
+          mmrAtLastMatch: 4415,
+          now: "2026-05-26T20:00:00.000Z"
+        }),
+        encounters: 0,
+        wins: 0,
+        losses: 0
+      },
+      {
+        ...createOpponent({
+          id: "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+          nickname: "Asyl",
+          race: "Protoss",
+          mmrAtLastMatch: 4075,
+          now: "2026-05-27T20:00:00.000Z"
+        }),
+        encounters: 1,
+        wins: 1,
+        losses: 0
+      }
+    ]);
+    const matchRepository = new InMemoryMatchRepository([
+      match(
+        "match_001",
+        "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+        "Protoss",
+        "2026-05-27T20:00:00.000Z"
+      )
+    ]);
+
+    await expect(
+      new MergeDuplicateOpponents({
+        opponentRepository,
+        matchRepository,
+        clock: () => "2026-05-27T21:00:00.000Z"
+      }).execute()
+    ).resolves.toEqual({
+      inspectedCount: 2,
+      mergedCount: 1
+    });
+
+    const opponents = await opponentRepository.findAll();
+
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0]).toMatchObject({
+      id: "opponent_https-starcraft2-blizzard-com-profile-2-1-16215737210316521472",
+      nickname: "Asyl",
+      encounters: 1
+    });
+  });
+
   it("merges resolved barcode duplicates by BattleTag and remaps their matches", async () => {
     const opponentRepository = new InMemoryOpponentRepository([
       {

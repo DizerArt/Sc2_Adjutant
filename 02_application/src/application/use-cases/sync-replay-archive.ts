@@ -153,7 +153,7 @@ export class SyncReplayArchive {
 
     const duplicate = await this.findDuplicateMatch(metadata, players);
     if (duplicate?.alreadyLinked) {
-      await this.enrichAlreadyLinkedBarcodeMatch(duplicate.match, players, region, userName);
+      await this.reconcileAlreadyLinkedReplayMatch(duplicate.match, players, region, userName);
       result.skippedExistingCount += 1;
       return;
     }
@@ -272,6 +272,15 @@ export class SyncReplayArchive {
       return mergeReplayOpponentSample(byId, replayOpponent, now);
     }
 
+    if (replayProfileQuery(replayOpponent)) {
+      return createOpponent({
+        id: opponentId,
+        nickname: replayOpponent.name,
+        race: replayOpponent.race,
+        now
+      });
+    }
+
     if (!isBarcodeNickname(replayOpponent.name)) {
       const normalizedReplayName = normalizePlayerIdentityName(replayOpponent.name);
       const existing = (await this.dependencies.opponentRepository.findAll()).find((opponent) =>
@@ -302,7 +311,7 @@ export class SyncReplayArchive {
       return;
     }
 
-    const profileLink = barcodeProfileQuery(replayOpponent);
+    const profileLink = replayProfileQuery(replayOpponent);
     const enrichment = await this.dependencies.enrichmentService.enrich(opponent, {
       nickname: replayOpponent.name,
       profileLink,
@@ -324,19 +333,14 @@ export class SyncReplayArchive {
     await this.dependencies.enrichmentCandidateRepository?.replaceForOpponent(opponent.id, snapshots);
   }
 
-  private async enrichAlreadyLinkedBarcodeMatch(
+  private async reconcileAlreadyLinkedReplayMatch(
     match: Match,
     players: ReplayMatchPlayers,
     region: OpponentSearchQuery["region"] | undefined,
     userName: string
   ): Promise<void> {
-    const profileLink = barcodeProfileQuery(players.opponent);
-    if (!this.dependencies.enrichmentService || !profileLink) {
-      return;
-    }
-
-    const existingOpponent = await this.dependencies.opponentRepository.findById(match.opponentId);
-    if (!existingOpponent || !shouldReconcileBarcodeOpponent(existingOpponent, players.opponent)) {
+    const profileLink = replayProfileQuery(players.opponent);
+    if (!profileLink) {
       return;
     }
 
@@ -353,7 +357,7 @@ export class SyncReplayArchive {
       await this.dependencies.opponentRepository.save(opponent);
     }
 
-    if (match.opponentId !== expectedOpponentId) {
+    if (match.opponentId !== expectedOpponentId || match.opponentRace !== players.opponent.race) {
       await this.dependencies.matchRepository.save({
         ...match,
         opponentId: expectedOpponentId,
@@ -471,8 +475,8 @@ function mergeReplayOpponentSample(opponent: Opponent, replayOpponent: ReplayMet
 }
 
 function buildOpponentId(replayOpponent: ReplayMetadataPlayer, playedAt: string): string {
-  const profileLink = barcodeProfileQuery(replayOpponent);
-  if (isBarcodeNickname(replayOpponent.name) && profileLink) {
+  const profileLink = replayProfileQuery(replayOpponent);
+  if (profileLink) {
     return createStableEntityId("opponent", profileLink);
   }
 
@@ -483,16 +487,8 @@ function buildOpponentId(replayOpponent: ReplayMetadataPlayer, playedAt: string)
   return createStableEntityId("opponent", replayOpponent.name);
 }
 
-function shouldReconcileBarcodeOpponent(opponent: Opponent, replayOpponent: ReplayMetadataPlayer): boolean {
-  if (!isBarcodeNickname(opponent.nickname) && !isBarcodeNickname(replayOpponent.name)) {
-    return false;
-  }
-
-  return Boolean(barcodeProfileQuery(replayOpponent));
-}
-
-function barcodeProfileQuery(replayOpponent: ReplayMetadataPlayer): string | undefined {
-  if (!isBarcodeNickname(replayOpponent.name) || !replayOpponent.toon) {
+function replayProfileQuery(replayOpponent: ReplayMetadataPlayer): string | undefined {
+  if (!replayOpponent.toon) {
     return undefined;
   }
 

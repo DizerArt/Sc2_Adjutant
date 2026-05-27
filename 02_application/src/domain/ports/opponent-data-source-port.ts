@@ -2,10 +2,12 @@ import type { Race } from "../value-objects/race.js";
 
 export type OpponentSearchQuery = {
   readonly nickname: string;
+  readonly battleTag?: string;
   readonly profileLink?: string;
   readonly race?: Race;
   readonly region?: "US" | "EU" | "KR" | "CN" | "Unknown";
   readonly season?: number;
+  readonly observedMmr?: number;
 };
 
 export type OpponentDataCandidate = {

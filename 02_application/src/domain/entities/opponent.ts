@@ -294,7 +294,7 @@ export function enrichOpponentFromCandidate(
       confidenceScore: candidate.confidenceScore,
       updatedAt: now
     }),
-    battleTag: candidate.battleTag ?? opponent.battleTag,
+    battleTag: opponent.battleTag ?? candidate.battleTag,
     aliases: mergeUniqueStrings(aliasBase, candidate.aliases),
     mmrAtLastMatch: candidate.mmr ?? localMmr,
     league: candidate.league ?? localLeague,

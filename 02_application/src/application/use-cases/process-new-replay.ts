@@ -45,7 +45,7 @@ export class ProcessNewReplay {
     await this.matchRepository.save(updatedMatch);
     await this.updateOpponentStats(match, updatedMatch);
     await this.updateOpponentRaceProfileFromReplay(updatedMatch, replayOpponent, now);
-    await this.enrichBarcodeOpponentFromReplay(updatedMatch, effectiveMetadata, replayOpponent, replayUser);
+    await this.enrichOpponentFromReplay(updatedMatch, effectiveMetadata, replayOpponent, replayUser);
 
     return {
       match: updatedMatch
@@ -192,7 +192,7 @@ export class ProcessNewReplay {
     }
   }
 
-  private async enrichBarcodeOpponentFromReplay(
+  private async enrichOpponentFromReplay(
     match: Match,
     metadata: ReplayMetadata,
     replayOpponentFromMatch: ReplayMetadataPlayer | undefined,
@@ -203,12 +203,12 @@ export class ProcessNewReplay {
     }
 
     const opponent = await this.opponentRepository.findById(match.opponentId);
-    if (!opponent || !isBarcodeNickname(opponent.nickname)) {
+    if (!opponent) {
       return;
     }
 
     const replayOpponent = replayOpponentFromMatch ?? findReplayOpponentForMatch(match, opponent, metadata.players);
-    if (!isSafeBarcodeReplayOpponent(opponent, replayOpponent)) {
+    if (isBarcodeNickname(opponent.nickname) && !isSafeBarcodeReplayOpponent(opponent, replayOpponent)) {
       return;
     }
 

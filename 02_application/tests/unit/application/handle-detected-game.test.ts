@@ -433,10 +433,11 @@ describe("HandleDetectedGame", () => {
       ? await enrichmentCandidateRepository.findByOpponentId(result.opponent.id)
       : [];
 
-    expect(source.queries).toEqual([
+    expect(source.queries).toMatchObject([
       {
         nickname: "LLLLLLLLLL",
         race: "Random",
+        observedMmr: 4577,
         region: undefined
       }
     ]);

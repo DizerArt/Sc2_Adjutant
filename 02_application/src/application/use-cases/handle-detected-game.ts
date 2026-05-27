@@ -9,6 +9,7 @@ import type { Opponent } from "../../domain/entities/opponent.js";
 import type { OpponentSearchQuery } from "../../domain/ports/opponent-data-source-port.js";
 import type { EnrichmentCandidateRepository } from "../../domain/repositories/enrichment-candidate-repository.js";
 import type { OpponentRepository } from "../../domain/repositories/opponent-repository.js";
+import { normalizeBattleTagKey } from "../../domain/value-objects/battle-tag.js";
 import {
   OpponentEnrichmentService,
   type OpponentEnrichmentWarning
@@ -65,9 +66,11 @@ export class HandleDetectedGame {
     const userPlayer = findUserPlayer(input.session, input.userName);
     const enrichment = await this.dependencies.enrichmentService.enrich(registered.opponent, {
       nickname: registered.opponent.nickname,
+      battleTag: safeOpponentBattleTag(detectedOpponent?.battleTag, userPlayer?.battleTag),
       profileLink: safeOpponentProfileLink(detectedOpponent?.profileLink, userPlayer?.profileLink),
       race: registered.opponent.race,
       region: input.region,
+      observedMmr: detectedOpponent?.mmr ?? registered.opponent.mmrAtLastMatch,
       excludedNicknames: localPlayerIdentityNames(input)
     });
     const capturedAt = new Date().toISOString();
@@ -90,6 +93,19 @@ export class HandleDetectedGame {
       enrichmentWarnings: enrichment.warnings
     };
   }
+}
+
+function safeOpponentBattleTag(
+  opponentBattleTag: string | undefined,
+  userBattleTag: string | undefined
+): string | undefined {
+  const normalizedOpponentBattleTag = normalizeBattleTagIdentity(opponentBattleTag);
+  if (!normalizedOpponentBattleTag) {
+    return undefined;
+  }
+
+  const normalizedUserBattleTag = normalizeBattleTagIdentity(userBattleTag);
+  return normalizedOpponentBattleTag === normalizedUserBattleTag ? undefined : opponentBattleTag;
 }
 
 function localPlayerIdentityNames(input: HandleDetectedGameInput): readonly string[] {
@@ -122,4 +138,8 @@ function safeOpponentProfileLink(
 
 function normalizeProfileLink(value: string | undefined): string {
   return value?.trim().toLowerCase() ?? "";
+}
+
+function normalizeBattleTagIdentity(value: string | undefined): string {
+  return normalizeBattleTagKey(value);
 }

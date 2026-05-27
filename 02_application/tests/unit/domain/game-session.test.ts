@@ -76,6 +76,20 @@ describe("game session mapping", () => {
     ]);
   });
 
+  it("maps BattleTag from live SC2 Client API player payloads", () => {
+    const session = toGameSession({
+      players: [
+        { name: "RetorieS", race: "Terran", account: { battleTag: "RetorieS#2321" }, isUser: true },
+        { name: "Showtime", race: "Zerg", profile: { battleTag: "Showtime#2619" } }
+      ]
+    });
+
+    expect(session.players).toMatchObject([
+      { name: "RetorieS", battleTag: "RetorieS#2321" },
+      { name: "Showtime", battleTag: "Showtime#2619" }
+    ]);
+  });
+
   it("keeps the same id for multiple samples of the same live game", () => {
     const first = toGameSession(
       {

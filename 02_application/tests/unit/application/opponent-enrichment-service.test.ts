@@ -278,6 +278,139 @@ describe("OpponentEnrichmentService", () => {
     expect(result.candidates.map((candidate) => candidate.nickname)).toEqual(["Neo"]);
   });
 
+  it("rejects exact nickname candidates when the trusted BattleTag differs", async () => {
+    const opponent = createOpponent({
+      id: "opponent_showtime-2619",
+      nickname: "Showtime",
+      race: "Zerg",
+      battleTag: "Showtime#2619",
+      mmrAtLastMatch: 3929,
+      now: "2026-05-03T18:00:00.000Z"
+    });
+
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "Showtime",
+          battleTag: "ShoWTimE#9999",
+          race: "Zerg",
+          aliases: ["ShoWTimE"],
+          mmr: 5824,
+          league: "Master",
+          confidenceScore: 0.99
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      battleTag: "Showtime#2619",
+      race: "Zerg"
+    });
+
+    expect(result.bestCandidate).toBeNull();
+    expect(result.opponent).toEqual(opponent);
+    expect(result.candidates).toEqual([]);
+  });
+
+  it("rejects nickname-only candidates when their MMR is far from the locally observed MMR", async () => {
+    const opponent = createOpponent({
+      id: "opponent_showtime",
+      nickname: "Showtime",
+      race: "Zerg",
+      mmrAtLastMatch: 3929,
+      now: "2026-05-03T18:00:00.000Z"
+    });
+
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "Showtime",
+          battleTag: "ShoWTimE#2619",
+          race: "Zerg",
+          aliases: [],
+          mmr: 5824,
+          league: "Master",
+          confidenceScore: 0.99
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      race: "Zerg",
+      observedMmr: 3929
+    });
+
+    expect(result.bestCandidate).toBeNull();
+    expect(result.opponent).toEqual(opponent);
+    expect(result.candidates).toEqual([]);
+  });
+
+  it("does not trust a stored BattleTag when the live query explicitly has no BattleTag", async () => {
+    const opponent = createOpponent({
+      id: "opponent_showtime",
+      nickname: "Showtime",
+      race: "Zerg",
+      battleTag: "ShoWTimE#2619",
+      mmrAtLastMatch: 3929,
+      now: "2026-05-03T18:00:00.000Z"
+    });
+
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "Showtime",
+          battleTag: "ShoWTimE#2619",
+          race: "Zerg",
+          mmr: 5824,
+          confidenceScore: 0.99
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      battleTag: undefined,
+      observedMmr: 3929,
+      race: "Zerg"
+    });
+
+    expect(result.bestCandidate).toBeNull();
+    expect(result.opponent).toEqual(opponent);
+    expect(result.candidates).toEqual([]);
+  });
+
+  it("preserves a locally observed BattleTag when enrichment has a matching candidate", async () => {
+    const opponent = createOpponent({
+      id: "opponent_showtime-2619",
+      nickname: "Showtime",
+      race: "Zerg",
+      battleTag: "Showtime#2619",
+      now: "2026-05-03T18:00:00.000Z"
+    });
+
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "Showtime",
+          battleTag: "Showtime#2619",
+          race: "Zerg",
+          aliases: [],
+          mmr: 3929,
+          confidenceScore: 0.99
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, { battleTag: "Showtime#2619" });
+
+    expect(result.bestCandidate?.battleTag).toBe("Showtime#2619");
+    expect(result.opponent.battleTag).toBe("Showtime#2619");
+    expect(result.opponent.mmrAtLastMatch).toBe(3929);
+  });
+
   it("rejects local player candidates when SC2 reports the user name with a clan suffix", async () => {
     const opponent = createOpponent({
       id: "opponent_barcode",

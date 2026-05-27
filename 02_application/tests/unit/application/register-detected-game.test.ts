@@ -96,6 +96,79 @@ describe("RegisterDetectedGame", () => {
     expect(opponents[0]?.raceProfiles?.Protoss?.mmrAtLastMatch).toBe(4227);
   });
 
+  it("stores the locally observed opponent BattleTag and uses it as the stable identity", async () => {
+    const opponentRepository = new InMemoryOpponentRepository();
+    const matchRepository = new InMemoryMatchRepository();
+    const useCase = new RegisterDetectedGame({
+      opponentRepository,
+      matchRepository,
+      clock: () => "2026-05-03T01:00:00.000Z"
+    });
+
+    await useCase.execute({
+      session: {
+        ...activeSession(),
+        players: [
+          { name: "Showtime", race: "Zerg", result: "Undecided", battleTag: "Showtime#2619" },
+          { name: "RetorieS", race: "Terran", result: "Undecided", battleTag: "RetorieS#2321", isUser: true }
+        ]
+      },
+      userName: "RetorieS"
+    });
+
+    const opponents = await opponentRepository.findAll();
+
+    expect(opponents).toHaveLength(1);
+    expect(opponents[0]).toMatchObject({
+      id: "opponent_showtime-2619",
+      nickname: "Showtime",
+      battleTag: "Showtime#2619",
+      race: "Zerg"
+    });
+  });
+
+  it("keeps two same-name opponents separate when their observed BattleTags differ", async () => {
+    const opponentRepository = new InMemoryOpponentRepository();
+    const matchRepository = new InMemoryMatchRepository();
+    const useCase = new RegisterDetectedGame({
+      opponentRepository,
+      matchRepository,
+      clock: () => "2026-05-03T01:00:00.000Z"
+    });
+
+    await useCase.execute({
+      session: {
+        id: "showtime-a",
+        isActive: true,
+        mode: "ranked-1v1",
+        detectedAt: "2026-05-03T00:30:00.000Z",
+        players: [
+          { name: "Showtime", race: "Zerg", result: "Undecided", battleTag: "Showtime#2619" },
+          { name: "RetorieS", race: "Terran", result: "Undecided", battleTag: "RetorieS#2321", isUser: true }
+        ]
+      },
+      userName: "RetorieS"
+    });
+    await useCase.execute({
+      session: {
+        id: "showtime-b",
+        isActive: true,
+        mode: "ranked-1v1",
+        detectedAt: "2026-05-03T01:30:00.000Z",
+        players: [
+          { name: "Showtime", race: "Protoss", result: "Undecided", battleTag: "Showtime#9999" },
+          { name: "RetorieS", race: "Terran", result: "Undecided", battleTag: "RetorieS#2321", isUser: true }
+        ]
+      },
+      userName: "RetorieS"
+    });
+
+    const opponents = await opponentRepository.findAll();
+
+    expect(opponents).toHaveLength(2);
+    expect(opponents.map((opponent) => opponent.battleTag).sort()).toEqual(["Showtime#2619", "Showtime#9999"]);
+  });
+
   it("reuses an unresolved live match after monitoring restarts during the same game", async () => {
     const opponentRepository = new InMemoryOpponentRepository();
     const matchRepository = new InMemoryMatchRepository();

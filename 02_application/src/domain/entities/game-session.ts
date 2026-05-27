@@ -1,9 +1,11 @@
+import { normalizeBattleTag } from "../value-objects/battle-tag.js";
 import { normalizeRace, type Race } from "../value-objects/race.js";
 
 export type GameSessionPlayer = {
   readonly name: string;
   readonly race: Race;
   readonly mmr?: number;
+  readonly battleTag?: string;
   readonly profileLink?: string;
   readonly result?: "Victory" | "Defeat" | "Undecided" | "Unknown";
   readonly isUser?: boolean;
@@ -85,6 +87,7 @@ function toGameSessionPlayer(player: unknown): GameSessionPlayer | null {
     name: rawName.trim(),
     race: extractPlayerRace(player),
     mmr: extractOptionalMmr(player),
+    battleTag: extractBattleTag(player),
     profileLink: extractProfileLink(player),
     result: normalizeResult(rawResult),
     isUser: typeof player.isUser === "boolean" ? player.isUser : undefined
@@ -101,6 +104,45 @@ function extractPlayerRace(player: Record<string, unknown>): Race {
     player.raceSelected,
     player.type
   );
+}
+
+function extractBattleTag(player: Record<string, unknown>): string | undefined {
+  return findBattleTag(player, 3);
+}
+
+function findBattleTag(value: unknown, depth: number): string | undefined {
+  if (depth < 0 || !isRecord(value)) {
+    return undefined;
+  }
+
+  for (const [key, candidate] of Object.entries(value)) {
+    if (!isBattleTagLikeKey(key)) {
+      continue;
+    }
+
+    const battleTag = typeof candidate === "string" ? normalizeBattleTag(candidate) : undefined;
+    if (battleTag) {
+      return battleTag;
+    }
+  }
+
+  for (const candidate of Object.values(value)) {
+    if (!isRecord(candidate) && !Array.isArray(candidate)) {
+      continue;
+    }
+
+    const battleTag = findBattleTag(candidate, depth - 1);
+    if (battleTag) {
+      return battleTag;
+    }
+  }
+
+  return undefined;
+}
+
+function isBattleTagLikeKey(key: string): boolean {
+  const normalized = key.toLowerCase();
+  return normalized === "battletag" || (normalized.includes("battle") && normalized.includes("tag"));
 }
 
 function firstKnownRace(...values: readonly unknown[]): Race {

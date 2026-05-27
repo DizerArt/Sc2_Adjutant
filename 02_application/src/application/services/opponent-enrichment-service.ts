@@ -7,6 +7,7 @@ import type {
   OpponentDataSourcePort,
   OpponentSearchQuery
 } from "../../domain/ports/opponent-data-source-port.js";
+import { battleTagsMatch, normalizeBattleTagKey } from "../../domain/value-objects/battle-tag.js";
 
 export type OpponentEnrichmentWarning = {
   readonly source: string;
@@ -22,6 +23,7 @@ export type OpponentEnrichmentResult = {
 
 export type OpponentEnrichmentServiceOptions = {
   readonly minConfidenceScore?: number;
+  readonly maxNicknameOnlyMmrDelta?: number;
   readonly clock?: () => string;
 };
 
@@ -32,6 +34,7 @@ export type OpponentEnrichmentQuery = Partial<OpponentSearchQuery> & {
 
 export class OpponentEnrichmentService {
   private readonly minConfidenceScore: number;
+  private readonly maxNicknameOnlyMmrDelta: number;
   private readonly clock: () => string;
 
   constructor(
@@ -39,16 +42,19 @@ export class OpponentEnrichmentService {
     options: OpponentEnrichmentServiceOptions = {}
   ) {
     this.minConfidenceScore = options.minConfidenceScore ?? 0.5;
+    this.maxNicknameOnlyMmrDelta = options.maxNicknameOnlyMmrDelta ?? 800;
     this.clock = options.clock ?? (() => new Date().toISOString());
   }
 
   async enrich(opponent: Opponent, query?: OpponentEnrichmentQuery): Promise<OpponentEnrichmentResult> {
     const searchQuery: OpponentSearchQuery = {
       nickname: query?.nickname ?? opponent.nickname,
+      battleTag: query && hasOwn(query, "battleTag") ? query.battleTag : opponent.battleTag,
       profileLink: query?.profileLink,
       race: query?.race ?? opponent.race,
       region: query?.region,
-      season: query?.season
+      season: query?.season,
+      observedMmr: query?.observedMmr ?? opponent.mmrAtLastMatch
     };
 
     const sources = filterSources(this.sources, query?.allowedSourceNames);
@@ -84,7 +90,13 @@ export class OpponentEnrichmentService {
       }
     }
 
-    const eligibleCandidates = filterExcludedCandidates(candidates, query?.excludedNicknames ?? []);
+    const battleTagCandidates = filterBattleTagCandidates(candidates, searchQuery.battleTag);
+    const mmrCandidates = filterNicknameOnlyMmrCandidates(
+      battleTagCandidates,
+      searchQuery,
+      this.maxNicknameOnlyMmrDelta
+    );
+    const eligibleCandidates = filterExcludedCandidates(mmrCandidates, query?.excludedNicknames ?? []);
     const bestCandidate = selectBestCandidate(eligibleCandidates, this.minConfidenceScore);
 
     return {
@@ -94,6 +106,40 @@ export class OpponentEnrichmentService {
       warnings
     };
   }
+}
+
+function filterNicknameOnlyMmrCandidates(
+  candidates: readonly OpponentDataCandidate[],
+  query: OpponentSearchQuery,
+  maxMmrDelta: number
+): readonly OpponentDataCandidate[] {
+  const hasStableLookup = Boolean(normalizeBattleTagKey(query.battleTag) || query.profileLink?.trim());
+  if (hasStableLookup || !isUsableMmr(query.observedMmr)) {
+    return candidates;
+  }
+
+  return candidates.filter((candidate) => {
+    if (!isUsableMmr(candidate.mmr)) {
+      return true;
+    }
+
+    return Math.abs(candidate.mmr - query.observedMmr!) <= maxMmrDelta;
+  });
+}
+
+function isUsableMmr(value: number | undefined): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value > 0;
+}
+
+function filterBattleTagCandidates(
+  candidates: readonly OpponentDataCandidate[],
+  requestedBattleTag: string | undefined
+): readonly OpponentDataCandidate[] {
+  if (!normalizeBattleTagKey(requestedBattleTag)) {
+    return candidates;
+  }
+
+  return candidates.filter((candidate) => battleTagsMatch(candidate.battleTag, requestedBattleTag));
 }
 
 function filterSources(
@@ -176,4 +222,8 @@ function normalizePlayerIdentityName(value: string | undefined): string {
     .replace(/#\d+$/, "")
     .trim()
     .toLowerCase();
+}
+
+function hasOwn<T extends object, K extends PropertyKey>(value: T, key: K): value is T & Record<K, unknown> {
+  return Object.prototype.hasOwnProperty.call(value, key);
 }

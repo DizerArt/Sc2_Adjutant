@@ -340,6 +340,76 @@ describe("ProcessNewReplay", () => {
     ]);
   });
 
+  it("uses the replay profile toon for normal opponent enrichment after the replay is linked", async () => {
+    const matchRepository = new InMemoryMatchRepository([
+      {
+        ...match("match_001", "2026-05-27T20:12:00.000Z"),
+        opponentRace: "Protoss",
+      },
+    ]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      {
+        ...createOpponent({
+          id: "opponent_001",
+          nickname: "Asyl",
+          race: "Protoss",
+          now: "2026-05-27T20:12:00.000Z",
+        }),
+        encounters: 1,
+      },
+    ]);
+    const source = new FakeOpponentDataSource([
+      {
+        source: "SC2Pulse",
+        nickname: "Asyl",
+        race: "Protoss",
+        battleTag: "Asyl#878",
+        aliases: [],
+        profileUrl: "https://starcraft2.blizzard.com/profile/2/1/16215737210316521472",
+        mmr: 4081,
+        league: "Diamond",
+        totalGames: 2971,
+        confidenceScore: 1,
+      },
+    ]);
+    const useCase = new ProcessNewReplay(
+      matchRepository,
+      opponentRepository,
+      () => "2026-05-27T20:20:00.000Z",
+      {
+        enrichmentService: new OpponentEnrichmentService([source], {
+          clock: () => "2026-05-27T20:20:00.000Z",
+        }),
+      },
+    );
+
+    await useCase.execute({
+      replayPath: "A:\\Replays\\asyl.SC2Replay",
+      playedAt: "2026-05-27T20:12:00.000Z",
+      result: "loss",
+      players: [
+        { name: "RetorieS", race: "Terran", result: "loss", toon: "2-S2-1-100" },
+        { name: "Asyl", race: "Protoss", result: "win", toon: "2-S2-1-16215737210316521472" },
+      ],
+    });
+
+    expect(source.queries).toEqual([
+      {
+        nickname: "Asyl",
+        profileLink: "https://starcraft2.blizzard.com/profile/2/1/16215737210316521472",
+        race: "Protoss",
+        region: undefined,
+        season: undefined,
+      },
+    ]);
+    await expect(opponentRepository.findById("opponent_001")).resolves.toMatchObject({
+      nickname: "Asyl",
+      battleTag: "Asyl#878",
+      mmrAtLastMatch: 4081,
+      league: "Diamond",
+    });
+  });
+
   it("does not enrich a barcode opponent from a non-barcode replay player", async () => {
     const matchRepository = new InMemoryMatchRepository([
       {

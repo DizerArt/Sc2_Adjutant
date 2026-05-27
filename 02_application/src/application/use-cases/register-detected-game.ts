@@ -14,6 +14,7 @@ import {
 import type { MatchRepository } from "../../domain/repositories/match-repository.js";
 import type { OpponentRepository } from "../../domain/repositories/opponent-repository.js";
 import { isBarcodeNickname } from "../../domain/value-objects/barcode.js";
+import { battleTagsMatch, normalizeBattleTagKey } from "../../domain/value-objects/battle-tag.js";
 import { createStableEntityId } from "../../domain/value-objects/entity-id.js";
 
 const SAME_RESOLVED_MATCH_WINDOW_MS = 60 * 1000;
@@ -99,6 +100,7 @@ export class RegisterDetectedGame {
         id: effectiveOpponentId,
         nickname: opponentSample.name,
         race: opponentSample.race,
+        battleTag: opponentSample.battleTag,
         mmrAtLastMatch: opponentSample.mmr,
         now
       });
@@ -155,13 +157,28 @@ function sanitizeOpponentPlayerProfileLink(
   player: GameSessionPlayer
 ): GameSessionPlayer {
   const opponentProfileLink = normalizeProfileLink(opponent.profileLink);
+  const opponentBattleTag = safeOpponentBattleTag(opponent.battleTag, player.battleTag);
+  const safeOpponent = opponentBattleTag === opponent.battleTag ? opponent : { ...opponent, battleTag: opponentBattleTag };
+
   if (!opponentProfileLink) {
-    return opponent;
+    return safeOpponent;
   }
 
   return opponentProfileLink === normalizeProfileLink(player.profileLink)
-    ? { ...opponent, profileLink: undefined }
-    : opponent;
+    ? { ...safeOpponent, profileLink: undefined }
+    : safeOpponent;
+}
+
+function safeOpponentBattleTag(
+  opponentBattleTag: string | undefined,
+  userBattleTag: string | undefined
+): string | undefined {
+  const normalizedOpponentBattleTag = normalizeBattleTagKey(opponentBattleTag);
+  if (!normalizedOpponentBattleTag) {
+    return undefined;
+  }
+
+  return normalizedOpponentBattleTag === normalizeBattleTagKey(userBattleTag) ? undefined : opponentBattleTag;
 }
 
 async function findReusableLiveMatch(
@@ -263,6 +280,11 @@ function resultFromPlayer(result: GameSessionPlayer["result"]): MatchResult {
 }
 
 function buildOpponentId(opponent: GameSessionPlayer, session: GameSession): string {
+  const battleTagKey = normalizeBattleTagKey(opponent.battleTag);
+  if (battleTagKey) {
+    return createStableEntityId("opponent", battleTagKey);
+  }
+
   if (isBarcodeNickname(opponent.name) && opponent.profileLink) {
     return createStableEntityId("opponent", opponent.profileLink);
   }
@@ -316,6 +338,15 @@ async function findExistingOpponent(
     return byId;
   }
 
+  const byBattleTag = await findExistingOpponentByBattleTag(repository, opponentPlayer.battleTag);
+  if (byBattleTag) {
+    return byBattleTag;
+  }
+
+  if (normalizeBattleTagKey(opponentPlayer.battleTag)) {
+    return null;
+  }
+
   // Barcode nicknames are not unique identifiers, so a name/alias lookup would
   // collide unrelated barcodes. Always create a fresh record for those.
   if (isBarcodeNickname(opponentPlayer.name)) {
@@ -333,6 +364,18 @@ async function findExistingOpponent(
   );
 }
 
+async function findExistingOpponentByBattleTag(
+  repository: OpponentRepository,
+  battleTag: string | undefined
+): Promise<Opponent | null> {
+  if (!normalizeBattleTagKey(battleTag)) {
+    return null;
+  }
+
+  const opponents = await repository.findAll();
+  return opponents.find((opponent) => battleTagsMatch(opponent.battleTag, battleTag)) ?? null;
+}
+
 function mergeDetectedMatch(existingMatch: Match, detectedMatch: Match, now: string): Match {
   return {
     ...existingMatch,
@@ -347,7 +390,9 @@ function mergeLocalOpponentSample(opponent: Opponent, opponentPlayer: GameSessio
   const nextRace =
     opponent.race !== "Unknown" || opponentPlayer.race === "Unknown" ? opponent.race : opponentPlayer.race;
   const nextMmr = normalizeSessionMmr(opponentPlayer.mmr);
+  const nextBattleTag = safeOpponentBattleTag(opponentPlayer.battleTag, undefined);
   const targetRace = nextRace === "Unknown" ? opponentPlayer.race : nextRace;
+  const battleTagChanged = nextBattleTag !== undefined && !battleTagsMatch(opponent.battleTag, nextBattleTag);
 
   return {
     ...opponent,
@@ -364,7 +409,8 @@ function mergeLocalOpponentSample(opponent: Opponent, opponentPlayer: GameSessio
           }
         },
     mmrAtLastMatch: nextMmr ?? opponent.mmrAtLastMatch,
-    updatedAt: nextRace !== opponent.race || nextMmr !== undefined ? now : opponent.updatedAt
+    battleTag: nextBattleTag ?? opponent.battleTag,
+    updatedAt: nextRace !== opponent.race || nextMmr !== undefined || battleTagChanged ? now : opponent.updatedAt
   };
 }
 

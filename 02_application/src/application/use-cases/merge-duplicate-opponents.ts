@@ -37,9 +37,10 @@ export class MergeDuplicateOpponents {
       this.dependencies.enrichmentCandidateRepository
     );
     const groups = groupOpponentsByIdentity(opponents, candidatesByOpponentId);
-    const nextOpponents: Opponent[] = [];
+    let nextOpponents: Opponent[] = [];
     const opponentIdMap = new Map<EntityId, EntityId>();
     const candidateIdMap = new Map<EntityId, EntityId>();
+    const droppedCandidateIds: EntityId[] = [];
     let mergedCount = 0;
 
     for (const group of groups.values()) {
@@ -57,6 +58,11 @@ export class MergeDuplicateOpponents {
         candidateIdMap.set(opponent.id, canonical.id);
       }
     }
+
+    const pruning = pruneZeroMatchNicknameDuplicates(nextOpponents, matches);
+    nextOpponents = pruning.opponents;
+    droppedCandidateIds.push(...pruning.droppedOpponentIds);
+    mergedCount += pruning.droppedOpponentIds.length;
 
     if (mergedCount === 0) {
       return {
@@ -80,6 +86,7 @@ export class MergeDuplicateOpponents {
       candidatesByOpponentId,
       candidateIdMap
     );
+    await clearCandidateSnapshots(this.dependencies.enrichmentCandidateRepository, droppedCandidateIds);
 
     return {
       inspectedCount: opponents.length,
@@ -110,6 +117,12 @@ function groupOpponentsByIdentity(
       const group = groups.get(key) ?? [];
       group.push(opponent);
       groups.set(key, group);
+      continue;
+    }
+
+    const stableProfileIdKey = selectedStableProfileIdKey(opponent.id);
+    if (stableProfileIdKey) {
+      groups.set(`stable-profile:${stableProfileIdKey}`, [opponent]);
       continue;
     }
 
@@ -192,6 +205,73 @@ function remapMatchOpponent(match: Match, opponentIdMap: ReadonlyMap<EntityId, E
   return opponentId ? { ...match, opponentId } : match;
 }
 
+function pruneZeroMatchNicknameDuplicates(
+  opponents: readonly Opponent[],
+  matches: readonly Match[]
+): {
+  readonly opponents: Opponent[];
+  readonly droppedOpponentIds: readonly EntityId[];
+} {
+  const matchCounts = countMatchesByOpponent(matches);
+  const activeNameKeys = new Set<string>();
+
+  for (const opponent of opponents) {
+    if ((matchCounts.get(opponent.id) ?? 0) === 0) {
+      continue;
+    }
+
+    for (const key of opponentNameKeys(opponent)) {
+      activeNameKeys.add(key);
+    }
+  }
+
+  const kept: Opponent[] = [];
+  const droppedOpponentIds: EntityId[] = [];
+
+  for (const opponent of opponents) {
+    const matchCount = matchCounts.get(opponent.id) ?? 0;
+    const isStaleDuplicate =
+      matchCount === 0 &&
+      !isBarcodeNickname(opponent.nickname) &&
+      opponentNameKeys(opponent).some((key) => activeNameKeys.has(key));
+
+    if (isStaleDuplicate) {
+      droppedOpponentIds.push(opponent.id);
+      continue;
+    }
+
+    kept.push(opponent);
+  }
+
+  return {
+    opponents: kept,
+    droppedOpponentIds
+  };
+}
+
+function countMatchesByOpponent(matches: readonly Match[]): Map<EntityId, number> {
+  const result = new Map<EntityId, number>();
+
+  for (const match of matches) {
+    result.set(match.opponentId, (result.get(match.opponentId) ?? 0) + 1);
+  }
+
+  return result;
+}
+
+function opponentNameKeys(opponent: Opponent): readonly string[] {
+  const keys = new Set<string>();
+
+  for (const value of [opponent.nickname, opponent.revealedNickname, ...opponent.aliases]) {
+    const key = normalizeIdentityKey(value);
+    if (key) {
+      keys.add(key);
+    }
+  }
+
+  return [...keys];
+}
+
 async function loadCandidatesByOpponentId(
   opponents: readonly Opponent[],
   repository: EnrichmentCandidateRepository | undefined
@@ -248,6 +328,19 @@ async function remapCandidateSnapshots(
   }
 }
 
+async function clearCandidateSnapshots(
+  repository: EnrichmentCandidateRepository | undefined,
+  opponentIds: readonly EntityId[]
+): Promise<void> {
+  if (!repository) {
+    return;
+  }
+
+  for (const opponentId of opponentIds) {
+    await repository.replaceForOpponent(opponentId, []);
+  }
+}
+
 function dedupeCandidateSnapshots(
   candidates: readonly EnrichmentCandidateSnapshot[]
 ): readonly EnrichmentCandidateSnapshot[] {
@@ -276,6 +369,18 @@ function selectedProfileUrlKey(candidates: readonly EnrichmentCandidateSnapshot[
     .sort((first, second) => candidateRank(second) - candidateRank(first))[0];
 
   return normalizeIdentityKey(reliableCandidate?.profileUrl);
+}
+
+function selectedStableProfileIdKey(opponentId: EntityId): string {
+  const normalized = normalizeIdentityKey(opponentId);
+  if (
+    normalized.startsWith("opponent_https-starcraft2-blizzard-com-profile-") ||
+    normalized.startsWith("opponent_battlenet-starcraft-profile-")
+  ) {
+    return normalized;
+  }
+
+  return "";
 }
 
 function candidateRank(candidate: EnrichmentCandidateSnapshot): number {

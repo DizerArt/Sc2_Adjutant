@@ -133,6 +133,7 @@ export function OverlayShell() {
     losses: opponent.losses
   };
   const winRateLabel = winRateFor(stats);
+  const mmrLabel = mmrForRace(opponent, race);
   const strategyTags = strategyTagsForRace(opponent, race);
   const tags = strategyTags.slice(0, MAX_TAG_COUNT);
   const overflowCount = Math.max(0, strategyTags.length - tags.length);
@@ -165,6 +166,10 @@ export function OverlayShell() {
           <div className="overlay-stat">
             <span className="overlay-stat-label">{t("overlay.games")}</span>
             <span className="overlay-stat-value">{stats.encounters}</span>
+          </div>
+          <div className="overlay-stat overlay-stat-mmr">
+            <span className="overlay-stat-label">MMR</span>
+            <span className="overlay-stat-value">{mmrLabel}</span>
           </div>
           <div className="overlay-stat overlay-stat-wins">
             <span className="overlay-stat-label">W</span>
@@ -241,6 +246,11 @@ function winRateFor(stats: RaceStats): string {
 function strategyTagsForRace(opponent: Opponent, race: Race): readonly string[] {
   const raceTags = opponent.raceProfiles?.[race]?.strategyTags ?? [];
   return raceTags.length > 0 ? raceTags : opponent.strategyTags;
+}
+
+function mmrForRace(opponent: Opponent, race: Race): string {
+  const mmr = opponent.raceProfiles?.[race]?.mmrAtLastMatch ?? opponent.mmrAtLastMatch;
+  return typeof mmr === "number" && Number.isFinite(mmr) && mmr > 0 ? String(Math.round(mmr)) : "-";
 }
 
 function findCurrentMatchOpponent(
