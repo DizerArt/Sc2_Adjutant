@@ -24,6 +24,7 @@ import type {
 } from "../../domain/ports/replay-analysis-reader-port.js";
 import { normalizeRace, type Race } from "../../domain/value-objects/race.js";
 import type { MatchResult } from "../../domain/entities/match.js";
+import { inferReplayPlayerRaces, type InferReplayPlayerRacesFn } from "./replay-race-inference.js";
 
 const require = createRequire(import.meta.url);
 
@@ -34,6 +35,7 @@ export type Sc2ReplayAnalysisReaderOptions = {
   readonly loadEngagements?: (replayPath: string, options?: LoadEngagementsOptions) => Promise<ReplayEngagements>;
   readonly loadEcoTimeline?: (replayPath: string, options?: LoadEcoTimelineOptions) => Promise<ReplayEcoTimeline>;
   readonly loadResourceCollectionTimeline?: (replayPath: string) => Promise<ReplayResourceCollectionTimeline>;
+  readonly inferReplayPlayerRaces?: InferReplayPlayerRacesFn;
 };
 
 const MAX_BUILD_ORDER_ENTRIES = 100;
@@ -48,6 +50,7 @@ export class Sc2ReplayAnalysisReader implements ReplayAnalysisReaderPort {
   private readonly loadResourceCollectionTimeline: NonNullable<
     Sc2ReplayAnalysisReaderOptions["loadResourceCollectionTimeline"]
   >;
+  private readonly inferReplayPlayerRaces: InferReplayPlayerRacesFn;
 
   constructor(options: Sc2ReplayAnalysisReaderOptions = {}) {
     this.loadReplaySummary = options.loadReplaySummary ?? sc2Reader.loadReplaySummary;
@@ -56,6 +59,7 @@ export class Sc2ReplayAnalysisReader implements ReplayAnalysisReaderPort {
     this.loadEngagements = options.loadEngagements ?? sc2Reader.loadEngagements;
     this.loadEcoTimeline = options.loadEcoTimeline ?? sc2Reader.loadEcoTimeline;
     this.loadResourceCollectionTimeline = options.loadResourceCollectionTimeline ?? loadResourceCollectionTimeline;
+    this.inferReplayPlayerRaces = options.inferReplayPlayerRaces ?? inferReplayPlayerRaces;
   }
 
   async readAnalysis(replayPath: string, opponentName?: string): Promise<ReplayAnalysis> {
@@ -64,7 +68,10 @@ export class Sc2ReplayAnalysisReader implements ReplayAnalysisReaderPort {
       this.loadReplaySummary(replayPath, { includeApm: true }),
       this.loadReplayApm(replayPath).catch(() => [])
     ]);
-    const players = replayPlayersFromSummary(summary.players, apmByPlayerIndex);
+    const inferredRaces = needsRaceInference(summary.players)
+      ? await this.inferReplayPlayerRaces(replayPath).catch(() => new Map<number, Race>())
+      : new Map<number, Race>();
+    const players = replayPlayersFromSummary(summary.players, apmByPlayerIndex, inferredRaces);
     const averageApm = averageApmForOpponent(players, opponentName);
     const [buildCommands, engagements, ecoTimeline, resourceCollectionTimeline] = await Promise.all([
       this.loadBuildCommands(replayPath).catch((error: unknown) => {
@@ -101,16 +108,26 @@ export class Sc2ReplayAnalysisReader implements ReplayAnalysisReaderPort {
 
 function replayPlayersFromSummary(
   players: readonly ReplayPlayerSummary[],
-  apmByPlayerIndex: readonly (number | undefined)[]
+  apmByPlayerIndex: readonly (number | undefined)[],
+  inferredRaces: ReadonlyMap<number, Race>
 ): readonly ReplayAnalysisPlayer[] {
   return players
     .filter((player) => player.name !== null)
     .map((player, index) => ({
       name: normalizePlayerName(player.name ?? ""),
-      race: normalizeRace(player.race),
+      race: raceFromSummaryOrInference(player.race, inferredRaces.get(index)),
       result: normalizeReplayResult(player.result),
       apm: normalizePositiveInteger(apmByPlayerIndex[index] ?? player.apm)
     }));
+}
+
+function raceFromSummaryOrInference(summaryRace: unknown, inferredRace: Race | undefined): Race {
+  const race = normalizeRace(summaryRace);
+  return race === "Unknown" ? inferredRace ?? race : race;
+}
+
+function needsRaceInference(players: readonly ReplayPlayerSummary[]): boolean {
+  return players.some((player) => normalizeRace(player.race) === "Unknown");
 }
 
 function averageApmForOpponent(

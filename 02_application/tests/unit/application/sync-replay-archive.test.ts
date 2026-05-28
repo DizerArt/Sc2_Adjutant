@@ -471,9 +471,72 @@ describe("SyncReplayArchive", () => {
       expect.objectContaining({
         id: "match_live",
         replayPath: "A:\\replays\\linked.SC2Replay",
-        result: "win"
+        result: "win",
+        playerRace: "Terran",
+        opponentRace: "Zerg"
       })
     ]);
+  });
+
+  it("repairs unknown races when replay sync links an existing live match", async () => {
+    const opponent = createOpponent({
+      id: "opponent_numberone",
+      nickname: "NumberOne",
+      race: "Unknown",
+      now: "2026-05-17T03:35:00.000Z"
+    });
+    const match = createMatch({
+      id: "match_live_unknown_race",
+      opponentId: opponent.id,
+      playedAt: "2026-05-17T03:34:00.000Z",
+      playerRace: "Unknown",
+      opponentRace: "Unknown",
+      result: "unknown",
+      now: "2026-05-17T03:34:00.000Z"
+    });
+    const matchRepository = new InMemoryMatchRepository([match]);
+    const opponentRepository = new InMemoryOpponentRepository([{ ...opponent, encounters: 1 }]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: new FakeReplayScanner([
+        replayFile("A:\\replays\\numberone.SC2Replay", "2026-05-17T03:35:00.000Z")
+      ]),
+      replayMetadataReader: new FakeReplayMetadataReader({
+        "A:\\replays\\numberone.SC2Replay": {
+          replayPath: "A:\\replays\\numberone.SC2Replay",
+          playedAt: "2026-05-17T03:35:00.000Z",
+          map: "Winter Madness LE",
+          result: "loss",
+          durationSeconds: 215,
+          players: [
+            { name: "RetorieS", race: "Terran", result: "loss" },
+            { name: "NumberOne", race: "Protoss", result: "win" }
+          ]
+        }
+      }),
+      matchRepository,
+      opponentRepository,
+      clock: () => "2026-05-17T03:40:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full"
+    });
+
+    await expect(matchRepository.findById("match_live_unknown_race")).resolves.toMatchObject({
+      replayPath: "A:\\replays\\numberone.SC2Replay",
+      playerRace: "Terran",
+      opponentRace: "Protoss",
+      result: "loss"
+    });
+    await expect(opponentRepository.findById("opponent_numberone")).resolves.toMatchObject({
+      race: "Protoss",
+      encounters: 1,
+      losses: 1,
+      raceProfiles: {
+        Protoss: expect.objectContaining({})
+      }
+    });
   });
 
   it("resolves replay-sync barcode opponents through their Battle.net profile link", async () => {

@@ -220,7 +220,9 @@ export class SyncReplayArchive {
       ...metadata,
       result: metadata.result && metadata.result !== "unknown" ? metadata.result : resultFromUserPlayer(players.user)
     };
-    const updatedMatch = attachReplayMetadata(match, effectiveMetadata, this.clock());
+    const now = this.clock();
+    const raceRepairedMatch = repairMatchRacesFromReplay(match, players, now);
+    const updatedMatch = attachReplayMetadata(raceRepairedMatch, effectiveMetadata, now);
     await this.dependencies.matchRepository.save(updatedMatch);
 
     const opponent = await this.dependencies.opponentRepository.findById(updatedMatch.opponentId);
@@ -228,7 +230,11 @@ export class SyncReplayArchive {
       return;
     }
 
-    const statsOpponent = updateOpponentMatchResult(opponent, match.result, updatedMatch.result);
+    const statsOpponent = mergeReplayOpponentSample(
+      updateOpponentMatchResult(opponent, match.result, updatedMatch.result),
+      players.opponent,
+      now
+    );
     await this.enrichOpponent(statsOpponent, players.opponent, region, [userName, players.user.name], updatedMatch.opponentRace);
   }
 
@@ -339,12 +345,22 @@ export class SyncReplayArchive {
     region: OpponentSearchQuery["region"] | undefined,
     userName: string
   ): Promise<void> {
+    const now = this.clock();
+    const raceRepairedMatch = repairMatchRacesFromReplay(match, players, now);
     const profileLink = replayProfileQuery(players.opponent);
     if (!profileLink) {
+      if (raceRepairedMatch !== match) {
+        await this.dependencies.matchRepository.save(raceRepairedMatch);
+        const existingOpponent = await this.dependencies.opponentRepository.findById(match.opponentId);
+        if (existingOpponent) {
+          await this.dependencies.opponentRepository.save(
+            mergeReplayOpponentSample(existingOpponent, players.opponent, now)
+          );
+        }
+      }
       return;
     }
 
-    const now = this.clock();
     const expectedOpponentId = createStableEntityId("opponent", profileLink);
     let opponent = await this.dependencies.opponentRepository.findById(expectedOpponentId);
     if (!opponent) {
@@ -357,13 +373,14 @@ export class SyncReplayArchive {
       await this.dependencies.opponentRepository.save(opponent);
     }
 
-    if (match.opponentId !== expectedOpponentId || match.opponentRace !== players.opponent.race) {
+    if (raceRepairedMatch.opponentId !== expectedOpponentId) {
       await this.dependencies.matchRepository.save({
-        ...match,
+        ...raceRepairedMatch,
         opponentId: expectedOpponentId,
-        opponentRace: players.opponent.race,
         updatedAt: now
       });
+    } else if (raceRepairedMatch !== match) {
+      await this.dependencies.matchRepository.save(raceRepairedMatch);
     }
 
     await this.enrichOpponent(opponent, players.opponent, region, [userName, players.user.name], players.opponent.race);
@@ -456,6 +473,28 @@ function replaylessDistance(match: Match, replayPlayedAt: number): number {
 
 function racesAreCompatible(first: Race, second: Race): boolean {
   return first === second || first === "Unknown" || second === "Unknown";
+}
+
+function repairMatchRacesFromReplay(match: Match, players: ReplayMatchPlayers, now: string): Match {
+  const nextPlayerRace =
+    match.playerRace === "Unknown" && players.user.race !== "Unknown"
+      ? players.user.race
+      : match.playerRace;
+  const nextOpponentRace =
+    match.opponentRace === "Unknown" && players.opponent.race !== "Unknown"
+      ? players.opponent.race
+      : match.opponentRace;
+
+  if (nextPlayerRace === match.playerRace && nextOpponentRace === match.opponentRace) {
+    return match;
+  }
+
+  return {
+    ...match,
+    playerRace: nextPlayerRace,
+    opponentRace: nextOpponentRace,
+    updatedAt: now
+  };
 }
 
 function mergeReplayOpponentSample(opponent: Opponent, replayOpponent: ReplayMetadataPlayer, now: string): Opponent {

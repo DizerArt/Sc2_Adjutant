@@ -3,6 +3,7 @@ import type { ReplaySummary } from "@replaysremastered/sc2readerjs";
 import { BinaryReplayMetadataReader } from "../../../../src/infrastructure/replay/binary-replay-metadata-reader.js";
 import type { ReplayMetadata } from "../../../../src/domain/entities/match.js";
 import type { ReplayFile, ReplayMetadataReaderPort } from "../../../../src/domain/ports/replay-metadata-reader-port.js";
+import type { Race } from "../../../../src/domain/value-objects/race.js";
 
 const baseFile: ReplayFile = {
   path: "C:\\replays\\Match.SC2Replay",
@@ -178,6 +179,32 @@ describe("BinaryReplayMetadataReader", () => {
     expect(metadata.players).toEqual([
       { name: "RetorieS", race: "Terran", result: "loss", toon: "1-S2-1-1" },
       { name: "Milkaa", race: "Protoss", result: "win", toon: "1-S2-1-2" }
+    ]);
+  });
+
+  it("fills unknown summary races from replay tracker unit inference", async () => {
+    const reader = new BinaryReplayMetadataReader({
+      loadReplaySummary: vi.fn(async () =>
+        buildSummary({
+          players: [
+            { name: "RetorieS", race: null, result: "loss", teamId: 0, toon: "1-S2-1-1", apm: 0 },
+            { name: "Kaiman", race: "Unknown", result: "win", teamId: 1, toon: "1-S2-1-2", apm: 0 }
+          ]
+        })
+      ),
+      inferReplayPlayerRaces: vi.fn(async () =>
+        new Map<number, Race>([
+          [0, "Terran"],
+          [1, "Protoss"]
+        ])
+      )
+    });
+
+    const metadata = await reader.readMetadata(baseFile);
+
+    expect(metadata.players).toEqual([
+      { name: "RetorieS", race: "Terran", result: "loss", toon: "1-S2-1-1" },
+      { name: "Kaiman", race: "Protoss", result: "win", toon: "1-S2-1-2" }
     ]);
   });
 });

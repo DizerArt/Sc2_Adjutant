@@ -11,6 +11,7 @@ describe("Sc2ReplayAnalysisReader", () => {
   it("uses Blizzard metadata APM values instead of the summary approximation", async () => {
     const reader = new Sc2ReplayAnalysisReader({
       loadReplaySummary: async () => summary(),
+      inferReplayPlayerRaces: async () => new Map(),
       loadReplayApm: async () => [170, 239],
       loadBuildCommands: async () => buildCommands(),
       loadEngagements: async () => engagements(),
@@ -35,6 +36,7 @@ describe("Sc2ReplayAnalysisReader", () => {
   it("uses replay resource collection rates instead of deriving that graph from workers", async () => {
     const reader = new Sc2ReplayAnalysisReader({
       loadReplaySummary: async () => summary(),
+      inferReplayPlayerRaces: async () => new Map(),
       loadBuildCommands: async () => buildCommands(),
       loadEngagements: async () => engagements(),
       loadEcoTimeline: async () => ecoTimeline(),
@@ -69,9 +71,43 @@ describe("Sc2ReplayAnalysisReader", () => {
       { seconds: 2, value: 14 }
     ]);
   });
+
+  it("fills unknown summary races from replay tracker unit inference", async () => {
+    const reader = new Sc2ReplayAnalysisReader({
+      loadReplaySummary: async () =>
+        summary({
+          players: [
+            { name: "RetorieS", race: "Unknown", result: "loss", teamId: 1, toon: null, apm: 96 },
+            { name: "Kaiman", race: null, result: "win", teamId: 2, toon: null, apm: 149 }
+          ]
+        }),
+      inferReplayPlayerRaces: async () =>
+        new Map([
+          [0, "Terran"],
+          [1, "Protoss"]
+        ]),
+      loadReplayApm: async () => [216, 313],
+      loadBuildCommands: async () => buildCommands(),
+      loadEngagements: async () => engagements(),
+      loadEcoTimeline: async () => ecoTimeline(),
+      loadResourceCollectionTimeline: async () => ({
+        players: [],
+        timeline: []
+      })
+    });
+
+    const analysis = await reader.readAnalysis("match.SC2Replay", "Kaiman");
+
+    expect(analysis.players).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name: "RetorieS", race: "Terran", apm: 216 }),
+        expect.objectContaining({ name: "Kaiman", race: "Protoss", apm: 313 })
+      ])
+    );
+  });
 });
 
-function summary(): ReplaySummary {
+function summary(overrides: Partial<ReplaySummary> = {}): ReplaySummary {
   return {
     replayId: "replay_001",
     patchVersion: "5.0.14.80949",
@@ -86,7 +122,8 @@ function summary(): ReplaySummary {
     players: [
       { name: "RetorieS", race: "Terran", result: "loss", teamId: 1, toon: null, apm: 96 },
       { name: "Opponent", race: "Zerg", result: "win", teamId: 2, toon: null, apm: 149 }
-    ]
+    ],
+    ...overrides
   };
 }
 

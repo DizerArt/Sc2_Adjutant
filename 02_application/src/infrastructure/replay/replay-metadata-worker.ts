@@ -2,7 +2,8 @@ import sc2Reader from "@replaysremastered/sc2readerjs";
 import type { ReplayPlayerSummary, ReplaySummary } from "@replaysremastered/sc2readerjs";
 import type { MatchResult, ReplayMetadata, ReplayMetadataPlayer } from "../../domain/entities/match.js";
 import type { ReplayFile } from "../../domain/ports/replay-metadata-reader-port.js";
-import { normalizeRace } from "../../domain/value-objects/race.js";
+import { normalizeRace, type Race } from "../../domain/value-objects/race.js";
+import { inferReplayPlayerRaces } from "./replay-race-inference.js";
 
 type WorkerRequest = {
   readonly id: number;
@@ -37,7 +38,7 @@ async function handleMessage(message: unknown): Promise<void> {
     sendResponse({
       id: request.id,
       ok: true,
-      metadata: metadataFromSummary(summary, request.file, request.userName)
+      metadata: await metadataFromSummary(summary, request.file, request.userName)
     });
   } catch (error) {
     sendResponse({
@@ -48,17 +49,21 @@ async function handleMessage(message: unknown): Promise<void> {
   }
 }
 
-function metadataFromSummary(
+async function metadataFromSummary(
   summary: ReplaySummary,
   file: ReplayFile,
   userName: string | undefined
-): ReplayMetadata {
+): Promise<ReplayMetadata> {
+  const inferredRaces = needsRaceInference(summary.players)
+    ? await inferReplayPlayerRaces(file.path).catch(() => new Map<number, Race>())
+    : new Map<number, Race>();
+
   return {
     replayPath: file.path,
     playedAt: summary.playedAt ?? file.modifiedAt,
     map: summary.mapTitle ?? undefined,
     result: matchResultForUser(summary.players, userName?.trim()),
-    players: replayPlayersFromSummary(summary.players),
+    players: replayPlayersFromSummary(summary.players, inferredRaces),
     durationSeconds: normalizeDuration(summary.durationSeconds)
   };
 }
@@ -82,7 +87,8 @@ function normalizeRequest(value: unknown): WorkerRequest | null {
 }
 
 function replayPlayersFromSummary(
-  players: readonly ReplayPlayerSummary[] | undefined
+  players: readonly ReplayPlayerSummary[] | undefined,
+  inferredRaces: ReadonlyMap<number, Race>
 ): readonly ReplayMetadataPlayer[] | undefined {
   if (!players || players.length === 0) {
     return undefined;
@@ -90,12 +96,21 @@ function replayPlayersFromSummary(
 
   return players
     .filter((player) => player.name !== null)
-    .map((player) => ({
+    .map((player, index) => ({
       name: normalizeReplayPlayerName(player.name ?? ""),
-      race: normalizeRace(player.race),
+      race: raceFromSummaryOrInference(player.race, inferredRaces.get(index)),
       result: normalizeReplayResult(player.result),
       toon: normalizeOptionalString(player.toon ?? undefined)
     }));
+}
+
+function raceFromSummaryOrInference(summaryRace: unknown, inferredRace: Race | undefined): Race {
+  const race = normalizeRace(summaryRace);
+  return race === "Unknown" ? inferredRace ?? race : race;
+}
+
+function needsRaceInference(players: readonly ReplayPlayerSummary[] | undefined): boolean {
+  return Boolean(players?.some((player) => normalizeRace(player.race) === "Unknown"));
 }
 
 function normalizeReplayPlayerName(value: string): string {
