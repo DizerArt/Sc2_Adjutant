@@ -30,7 +30,10 @@ const IPC_CHANNELS = {
   windowSetCompact: "window:set-compact",
   overlayShow: "overlay:show",
   overlayHide: "overlay:hide",
-  overlaySetPosition: "overlay:set-position"
+  overlaySetPosition: "overlay:set-position",
+  overlaySetPlacementMode: "overlay:set-placement-mode",
+  voiceSpeak: "voice:speak",
+  voiceListAvailable: "voice:list-available"
 };
 
 contextBridge.exposeInMainWorld("sc2Assistant", {
@@ -68,5 +71,13 @@ contextBridge.exposeInMainWorld("sc2Assistant", {
   setCompactWindow: (request) => ipcRenderer.invoke(IPC_CHANNELS.windowSetCompact, request),
   showOverlay: () => ipcRenderer.invoke(IPC_CHANNELS.overlayShow),
   hideOverlay: () => ipcRenderer.invoke(IPC_CHANNELS.overlayHide),
-  setOverlayPosition: (position) => ipcRenderer.invoke(IPC_CHANNELS.overlaySetPosition, position)
+  setOverlayPosition: (position) => ipcRenderer.invoke(IPC_CHANNELS.overlaySetPosition, position),
+  setOverlayPlacementMode: (enabled) =>
+    ipcRenderer.invoke(IPC_CHANNELS.overlaySetPlacementMode, enabled),
+  onVoiceSpeak: (listener) => {
+    const handler = (_event, payload) => listener(payload);
+    ipcRenderer.on(IPC_CHANNELS.voiceSpeak, handler);
+    return () => ipcRenderer.removeListener(IPC_CHANNELS.voiceSpeak, handler);
+  },
+  listAvailableVoices: () => ipcRenderer.invoke(IPC_CHANNELS.voiceListAvailable)
 });

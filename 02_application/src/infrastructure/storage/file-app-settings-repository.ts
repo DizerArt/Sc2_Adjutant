@@ -30,7 +30,10 @@ export class FileAppSettingsRepository implements AppSettingsRepository {
       externalSourcesEnabled: parsed.externalSourcesEnabled,
       externalSources: parsed.externalSources,
       overlayEnabled: parsed.overlayEnabled,
-      overlayPosition: parsed.overlayPosition
+      overlayPosition: parsed.overlayPosition,
+      overlayPlacementMode: parsed.overlayPlacementMode,
+      overlayCustomPosition: parsed.overlayCustomPosition,
+      voice: parsed.voice
     }, parsed.updatedAt ?? new Date().toISOString());
   }
 

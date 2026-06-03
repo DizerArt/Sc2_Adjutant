@@ -18,7 +18,11 @@ describe("SaveAppSettings", () => {
       externalSources: {
         sc2Pulse: true,
         localFixture: false
-      }
+      },
+      overlayEnabled: true,
+      overlayPosition: "bottom-3",
+      overlayPlacementMode: true,
+      overlayCustomPosition: { x: 123.4, y: 456.7 }
     });
 
     expect(result.settings).toMatchObject({
@@ -31,6 +35,10 @@ describe("SaveAppSettings", () => {
         sc2Pulse: true,
         localFixture: false
       },
+      overlayEnabled: true,
+      overlayPosition: "bottom-3",
+      overlayPlacementMode: true,
+      overlayCustomPosition: { x: 123, y: 457 },
       updatedAt: "2026-05-03T01:00:00.000Z"
     });
     await expect(repository.read()).resolves.toEqual(result.settings);

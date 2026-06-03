@@ -19,7 +19,9 @@
   background:
     linear-gradient(140deg, rgba(255, 255, 255, 0.04), transparent 60%),
     var(--race-panel-bg);
-  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.3), 0 0 22px rgba(0, 0, 0, 0.18);
+  box-shadow:
+    inset 0 0 24px rgba(0, 0, 0, 0.3),
+    0 0 22px rgba(0, 0, 0, 0.18);
 }
 
 .race-profile.theme-terran {
@@ -38,7 +40,9 @@
   --race-panel-bg: rgba(22, 10, 25, 0.94);
   --race-panel-border: rgba(185, 104, 255, 0.36);
   --race-grid: rgba(185, 104, 255, 0.05);
-  box-shadow: inset 0 0 28px rgba(185, 104, 255, 0.08), 0 0 24px rgba(185, 104, 255, 0.08);
+  box-shadow:
+    inset 0 0 28px rgba(185, 104, 255, 0.08),
+    0 0 24px rgba(185, 104, 255, 0.08);
 }
 
 .race-profile.theme-protoss {
@@ -48,7 +52,9 @@
   --race-panel-bg: rgba(8, 19, 35, 0.94);
   --race-panel-border: rgba(255, 216, 107, 0.34);
   --race-grid: rgba(86, 216, 255, 0.05);
-  box-shadow: inset 0 0 30px rgba(86, 216, 255, 0.08), 0 0 24px rgba(255, 216, 107, 0.09);
+  box-shadow:
+    inset 0 0 30px rgba(86, 216, 255, 0.08),
+    0 0 24px rgba(255, 216, 107, 0.09);
 }
 
 .race-profile.theme-random {
@@ -98,6 +104,13 @@
   padding-bottom: 6px;
 }
 
+.opponent-title-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .opponent-title-row .panel-title {
   padding-bottom: 0;
   border-bottom: 0;
@@ -112,7 +125,8 @@
   gap: 6px;
 }
 
-.profile-marker-controls button {
+.profile-marker-controls button,
+.profile-voice-preview-button {
   display: grid;
   width: 28px;
   height: 28px;
@@ -128,7 +142,8 @@
 }
 
 .profile-marker-controls button:hover,
-.profile-marker-controls button[data-active="true"] {
+.profile-marker-controls button[data-active="true"],
+.profile-voice-preview-button:hover {
   border-color: var(--race-primary);
   color: var(--race-primary);
   text-shadow: 0 0 8px color-mix(in srgb, var(--race-primary) 48%, transparent);
@@ -159,6 +174,11 @@
   text-shadow: 0 0 8px rgba(255, 42, 42, 0.48);
 }
 
+.profile-voice-preview-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .race-stage {
   display: grid;
   place-items: center;
@@ -166,11 +186,19 @@
   border: 1px solid var(--race-panel-border);
   border-radius: 6px;
   background:
-    radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--race-primary) 18%, transparent), transparent 28%),
+    radial-gradient(
+      circle at 50% 46%,
+      color-mix(in srgb, var(--race-primary) 18%, transparent),
+      transparent 28%
+    ),
     linear-gradient(var(--race-grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--race-grid) 1px, transparent 1px),
     rgba(4, 10, 18, 0.72);
-  background-size: auto, 30px 30px, 30px 30px, auto;
+  background-size:
+    auto,
+    30px 30px,
+    30px 30px,
+    auto;
 }
 
 .race-emblem {
@@ -188,7 +216,9 @@
   border-radius: 50%;
   border: 2px solid currentColor;
   opacity: 0.5;
-  box-shadow: inset 0 0 22px currentColor, 0 0 18px currentColor;
+  box-shadow:
+    inset 0 0 22px currentColor,
+    0 0 18px currentColor;
 }
 
 .race-emblem .emblem-ring::before,
@@ -210,7 +240,18 @@
   width: 56%;
   height: 56%;
   background: currentColor;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 56%, 79% 92%, 50% 70%, 21% 92%, 32% 56%, 2% 35%, 39% 35%);
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 56%,
+    79% 92%,
+    50% 70%,
+    21% 92%,
+    32% 56%,
+    2% 35%,
+    39% 35%
+  );
   filter: drop-shadow(0 0 12px currentColor);
 }
 
@@ -220,8 +261,22 @@
   height: 60%;
   border-radius: 50%;
   background:
-    radial-gradient(circle at center, transparent 0 28%, currentColor 30% 36%, transparent 38%),
-    conic-gradient(from 22deg, transparent 0 13%, currentColor 13% 24%, transparent 24% 38%, currentColor 38% 48%, transparent 48% 62%, currentColor 62% 74%, transparent 74% 100%);
+    radial-gradient(
+      circle at center,
+      transparent 0 28%,
+      currentColor 30% 36%,
+      transparent 38%
+    ),
+    conic-gradient(
+      from 22deg,
+      transparent 0 13%,
+      currentColor 13% 24%,
+      transparent 24% 38%,
+      currentColor 38% 48%,
+      transparent 48% 62%,
+      currentColor 62% 74%,
+      transparent 74% 100%
+    );
   filter: drop-shadow(0 0 12px currentColor);
 }
 
@@ -243,7 +298,12 @@
   position: relative;
   width: 42%;
   height: 74%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), currentColor 55%, rgba(255, 255, 255, 0.18));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    currentColor 55%,
+    rgba(255, 255, 255, 0.18)
+  );
   clip-path: polygon(50% 0%, 84% 18%, 70% 86%, 50% 100%, 30% 86%, 16% 18%);
   filter: drop-shadow(0 0 16px currentColor);
 }
@@ -333,7 +393,8 @@
   color: #fff5d8;
   font-size: 1.25rem;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  text-shadow: 0 0 14px color-mix(in srgb, var(--race-secondary) 40%, transparent);
+  text-shadow: 0 0 14px
+    color-mix(in srgb, var(--race-secondary) 40%, transparent);
 }
 
 .profile-identity .identity-mmr small {
@@ -354,7 +415,8 @@
   color: #fff5d8;
   font-size: 0.86rem;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  text-shadow: 0 0 10px color-mix(in srgb, var(--race-secondary) 30%, transparent);
+  text-shadow: 0 0 10px
+    color-mix(in srgb, var(--race-secondary) 30%, transparent);
 }
 
 .profile-identity .identity-league-label {
@@ -500,7 +562,7 @@
 .tag-add-toggle {
   display: inline-grid;
   place-items: center;
-  width: 22px;
+  width: 15px;
   height: 22px;
   border: 1px solid var(--race-panel-border);
   border-radius: 4px;
@@ -546,19 +608,21 @@
 
 .profile-tags .tag-chip {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 18px;
+  grid-template-columns: minmax(0, 1fr) 9px;
   align-items: center;
   box-sizing: border-box;
-  flex: 0 0 134px;
-  max-width: 134px;
-  min-height: 22px;
-  padding: 0 4px 0 10px;
+  flex: 0 1 fit-content;
+  width: fit-content;
+  max-width: 133px;
+  min-width: 58px;
+  min-height: 20px;
+  padding: 0 0 0 7px;
   border-radius: 4px;
   border: 1px solid var(--race-panel-border);
   background: color-mix(in srgb, var(--race-primary) 8%, transparent);
   color: #d4f3ff;
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -573,15 +637,15 @@
 
 .profile-tags .tag-chip button {
   display: inline-grid;
-  width: 18px;
-  height: 18px;
+  width: 9px;
+  height: 16px;
   place-items: center;
   border: 0;
   border-radius: 3px;
   background: transparent;
   color: #86a0b9;
   cursor: pointer;
-  font-size: 0.76rem;
+  font-size: 0.58rem;
   font-weight: 900;
   line-height: 1;
 }
@@ -598,6 +662,7 @@
 
 .profile-tags .tag-chip-overflow {
   grid-template-columns: 1fr;
+  flex: 0 0 42px;
   flex-basis: 42px;
   min-width: 42px;
   justify-content: center;
@@ -624,21 +689,21 @@
 
 .tag-add-item {
   display: inline-flex;
-  flex: 0 0 134px;
-  max-width: 134px;
+  flex: 0 0 133px;
+  max-width: 133px;
   min-width: 0;
 }
 
 .tag-add-form {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 22px;
+  grid-template-columns: minmax(0, 1fr) 16px;
   align-items: center;
   box-sizing: border-box;
-  width: 134px;
-  max-width: 134px;
-  min-height: 22px;
+  width: 133px;
+  max-width: 133px;
+  min-height: 20px;
   overflow: hidden;
-  padding: 0 2px 0 8px;
+  padding: 0 1px 0 7px;
   border: 1px solid var(--race-panel-border);
   border-radius: 4px;
   background: color-mix(in srgb, var(--race-primary) 8%, rgba(3, 8, 14, 0.88));
@@ -648,12 +713,12 @@
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  height: 20px;
+  height: 18px;
   padding: 0;
   border: 0;
   background: transparent;
   color: #f6fdff;
-  font-size: 0.74rem;
+  font-size: 0.61rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   outline: none;
@@ -671,8 +736,8 @@
 .tag-add-form button {
   display: inline-grid;
   place-items: center;
-  width: 22px;
-  height: 20px;
+  width: 16px;
+  height: 18px;
   border: 0;
   border-radius: 4px;
   background: transparent;
@@ -735,8 +800,17 @@
   border: 1px solid var(--race-primary);
   border-radius: 6px;
   background:
-    linear-gradient(135deg, transparent 0 6%, color-mix(in srgb, var(--race-primary) 14%, transparent) 6% 94%, transparent 94%),
-    linear-gradient(180deg, color-mix(in srgb, var(--race-primary) 22%, #062138) 0%, rgba(5, 22, 38, 0.92) 100%);
+    linear-gradient(
+      135deg,
+      transparent 0 6%,
+      color-mix(in srgb, var(--race-primary) 14%, transparent) 6% 94%,
+      transparent 94%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--race-primary) 22%, #062138) 0%,
+      rgba(5, 22, 38, 0.92) 100%
+    );
   box-shadow:
     0 0 22px color-mix(in srgb, var(--race-primary) 35%, transparent),
     inset 0 0 28px color-mix(in srgb, var(--race-primary) 14%, transparent);
@@ -777,7 +851,8 @@
 .race-tab[data-active="true"] {
   border-color: var(--race-primary);
   color: var(--race-primary);
-  box-shadow: inset 0 0 14px color-mix(in srgb, var(--race-primary) 18%, transparent);
+  box-shadow: inset 0 0 14px
+    color-mix(in srgb, var(--race-primary) 18%, transparent);
 }
 
 /* Generic helpers used across themes. The zerg theme overrides them heavily;
@@ -829,9 +904,21 @@
   border: none;
   border-radius: 12px;
   background:
-    radial-gradient(circle at 10% 10%, rgba(185, 104, 255, 0.18), transparent 35%),
-    radial-gradient(circle at 95% 95%, rgba(116, 255, 45, 0.08), transparent 40%),
-    radial-gradient(circle at 90% 0%, rgba(255, 100, 60, 0.08), transparent 30%),
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(185, 104, 255, 0.18),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 95% 95%,
+      rgba(116, 255, 45, 0.08),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(255, 100, 60, 0.08),
+      transparent 30%
+    ),
     linear-gradient(140deg, rgba(40, 20, 30, 0.78), rgba(7, 4, 9, 0.94));
   box-shadow:
     inset 0 0 0 2px rgba(60, 30, 18, 0.85),
@@ -853,10 +940,26 @@
     inset 0 0 24px rgba(0, 0, 0, 0.55),
     inset 0 0 70px rgba(185, 104, 255, 0.06);
   background:
-    radial-gradient(circle at 0% 0%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
-    radial-gradient(circle at 100% 0%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
-    radial-gradient(circle at 0% 100%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px),
-    radial-gradient(circle at 100% 100%, rgba(170, 110, 70, 0.35) 0 8px, transparent 14px);
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(170, 110, 70, 0.35) 0 8px,
+      transparent 14px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(170, 110, 70, 0.35) 0 8px,
+      transparent 14px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(170, 110, 70, 0.35) 0 8px,
+      transparent 14px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(170, 110, 70, 0.35) 0 8px,
+      transparent 14px
+    );
 }
 
 .race-profile.theme-zerg::after {
@@ -866,9 +969,21 @@
   pointer-events: none;
   border-radius: 12px;
   background:
-    radial-gradient(ellipse at 50% -10%, rgba(255, 200, 150, 0.05), transparent 50%),
-    radial-gradient(ellipse at -10% 50%, rgba(190, 110, 70, 0.05), transparent 40%),
-    radial-gradient(ellipse at 110% 50%, rgba(190, 110, 70, 0.05), transparent 40%);
+    radial-gradient(
+      ellipse at 50% -10%,
+      rgba(255, 200, 150, 0.05),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at -10% 50%,
+      rgba(190, 110, 70, 0.05),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 110% 50%,
+      rgba(190, 110, 70, 0.05),
+      transparent 40%
+    );
   z-index: -1;
 }
 
@@ -882,8 +997,16 @@
   border: 1px solid rgba(170, 110, 70, 0.45);
   border-radius: 8px;
   background:
-    radial-gradient(circle at 10% 0%, rgba(185, 104, 255, 0.1), transparent 35%),
-    radial-gradient(circle at 100% 100%, rgba(116, 255, 45, 0.06), transparent 40%),
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(185, 104, 255, 0.1),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(116, 255, 45, 0.06),
+      transparent 40%
+    ),
     linear-gradient(180deg, rgba(28, 14, 28, 0.94), rgba(8, 4, 12, 0.96));
   box-shadow:
     inset 0 0 0 1px rgba(60, 30, 22, 0.7),
@@ -959,19 +1082,47 @@
   overflow: hidden;
   /* Beveled chitin-plate shape — cut corners read as carved bone, not chrome. */
   clip-path: polygon(
-    8% 0%, 92% 0%,
-    100% 4%, 100% 96%,
-    92% 100%, 8% 100%,
-    0% 96%, 0% 4%
+    8% 0%,
+    92% 0%,
+    100% 4%,
+    100% 96%,
+    92% 100%,
+    8% 100%,
+    0% 96%,
+    0% 4%
   );
   background:
-    radial-gradient(circle at 50% 55%, rgba(185, 104, 255, 0.4), transparent 55%),
-    radial-gradient(circle at 50% 100%, rgba(116, 255, 45, 0.1), transparent 60%),
+    radial-gradient(
+      circle at 50% 55%,
+      rgba(185, 104, 255, 0.4),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(116, 255, 45, 0.1),
+      transparent 60%
+    ),
     /* Biomass vein webbing — diagonal lines fading into the corners. */
-    repeating-linear-gradient(45deg, rgba(190, 130, 90, 0.08) 0 1px, transparent 1px 18px),
-    repeating-linear-gradient(-45deg, rgba(190, 130, 90, 0.06) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(0deg, rgba(185, 104, 255, 0.07) 0 1px, transparent 1px 26px),
-    repeating-linear-gradient(90deg, rgba(185, 104, 255, 0.06) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(
+        45deg,
+        rgba(190, 130, 90, 0.08) 0 1px,
+        transparent 1px 18px
+      ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(190, 130, 90, 0.06) 0 1px,
+      transparent 1px 22px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(185, 104, 255, 0.07) 0 1px,
+      transparent 1px 26px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(185, 104, 255, 0.06) 0 1px,
+      transparent 1px 26px
+    ),
     radial-gradient(circle at 50% 50%, rgba(35, 12, 38, 1), rgba(8, 4, 12, 1));
   box-shadow:
     inset 0 0 0 1px rgba(60, 30, 22, 0.85),
@@ -989,9 +1140,27 @@
   /* Concentric sonar rings, kept from the previous pass — they read as a
      tactical overlay inside the chitin frame. */
   background:
-    radial-gradient(circle at 50% 50%, transparent 38%, rgba(185, 104, 255, 0.16) 38%, rgba(185, 104, 255, 0.16) 38.4%, transparent 39%),
-    radial-gradient(circle at 50% 50%, transparent 28%, rgba(185, 104, 255, 0.14) 28%, rgba(185, 104, 255, 0.14) 28.4%, transparent 29%),
-    radial-gradient(circle at 50% 50%, transparent 18%, rgba(185, 104, 255, 0.12) 18%, rgba(185, 104, 255, 0.12) 18.4%, transparent 19%);
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 38%,
+      rgba(185, 104, 255, 0.16) 38%,
+      rgba(185, 104, 255, 0.16) 38.4%,
+      transparent 39%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 28%,
+      rgba(185, 104, 255, 0.14) 28%,
+      rgba(185, 104, 255, 0.14) 28.4%,
+      transparent 29%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 18%,
+      rgba(185, 104, 255, 0.12) 18%,
+      rgba(185, 104, 255, 0.12) 18.4%,
+      transparent 19%
+    );
 }
 
 .race-profile.theme-zerg .race-stage-frame::before {
@@ -1004,10 +1173,14 @@
   pointer-events: none;
   border: 1px solid rgba(190, 130, 90, 0.7);
   clip-path: polygon(
-    8% 0%, 92% 0%,
-    100% 5%, 100% 95%,
-    92% 100%, 8% 100%,
-    0% 95%, 0% 5%
+    8% 0%,
+    92% 0%,
+    100% 5%,
+    100% 95%,
+    92% 100%,
+    8% 100%,
+    0% 95%,
+    0% 5%
   );
   box-shadow:
     inset 0 0 0 1px rgba(20, 8, 16, 0.9),
@@ -1025,19 +1198,58 @@
   pointer-events: none;
   background:
     /* Side biomass nubs */
-    linear-gradient(135deg, var(--zerg-bone) 0 50%, transparent 50%) left center / 12px 12px no-repeat,
-    linear-gradient(-45deg, var(--zerg-bone) 0 50%, transparent 50%) right center / 12px 12px no-repeat,
+    linear-gradient(135deg, var(--zerg-bone) 0 50%, transparent 50%) left
+      center / 12px 12px no-repeat,
+    linear-gradient(-45deg, var(--zerg-bone) 0 50%, transparent 50%) right
+      center / 12px 12px no-repeat,
     /* Corner alien glyph clusters */
-    radial-gradient(circle at 6% 6%, rgba(255, 220, 190, 0.55) 0 2px, transparent 3px),
-    radial-gradient(circle at 14% 6%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 6% 14%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 94% 6%, rgba(255, 220, 190, 0.55) 0 2px, transparent 3px),
-    radial-gradient(circle at 86% 6%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 94% 14%, rgba(195, 150, 220, 0.4) 0 1.5px, transparent 2px),
-    radial-gradient(circle at 6% 94%, rgba(255, 220, 190, 0.5) 0 2px, transparent 3px),
-    radial-gradient(circle at 94% 94%, rgba(255, 220, 190, 0.5) 0 2px, transparent 3px),
+    radial-gradient(
+        circle at 6% 6%,
+        rgba(255, 220, 190, 0.55) 0 2px,
+        transparent 3px
+      ),
+    radial-gradient(
+      circle at 14% 6%,
+      rgba(195, 150, 220, 0.4) 0 1.5px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 6% 14%,
+      rgba(195, 150, 220, 0.4) 0 1.5px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 94% 6%,
+      rgba(255, 220, 190, 0.55) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 86% 6%,
+      rgba(195, 150, 220, 0.4) 0 1.5px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 94% 14%,
+      rgba(195, 150, 220, 0.4) 0 1.5px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 6% 94%,
+      rgba(255, 220, 190, 0.5) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 94% 94%,
+      rgba(255, 220, 190, 0.5) 0 2px,
+      transparent 3px
+    ),
     /* Subtle vertical scanning highlight */
-    linear-gradient(180deg, transparent 0%, rgba(185, 104, 255, 0.05) 50%, transparent 100%);
+    linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(185, 104, 255, 0.05) 50%,
+        transparent 100%
+      );
   filter: drop-shadow(0 0 6px rgba(190, 130, 90, 0.5));
 }
 
@@ -1054,7 +1266,8 @@
      border on the stage carries the framing, the image just fills it. */
   object-fit: cover;
   object-position: center 30%;
-  filter: drop-shadow(0 0 22px rgba(185, 104, 255, 0.45)) drop-shadow(0 0 48px rgba(185, 104, 255, 0.2));
+  filter: drop-shadow(0 0 22px rgba(185, 104, 255, 0.45))
+    drop-shadow(0 0 48px rgba(185, 104, 255, 0.2));
 }
 
 .race-profile.theme-zerg .race-stage::after {
@@ -1067,7 +1280,12 @@
   height: 14%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(185, 104, 255, 0.55), rgba(185, 104, 255, 0.15) 50%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(185, 104, 255, 0.55),
+    rgba(185, 104, 255, 0.15) 50%,
+    transparent 70%
+  );
   filter: blur(2px);
   z-index: 1;
   pointer-events: none;
@@ -1099,8 +1317,12 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at center, rgba(185, 104, 255, 0.85) 30%, rgba(185, 104, 255, 0.15) 60%, transparent 75%);
+  background: radial-gradient(
+    circle at center,
+    rgba(185, 104, 255, 0.85) 30%,
+    rgba(185, 104, 255, 0.15) 60%,
+    transparent 75%
+  );
   box-shadow: 0 0 10px rgba(185, 104, 255, 0.65);
 }
 
@@ -1128,8 +1350,11 @@
 .race-profile.theme-zerg .race-tab[data-active="true"] {
   border-color: rgba(185, 104, 255, 0.85);
   color: #f3d6ff;
-  background:
-    linear-gradient(180deg, rgba(75, 30, 100, 0.9), rgba(20, 8, 28, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(75, 30, 100, 0.9),
+    rgba(20, 8, 28, 0.95)
+  );
   box-shadow:
     0 0 14px rgba(185, 104, 255, 0.4),
     inset 0 0 14px rgba(185, 104, 255, 0.25);
@@ -1147,8 +1372,14 @@
   vertical-align: middle;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, transparent 32%, rgba(185, 104, 255, 0.85) 32% 38%, transparent 39%),
-    conic-gradient(from 25deg,
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 32%,
+      rgba(185, 104, 255, 0.85) 32% 38%,
+      transparent 39%
+    ),
+    conic-gradient(
+      from 25deg,
       transparent 0 12%,
       rgba(185, 104, 255, 0.95) 12% 22%,
       transparent 22% 38%,
@@ -1156,14 +1387,20 @@
       transparent 48% 62%,
       rgba(185, 104, 255, 0.95) 62% 72%,
       transparent 72% 88%,
-      rgba(185, 104, 255, 0.95) 88% 100%);
+      rgba(185, 104, 255, 0.95) 88% 100%
+    );
   filter: drop-shadow(0 0 6px rgba(185, 104, 255, 0.6));
 }
 
 .race-profile.theme-zerg .identity-icon[data-icon="mmr"] {
   background:
-    radial-gradient(circle at 50% 50%, rgba(255, 154, 47, 0.95) 0 14%, transparent 16%),
-    conic-gradient(from 0deg,
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255, 154, 47, 0.95) 0 14%,
+      transparent 16%
+    ),
+    conic-gradient(
+      from 0deg,
       rgba(255, 154, 47, 0.95) 0 8%,
       transparent 8% 18%,
       rgba(255, 154, 47, 0.95) 18% 28%,
@@ -1171,14 +1408,19 @@
       rgba(255, 154, 47, 0.95) 38% 50%,
       transparent 50% 62%,
       rgba(255, 154, 47, 0.95) 62% 75%,
-      transparent 75% 100%);
+      transparent 75% 100%
+    );
   filter: drop-shadow(0 0 6px rgba(255, 154, 47, 0.55));
 }
 
 .race-profile.theme-zerg .identity-icon[data-icon="tags"] {
   border-radius: 4px;
   background:
-    linear-gradient(135deg, rgba(185, 104, 255, 0.9) 0 60%, transparent 60% 100%),
+    linear-gradient(
+      135deg,
+      rgba(185, 104, 255, 0.9) 0 60%,
+      transparent 60% 100%
+    ),
     rgba(185, 104, 255, 0.2);
   clip-path: polygon(20% 0, 100% 0, 100% 70%, 80% 100%, 0 100%, 0 30%);
 }
@@ -1223,7 +1465,11 @@
   text-shadow:
     0 0 10px rgba(255, 154, 47, 0.4),
     0 0 22px rgba(255, 154, 47, 0.18);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -1276,7 +1522,11 @@
   border-radius: 7px;
   border: 1px solid rgba(185, 104, 255, 0.4);
   background:
-    radial-gradient(circle at 0% 0%, rgba(185, 104, 255, 0.18), transparent 55%),
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(185, 104, 255, 0.18),
+      transparent 55%
+    ),
     linear-gradient(180deg, rgba(50, 22, 70, 0.55), rgba(15, 6, 18, 0.92));
   box-shadow:
     inset 0 0 0 1px rgba(60, 30, 22, 0.5),
@@ -1320,8 +1570,14 @@
 }
 .race-profile.theme-zerg .profile-stat-cards .stat-card.encounters .stat-icon {
   background:
-    radial-gradient(circle at 50% 50%, transparent 30%, rgba(185, 104, 255, 0.95) 30% 38%, transparent 40%),
-    conic-gradient(from 30deg,
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 30%,
+      rgba(185, 104, 255, 0.95) 30% 38%,
+      transparent 40%
+    ),
+    conic-gradient(
+      from 30deg,
       transparent 0 8%,
       rgba(185, 104, 255, 0.95) 8% 22%,
       transparent 22% 36%,
@@ -1329,7 +1585,8 @@
       transparent 50% 64%,
       rgba(185, 104, 255, 0.95) 64% 78%,
       transparent 78% 92%,
-      rgba(185, 104, 255, 0.95) 92% 100%);
+      rgba(185, 104, 255, 0.95) 92% 100%
+    );
   filter: drop-shadow(0 0 6px rgba(185, 104, 255, 0.55));
 }
 
@@ -1350,9 +1607,23 @@
   color: #c4ff8f;
 }
 .race-profile.theme-zerg .profile-stat-cards .stat-card.wins .stat-icon {
-  background:
-    linear-gradient(180deg, rgba(255, 220, 80, 0.95) 0%, rgba(180, 130, 30, 0.85) 100%);
-  clip-path: polygon(50% 0%, 65% 30%, 100% 35%, 75% 60%, 85% 100%, 50% 78%, 15% 100%, 25% 60%, 0 35%, 35% 30%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 220, 80, 0.95) 0%,
+    rgba(180, 130, 30, 0.85) 100%
+  );
+  clip-path: polygon(
+    50% 0%,
+    65% 30%,
+    100% 35%,
+    75% 60%,
+    85% 100%,
+    50% 78%,
+    15% 100%,
+    25% 60%,
+    0 35%,
+    35% 30%
+  );
   filter: drop-shadow(0 0 6px rgba(255, 220, 80, 0.5));
 }
 
@@ -1375,11 +1646,34 @@
 .race-profile.theme-zerg .profile-stat-cards .stat-card.losses .stat-icon {
   position: relative;
   background:
-    radial-gradient(circle at 50% 38%, rgba(255, 94, 94, 0.9) 0 30%, transparent 32%),
-    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
-    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(
+      circle at 50% 38%,
+      rgba(255, 94, 94, 0.9) 0 30%,
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 36% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
+    radial-gradient(
+      circle at 64% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
     linear-gradient(180deg, rgba(255, 94, 94, 0.9), rgba(120, 30, 30, 0.85));
-  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  clip-path: polygon(
+    20% 0,
+    80% 0,
+    100% 30%,
+    90% 70%,
+    65% 75%,
+    65% 100%,
+    35% 100%,
+    35% 75%,
+    10% 70%,
+    0 30%
+  );
   filter: drop-shadow(0 0 6px rgba(255, 94, 94, 0.45));
 }
 
@@ -1390,8 +1684,11 @@
   padding: 10px 12px;
   border: 1px solid rgba(170, 110, 70, 0.5);
   border-radius: 7px;
-  background:
-    linear-gradient(180deg, rgba(36, 16, 36, 0.7), rgba(8, 4, 12, 0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(36, 16, 36, 0.7),
+    rgba(8, 4, 12, 0.92)
+  );
   box-shadow:
     inset 0 0 0 1px rgba(60, 30, 22, 0.5),
     inset 0 0 22px rgba(0, 0, 0, 0.55);
@@ -1444,7 +1741,15 @@
 
 .race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label::before {
   /* Lightning bolt for aggression */
-  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+  clip-path: polygon(
+    40% 0%,
+    100% 0%,
+    65% 45%,
+    95% 45%,
+    30% 100%,
+    55% 60%,
+    25% 60%
+  );
 }
 
 .race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label {
@@ -1461,7 +1766,18 @@
 
 .race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label::before {
   /* Trending zigzag */
-  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+  clip-path: polygon(
+    0 70%,
+    25% 40%,
+    45% 60%,
+    70% 20%,
+    100% 20%,
+    100% 35%,
+    75% 35%,
+    50% 80%,
+    30% 60%,
+    5% 90%
+  );
 }
 
 .race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label,
@@ -1471,9 +1787,15 @@
   color: #f3d6ff;
 }
 
-.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label::before { color: #ff7575; }
-.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label::before { color: #93ff37; }
-.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label::before { color: #b968ff; }
+.race-profile.theme-zerg .bar-row:nth-of-type(1) .bar-label::before {
+  color: #ff7575;
+}
+.race-profile.theme-zerg .bar-row:nth-of-type(2) .bar-label::before {
+  color: #93ff37;
+}
+.race-profile.theme-zerg .bar-row:nth-of-type(3) .bar-label::before {
+  color: #b968ff;
+}
 
 .race-profile.theme-zerg .progress-track {
   position: relative;
@@ -1492,11 +1814,7 @@
     #000 0 11px,
     transparent 11px 13px
   );
-          mask: repeating-linear-gradient(
-            90deg,
-            #000 0 11px,
-            transparent 11px 13px
-          );
+  mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 13px);
 }
 
 .race-profile.theme-zerg .progress-track::before {
@@ -1564,16 +1882,19 @@
 }
 
 .race-profile.theme-zerg .tag-chip {
-  min-height: 22px;
-  padding: 0 4px 0 10px;
+  min-height: 20px;
+  padding: 0 0 0 7px;
   border-radius: 6px;
   border: 1px solid rgba(135, 255, 55, 0.5);
-  background:
-    linear-gradient(180deg, rgba(40, 70, 18, 0.85), rgba(8, 14, 8, 0.92));
+  background: linear-gradient(
+    180deg,
+    rgba(40, 70, 18, 0.85),
+    rgba(8, 14, 8, 0.92)
+  );
   color: #c4ff8f;
-  font-size: 0.64rem;
+  font-size: 0.54rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   box-shadow:
     inset 0 0 0 1px rgba(60, 80, 30, 0.6),
     inset 0 0 10px rgba(135, 255, 55, 0.18),
@@ -1598,7 +1919,11 @@
   padding: 5px 8px;
   border: 1px solid rgba(170, 110, 70, 0.4);
   background:
-    radial-gradient(circle at 0% 0%, rgba(185, 104, 255, 0.08), transparent 55%),
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(185, 104, 255, 0.08),
+      transparent 55%
+    ),
     linear-gradient(180deg, rgba(28, 14, 28, 0.85), rgba(8, 4, 12, 0.92));
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -1627,8 +1952,12 @@
   min-height: 42px;
   border-radius: 9px;
   border: 2px solid rgba(190, 130, 90, 0.85);
-  background:
-    radial-gradient(circle at 50% 50%, rgba(185, 104, 255, 0.55), rgba(80, 30, 130, 0.9) 60%, rgba(20, 8, 28, 1) 100%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(185, 104, 255, 0.55),
+    rgba(80, 30, 130, 0.9) 60%,
+    rgba(20, 8, 28, 1) 100%
+  );
   box-shadow:
     inset 0 0 0 1px rgba(255, 220, 200, 0.18),
     inset 0 0 18px rgba(255, 220, 200, 0.08),
@@ -1744,22 +2073,62 @@
      + rust blotches + scorch marks + grain noise. */
   background:
     /* Random rust blotches scattered around the plate */
-    radial-gradient(ellipse 60px 20px at 18% 88%, rgba(196, 107, 42, 0.22), transparent 70%),
-    radial-gradient(ellipse 35px 14px at 78% 12%, rgba(196, 107, 42, 0.16), transparent 70%),
-    radial-gradient(ellipse 22px 50px at 96% 64%, rgba(107, 48, 20, 0.28), transparent 75%),
-    radial-gradient(ellipse 18px 18px at 4% 32%, rgba(107, 48, 20, 0.22), transparent 75%),
+    radial-gradient(
+      ellipse 60px 20px at 18% 88%,
+      rgba(196, 107, 42, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 35px 14px at 78% 12%,
+      rgba(196, 107, 42, 0.16),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 22px 50px at 96% 64%,
+      rgba(107, 48, 20, 0.28),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 18px 18px at 4% 32%,
+      rgba(107, 48, 20, 0.22),
+      transparent 75%
+    ),
     /* Scorch marks — dark soot patches */
     radial-gradient(circle at 88% 92%, rgba(0, 0, 0, 0.55), transparent 12%),
     radial-gradient(circle at 6% 8%, rgba(0, 0, 0, 0.45), transparent 10%),
-    radial-gradient(ellipse 30px 6px at 50% 4%, rgba(0, 0, 0, 0.4), transparent 70%),
+    radial-gradient(
+      ellipse 30px 6px at 50% 4%,
+      rgba(0, 0, 0, 0.4),
+      transparent 70%
+    ),
     /* Diagonal scratch striations */
-    repeating-linear-gradient(118deg, transparent 0 22px, rgba(255, 255, 255, 0.02) 22px 23px, transparent 23px 80px),
-    repeating-linear-gradient(62deg, transparent 0 31px, rgba(0, 0, 0, 0.18) 31px 32px, transparent 32px 95px),
+    repeating-linear-gradient(
+        118deg,
+        transparent 0 22px,
+        rgba(255, 255, 255, 0.02) 22px 23px,
+        transparent 23px 80px
+      ),
+    repeating-linear-gradient(
+      62deg,
+      transparent 0 31px,
+      rgba(0, 0, 0, 0.18) 31px 32px,
+      transparent 32px 95px
+    ),
     /* Heavier brushed metal grain */
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 3px, rgba(0, 0, 0, 0.06) 3px 4px, transparent 4px 7px),
+    repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.015) 0 1px,
+        transparent 1px 3px,
+        rgba(0, 0, 0, 0.06) 3px 4px,
+        transparent 4px 7px
+      ),
     /* Original tactical glows */
     radial-gradient(circle at 12% 10%, rgba(23, 217, 255, 0.1), transparent 35%),
-    radial-gradient(circle at 90% 90%, rgba(23, 217, 255, 0.06), transparent 40%),
+    radial-gradient(
+      circle at 90% 90%,
+      rgba(23, 217, 255, 0.06),
+      transparent 40%
+    ),
     linear-gradient(140deg, rgba(20, 36, 52, 0.78), rgba(6, 12, 20, 0.96));
   box-shadow:
     /* Outer chipped armor edge */
@@ -1786,23 +2155,83 @@
     inset 0 0 60px rgba(23, 217, 255, 0.04);
   background:
     /* Big corner bolt plates */
-    radial-gradient(circle at 0% 0%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
-    radial-gradient(circle at 100% 0%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
-    radial-gradient(circle at 0% 100%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
-    radial-gradient(circle at 100% 100%, rgba(8, 12, 18, 1) 0 4px, var(--terran-rivet) 4px 6px, transparent 8px),
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(8, 12, 18, 1) 0 4px,
+      var(--terran-rivet) 4px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(8, 12, 18, 1) 0 4px,
+      var(--terran-rivet) 4px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(8, 12, 18, 1) 0 4px,
+      var(--terran-rivet) 4px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(8, 12, 18, 1) 0 4px,
+      var(--terran-rivet) 4px 6px,
+      transparent 8px
+    ),
     /* Small hex-bolts spaced along the top rail */
-    radial-gradient(circle at 25% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 50% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 75% 0%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(
+        circle at 25% 0%,
+        var(--terran-rivet) 0 2.5px,
+        transparent 4px
+      ),
+    radial-gradient(
+      circle at 50% 0%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 75% 0%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
     /* Bottom rail bolts */
-    radial-gradient(circle at 25% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 50% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 75% 100%, var(--terran-rivet) 0 2.5px, transparent 4px),
+    radial-gradient(
+        circle at 25% 100%,
+        var(--terran-rivet) 0 2.5px,
+        transparent 4px
+      ),
+    radial-gradient(
+      circle at 50% 100%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 75% 100%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
     /* Side rail bolts */
-    radial-gradient(circle at 0% 30%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 0% 70%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 100% 30%, var(--terran-rivet) 0 2.5px, transparent 4px),
-    radial-gradient(circle at 100% 70%, var(--terran-rivet) 0 2.5px, transparent 4px);
+    radial-gradient(
+        circle at 0% 30%,
+        var(--terran-rivet) 0 2.5px,
+        transparent 4px
+      ),
+    radial-gradient(
+      circle at 0% 70%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 30%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 70%,
+      var(--terran-rivet) 0 2.5px,
+      transparent 4px
+    );
 }
 
 .race-profile.theme-terran::after {
@@ -1816,26 +2245,42 @@
   border-radius: 6px;
   background:
     /* Top-left hazard wedge */
-    repeating-linear-gradient(45deg,
-      rgba(255, 209, 93, 0.55) 0 4px,
-      rgba(20, 14, 8, 0.85) 4px 8px) top left / 56px 8px no-repeat,
+    repeating-linear-gradient(
+        45deg,
+        rgba(255, 209, 93, 0.55) 0 4px,
+        rgba(20, 14, 8, 0.85) 4px 8px
+      )
+      top left / 56px 8px no-repeat,
     /* Top-right hazard wedge */
-    repeating-linear-gradient(-45deg,
-      rgba(255, 209, 93, 0.55) 0 4px,
-      rgba(20, 14, 8, 0.85) 4px 8px) top right / 56px 8px no-repeat,
+    repeating-linear-gradient(
+        -45deg,
+        rgba(255, 209, 93, 0.55) 0 4px,
+        rgba(20, 14, 8, 0.85) 4px 8px
+      )
+      top right / 56px 8px no-repeat,
     /* Bottom-left hazard wedge */
-    repeating-linear-gradient(-45deg,
-      rgba(255, 209, 93, 0.55) 0 4px,
-      rgba(20, 14, 8, 0.85) 4px 8px) bottom left / 56px 8px no-repeat,
+    repeating-linear-gradient(
+        -45deg,
+        rgba(255, 209, 93, 0.55) 0 4px,
+        rgba(20, 14, 8, 0.85) 4px 8px
+      )
+      bottom left / 56px 8px no-repeat,
     /* Bottom-right hazard wedge */
-    repeating-linear-gradient(45deg,
-      rgba(255, 209, 93, 0.55) 0 4px,
-      rgba(20, 14, 8, 0.85) 4px 8px) bottom right / 56px 8px no-repeat,
+    repeating-linear-gradient(
+        45deg,
+        rgba(255, 209, 93, 0.55) 0 4px,
+        rgba(20, 14, 8, 0.85) 4px 8px
+      )
+      bottom right / 56px 8px no-repeat,
     /* Cyan tactical ticks (kept from the previous pass) */
-    linear-gradient(90deg, var(--terran-cyan) 0 100%) 76px 6px / 26px 2px no-repeat,
-    linear-gradient(90deg, var(--terran-orange) 0 100%) right 76px top 6px / 32px 2px no-repeat,
-    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) 76px bottom 6px / 18px 2px no-repeat,
-    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) right 76px bottom 6px / 18px 2px no-repeat;
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) 76px 6px / 26px 2px
+      no-repeat,
+    linear-gradient(90deg, var(--terran-orange) 0 100%) right 76px top 6px /
+      32px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) 76px bottom 6px /
+      18px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-cyan-soft) 0 100%) right 76px bottom
+      6px / 18px 2px no-repeat;
   z-index: -1;
   filter: drop-shadow(0 0 6px rgba(23, 217, 255, 0.5));
 }
@@ -1851,19 +2296,43 @@
   border-radius: 4px;
   background:
     /* Local rust streak running down the inner edge */
-    radial-gradient(ellipse 16px 60px at 100% 50%, rgba(196, 107, 42, 0.18), transparent 75%),
-    radial-gradient(ellipse 8px 40px at 0% 70%, rgba(107, 48, 20, 0.22), transparent 80%),
+    radial-gradient(
+      ellipse 16px 60px at 100% 50%,
+      rgba(196, 107, 42, 0.18),
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 8px 40px at 0% 70%,
+      rgba(107, 48, 20, 0.22),
+      transparent 80%
+    ),
     /* Soot smudge near the top */
-    radial-gradient(ellipse 50px 8px at 70% 0%, rgba(0, 0, 0, 0.35), transparent 75%),
+    radial-gradient(
+        ellipse 50px 8px at 70% 0%,
+        rgba(0, 0, 0, 0.35),
+        transparent 75%
+      ),
     /* Brushed-metal striations replace the clean blueprint grid */
-    repeating-linear-gradient(0deg,
-      rgba(255, 255, 255, 0.018) 0 1px,
-      transparent 1px 2px,
-      rgba(0, 0, 0, 0.06) 2px 3px,
-      transparent 3px 5px),
+    repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.018) 0 1px,
+        transparent 1px 2px,
+        rgba(0, 0, 0, 0.06) 2px 3px,
+        transparent 3px 5px
+      ),
     /* Heavy diagonal scratch — long, sparse */
-    repeating-linear-gradient(108deg, transparent 0 38px, rgba(255, 255, 255, 0.025) 38px 39px, transparent 39px 110px),
-    repeating-linear-gradient(72deg, transparent 0 50px, rgba(0, 0, 0, 0.18) 50px 51px, transparent 51px 130px),
+    repeating-linear-gradient(
+        108deg,
+        transparent 0 38px,
+        rgba(255, 255, 255, 0.025) 38px 39px,
+        transparent 39px 110px
+      ),
+    repeating-linear-gradient(
+      72deg,
+      transparent 0 50px,
+      rgba(0, 0, 0, 0.18) 50px 51px,
+      transparent 51px 130px
+    ),
     /* Faint cyan tactical wash */
     radial-gradient(circle at 8% 0%, rgba(23, 217, 255, 0.08), transparent 40%),
     /* Dirty gunmetal base — slightly desaturated, more brown-tinged */
@@ -1886,10 +2355,14 @@
   border: 1px solid rgba(40, 70, 96, 0.6);
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.45);
   background:
-    linear-gradient(90deg, var(--terran-cyan) 0 100%) left 0 top 0 / 14px 1px no-repeat,
-    linear-gradient(180deg, var(--terran-cyan) 0 100%) left 0 top 0 / 1px 14px no-repeat,
-    linear-gradient(90deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 14px 1px no-repeat,
-    linear-gradient(180deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 1px 14px no-repeat;
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) left 0 top 0 / 14px 1px
+      no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) left 0 top 0 / 1px 14px
+      no-repeat,
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 14px
+      1px no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) right 0 bottom 0 / 1px
+      14px no-repeat;
 }
 
 /* Match the zerg panel: stage flexes into the leftover vertical space. */
@@ -1944,32 +2417,72 @@
   overflow: hidden;
   /* Industrial cut-corner plate. */
   clip-path: polygon(
-    6% 0%, 94% 0%,
-    100% 4%, 100% 96%,
-    94% 100%, 6% 100%,
-    0% 96%, 0% 4%
+    6% 0%,
+    94% 0%,
+    100% 4%,
+    100% 96%,
+    94% 100%,
+    6% 100%,
+    0% 96%,
+    0% 4%
   );
   background:
     /* Battle-damage soot patches near the corners */
     radial-gradient(circle at 8% 92%, rgba(0, 0, 0, 0.55), transparent 18%),
     radial-gradient(circle at 92% 14%, rgba(0, 0, 0, 0.45), transparent 12%),
     /* Rust streaks bleeding from edges */
-    radial-gradient(ellipse 12px 36px at 0% 38%, rgba(196, 107, 42, 0.22), transparent 75%),
-    radial-gradient(ellipse 10px 28px at 100% 70%, rgba(107, 48, 20, 0.28), transparent 75%),
+    radial-gradient(
+        ellipse 12px 36px at 0% 38%,
+        rgba(196, 107, 42, 0.22),
+        transparent 75%
+      ),
+    radial-gradient(
+      ellipse 10px 28px at 100% 70%,
+      rgba(107, 48, 20, 0.28),
+      transparent 75%
+    ),
     /* Tactical concentric rings */
-    radial-gradient(circle at 50% 50%, transparent 38%, rgba(23, 217, 255, 0.12) 38%, rgba(23, 217, 255, 0.12) 38.4%, transparent 39%),
-    radial-gradient(circle at 50% 50%, transparent 28%, rgba(23, 217, 255, 0.1) 28%, rgba(23, 217, 255, 0.1) 28.4%, transparent 29%),
+    radial-gradient(
+        circle at 50% 50%,
+        transparent 38%,
+        rgba(23, 217, 255, 0.12) 38%,
+        rgba(23, 217, 255, 0.12) 38.4%,
+        transparent 39%
+      ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 28%,
+      rgba(23, 217, 255, 0.1) 28%,
+      rgba(23, 217, 255, 0.1) 28.4%,
+      transparent 29%
+    ),
     /* Brushed-metal vertical striations */
-    repeating-linear-gradient(0deg,
-      rgba(255, 255, 255, 0.022) 0 1px,
-      transparent 1px 2px,
-      rgba(0, 0, 0, 0.08) 2px 3px,
-      transparent 3px 6px),
+    repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.022) 0 1px,
+        transparent 1px 2px,
+        rgba(0, 0, 0, 0.08) 2px 3px,
+        transparent 3px 6px
+      ),
     /* Sparse diagonal scratch lines */
-    repeating-linear-gradient(125deg, transparent 0 28px, rgba(255, 255, 255, 0.04) 28px 29px, transparent 29px 90px),
-    repeating-linear-gradient(55deg, transparent 0 36px, rgba(0, 0, 0, 0.22) 36px 37px, transparent 37px 110px),
+    repeating-linear-gradient(
+        125deg,
+        transparent 0 28px,
+        rgba(255, 255, 255, 0.04) 28px 29px,
+        transparent 29px 90px
+      ),
+    repeating-linear-gradient(
+      55deg,
+      transparent 0 36px,
+      rgba(0, 0, 0, 0.22) 36px 37px,
+      transparent 37px 110px
+    ),
     /* Vignette + dirty base */
-    radial-gradient(circle at 50% 55%, rgba(23, 217, 255, 0.18), transparent 60%),
+    radial-gradient(
+        circle at 50% 55%,
+        rgba(23, 217, 255, 0.18),
+        transparent 60%
+      ),
     radial-gradient(circle at 50% 50%, rgba(14, 18, 24, 1), rgba(4, 6, 10, 1));
   box-shadow:
     inset 0 0 0 1px rgba(20, 38, 56, 0.85),
@@ -1986,8 +2499,20 @@
   z-index: 3;
   /* Sonar / radar sweep rings + a thin scanline pulse band. */
   background:
-    radial-gradient(circle at 50% 50%, transparent 18%, rgba(23, 217, 255, 0.2) 18%, rgba(23, 217, 255, 0.2) 18.4%, transparent 19%),
-    radial-gradient(circle at 50% 50%, transparent 9%, rgba(23, 217, 255, 0.15) 9%, rgba(23, 217, 255, 0.15) 9.4%, transparent 10%);
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 18%,
+      rgba(23, 217, 255, 0.2) 18%,
+      rgba(23, 217, 255, 0.2) 18.4%,
+      transparent 19%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 9%,
+      rgba(23, 217, 255, 0.15) 9%,
+      rgba(23, 217, 255, 0.15) 9.4%,
+      transparent 10%
+    );
 }
 
 .race-profile.theme-terran .race-stage-frame::before {
@@ -1999,10 +2524,14 @@
   pointer-events: none;
   border: 1px solid rgba(70, 120, 160, 0.55);
   clip-path: polygon(
-    6% 0%, 94% 0%,
-    100% 5%, 100% 95%,
-    94% 100%, 6% 100%,
-    0% 95%, 0% 5%
+    6% 0%,
+    94% 0%,
+    100% 5%,
+    100% 95%,
+    94% 100%,
+    6% 100%,
+    0% 95%,
+    0% 5%
   );
   box-shadow:
     inset 0 0 0 1px rgba(8, 16, 26, 0.9),
@@ -2018,18 +2547,39 @@
   pointer-events: none;
   background:
     /* Mid-edge yellow ticks (left + right) */
-    linear-gradient(90deg, var(--terran-yellow) 0 100%) left center / 14px 2px no-repeat,
-    linear-gradient(90deg, var(--terran-yellow) 0 100%) right center / 14px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-yellow) 0 100%) left center / 14px 2px
+      no-repeat,
+    linear-gradient(90deg, var(--terran-yellow) 0 100%) right center / 14px 2px
+      no-repeat,
     /* Top + bottom centred ticks (orange) */
-    linear-gradient(90deg, var(--terran-orange) 0 100%) center top / 18px 2px no-repeat,
-    linear-gradient(90deg, var(--terran-orange) 0 100%) center bottom / 18px 2px no-repeat,
+    linear-gradient(90deg, var(--terran-orange) 0 100%) center top / 18px 2px
+      no-repeat,
+    linear-gradient(90deg, var(--terran-orange) 0 100%) center bottom / 18px 2px
+      no-repeat,
     /* Cyan corner dots */
     radial-gradient(circle at 4% 4%, var(--terran-cyan) 0 2px, transparent 3px),
-    radial-gradient(circle at 96% 4%, var(--terran-cyan) 0 2px, transparent 3px),
-    radial-gradient(circle at 4% 96%, var(--terran-cyan) 0 2px, transparent 3px),
-    radial-gradient(circle at 96% 96%, var(--terran-cyan) 0 2px, transparent 3px),
+    radial-gradient(
+      circle at 96% 4%,
+      var(--terran-cyan) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 4% 96%,
+      var(--terran-cyan) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 96% 96%,
+      var(--terran-cyan) 0 2px,
+      transparent 3px
+    ),
     /* Subtle horizontal scanline pulse */
-    linear-gradient(180deg, transparent 0%, rgba(23, 217, 255, 0.05) 50%, transparent 100%);
+    linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(23, 217, 255, 0.05) 50%,
+        transparent 100%
+      );
   filter: drop-shadow(0 0 5px rgba(23, 217, 255, 0.45));
 }
 
@@ -2046,7 +2596,8 @@
      shoulders stay framed when the stage gets tall. */
   object-fit: cover;
   object-position: center 35%;
-  filter: drop-shadow(0 0 18px rgba(23, 217, 255, 0.4)) drop-shadow(0 0 38px rgba(23, 217, 255, 0.18));
+  filter: drop-shadow(0 0 18px rgba(23, 217, 255, 0.4))
+    drop-shadow(0 0 38px rgba(23, 217, 255, 0.18));
 }
 
 /* Drop the zerg's purple under-glow disc here; the marine's own back-glow
@@ -2082,7 +2633,13 @@
   width: 18px;
   height: 4px;
   border-radius: 1px;
-  background: linear-gradient(90deg, transparent 0 10%, var(--terran-cyan) 10% 50%, transparent 50% 60%, var(--terran-cyan) 60% 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0 10%,
+    var(--terran-cyan) 10% 50%,
+    transparent 50% 60%,
+    var(--terran-cyan) 60% 100%
+  );
   box-shadow: 0 0 8px rgba(23, 217, 255, 0.7);
 }
 
@@ -2107,7 +2664,11 @@
 .race-profile.theme-terran .race-tab[data-active="true"] {
   border-color: var(--terran-cyan);
   color: var(--terran-cyan);
-  background: linear-gradient(180deg, rgba(20, 60, 95, 0.85), rgba(8, 20, 32, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(20, 60, 95, 0.85),
+    rgba(8, 20, 32, 0.95)
+  );
   box-shadow:
     0 0 12px rgba(23, 217, 255, 0.45),
     inset 0 0 14px rgba(23, 217, 255, 0.25);
@@ -2127,14 +2688,37 @@
   vertical-align: middle;
   background: var(--terran-cyan);
   /* Stylised silhouette icon — looks like a head + shoulders. */
-  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  clip-path: polygon(
+    50% 0%,
+    70% 12%,
+    70% 32%,
+    50% 42%,
+    30% 32%,
+    30% 12%,
+    50% 0%,
+    100% 60%,
+    100% 100%,
+    0% 100%,
+    0% 60%
+  );
   filter: drop-shadow(0 0 5px rgba(23, 217, 255, 0.55));
 }
 
 .race-profile.theme-terran .identity-icon[data-icon="mmr"] {
   /* Trophy / chevron silhouette in orange. */
   background: var(--terran-orange);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
 }
 
@@ -2183,7 +2767,11 @@
   text-shadow:
     0 0 10px rgba(255, 154, 47, 0.45),
     0 0 22px rgba(255, 154, 47, 0.18);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -2229,7 +2817,15 @@
   border: 1px solid rgba(60, 100, 140, 0.55);
   background:
     /* Hazard stripe in the bottom-right corner — small but iconic */
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 216, 107, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 216, 107, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(23, 217, 255, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 40, 60, 0.65), rgba(8, 16, 26, 0.95));
   box-shadow:
@@ -2266,14 +2862,27 @@
 .race-profile.theme-terran .profile-stat-cards .stat-card.encounters {
   border-color: rgba(23, 217, 255, 0.55);
 }
-.race-profile.theme-terran .profile-stat-cards .stat-card.encounters .stat-value {
+.race-profile.theme-terran
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-value {
   color: #d4f3ff;
 }
-.race-profile.theme-terran .profile-stat-cards .stat-card.encounters .stat-icon {
+.race-profile.theme-terran
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-icon {
   background:
-    radial-gradient(circle at 50% 50%, transparent 32%, var(--terran-cyan) 32% 40%, transparent 41%),
-    linear-gradient(90deg, var(--terran-cyan) 0 100%) center / 100% 2px no-repeat,
-    linear-gradient(180deg, var(--terran-cyan) 0 100%) center / 2px 100% no-repeat;
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 32%,
+      var(--terran-cyan) 32% 40%,
+      transparent 41%
+    ),
+    linear-gradient(90deg, var(--terran-cyan) 0 100%) center / 100% 2px
+      no-repeat,
+    linear-gradient(180deg, var(--terran-cyan) 0 100%) center / 2px 100%
+      no-repeat;
   filter: drop-shadow(0 0 6px rgba(23, 217, 255, 0.55));
 }
 
@@ -2281,7 +2890,15 @@
 .race-profile.theme-terran .profile-stat-cards .stat-card.wins {
   border-color: rgba(135, 255, 55, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 216, 107, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 216, 107, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
 }
@@ -2293,7 +2910,22 @@
 }
 .race-profile.theme-terran .profile-stat-cards .stat-card.wins .stat-icon {
   background: var(--terran-green);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    60% 80%,
+    60% 100%,
+    40% 100%,
+    40% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
 }
 
@@ -2301,7 +2933,15 @@
 .race-profile.theme-terran .profile-stat-cards .stat-card.losses {
   border-color: rgba(255, 97, 96, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 216, 107, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 216, 107, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 216, 107, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 216, 107, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
 }
@@ -2314,11 +2954,34 @@
 .race-profile.theme-terran .profile-stat-cards .stat-card.losses .stat-icon {
   position: relative;
   background:
-    radial-gradient(circle at 50% 38%, var(--terran-red) 0 30%, transparent 32%),
-    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
-    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(
+      circle at 50% 38%,
+      var(--terran-red) 0 30%,
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 36% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
+    radial-gradient(
+      circle at 64% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
     linear-gradient(180deg, var(--terran-red), rgba(120, 30, 30, 0.85));
-  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  clip-path: polygon(
+    20% 0,
+    80% 0,
+    100% 30%,
+    90% 70%,
+    65% 75%,
+    65% 100%,
+    35% 100%,
+    35% 75%,
+    10% 70%,
+    0 30%
+  );
   filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
 }
 
@@ -2330,8 +2993,16 @@
   border: 1px solid rgba(60, 100, 140, 0.55);
   border-radius: 5px;
   background:
-    repeating-linear-gradient(0deg, rgba(23, 217, 255, 0.04) 0 1px, transparent 1px 24px),
-    repeating-linear-gradient(90deg, rgba(23, 217, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(23, 217, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(23, 217, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
     linear-gradient(180deg, rgba(16, 30, 46, 0.85), rgba(6, 12, 20, 0.95));
   box-shadow:
     inset 0 0 0 1px rgba(20, 38, 56, 0.6),
@@ -2381,18 +3052,58 @@
 
 .race-profile.theme-terran .bar-row:nth-of-type(1) .bar-label::before {
   color: #ff7575;
-  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+  clip-path: polygon(
+    40% 0%,
+    100% 0%,
+    65% 45%,
+    95% 45%,
+    30% 100%,
+    55% 60%,
+    25% 60%
+  );
 }
 
 .race-profile.theme-terran .bar-row:nth-of-type(2) .bar-label::before {
   color: var(--terran-yellow);
   /* Dollar sign approximation: vertical bar through a stylised S. */
-  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+  clip-path: polygon(
+    46% 0%,
+    54% 0%,
+    54% 12%,
+    80% 18%,
+    80% 32%,
+    30% 32%,
+    30% 46%,
+    80% 50%,
+    80% 80%,
+    54% 86%,
+    54% 100%,
+    46% 100%,
+    46% 86%,
+    20% 80%,
+    20% 66%,
+    70% 66%,
+    70% 52%,
+    20% 48%,
+    20% 18%,
+    46% 12%
+  );
 }
 
 .race-profile.theme-terran .bar-row:nth-of-type(3) .bar-label::before {
   color: #b968ff;
-  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+  clip-path: polygon(
+    0 70%,
+    25% 40%,
+    45% 60%,
+    70% 20%,
+    100% 20%,
+    100% 35%,
+    75% 35%,
+    50% 80%,
+    30% 60%,
+    5% 90%
+  );
 }
 
 .race-profile.theme-terran .progress-track {
@@ -2412,11 +3123,7 @@
     #000 0 11px,
     transparent 11px 13px
   );
-          mask: repeating-linear-gradient(
-            90deg,
-            #000 0 11px,
-            transparent 11px 13px
-          );
+  mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 13px);
 }
 
 .race-profile.theme-terran .progress-track::before {
@@ -2438,7 +3145,11 @@
 }
 
 .race-profile.theme-terran .progress-fill.economy {
-  background-image: linear-gradient(90deg, var(--terran-yellow), var(--terran-green));
+  background-image: linear-gradient(
+    90deg,
+    var(--terran-yellow),
+    var(--terran-green)
+  );
   box-shadow: 0 0 10px rgba(255, 216, 107, 0.45);
 }
 
@@ -2483,26 +3194,24 @@
 
 .race-profile.theme-terran .tag-chip {
   position: relative;
-  min-height: 22px;
-  padding: 0 4px 0 14px;
+  min-height: 20px;
+  padding: 0 0 0 9px;
   border-radius: 3px;
   border: 1px solid rgba(23, 217, 255, 0.55);
-  background:
-    linear-gradient(180deg, rgba(20, 50, 70, 0.85), rgba(8, 18, 28, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(20, 50, 70, 0.85),
+    rgba(8, 18, 28, 0.95)
+  );
   color: var(--terran-cyan-soft);
-  font-size: 0.68rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   box-shadow:
     inset 0 0 0 1px rgba(20, 38, 56, 0.7),
     inset 0 0 10px rgba(23, 217, 255, 0.15),
     0 0 8px rgba(23, 217, 255, 0.18);
-  clip-path: polygon(
-    6% 0%, 94% 0%,
-    100% 50%,
-    94% 100%, 6% 100%,
-    0% 50%
-  );
+  clip-path: polygon(4% 0%, 96% 0%, 100% 50%, 96% 100%, 4% 100%, 0% 50%);
 }
 
 /* Profile meta row */
@@ -2548,8 +3257,12 @@
   min-height: 42px;
   border-radius: 4px;
   border: 2px solid rgba(70, 130, 170, 0.85);
-  background:
-    linear-gradient(180deg, rgba(28, 96, 140, 0.92), rgba(10, 36, 60, 1) 70%, rgba(6, 18, 30, 1) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(28, 96, 140, 0.92),
+    rgba(10, 36, 60, 1) 70%,
+    rgba(6, 18, 30, 1) 100%
+  );
   box-shadow:
     inset 0 0 0 1px rgba(180, 230, 255, 0.18),
     inset 0 0 18px rgba(120, 200, 240, 0.15),
@@ -2619,9 +3332,21 @@
   border: none;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 12% 10%, rgba(92, 220, 255, 0.14), transparent 38%),
-    radial-gradient(circle at 88% 90%, rgba(255, 209, 93, 0.08), transparent 42%),
-    radial-gradient(circle at 50% 50%, rgba(58, 168, 255, 0.06), transparent 60%),
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(92, 220, 255, 0.14),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 88% 90%,
+      rgba(255, 209, 93, 0.08),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(58, 168, 255, 0.06),
+      transparent 60%
+    ),
     linear-gradient(140deg, rgba(14, 30, 56, 0.85), rgba(4, 12, 24, 0.97));
   box-shadow:
     /* Outer gold trim — two layered rings to read as carved bullion edge */
@@ -2651,10 +3376,30 @@
     0 0 6px rgba(220, 180, 80, 0.35);
   background:
     /* Corner sapphire gems */
-    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 100% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 0% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px);
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    );
   filter: drop-shadow(0 0 6px rgba(58, 168, 255, 0.7));
 }
 
@@ -2667,10 +3412,30 @@
   pointer-events: none;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 50% 6px, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at 50% calc(100% - 6px), rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at 6px 50%, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at calc(100% - 6px) 50%, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px);
+    radial-gradient(
+      circle at 50% 6px,
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 50% calc(100% - 6px),
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 6px 50%,
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at calc(100% - 6px) 50%,
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    );
   filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.8));
   z-index: -1;
 }
@@ -2686,9 +3451,26 @@
   border-radius: 5px;
   background:
     /* Faint Khalai script suggestion — vertical thin bars on the right edge */
-    linear-gradient(90deg, transparent 0 92%, rgba(92, 220, 255, 0.05) 92% 92.4%, transparent 92.4% 94%, rgba(92, 220, 255, 0.05) 94% 94.4%, transparent 94.4% 96%, rgba(92, 220, 255, 0.05) 96% 96.4%, transparent),
-    radial-gradient(circle at 12% 0%, rgba(92, 220, 255, 0.12), transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(255, 209, 93, 0.06), transparent 40%),
+    linear-gradient(
+      90deg,
+      transparent 0 92%,
+      rgba(92, 220, 255, 0.05) 92% 92.4%,
+      transparent 92.4% 94%,
+      rgba(92, 220, 255, 0.05) 94% 94.4%,
+      transparent 94.4% 96%,
+      rgba(92, 220, 255, 0.05) 96% 96.4%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(92, 220, 255, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(255, 209, 93, 0.06),
+      transparent 40%
+    ),
     linear-gradient(180deg, rgba(10, 26, 50, 0.95), rgba(4, 12, 26, 0.97));
   box-shadow:
     inset 0 0 0 1px rgba(255, 220, 130, 0.25),
@@ -2707,10 +3489,26 @@
   border: 1px solid rgba(220, 180, 80, 0.35);
   box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.55);
   background:
-    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 100% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 0% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px);
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    );
   filter: drop-shadow(0 0 5px rgba(58, 168, 255, 0.7));
 }
 
@@ -2765,27 +3563,77 @@
   /* Slight bevel — Khalai panels have softer cuts than terran's industrial
      plate but cleaner than zerg's organic chitin. */
   clip-path: polygon(
-    5% 0%, 95% 0%,
-    100% 5%, 100% 95%,
-    95% 100%, 5% 100%,
-    0% 95%, 0% 5%
+    5% 0%,
+    95% 0%,
+    100% 5%,
+    100% 95%,
+    95% 100%,
+    5% 100%,
+    0% 95%,
+    0% 5%
   );
   background:
     /* Concentric blue/gold tactical rings */
-    radial-gradient(circle at 50% 50%, transparent 38%, rgba(255, 209, 93, 0.16) 38%, rgba(255, 209, 93, 0.16) 38.4%, transparent 39%),
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(92, 220, 255, 0.18) 26%, rgba(92, 220, 255, 0.18) 26.4%, transparent 27%),
-    radial-gradient(circle at 50% 50%, transparent 16%, rgba(92, 220, 255, 0.14) 16%, rgba(92, 220, 255, 0.14) 16.4%, transparent 17%),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 38%,
+      rgba(255, 209, 93, 0.16) 38%,
+      rgba(255, 209, 93, 0.16) 38.4%,
+      transparent 39%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 26%,
+      rgba(92, 220, 255, 0.18) 26%,
+      rgba(92, 220, 255, 0.18) 26.4%,
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 16%,
+      rgba(92, 220, 255, 0.14) 16%,
+      rgba(92, 220, 255, 0.14) 16.4%,
+      transparent 17%
+    ),
     /* Khalai blueprint micro-grid */
-    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(
+        0deg,
+        rgba(92, 220, 255, 0.05) 0 1px,
+        transparent 1px 22px
+      ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(92, 220, 255, 0.05) 0 1px,
+      transparent 1px 22px
+    ),
     /* Star-field highlight — small bright pinpoints scattered for the
        deep-space templar aesthetic */
-    radial-gradient(circle at 18% 22%, rgba(180, 230, 255, 0.3) 0 1px, transparent 2px),
-    radial-gradient(circle at 80% 68%, rgba(180, 230, 255, 0.24) 0 1px, transparent 2px),
-    radial-gradient(circle at 26% 78%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
-    radial-gradient(circle at 76% 18%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
+    radial-gradient(
+        circle at 18% 22%,
+        rgba(180, 230, 255, 0.3) 0 1px,
+        transparent 2px
+      ),
+    radial-gradient(
+      circle at 80% 68%,
+      rgba(180, 230, 255, 0.24) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 26% 78%,
+      rgba(180, 230, 255, 0.22) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 76% 18%,
+      rgba(180, 230, 255, 0.22) 0 1px,
+      transparent 2px
+    ),
     /* Vignette */
-    radial-gradient(circle at 50% 60%, rgba(58, 168, 255, 0.22), transparent 60%),
+    radial-gradient(
+        circle at 50% 60%,
+        rgba(58, 168, 255, 0.22),
+        transparent 60%
+      ),
     radial-gradient(circle at 50% 50%, rgba(8, 24, 46, 1), rgba(2, 8, 18, 1));
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.85),
@@ -2802,8 +3650,20 @@
   z-index: 3;
   background:
     /* Subtle blueprint cross-hair through the centre */
-    linear-gradient(90deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%),
-    linear-gradient(180deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%);
+    linear-gradient(
+      90deg,
+      transparent 49.6%,
+      rgba(92, 220, 255, 0.18) 49.8%,
+      rgba(92, 220, 255, 0.18) 50.2%,
+      transparent 50.4%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 49.6%,
+      rgba(92, 220, 255, 0.18) 49.8%,
+      rgba(92, 220, 255, 0.18) 50.2%,
+      transparent 50.4%
+    );
 }
 
 .race-profile.theme-protoss .race-stage-frame::before {
@@ -2814,10 +3674,14 @@
   pointer-events: none;
   border: 1px solid rgba(220, 180, 80, 0.7);
   clip-path: polygon(
-    5% 0%, 95% 0%,
-    100% 6%, 100% 94%,
-    95% 100%, 5% 100%,
-    0% 94%, 0% 6%
+    5% 0%,
+    95% 0%,
+    100% 6%,
+    100% 94%,
+    95% 100%,
+    5% 100%,
+    0% 94%,
+    0% 6%
   );
   box-shadow:
     inset 0 0 0 1px rgba(8, 14, 26, 0.9),
@@ -2834,17 +3698,58 @@
   pointer-events: none;
   background:
     /* Mid-edge diamonds */
-    radial-gradient(circle at 50% 0%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
-    radial-gradient(circle at 50% 100%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
-    radial-gradient(circle at 0% 50%, rgba(180, 230, 255, 0.9) 0 2.5px, rgba(58, 168, 255, 0.6) 2.5px 5px, transparent 7px),
-    radial-gradient(circle at 100% 50%, rgba(180, 230, 255, 0.9) 0 2.5px, rgba(58, 168, 255, 0.6) 2.5px 5px, transparent 7px),
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(180, 230, 255, 0.95) 0 3px,
+      rgba(58, 168, 255, 0.7) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(180, 230, 255, 0.95) 0 3px,
+      rgba(58, 168, 255, 0.7) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(180, 230, 255, 0.9) 0 2.5px,
+      rgba(58, 168, 255, 0.6) 2.5px 5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 100% 50%,
+      rgba(180, 230, 255, 0.9) 0 2.5px,
+      rgba(58, 168, 255, 0.6) 2.5px 5px,
+      transparent 7px
+    ),
     /* Corner star pinpoints */
-    radial-gradient(circle at 6% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 94% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 6% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 94% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
+    radial-gradient(
+        circle at 6% 6%,
+        rgba(255, 230, 160, 0.85) 0 1.5px,
+        transparent 2.5px
+      ),
+    radial-gradient(
+      circle at 94% 6%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 6% 94%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 94% 94%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
     /* Soft vertical light wash */
-    linear-gradient(180deg, transparent 0%, rgba(92, 220, 255, 0.06) 50%, transparent 100%);
+    linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(92, 220, 255, 0.06) 50%,
+        transparent 100%
+      );
   filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.55));
 }
 
@@ -2861,7 +3766,8 @@
      the helm and shoulders stay framed when the stage is tall. */
   object-fit: cover;
   object-position: center 32%;
-  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45)) drop-shadow(0 0 44px rgba(255, 209, 93, 0.16));
+  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45))
+    drop-shadow(0 0 44px rgba(255, 209, 93, 0.16));
 }
 
 .race-profile.theme-protoss .race-stage::after {
@@ -2875,7 +3781,12 @@
   height: 12%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(58, 168, 255, 0.5), rgba(58, 168, 255, 0.12) 50%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(58, 168, 255, 0.5),
+    rgba(58, 168, 255, 0.12) 50%,
+    transparent 70%
+  );
   filter: blur(2px);
   z-index: 1;
   pointer-events: none;
@@ -2908,7 +3819,12 @@
   display: block;
   width: 12px;
   height: 12px;
-  background: radial-gradient(circle at 50% 35%, rgba(180, 230, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.75) 35% 60%, rgba(22, 100, 200, 0.7) 70% 100%);
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(180, 230, 255, 0.95) 0 30%,
+    rgba(58, 168, 255, 0.75) 35% 60%,
+    rgba(22, 100, 200, 0.7) 70% 100%
+  );
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   box-shadow: 0 0 10px rgba(58, 168, 255, 0.7);
 }
@@ -2934,7 +3850,11 @@
 .race-profile.theme-protoss .race-tab[data-active="true"] {
   border-color: var(--protoss-gold);
   color: var(--protoss-gold-soft);
-  background: linear-gradient(180deg, rgba(50, 32, 8, 0.92), rgba(8, 22, 44, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(50, 32, 8, 0.92),
+    rgba(8, 22, 44, 0.95)
+  );
   box-shadow:
     0 0 12px rgba(255, 209, 93, 0.4),
     inset 0 0 14px rgba(92, 220, 255, 0.25);
@@ -2953,13 +3873,36 @@
   margin-right: 6px;
   vertical-align: middle;
   background: var(--protoss-cyan);
-  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  clip-path: polygon(
+    50% 0%,
+    70% 12%,
+    70% 32%,
+    50% 42%,
+    30% 32%,
+    30% 12%,
+    50% 0%,
+    100% 60%,
+    100% 100%,
+    0% 100%,
+    0% 60%
+  );
   filter: drop-shadow(0 0 5px rgba(92, 220, 255, 0.6));
 }
 
 .race-profile.theme-protoss .identity-icon[data-icon="mmr"] {
   background: var(--protoss-orange);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
 }
 
@@ -3008,7 +3951,11 @@
   text-shadow:
     0 0 10px rgba(255, 154, 47, 0.45),
     0 0 22px rgba(255, 154, 47, 0.18);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -3054,7 +4001,15 @@
   border: 1px solid rgba(220, 180, 80, 0.55);
   background:
     /* Hazard stripe corner accent */
-    linear-gradient(135deg, transparent 0 80%, rgba(92, 220, 255, 0.45) 80% 86%, transparent 86% 92%, rgba(92, 220, 255, 0.45) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(92, 220, 255, 0.45) 80% 86%,
+        transparent 86% 92%,
+        rgba(92, 220, 255, 0.45) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 40, 70, 0.65), rgba(6, 14, 26, 0.95));
   box-shadow:
@@ -3090,21 +4045,42 @@
 .race-profile.theme-protoss .profile-stat-cards .stat-card.encounters {
   border-color: rgba(92, 220, 255, 0.55);
 }
-.race-profile.theme-protoss .profile-stat-cards .stat-card.encounters .stat-value {
+.race-profile.theme-protoss
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-value {
   color: var(--protoss-cyan-soft);
 }
-.race-profile.theme-protoss .profile-stat-cards .stat-card.encounters .stat-icon {
+.race-profile.theme-protoss
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-icon {
   background:
-    radial-gradient(circle at 50% 50%, transparent 32%, var(--protoss-cyan) 32% 40%, transparent 41%),
-    linear-gradient(90deg, var(--protoss-cyan) 0 100%) center / 100% 2px no-repeat,
-    linear-gradient(180deg, var(--protoss-cyan) 0 100%) center / 2px 100% no-repeat;
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 32%,
+      var(--protoss-cyan) 32% 40%,
+      transparent 41%
+    ),
+    linear-gradient(90deg, var(--protoss-cyan) 0 100%) center / 100% 2px
+      no-repeat,
+    linear-gradient(180deg, var(--protoss-cyan) 0 100%) center / 2px 100%
+      no-repeat;
   filter: drop-shadow(0 0 6px rgba(92, 220, 255, 0.55));
 }
 
 .race-profile.theme-protoss .profile-stat-cards .stat-card.wins {
   border-color: rgba(135, 255, 55, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 209, 93, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 209, 93, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
 }
@@ -3116,14 +4092,37 @@
 }
 .race-profile.theme-protoss .profile-stat-cards .stat-card.wins .stat-icon {
   background: var(--protoss-green);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    60% 80%,
+    60% 100%,
+    40% 100%,
+    40% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
 }
 
 .race-profile.theme-protoss .profile-stat-cards .stat-card.losses {
   border-color: rgba(255, 97, 96, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 209, 93, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 209, 93, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
 }
@@ -3136,11 +4135,34 @@
 .race-profile.theme-protoss .profile-stat-cards .stat-card.losses .stat-icon {
   position: relative;
   background:
-    radial-gradient(circle at 50% 38%, var(--protoss-red) 0 30%, transparent 32%),
-    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
-    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(
+      circle at 50% 38%,
+      var(--protoss-red) 0 30%,
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 36% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
+    radial-gradient(
+      circle at 64% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
     linear-gradient(180deg, var(--protoss-red), rgba(120, 30, 30, 0.85));
-  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  clip-path: polygon(
+    20% 0,
+    80% 0,
+    100% 30%,
+    90% 70%,
+    65% 75%,
+    65% 100%,
+    35% 100%,
+    35% 75%,
+    10% 70%,
+    0 30%
+  );
   filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
 }
 
@@ -3152,8 +4174,16 @@
   border: 1px solid rgba(220, 180, 80, 0.55);
   border-radius: 5px;
   background:
-    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
-    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(92, 220, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(92, 220, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
     linear-gradient(180deg, rgba(14, 28, 50, 0.85), rgba(4, 12, 22, 0.95));
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.6),
@@ -3203,17 +4233,57 @@
 
 .race-profile.theme-protoss .bar-row:nth-of-type(1) .bar-label::before {
   color: #ff7575;
-  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+  clip-path: polygon(
+    40% 0%,
+    100% 0%,
+    65% 45%,
+    95% 45%,
+    30% 100%,
+    55% 60%,
+    25% 60%
+  );
 }
 
 .race-profile.theme-protoss .bar-row:nth-of-type(2) .bar-label::before {
   color: var(--protoss-gold);
-  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+  clip-path: polygon(
+    46% 0%,
+    54% 0%,
+    54% 12%,
+    80% 18%,
+    80% 32%,
+    30% 32%,
+    30% 46%,
+    80% 50%,
+    80% 80%,
+    54% 86%,
+    54% 100%,
+    46% 100%,
+    46% 86%,
+    20% 80%,
+    20% 66%,
+    70% 66%,
+    70% 52%,
+    20% 48%,
+    20% 18%,
+    46% 12%
+  );
 }
 
 .race-profile.theme-protoss .bar-row:nth-of-type(3) .bar-label::before {
   color: #b968ff;
-  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+  clip-path: polygon(
+    0 70%,
+    25% 40%,
+    45% 60%,
+    70% 20%,
+    100% 20%,
+    100% 35%,
+    75% 35%,
+    50% 80%,
+    30% 60%,
+    5% 90%
+  );
 }
 
 .race-profile.theme-protoss .progress-track {
@@ -3233,11 +4303,7 @@
     #000 0 11px,
     transparent 11px 13px
   );
-          mask: repeating-linear-gradient(
-            90deg,
-            #000 0 11px,
-            transparent 11px 13px
-          );
+  mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 13px);
 }
 
 .race-profile.theme-protoss .progress-track::before {
@@ -3259,7 +4325,11 @@
 }
 
 .race-profile.theme-protoss .progress-fill.economy {
-  background-image: linear-gradient(90deg, var(--protoss-gold), var(--protoss-green));
+  background-image: linear-gradient(
+    90deg,
+    var(--protoss-gold),
+    var(--protoss-green)
+  );
   box-shadow: 0 0 10px rgba(255, 209, 93, 0.5);
 }
 
@@ -3304,26 +4374,24 @@
 
 .race-profile.theme-protoss .tag-chip {
   position: relative;
-  min-height: 22px;
-  padding: 0 4px 0 14px;
+  min-height: 20px;
+  padding: 0 0 0 9px;
   border-radius: 4px;
   border: 1px solid rgba(220, 180, 80, 0.6);
-  background:
-    linear-gradient(180deg, rgba(40, 28, 8, 0.85), rgba(10, 24, 44, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(40, 28, 8, 0.85),
+    rgba(10, 24, 44, 0.95)
+  );
   color: var(--protoss-gold-soft);
-  font-size: 0.68rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.7),
     inset 0 0 10px rgba(92, 220, 255, 0.18),
     0 0 8px rgba(255, 209, 93, 0.18);
-  clip-path: polygon(
-    8% 0%, 92% 0%,
-    100% 50%,
-    92% 100%, 8% 100%,
-    0% 50%
-  );
+  clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
 }
 
 /* Profile meta row */
@@ -3370,8 +4438,12 @@
   border-radius: 5px;
   border: 2px solid rgba(220, 180, 80, 0.85);
   background:
-    /* Inner sapphire wash */
-    radial-gradient(ellipse at 50% 50%, rgba(92, 220, 255, 0.6), rgba(22, 100, 200, 0.85) 60%, rgba(8, 22, 44, 1) 100%);
+    /* Inner sapphire wash */ radial-gradient(
+    ellipse at 50% 50%,
+    rgba(92, 220, 255, 0.6),
+    rgba(22, 100, 200, 0.85) 60%,
+    rgba(8, 22, 44, 1) 100%
+  );
   box-shadow:
     inset 0 0 0 1px rgba(255, 230, 160, 0.45),
     inset 0 0 20px rgba(180, 230, 255, 0.18),
@@ -3396,7 +4468,12 @@
   width: 16px;
   height: 16px;
   transform: translateY(-50%) rotate(45deg);
-  background: radial-gradient(circle at 50% 30%, rgba(220, 245, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.7) 35% 65%, rgba(22, 100, 200, 0.7) 70% 100%);
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(220, 245, 255, 0.95) 0 30%,
+    rgba(58, 168, 255, 0.7) 35% 65%,
+    rgba(22, 100, 200, 0.7) 70% 100%
+  );
   filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.85));
 }
 
@@ -3442,9 +4519,21 @@
   border: none;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 12% 10%, rgba(92, 220, 255, 0.14), transparent 38%),
-    radial-gradient(circle at 88% 90%, rgba(185, 104, 255, 0.12), transparent 42%),
-    radial-gradient(circle at 50% 50%, rgba(58, 168, 255, 0.06), transparent 60%),
+    radial-gradient(
+      circle at 12% 10%,
+      rgba(92, 220, 255, 0.14),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 88% 90%,
+      rgba(185, 104, 255, 0.12),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(58, 168, 255, 0.06),
+      transparent 60%
+    ),
     linear-gradient(140deg, rgba(18, 18, 50, 0.85), rgba(6, 8, 22, 0.97));
   box-shadow:
     inset 0 0 0 2px rgba(220, 180, 80, 0.85),
@@ -3471,10 +4560,30 @@
     inset 0 0 80px rgba(58, 168, 255, 0.05),
     0 0 6px rgba(220, 180, 80, 0.35);
   background:
-    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 100% 0%, rgba(220, 180, 255, 0.95) 0 4px, rgba(185, 104, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 0% 100%, rgba(220, 180, 255, 0.95) 0 4px, rgba(185, 104, 255, 0.75) 4px 8px, transparent 11px),
-    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.95) 0 4px, rgba(58, 168, 255, 0.75) 4px 8px, transparent 11px);
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(220, 180, 255, 0.95) 0 4px,
+      rgba(185, 104, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(220, 180, 255, 0.95) 0 4px,
+      rgba(185, 104, 255, 0.75) 4px 8px,
+      transparent 11px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(180, 230, 255, 0.95) 0 4px,
+      rgba(58, 168, 255, 0.75) 4px 8px,
+      transparent 11px
+    );
   filter: drop-shadow(0 0 6px rgba(140, 130, 240, 0.7));
 }
 
@@ -3487,10 +4596,30 @@
   pointer-events: none;
   border-radius: 8px;
   background:
-    radial-gradient(circle at 50% 6px, rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at 50% calc(100% - 6px), rgba(180, 230, 255, 0.9) 0 3px, rgba(58, 168, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at 6px 50%, rgba(220, 180, 255, 0.9) 0 3px, rgba(185, 104, 255, 0.65) 3px 6px, transparent 8px),
-    radial-gradient(circle at calc(100% - 6px) 50%, rgba(220, 180, 255, 0.9) 0 3px, rgba(185, 104, 255, 0.65) 3px 6px, transparent 8px);
+    radial-gradient(
+      circle at 50% 6px,
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 50% calc(100% - 6px),
+      rgba(180, 230, 255, 0.9) 0 3px,
+      rgba(58, 168, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 6px 50%,
+      rgba(220, 180, 255, 0.9) 0 3px,
+      rgba(185, 104, 255, 0.65) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at calc(100% - 6px) 50%,
+      rgba(220, 180, 255, 0.9) 0 3px,
+      rgba(185, 104, 255, 0.65) 3px 6px,
+      transparent 8px
+    );
   filter: drop-shadow(0 0 8px rgba(120, 130, 240, 0.8));
   z-index: -1;
 }
@@ -3505,9 +4634,26 @@
   border: 1px solid rgba(220, 180, 80, 0.45);
   border-radius: 5px;
   background:
-    linear-gradient(90deg, transparent 0 92%, rgba(185, 104, 255, 0.05) 92% 92.4%, transparent 92.4% 94%, rgba(92, 220, 255, 0.05) 94% 94.4%, transparent 94.4% 96%, rgba(185, 104, 255, 0.05) 96% 96.4%, transparent),
-    radial-gradient(circle at 12% 0%, rgba(92, 220, 255, 0.12), transparent 40%),
-    radial-gradient(circle at 100% 100%, rgba(185, 104, 255, 0.08), transparent 40%),
+    linear-gradient(
+      90deg,
+      transparent 0 92%,
+      rgba(185, 104, 255, 0.05) 92% 92.4%,
+      transparent 92.4% 94%,
+      rgba(92, 220, 255, 0.05) 94% 94.4%,
+      transparent 94.4% 96%,
+      rgba(185, 104, 255, 0.05) 96% 96.4%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 12% 0%,
+      rgba(92, 220, 255, 0.12),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(185, 104, 255, 0.08),
+      transparent 40%
+    ),
     linear-gradient(180deg, rgba(16, 14, 44, 0.95), rgba(6, 6, 22, 0.97));
   box-shadow:
     inset 0 0 0 1px rgba(255, 220, 130, 0.25),
@@ -3525,10 +4671,26 @@
   border: 1px solid rgba(220, 180, 80, 0.35);
   box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.55);
   background:
-    radial-gradient(circle at 0% 0%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 100% 0%, rgba(220, 180, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 0% 100%, rgba(220, 180, 255, 0.7) 0 2px, transparent 4px),
-    radial-gradient(circle at 100% 100%, rgba(180, 230, 255, 0.7) 0 2px, transparent 4px);
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(220, 180, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(220, 180, 255, 0.7) 0 2px,
+      transparent 4px
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(180, 230, 255, 0.7) 0 2px,
+      transparent 4px
+    );
   filter: drop-shadow(0 0 5px rgba(120, 130, 240, 0.7));
 }
 
@@ -3580,26 +4742,82 @@
   border-radius: 4px;
   overflow: hidden;
   clip-path: polygon(
-    5% 0%, 95% 0%,
-    100% 5%, 100% 95%,
-    95% 100%, 5% 100%,
-    0% 95%, 0% 5%
+    5% 0%,
+    95% 0%,
+    100% 5%,
+    100% 95%,
+    95% 100%,
+    5% 100%,
+    0% 95%,
+    0% 5%
   );
   background:
     /* Outer violet ring */
-    radial-gradient(circle at 50% 50%, transparent 44%, rgba(185, 104, 255, 0.16) 44%, rgba(185, 104, 255, 0.16) 44.4%, transparent 45%),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 44%,
+      rgba(185, 104, 255, 0.16) 44%,
+      rgba(185, 104, 255, 0.16) 44.4%,
+      transparent 45%
+    ),
     /* Gold ring */
-    radial-gradient(circle at 50% 50%, transparent 38%, rgba(255, 209, 93, 0.16) 38%, rgba(255, 209, 93, 0.16) 38.4%, transparent 39%),
+    radial-gradient(
+        circle at 50% 50%,
+        transparent 38%,
+        rgba(255, 209, 93, 0.16) 38%,
+        rgba(255, 209, 93, 0.16) 38.4%,
+        transparent 39%
+      ),
     /* Cyan rings */
-    radial-gradient(circle at 50% 50%, transparent 26%, rgba(92, 220, 255, 0.18) 26%, rgba(92, 220, 255, 0.18) 26.4%, transparent 27%),
-    radial-gradient(circle at 50% 50%, transparent 16%, rgba(92, 220, 255, 0.14) 16%, rgba(92, 220, 255, 0.14) 16.4%, transparent 17%),
-    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(90deg, rgba(92, 220, 255, 0.05) 0 1px, transparent 1px 22px),
-    radial-gradient(circle at 18% 22%, rgba(180, 230, 255, 0.3) 0 1px, transparent 2px),
-    radial-gradient(circle at 80% 68%, rgba(220, 180, 255, 0.24) 0 1px, transparent 2px),
-    radial-gradient(circle at 26% 78%, rgba(180, 230, 255, 0.22) 0 1px, transparent 2px),
-    radial-gradient(circle at 76% 18%, rgba(220, 180, 255, 0.22) 0 1px, transparent 2px),
-    radial-gradient(circle at 50% 60%, rgba(58, 168, 255, 0.22), transparent 60%),
+    radial-gradient(
+        circle at 50% 50%,
+        transparent 26%,
+        rgba(92, 220, 255, 0.18) 26%,
+        rgba(92, 220, 255, 0.18) 26.4%,
+        transparent 27%
+      ),
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 16%,
+      rgba(92, 220, 255, 0.14) 16%,
+      rgba(92, 220, 255, 0.14) 16.4%,
+      transparent 17%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(92, 220, 255, 0.05) 0 1px,
+      transparent 1px 22px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(92, 220, 255, 0.05) 0 1px,
+      transparent 1px 22px
+    ),
+    radial-gradient(
+      circle at 18% 22%,
+      rgba(180, 230, 255, 0.3) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 80% 68%,
+      rgba(220, 180, 255, 0.24) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 26% 78%,
+      rgba(180, 230, 255, 0.22) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 76% 18%,
+      rgba(220, 180, 255, 0.22) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 50% 60%,
+      rgba(58, 168, 255, 0.22),
+      transparent 60%
+    ),
     radial-gradient(circle at 50% 50%, rgba(12, 14, 38, 1), rgba(2, 4, 14, 1));
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.85),
@@ -3615,8 +4833,20 @@
   pointer-events: none;
   z-index: 3;
   background:
-    linear-gradient(90deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%),
-    linear-gradient(180deg, transparent 49.6%, rgba(92, 220, 255, 0.18) 49.8%, rgba(92, 220, 255, 0.18) 50.2%, transparent 50.4%);
+    linear-gradient(
+      90deg,
+      transparent 49.6%,
+      rgba(92, 220, 255, 0.18) 49.8%,
+      rgba(92, 220, 255, 0.18) 50.2%,
+      transparent 50.4%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 49.6%,
+      rgba(92, 220, 255, 0.18) 49.8%,
+      rgba(92, 220, 255, 0.18) 50.2%,
+      transparent 50.4%
+    );
 }
 
 .race-profile.theme-random .race-stage-frame::before {
@@ -3626,10 +4856,14 @@
   pointer-events: none;
   border: 1px solid rgba(220, 180, 80, 0.7);
   clip-path: polygon(
-    5% 0%, 95% 0%,
-    100% 6%, 100% 94%,
-    95% 100%, 5% 100%,
-    0% 94%, 0% 6%
+    5% 0%,
+    95% 0%,
+    100% 6%,
+    100% 94%,
+    95% 100%,
+    5% 100%,
+    0% 94%,
+    0% 6%
   );
   box-shadow:
     inset 0 0 0 1px rgba(8, 14, 26, 0.9),
@@ -3644,15 +4878,56 @@
   pointer-events: none;
   background:
     /* Mid-edge gems: cyan top/bottom, violet sides */
-    radial-gradient(circle at 50% 0%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
-    radial-gradient(circle at 50% 100%, rgba(180, 230, 255, 0.95) 0 3px, rgba(58, 168, 255, 0.7) 3px 6px, transparent 8px),
-    radial-gradient(circle at 0% 50%, rgba(220, 180, 255, 0.9) 0 2.5px, rgba(185, 104, 255, 0.6) 2.5px 5px, transparent 7px),
-    radial-gradient(circle at 100% 50%, rgba(220, 180, 255, 0.9) 0 2.5px, rgba(185, 104, 255, 0.6) 2.5px 5px, transparent 7px),
-    radial-gradient(circle at 6% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 94% 6%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 6% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    radial-gradient(circle at 94% 94%, rgba(255, 230, 160, 0.85) 0 1.5px, transparent 2.5px),
-    linear-gradient(180deg, transparent 0%, rgba(92, 220, 255, 0.06) 50%, transparent 100%);
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(180, 230, 255, 0.95) 0 3px,
+      rgba(58, 168, 255, 0.7) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(180, 230, 255, 0.95) 0 3px,
+      rgba(58, 168, 255, 0.7) 3px 6px,
+      transparent 8px
+    ),
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(220, 180, 255, 0.9) 0 2.5px,
+      rgba(185, 104, 255, 0.6) 2.5px 5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 100% 50%,
+      rgba(220, 180, 255, 0.9) 0 2.5px,
+      rgba(185, 104, 255, 0.6) 2.5px 5px,
+      transparent 7px
+    ),
+    radial-gradient(
+      circle at 6% 6%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 94% 6%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 6% 94%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    radial-gradient(
+      circle at 94% 94%,
+      rgba(255, 230, 160, 0.85) 0 1.5px,
+      transparent 2.5px
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(92, 220, 255, 0.06) 50%,
+      transparent 100%
+    );
   filter: drop-shadow(0 0 8px rgba(120, 130, 240, 0.55));
 }
 
@@ -3667,7 +4942,8 @@
   margin: 0;
   object-fit: cover;
   object-position: center 38%;
-  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45)) drop-shadow(0 0 44px rgba(185, 104, 255, 0.22));
+  filter: drop-shadow(0 0 22px rgba(58, 168, 255, 0.45))
+    drop-shadow(0 0 44px rgba(185, 104, 255, 0.22));
 }
 
 .race-profile.theme-random .race-stage::after {
@@ -3679,7 +4955,12 @@
   height: 12%;
   transform: translateX(-50%);
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(58, 168, 255, 0.5), rgba(185, 104, 255, 0.2) 50%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(58, 168, 255, 0.5),
+    rgba(185, 104, 255, 0.2) 50%,
+    transparent 70%
+  );
   filter: blur(2px);
   z-index: 1;
   pointer-events: none;
@@ -3711,7 +4992,12 @@
   display: block;
   width: 12px;
   height: 12px;
-  background: radial-gradient(circle at 50% 35%, rgba(220, 230, 255, 0.95) 0 30%, rgba(120, 150, 240, 0.78) 35% 60%, rgba(58, 50, 160, 0.7) 70% 100%);
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(220, 230, 255, 0.95) 0 30%,
+    rgba(120, 150, 240, 0.78) 35% 60%,
+    rgba(58, 50, 160, 0.7) 70% 100%
+  );
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   box-shadow: 0 0 10px rgba(120, 130, 240, 0.7);
 }
@@ -3737,7 +5023,11 @@
 .race-profile.theme-random .race-tab[data-active="true"] {
   border-color: var(--random-gold);
   color: var(--random-gold-soft);
-  background: linear-gradient(180deg, rgba(50, 32, 8, 0.92), rgba(20, 16, 50, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(50, 32, 8, 0.92),
+    rgba(20, 16, 50, 0.95)
+  );
   box-shadow:
     0 0 12px rgba(255, 209, 93, 0.4),
     inset 0 0 14px rgba(185, 104, 255, 0.25);
@@ -3756,13 +5046,36 @@
   margin-right: 6px;
   vertical-align: middle;
   background: var(--random-cyan);
-  clip-path: polygon(50% 0%, 70% 12%, 70% 32%, 50% 42%, 30% 32%, 30% 12%, 50% 0%, 100% 60%, 100% 100%, 0% 100%, 0% 60%);
+  clip-path: polygon(
+    50% 0%,
+    70% 12%,
+    70% 32%,
+    50% 42%,
+    30% 32%,
+    30% 12%,
+    50% 0%,
+    100% 60%,
+    100% 100%,
+    0% 100%,
+    0% 60%
+  );
   filter: drop-shadow(0 0 5px rgba(92, 220, 255, 0.6));
 }
 
 .race-profile.theme-random .identity-icon[data-icon="mmr"] {
   background: var(--random-orange);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 5px rgba(255, 154, 47, 0.55));
 }
 
@@ -3811,7 +5124,11 @@
   text-shadow:
     0 0 10px rgba(255, 154, 47, 0.45),
     0 0 22px rgba(255, 154, 47, 0.18);
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
   letter-spacing: 0.04em;
 }
 
@@ -3856,7 +5173,15 @@
   border-radius: 5px;
   border: 1px solid rgba(220, 180, 80, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(185, 104, 255, 0.45) 80% 86%, transparent 86% 92%, rgba(185, 104, 255, 0.45) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(185, 104, 255, 0.45) 80% 86%,
+        transparent 86% 92%,
+        rgba(185, 104, 255, 0.45) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 22, 60, 0.65), rgba(6, 8, 22, 0.95));
   box-shadow:
@@ -3892,21 +5217,42 @@
 .race-profile.theme-random .profile-stat-cards .stat-card.encounters {
   border-color: rgba(92, 220, 255, 0.55);
 }
-.race-profile.theme-random .profile-stat-cards .stat-card.encounters .stat-value {
+.race-profile.theme-random
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-value {
   color: var(--random-cyan-soft);
 }
-.race-profile.theme-random .profile-stat-cards .stat-card.encounters .stat-icon {
+.race-profile.theme-random
+  .profile-stat-cards
+  .stat-card.encounters
+  .stat-icon {
   background:
-    radial-gradient(circle at 50% 50%, transparent 32%, var(--random-cyan) 32% 40%, transparent 41%),
-    linear-gradient(90deg, var(--random-cyan) 0 100%) center / 100% 2px no-repeat,
-    linear-gradient(180deg, var(--random-cyan) 0 100%) center / 2px 100% no-repeat;
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 32%,
+      var(--random-cyan) 32% 40%,
+      transparent 41%
+    ),
+    linear-gradient(90deg, var(--random-cyan) 0 100%) center / 100% 2px
+      no-repeat,
+    linear-gradient(180deg, var(--random-cyan) 0 100%) center / 2px 100%
+      no-repeat;
   filter: drop-shadow(0 0 6px rgba(92, 220, 255, 0.55));
 }
 
 .race-profile.theme-random .profile-stat-cards .stat-card.wins {
   border-color: rgba(135, 255, 55, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 209, 93, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 209, 93, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(116, 255, 45, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(20, 50, 18, 0.55), rgba(8, 14, 8, 0.95));
 }
@@ -3918,14 +5264,37 @@
 }
 .race-profile.theme-random .profile-stat-cards .stat-card.wins .stat-icon {
   background: var(--random-green);
-  clip-path: polygon(20% 0%, 80% 0%, 80% 30%, 100% 30%, 80% 60%, 80% 80%, 60% 80%, 60% 100%, 40% 100%, 40% 80%, 20% 80%, 20% 60%, 0% 30%, 20% 30%);
+  clip-path: polygon(
+    20% 0%,
+    80% 0%,
+    80% 30%,
+    100% 30%,
+    80% 60%,
+    80% 80%,
+    60% 80%,
+    60% 100%,
+    40% 100%,
+    40% 80%,
+    20% 80%,
+    20% 60%,
+    0% 30%,
+    20% 30%
+  );
   filter: drop-shadow(0 0 6px rgba(135, 255, 55, 0.55));
 }
 
 .race-profile.theme-random .profile-stat-cards .stat-card.losses {
   border-color: rgba(255, 97, 96, 0.55);
   background:
-    linear-gradient(135deg, transparent 0 80%, rgba(255, 209, 93, 0.5) 80% 86%, transparent 86% 92%, rgba(255, 209, 93, 0.5) 92% 96%, transparent 96%) bottom right / 20px 20px no-repeat,
+    linear-gradient(
+        135deg,
+        transparent 0 80%,
+        rgba(255, 209, 93, 0.5) 80% 86%,
+        transparent 86% 92%,
+        rgba(255, 209, 93, 0.5) 92% 96%,
+        transparent 96%
+      )
+      bottom right / 20px 20px no-repeat,
     radial-gradient(circle at 0% 0%, rgba(255, 80, 80, 0.16), transparent 55%),
     linear-gradient(180deg, rgba(60, 18, 18, 0.55), rgba(15, 6, 6, 0.95));
 }
@@ -3938,11 +5307,34 @@
 .race-profile.theme-random .profile-stat-cards .stat-card.losses .stat-icon {
   position: relative;
   background:
-    radial-gradient(circle at 50% 38%, var(--random-red) 0 30%, transparent 32%),
-    radial-gradient(circle at 36% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
-    radial-gradient(circle at 64% 38%, rgba(8, 0, 0, 0.95) 0 8%, transparent 9%),
+    radial-gradient(
+      circle at 50% 38%,
+      var(--random-red) 0 30%,
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 36% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
+    radial-gradient(
+      circle at 64% 38%,
+      rgba(8, 0, 0, 0.95) 0 8%,
+      transparent 9%
+    ),
     linear-gradient(180deg, var(--random-red), rgba(120, 30, 30, 0.85));
-  clip-path: polygon(20% 0, 80% 0, 100% 30%, 90% 70%, 65% 75%, 65% 100%, 35% 100%, 35% 75%, 10% 70%, 0 30%);
+  clip-path: polygon(
+    20% 0,
+    80% 0,
+    100% 30%,
+    90% 70%,
+    65% 75%,
+    65% 100%,
+    35% 100%,
+    35% 75%,
+    10% 70%,
+    0 30%
+  );
   filter: drop-shadow(0 0 6px rgba(255, 97, 96, 0.55));
 }
 
@@ -3954,8 +5346,16 @@
   border: 1px solid rgba(220, 180, 80, 0.55);
   border-radius: 5px;
   background:
-    repeating-linear-gradient(0deg, rgba(92, 220, 255, 0.04) 0 1px, transparent 1px 24px),
-    repeating-linear-gradient(90deg, rgba(185, 104, 255, 0.04) 0 1px, transparent 1px 24px),
+    repeating-linear-gradient(
+      0deg,
+      rgba(92, 220, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(185, 104, 255, 0.04) 0 1px,
+      transparent 1px 24px
+    ),
     linear-gradient(180deg, rgba(16, 18, 50, 0.85), rgba(4, 6, 22, 0.95));
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.6),
@@ -4005,17 +5405,57 @@
 
 .race-profile.theme-random .bar-row:nth-of-type(1) .bar-label::before {
   color: #ff7575;
-  clip-path: polygon(40% 0%, 100% 0%, 65% 45%, 95% 45%, 30% 100%, 55% 60%, 25% 60%);
+  clip-path: polygon(
+    40% 0%,
+    100% 0%,
+    65% 45%,
+    95% 45%,
+    30% 100%,
+    55% 60%,
+    25% 60%
+  );
 }
 
 .race-profile.theme-random .bar-row:nth-of-type(2) .bar-label::before {
   color: var(--random-gold);
-  clip-path: polygon(46% 0%, 54% 0%, 54% 12%, 80% 18%, 80% 32%, 30% 32%, 30% 46%, 80% 50%, 80% 80%, 54% 86%, 54% 100%, 46% 100%, 46% 86%, 20% 80%, 20% 66%, 70% 66%, 70% 52%, 20% 48%, 20% 18%, 46% 12%);
+  clip-path: polygon(
+    46% 0%,
+    54% 0%,
+    54% 12%,
+    80% 18%,
+    80% 32%,
+    30% 32%,
+    30% 46%,
+    80% 50%,
+    80% 80%,
+    54% 86%,
+    54% 100%,
+    46% 100%,
+    46% 86%,
+    20% 80%,
+    20% 66%,
+    70% 66%,
+    70% 52%,
+    20% 48%,
+    20% 18%,
+    46% 12%
+  );
 }
 
 .race-profile.theme-random .bar-row:nth-of-type(3) .bar-label::before {
   color: var(--random-violet);
-  clip-path: polygon(0 70%, 25% 40%, 45% 60%, 70% 20%, 100% 20%, 100% 35%, 75% 35%, 50% 80%, 30% 60%, 5% 90%);
+  clip-path: polygon(
+    0 70%,
+    25% 40%,
+    45% 60%,
+    70% 20%,
+    100% 20%,
+    100% 35%,
+    75% 35%,
+    50% 80%,
+    30% 60%,
+    5% 90%
+  );
 }
 
 .race-profile.theme-random .progress-track {
@@ -4035,11 +5475,7 @@
     #000 0 11px,
     transparent 11px 13px
   );
-          mask: repeating-linear-gradient(
-            90deg,
-            #000 0 11px,
-            transparent 11px 13px
-          );
+  mask: repeating-linear-gradient(90deg, #000 0 11px, transparent 11px 13px);
 }
 
 .race-profile.theme-random .progress-track::before {
@@ -4061,12 +5497,20 @@
 }
 
 .race-profile.theme-random .progress-fill.economy {
-  background-image: linear-gradient(90deg, var(--random-gold), var(--random-green));
+  background-image: linear-gradient(
+    90deg,
+    var(--random-gold),
+    var(--random-green)
+  );
   box-shadow: 0 0 10px rgba(255, 209, 93, 0.5);
 }
 
 .race-profile.theme-random .progress-fill.unpredictable {
-  background-image: linear-gradient(90deg, var(--random-violet), var(--random-violet-soft));
+  background-image: linear-gradient(
+    90deg,
+    var(--random-violet),
+    var(--random-violet-soft)
+  );
   box-shadow: 0 0 10px rgba(185, 104, 255, 0.55);
 }
 
@@ -4106,26 +5550,24 @@
 
 .race-profile.theme-random .tag-chip {
   position: relative;
-  min-height: 22px;
-  padding: 0 4px 0 14px;
+  min-height: 20px;
+  padding: 0 0 0 9px;
   border-radius: 4px;
   border: 1px solid rgba(220, 180, 80, 0.6);
-  background:
-    linear-gradient(180deg, rgba(40, 28, 8, 0.85), rgba(16, 16, 50, 0.95));
+  background: linear-gradient(
+    180deg,
+    rgba(40, 28, 8, 0.85),
+    rgba(16, 16, 50, 0.95)
+  );
   color: var(--random-gold-soft);
-  font-size: 0.68rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   box-shadow:
     inset 0 0 0 1px rgba(80, 50, 14, 0.7),
     inset 0 0 10px rgba(185, 104, 255, 0.18),
     0 0 8px rgba(255, 209, 93, 0.18);
-  clip-path: polygon(
-    8% 0%, 92% 0%,
-    100% 50%,
-    92% 100%, 8% 100%,
-    0% 50%
-  );
+  clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
 }
 
 /* Profile meta row */
@@ -4143,7 +5585,11 @@
   border-radius: 4px;
   background:
     radial-gradient(circle at 0% 0%, rgba(92, 220, 255, 0.08), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(185, 104, 255, 0.06), transparent 55%),
+    radial-gradient(
+      circle at 100% 100%,
+      rgba(185, 104, 255, 0.06),
+      transparent 55%
+    ),
     linear-gradient(180deg, rgba(16, 20, 50, 0.85), rgba(4, 6, 18, 0.95));
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
@@ -4172,8 +5618,12 @@
   min-height: 44px;
   border-radius: 5px;
   border: 2px solid rgba(220, 180, 80, 0.85);
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(92, 220, 255, 0.6), rgba(22, 100, 200, 0.85) 60%, rgba(8, 14, 44, 1) 100%);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(92, 220, 255, 0.6),
+    rgba(22, 100, 200, 0.85) 60%,
+    rgba(8, 14, 44, 1) 100%
+  );
   box-shadow:
     inset 0 0 0 1px rgba(255, 230, 160, 0.45),
     inset 0 0 20px rgba(180, 230, 255, 0.18),
@@ -4198,7 +5648,12 @@
   width: 16px;
   height: 16px;
   transform: translateY(-50%) rotate(45deg);
-  background: radial-gradient(circle at 50% 30%, rgba(220, 245, 255, 0.95) 0 30%, rgba(58, 168, 255, 0.7) 35% 65%, rgba(22, 100, 200, 0.7) 70% 100%);
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(220, 245, 255, 0.95) 0 30%,
+    rgba(58, 168, 255, 0.7) 35% 65%,
+    rgba(22, 100, 200, 0.7) 70% 100%
+  );
   filter: drop-shadow(0 0 8px rgba(58, 168, 255, 0.85));
 }
 
@@ -4298,7 +5753,6 @@
   }
 }
 
-
 .profile-notes-button {
   position: absolute;
   top: 72px;
@@ -4313,7 +5767,11 @@
   padding: 0 14px;
   border: 1px solid var(--race-panel-border);
   border-radius: 4px;
-  background: linear-gradient(180deg, rgba(6, 15, 28, 0.92), rgba(4, 9, 16, 0.96));
+  background: linear-gradient(
+    180deg,
+    rgba(6, 15, 28, 0.92),
+    rgba(4, 9, 16, 0.96)
+  );
   color: #eef8ff;
   font-size: 0.68rem;
   font-weight: 800;
@@ -4339,7 +5797,11 @@
   height: 20px;
   place-items: center;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--race-primary) 28%, rgba(5, 10, 18, 0.92));
+  background: color-mix(
+    in srgb,
+    var(--race-primary) 28%,
+    rgba(5, 10, 18, 0.92)
+  );
   color: #fff5d8;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 0.68rem;
@@ -4368,7 +5830,11 @@
   padding: 0 12px;
   border: 1px solid var(--race-panel-border);
   border-radius: 4px;
-  background: linear-gradient(180deg, rgba(6, 15, 28, 0.9), rgba(4, 9, 16, 0.96));
+  background: linear-gradient(
+    180deg,
+    rgba(6, 15, 28, 0.9),
+    rgba(4, 9, 16, 0.96)
+  );
   color: #eef8ff;
   cursor: pointer;
   font-size: 0.62rem;
@@ -4394,7 +5860,11 @@
   height: 18px;
   place-items: center;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--race-primary) 24%, rgba(5, 10, 18, 0.92));
+  background: color-mix(
+    in srgb,
+    var(--race-primary) 24%,
+    rgba(5, 10, 18, 0.92)
+  );
   color: #fff5d8;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   font-size: 0.62rem;
@@ -4412,8 +5882,11 @@
   padding: 10px;
   border: 1px solid var(--race-panel-border);
   border-radius: 6px;
-  background:
-    linear-gradient(180deg, rgba(10, 18, 30, 0.96), rgba(4, 8, 14, 0.98));
+  background: linear-gradient(
+    180deg,
+    rgba(10, 18, 30, 0.96),
+    rgba(4, 8, 14, 0.98)
+  );
   box-shadow:
     inset 0 0 0 1px color-mix(in srgb, var(--race-primary) 18%, transparent),
     0 18px 36px rgba(0, 0, 0, 0.45),
@@ -4487,8 +5960,11 @@
 .profile-history-row:hover,
 .profile-history-row:focus-visible {
   outline: none;
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--race-primary) 12%, transparent), transparent 62%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--race-primary) 12%, transparent),
+    transparent 62%
+  );
 }
 
 .profile-history-popover .history-race {

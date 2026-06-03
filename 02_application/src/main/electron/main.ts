@@ -5,9 +5,16 @@ import { registerIpcHandlers } from "./ipc-handlers.js";
 import { FileAppSettingsRepository } from "../../infrastructure/storage/file-app-settings-repository.js";
 import { resolveAppDataDirectory } from "../../infrastructure/storage/app-data-directory.js";
 import {
+  normalizeOverlayCustomPosition,
   normalizeOverlayPosition,
+  type OverlayCustomPosition,
   type OverlayPosition
 } from "../../domain/entities/app-settings.js";
+import {
+  registerVoiceModelProtocol,
+  registerVoiceModelSchemePrivileges
+} from "./voice-model-protocol.js";
+import { setVoiceBroadcastTarget } from "./voice-broadcaster.js";
 
 const rendererDevUrl = process.env.SC2_ASSISTANT_RENDERER_URL ?? "http://127.0.0.1:5173";
 const currentDir = fileURLToPath(new URL(".", import.meta.url));
@@ -19,6 +26,8 @@ const OVERLAY_MARGIN = 16;
 
 let mainWindowRef: BrowserWindow | null = null;
 let overlayWindowRef: BrowserWindow | null = null;
+let overlayMoveSaveTimer: ReturnType<typeof setTimeout> | null = null;
+let overlayPlacementModeActive = false;
 
 async function createMainWindow(): Promise<void> {
   const mainWindow = new BrowserWindow({
@@ -39,11 +48,15 @@ async function createMainWindow(): Promise<void> {
     }
   });
   mainWindowRef = mainWindow;
+  setVoiceBroadcastTarget(mainWindow);
   registerExternalNavigation(mainWindow);
   attachSmokeLifecycleIfRequested(mainWindow);
   registerWindowControlHandlers(mainWindow);
 
   mainWindow.on("closed", () => {
+    if (mainWindowRef === mainWindow) {
+      setVoiceBroadcastTarget(null);
+    }
     mainWindowRef = null;
     if (overlayWindowRef && !overlayWindowRef.isDestroyed()) {
       overlayWindowRef.close();
@@ -66,12 +79,16 @@ function overlaySettingsRepository(): FileAppSettingsRepository {
 async function readOverlaySettings(): Promise<{
   readonly overlayEnabled: boolean;
   readonly overlayPosition: OverlayPosition;
+  readonly overlayPlacementMode: boolean;
+  readonly overlayCustomPosition?: OverlayCustomPosition;
 }> {
   const repository = overlaySettingsRepository();
   const settings = await repository.read();
   return {
     overlayEnabled: settings.overlayEnabled,
-    overlayPosition: settings.overlayPosition
+    overlayPosition: settings.overlayPosition,
+    overlayPlacementMode: settings.overlayPlacementMode,
+    overlayCustomPosition: settings.overlayCustomPosition
   };
 }
 
@@ -96,12 +113,13 @@ async function persistOverlayPosition(position: OverlayPosition): Promise<void> 
   try {
     const repository = overlaySettingsRepository();
     const current = await repository.read();
-    if (current.overlayPosition === position) {
+    if (current.overlayPosition === position && !current.overlayCustomPosition) {
       return;
     }
     await repository.save({
       ...current,
       overlayPosition: position,
+      overlayCustomPosition: undefined,
       updatedAt: new Date().toISOString()
     });
   } catch (error) {
@@ -109,11 +127,52 @@ async function persistOverlayPosition(position: OverlayPosition): Promise<void> 
   }
 }
 
+async function persistOverlayPlacementMode(enabled: boolean): Promise<void> {
+  try {
+    const repository = overlaySettingsRepository();
+    const current = await repository.read();
+    if (current.overlayPlacementMode === enabled) {
+      return;
+    }
+    await repository.save({
+      ...current,
+      overlayPlacementMode: enabled,
+      updatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Failed to persist overlay placement mode:", error);
+  }
+}
+
+async function persistOverlayCustomPosition(position: OverlayCustomPosition): Promise<void> {
+  try {
+    const repository = overlaySettingsRepository();
+    const current = await repository.read();
+    const normalized = normalizeOverlayCustomPosition(position);
+    if (!normalized) {
+      return;
+    }
+    if (
+      current.overlayCustomPosition?.x === normalized.x &&
+      current.overlayCustomPosition?.y === normalized.y
+    ) {
+      return;
+    }
+    await repository.save({
+      ...current,
+      overlayCustomPosition: normalized,
+      updatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Failed to persist overlay custom position:", error);
+  }
+}
+
 async function restoreOverlayFromSettings(): Promise<void> {
   try {
     const settings = await readOverlaySettings();
     if (settings.overlayEnabled) {
-      await ensureOverlayWindow(settings.overlayPosition);
+      await ensureOverlayWindow();
     }
   } catch (error) {
     console.error("Failed to restore overlay state:", error);
@@ -159,18 +218,54 @@ function computeOverlayCoords(
   return { x, y };
 }
 
+function clampOverlayCoords(
+  position: OverlayCustomPosition,
+  width: number,
+  height: number
+): OverlayCustomPosition {
+  const display = screen.getDisplayNearestPoint({ x: position.x, y: position.y });
+  const { x: baseX, y: baseY, width: areaWidth, height: areaHeight } = display.workArea;
+  const minX = baseX;
+  const minY = baseY;
+  const maxX = Math.max(minX, baseX + areaWidth - width);
+  const maxY = Math.max(minY, baseY + areaHeight - height);
+
+  return {
+    x: Math.min(Math.max(position.x, minX), maxX),
+    y: Math.min(Math.max(position.y, minY), maxY)
+  };
+}
+
+function overlayInitialCoords(
+  settings: Awaited<ReturnType<typeof readOverlaySettings>>,
+  width: number,
+  height: number
+): OverlayCustomPosition {
+  if (settings.overlayCustomPosition) {
+    return clampOverlayCoords(settings.overlayCustomPosition, width, height);
+  }
+  return computeOverlayCoords(settings.overlayPosition, width, height);
+}
+
 async function ensureOverlayWindow(positionOverride?: OverlayPosition): Promise<BrowserWindow> {
-  const position = positionOverride ?? (await readOverlaySettings()).overlayPosition;
+  const settings = await readOverlaySettings();
+  const position = positionOverride ?? settings.overlayPosition;
+  const placementMode = settings.overlayPlacementMode;
 
   if (overlayWindowRef && !overlayWindowRef.isDestroyed()) {
-    repositionOverlay(overlayWindowRef, position);
+    if (positionOverride) {
+      repositionOverlay(overlayWindowRef, position);
+    }
+    applyOverlayPlacementMode(overlayWindowRef, placementMode);
     if (!overlayWindowRef.isVisible()) {
       overlayWindowRef.showInactive();
     }
     return overlayWindowRef;
   }
 
-  const { x, y } = computeOverlayCoords(position, OVERLAY_WIDTH, OVERLAY_HEIGHT);
+  const { x, y } = positionOverride
+    ? computeOverlayCoords(position, OVERLAY_WIDTH, OVERLAY_HEIGHT)
+    : overlayInitialCoords(settings, OVERLAY_WIDTH, OVERLAY_HEIGHT);
 
   const overlay = new BrowserWindow({
     width: OVERLAY_WIDTH,
@@ -182,7 +277,7 @@ async function ensureOverlayWindow(positionOverride?: OverlayPosition): Promise<
     alwaysOnTop: true,
     skipTaskbar: true,
     resizable: false,
-    movable: false,
+    movable: true,
     minimizable: false,
     maximizable: false,
     focusable: false,
@@ -198,11 +293,14 @@ async function ensureOverlayWindow(positionOverride?: OverlayPosition): Promise<
   });
   registerExternalNavigation(overlay);
 
-  // Discord-style: overlay never receives mouse input — every click falls
-  // through to whatever is behind it (the SC2 client in fullscreen).
-  overlay.setIgnoreMouseEvents(true, { forward: false });
+  // Placement mode makes the card draggable; fixed mode lets clicks reach SC2.
+  applyOverlayPlacementMode(overlay, placementMode);
   overlay.setAlwaysOnTop(true, "screen-saver");
   overlay.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+
+  overlay.on("move", () => {
+    scheduleOverlayPositionSave(overlay);
+  });
 
   overlay.on("closed", () => {
     overlayWindowRef = null;
@@ -230,6 +328,31 @@ async function ensureOverlayWindow(positionOverride?: OverlayPosition): Promise<
 
   overlayWindowRef = overlay;
   return overlay;
+}
+
+function applyOverlayPlacementMode(overlay: BrowserWindow, enabled: boolean): void {
+  if (overlay.isDestroyed()) {
+    return;
+  }
+  overlayPlacementModeActive = enabled;
+  overlay.setFocusable(enabled);
+  overlay.setIgnoreMouseEvents(!enabled, { forward: false });
+}
+
+function scheduleOverlayPositionSave(overlay: BrowserWindow): void {
+  if (!overlayPlacementModeActive || overlay.isDestroyed()) {
+    return;
+  }
+  if (overlayMoveSaveTimer) {
+    clearTimeout(overlayMoveSaveTimer);
+  }
+  overlayMoveSaveTimer = setTimeout(() => {
+    if (overlay.isDestroyed()) {
+      return;
+    }
+    const [x, y] = overlay.getPosition();
+    void persistOverlayCustomPosition({ x, y });
+  }, 250);
 }
 
 function repositionOverlay(overlay: BrowserWindow, position: OverlayPosition): void {
@@ -275,6 +398,7 @@ function registerWindowControlHandlers(window: BrowserWindow): void {
   ipcMain.removeHandler("overlay:show");
   ipcMain.removeHandler("overlay:hide");
   ipcMain.removeHandler("overlay:set-position");
+  ipcMain.removeHandler("overlay:set-placement-mode");
 
   // Bounds captured before entering compact mode, restored on exit.
   let compactRestoreBounds: WindowBounds | null = null;
@@ -350,6 +474,21 @@ function registerWindowControlHandlers(window: BrowserWindow): void {
       repositionOverlay(overlayWindowRef, position);
     }
   });
+  ipcMain.handle("overlay:set-placement-mode", async (_event, rawEnabled: unknown) => {
+    const enabled = rawEnabled === true;
+    await persistOverlayPlacementMode(enabled);
+    if (enabled) {
+      const overlay = await ensureOverlayWindow();
+      applyOverlayPlacementMode(overlay, true);
+      if (!overlay.isVisible()) {
+        overlay.showInactive();
+      }
+      return;
+    }
+    if (overlayWindowRef && !overlayWindowRef.isDestroyed()) {
+      applyOverlayPlacementMode(overlayWindowRef, false);
+    }
+  });
 }
 
 function registerExternalNavigation(window: BrowserWindow): void {
@@ -407,9 +546,12 @@ function smokeExitArg(): string | undefined {
   return process.argv.find((argument) => argument.startsWith("--smoke-exit-ms="))?.split("=")[1];
 }
 
+registerVoiceModelSchemePrivileges();
+
 app
   .whenReady()
   .then(async () => {
+    registerVoiceModelProtocol();
     await registerIpcHandlers();
     Menu.setApplicationMenu(null);
     await createMainWindow();

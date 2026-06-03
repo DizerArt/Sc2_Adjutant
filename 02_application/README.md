@@ -101,8 +101,41 @@ Relevant modules:
 - `src/infrastructure/replay/child-process-replay-metadata-reader.ts`
 - `src/infrastructure/replay/replay-metadata-worker.ts`
 - `src/infrastructure/replay/sc2-replay-analysis-reader.ts`
+- `src/infrastructure/replay/replay-suspicion-analyzer.ts`
 - `src/application/use-cases/sync-replay-archive.ts`
 - `src/application/use-cases/process-new-replay.ts`
+
+## Voice Assistant
+
+The Voice Assistant is an optional offline Piper-based narrator. It can announce application startup and the detected opponent card.
+
+Voice runtime resources are local-only:
+
+- `resources/voice-models/` contains `.onnx` model files and matching `.onnx.json` configs.
+- `resources/voice-wasm/` contains ONNX Runtime and Piper phonemizer WASM assets.
+- `voice-model://` is an Electron custom protocol that exposes those resources to the renderer.
+
+Download or refresh bundled voice assets with:
+
+```powershell
+npm run voice:download
+npm run voice:wasm
+```
+
+The narrator waits until settings and the Piper runtime are ready before playing the launch greeting. Live opponent announcements are debounced briefly so late MMR/race enrichment can replace the first raw SC2 Client API snapshot before it is spoken.
+
+## Future Replay Suspicion Review
+
+Replay suspicion analysis is currently disabled. The previous score-based panel was too noisy and should not ship as an automatic maphack detector.
+
+Future work should be a manual-review aid instead of a verdict system. It should show concrete replay timestamps and explain why each moment is worth checking:
+
+- camera or command movement toward hidden army, tech, or drop paths;
+- no friendly unit nearby and no recent scouting memory;
+- no scan, observer, overlord, creep, sensor tower, or recent army contact explaining the information;
+- repeated suspicious moments across a match, shown as evidence rather than a standalone score.
+
+See the repository `TODO.md` for the parked design notes and re-enable criteria.
 
 ## Local Storage
 

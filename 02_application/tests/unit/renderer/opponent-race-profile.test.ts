@@ -36,7 +36,7 @@ describe("playstyleFromTags", () => {
   });
 
   it("recognizes compact versions of long playstyle tags", () => {
-    const score = playstyleFromTags(["battlecruis", "static defe", "dark templa"]);
+    const score = playstyleFromTags(["battlecruiser ru", "static defense", "dark templar"]);
     expect(score.aggression).toBeGreaterThan(0);
     expect(score.economy).toBeGreaterThan(0);
     expect(score.unpredictable).toBeGreaterThan(0);

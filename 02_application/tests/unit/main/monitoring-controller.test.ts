@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HandleDetectedGame } from "../../../src/application/use-cases/handle-detected-game.js";
 import type { GameSession } from "../../../src/domain/entities/game-session.js";
 import type { Match } from "../../../src/domain/entities/match.js";
@@ -8,8 +8,17 @@ import type { MatchRepository } from "../../../src/domain/repositories/match-rep
 import type { OpponentRepository } from "../../../src/domain/repositories/opponent-repository.js";
 import type { EntityId } from "../../../src/domain/value-objects/entity-id.js";
 import { MonitoringController } from "../../../src/main/electron/monitoring-controller.js";
+import { broadcastVoiceEvent } from "../../../src/main/electron/voice-broadcaster.js";
+
+vi.mock("../../../src/main/electron/voice-broadcaster.js", () => ({
+  broadcastVoiceEvent: vi.fn()
+}));
 
 describe("MonitoringController", () => {
+  beforeEach(() => {
+    vi.mocked(broadcastVoiceEvent).mockClear();
+  });
+
   it("starts and stops monitoring", () => {
     const controller = createController(activeSession());
 
@@ -99,6 +108,223 @@ describe("MonitoringController", () => {
 
     expect(handleDetectedGame.execute).toHaveBeenCalledTimes(1);
   });
+
+  it("debounces opponent voice announcements", async () => {
+    vi.useFakeTimers();
+    const handleDetectedGame = {
+      execute: vi.fn(async () => ({
+        enrichedOpponent: {
+          nickname: "RobbyG",
+          race: "Terran",
+          mmrAtLastMatch: 4200,
+          encounters: 2,
+          wins: 1,
+          losses: 1,
+          strategyTags: [],
+          notes: []
+        },
+        match: {
+          id: "match_retories-robbyg-2026-05-03t05-00-00-000z",
+          opponentRace: "Terran"
+        }
+      }))
+    };
+    const controller = new MonitoringController({
+      sc2Client: {
+        async getCurrentGame() {
+          return activeSession();
+        }
+      },
+      userName: "RetorieS",
+      intervalMs: 60_000,
+      handleDetectedGame: handleDetectedGame as unknown as HandleDetectedGame
+    });
+
+    controller.start();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(broadcastVoiceEvent).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1499);
+    expect(broadcastVoiceEvent).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1);
+    expect(broadcastVoiceEvent).toHaveBeenCalledWith({
+      kind: "opponent",
+      data: expect.objectContaining({
+        nickname: "RobbyG",
+        mmr: 4200,
+        race: "Terran"
+      })
+    });
+
+    controller.stop();
+    vi.useRealTimers();
+  });
+
+  it("does not announce the same live opponent again when later snapshots arrive", async () => {
+    vi.useFakeTimers();
+    const sessions = [activeSession(), activeSessionWithOpponentMmr()];
+    const handleDetectedGame = {
+      execute: vi
+        .fn()
+        .mockResolvedValueOnce({
+          enrichedOpponent: {
+            nickname: "RobbyG",
+            race: "Terran",
+            encounters: 1,
+            wins: 0,
+            losses: 1,
+            strategyTags: [],
+            notes: []
+          },
+          match: {
+            id: "match_retories-robbyg-2026-05-03t05-00-00-000z",
+            opponentRace: "Terran"
+          }
+        })
+        .mockResolvedValueOnce({
+          enrichedOpponent: {
+            nickname: "RobbyG",
+            race: "Terran",
+            mmrAtLastMatch: 4200,
+            encounters: 1,
+            wins: 0,
+            losses: 1,
+            strategyTags: [],
+            notes: []
+          },
+          match: {
+            id: "match_retories-robbyg-2026-05-03t05-00-00-000z",
+            opponentRace: "Terran"
+          }
+        })
+    };
+    const controller = new MonitoringController({
+      sc2Client: {
+        async getCurrentGame() {
+          return sessions.shift() ?? activeSessionWithOpponentMmr();
+        }
+      },
+      userName: "RetorieS",
+      intervalMs: 60_000,
+      handleDetectedGame: handleDetectedGame as unknown as HandleDetectedGame
+    });
+
+    controller.start();
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(handleDetectedGame.execute).toHaveBeenCalledTimes(2);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    controller.stop();
+    vi.useRealTimers();
+  });
+
+  it("does not re-announce an active opponent when the live session id changes mid-game", async () => {
+    vi.useFakeTimers();
+    const sessions = [
+      activeSessionAt("raw-start", "2026-05-03T05:00:20.000Z", "2026-05-03T05:00:00.000Z"),
+      activeSessionAt("raw-jitter", "2026-05-03T05:03:00.000Z", "2026-05-03T05:02:59.000Z")
+    ];
+    const handleDetectedGame = {
+      execute: vi.fn(async ({ session }: { session: GameSession }) => ({
+        enrichedOpponent: {
+          nickname: "RobbyG",
+          race: "Terran",
+          mmrAtLastMatch: session.players.find((player) => player.name === "RobbyG")?.mmr ?? 4200,
+          encounters: 2,
+          wins: 1,
+          losses: 1,
+          strategyTags: [],
+          notes: []
+        },
+        match: {
+          id: "match_retories-robbyg-2026-05-03t05-00-00-000z",
+          opponentRace: "Terran"
+        }
+      }))
+    };
+    const controller = new MonitoringController({
+      sc2Client: {
+        async getCurrentGame() {
+          return sessions.shift() ?? activeSessionAt("raw-jitter", "2026-05-03T05:03:00.000Z", "2026-05-03T05:02:59.000Z");
+        }
+      },
+      userName: "RetorieS",
+      intervalMs: 60_000,
+      handleDetectedGame: handleDetectedGame as unknown as HandleDetectedGame
+    });
+
+    controller.start();
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(handleDetectedGame.execute).toHaveBeenCalledTimes(2);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    controller.stop();
+    vi.useRealTimers();
+  });
+
+  it("does not announce opponent cards for final match snapshots", async () => {
+    vi.useFakeTimers();
+    const sessions = [
+      activeSession(),
+      {
+        ...activeSession(),
+        id: "RetorieS:Terran|RobbyG:Terran:final",
+        players: [
+          { name: "RetorieS", race: "Terran", result: "Victory", isUser: true },
+          { name: "RobbyG", race: "Terran", result: "Defeat" }
+        ]
+      } satisfies GameSession
+    ];
+    const handleDetectedGame = {
+      execute: vi.fn(async () => ({
+        enrichedOpponent: {
+          nickname: "RobbyG",
+          race: "Terran",
+          mmrAtLastMatch: 4200,
+          encounters: 2,
+          wins: 1,
+          losses: 1,
+          strategyTags: [],
+          notes: []
+        },
+        match: {
+          id: "match_retories-robbyg-2026-05-03t05-00-00-000z",
+          opponentRace: "Terran"
+        }
+      }))
+    };
+    const controller = new MonitoringController({
+      sc2Client: {
+        async getCurrentGame() {
+          return sessions.shift() ?? activeSession();
+        }
+      },
+      userName: "RetorieS",
+      intervalMs: 60_000,
+      handleDetectedGame: handleDetectedGame as unknown as HandleDetectedGame
+    });
+
+    controller.start();
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    await vi.advanceTimersByTimeAsync(60_000);
+    await vi.advanceTimersByTimeAsync(1500);
+    expect(handleDetectedGame.execute).toHaveBeenCalledTimes(2);
+    expect(broadcastVoiceEvent).toHaveBeenCalledTimes(1);
+
+    controller.stop();
+    vi.useRealTimers();
+  });
 });
 
 function createController(session: GameSession): MonitoringController {
@@ -148,6 +374,24 @@ function activeSession(): GameSession {
       { name: "RetorieS", race: "Terran", result: "Undecided", isUser: true },
       { name: "RobbyG", race: "Terran", result: "Undecided" }
     ]
+  };
+}
+
+function activeSessionWithOpponentMmr(): GameSession {
+  return {
+    ...activeSession(),
+    players: activeSession().players.map((player) =>
+      player.name === "RobbyG" ? { ...player, mmr: 4200 } : player
+    )
+  };
+}
+
+function activeSessionAt(id: string, detectedAt: string, startedAt: string): GameSession {
+  return {
+    ...activeSession(),
+    id,
+    detectedAt,
+    startedAt
   };
 }
 

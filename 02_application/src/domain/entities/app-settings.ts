@@ -1,4 +1,9 @@
 import { normalizeRace, type Race } from "../value-objects/race.js";
+import {
+  defaultVoiceSettings,
+  normalizeVoiceSettings,
+  type VoiceSettings
+} from "./voice-settings.js";
 
 export type AppRegion = "us" | "eu" | "kr" | "cn" | "unknown";
 export type AppLanguage = "en" | "ru";
@@ -18,6 +23,11 @@ export const OVERLAY_POSITIONS = [
 ] as const;
 
 export type OverlayPosition = (typeof OVERLAY_POSITIONS)[number];
+
+export type OverlayCustomPosition = {
+  readonly x: number;
+  readonly y: number;
+};
 
 const LEGACY_OVERLAY_POSITIONS: Record<string, OverlayPosition> = {
   "bottom-left": "bottom-1",
@@ -41,11 +51,18 @@ export type AppSettings = {
   readonly externalSources: ExternalSourceSettings;
   readonly overlayEnabled: boolean;
   readonly overlayPosition: OverlayPosition;
+  readonly overlayPlacementMode: boolean;
+  readonly overlayCustomPosition?: OverlayCustomPosition;
+  readonly voice: VoiceSettings;
   readonly updatedAt: string;
 };
 
-export type UpdateAppSettingsInput = Partial<Omit<AppSettings, "updatedAt" | "externalSources">> & {
+export type UpdateAppSettingsInput = Partial<
+  Omit<AppSettings, "updatedAt" | "externalSources" | "voice" | "overlayCustomPosition">
+> & {
   readonly externalSources?: Partial<ExternalSourceSettings>;
+  readonly overlayCustomPosition?: OverlayCustomPosition | null;
+  readonly voice?: Partial<VoiceSettings>;
 };
 
 export function defaultAppSettings(now = new Date().toISOString()): AppSettings {
@@ -58,6 +75,8 @@ export function defaultAppSettings(now = new Date().toISOString()): AppSettings 
     externalSources: defaultExternalSourceSettings(),
     overlayEnabled: false,
     overlayPosition: "top-right",
+    overlayPlacementMode: false,
+    voice: defaultVoiceSettings(),
     updatedAt: now
   };
 }
@@ -70,6 +89,23 @@ export function normalizeOverlayPosition(value: unknown): OverlayPosition {
     return value as OverlayPosition;
   }
   return LEGACY_OVERLAY_POSITIONS[value] ?? "top-right";
+}
+
+export function normalizeOverlayCustomPosition(value: unknown): OverlayCustomPosition | undefined {
+  if (typeof value !== "object" || value === null) {
+    return undefined;
+  }
+  const candidate = value as Record<string, unknown>;
+  if (typeof candidate.x !== "number" || typeof candidate.y !== "number") {
+    return undefined;
+  }
+  if (!Number.isFinite(candidate.x) || !Number.isFinite(candidate.y)) {
+    return undefined;
+  }
+  return {
+    x: Math.round(candidate.x),
+    y: Math.round(candidate.y)
+  };
 }
 
 export function normalizeLanguage(value: unknown): AppLanguage {
@@ -94,6 +130,11 @@ export function updateAppSettings(
     overlayPosition: input.overlayPosition
       ? normalizeOverlayPosition(input.overlayPosition)
       : current.overlayPosition,
+    overlayPlacementMode: input.overlayPlacementMode ?? current.overlayPlacementMode,
+    overlayCustomPosition: Object.prototype.hasOwnProperty.call(input, "overlayCustomPosition")
+      ? normalizeOverlayCustomPosition(input.overlayCustomPosition)
+      : current.overlayCustomPosition,
+    voice: normalizeVoiceSettings(input.voice, current.voice),
     updatedAt: now
   };
 }

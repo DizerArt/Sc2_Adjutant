@@ -43,9 +43,13 @@ import {
   normalizeUiLanguage,
   type Translator,
 } from "../i18n.js";
+import { useVoiceNarrator } from "../voice/use-voice-narrator.js";
+import type { OpponentSpeechData } from "../voice/voice-narrator-service.js";
+import { VoiceSettingsPanel } from "./VoiceSettingsPanel.js";
+import type { VoiceSettings } from "../../domain/entities/voice-settings.js";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
-type ActiveView = "match" | "opponents" | "diagnostics" | "settings" | "info";
+type ActiveView = "match" | "opponents" | "diagnostics" | "settings" | "voice" | "info";
 type OpponentsTab = "known" | "history";
 type OpponentSortKey = "lastSeen" | "mmr" | "race" | "confidence";
 type MatchHistorySortKey = "lastSeen" | "race" | "result";
@@ -85,6 +89,7 @@ type SettingsDraft = {
   };
   readonly overlayEnabled: boolean;
   readonly overlayPosition: OverlayPosition;
+  readonly overlayPlacementMode: boolean;
 };
 
 type ReplaySyncDraft = {
@@ -190,6 +195,23 @@ export function AppShell() {
   const runtimeSnapshotRef = useRef("");
   const language = normalizeUiLanguage(settingsDraft.language);
   const t = useMemo(() => createTranslator(language), [language]);
+
+  const voiceController = useVoiceNarrator(dashboardState.settings);
+
+  const saveVoiceSettings = useCallback(
+    async (next: VoiceSettings) => {
+      if (!window.sc2Assistant) {
+        throw new Error("Electron bridge is not available.");
+      }
+      const response = await window.sc2Assistant.saveSettings({ voice: next });
+      setDashboardState((current) => ({
+        ...current,
+        settings: response.settings,
+        loadState: "ready",
+      }));
+    },
+    [],
+  );
 
   const loadDashboard = useCallback(
     async (mode: "full" | "silent" = "full") => {
@@ -923,6 +945,7 @@ export function AppShell() {
         externalSources: settingsDraft.externalSources,
         overlayEnabled: settingsDraft.overlayEnabled,
         overlayPosition: settingsDraft.overlayPosition,
+        overlayPlacementMode: settingsDraft.overlayPlacementMode,
       });
 
       if (settingsDraft.overlayEnabled) {
@@ -1048,6 +1071,7 @@ export function AppShell() {
               ["opponents", t("nav.opponents")],
               ["diagnostics", t("nav.diagnostics")],
               ["settings", t("nav.settings")],
+              ["voice", t("nav.voice")],
               ["info", t("nav.info")],
             ].map(([view, label]) => (
               <button
@@ -1139,6 +1163,14 @@ export function AppShell() {
               storageOpenState={storageOpenState}
               t={t}
             />
+          ) : activeView === "voice" ? (
+            <VoiceSettingsPanel
+              settings={dashboardState.settings}
+              onSave={saveVoiceSettings}
+              narrator={voiceController.narrator}
+              runtimeStatus={voiceController.status}
+              t={t}
+            />
           ) : infoEditorOpen ? (
             <OpponentInfoEditor
               candidates={dashboardState.candidates}
@@ -1184,6 +1216,9 @@ export function AppShell() {
               onOpponentFiltersChange={setOpponentFilters}
               onOpponentSelect={selectOpponent}
               onOpponentMarkerToggle={toggleOpponentMarker}
+              onOpponentVoicePreview={(data) =>
+                void voiceController.narrator?.previewOpponentCard(data)
+              }
               onOpponentsTabChange={setOpponentsTab}
               onProfileHistoryMatchSelect={openProfileHistoryMatch}
               onRevealReplay={revealReplay}
@@ -1442,6 +1477,7 @@ type OpponentWorkspaceProps = {
   readonly onOpponentFiltersChange: (filters: OpponentListFilters) => void;
   readonly onOpponentSelect: (opponentId: string) => void | Promise<void>;
   readonly onOpponentMarkerToggle: (marker: OpponentMarker) => void | Promise<void>;
+  readonly onOpponentVoicePreview: (data: OpponentSpeechData) => void | Promise<void>;
   readonly onOpponentsTabChange: (tab: OpponentsTab) => void;
   readonly onProfileHistoryMatchSelect: (
     item: MatchHistoryItem,
@@ -1523,6 +1559,7 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
             matches={props.dashboardState.matches}
             onAddInfoClick={props.onAddInfo}
             onMarkerToggle={props.onOpponentMarkerToggle}
+            onPreviewVoiceClick={props.onOpponentVoicePreview}
             onOpenNotesClick={props.onOpenNotes}
             onHistoryMatchSelect={props.onProfileHistoryMatchSelect}
             onStrategyTagAdd={props.onStrategyTagAdd}
@@ -1789,8 +1826,101 @@ function MatchDetailsPanel({
           <div className="empty-state">{t("match.emptyBuildOrder")}</div>
         )}
       </section>
+
+      {details?.suspicion ? (
+        <SuspicionPanel suspicion={details.suspicion} t={t} />
+      ) : null}
     </div>
   );
+}
+
+function SuspicionPanel({
+  suspicion,
+  t,
+}: {
+  readonly suspicion: NonNullable<MatchDetails["suspicion"]>;
+  readonly t: Translator;
+}) {
+  return (
+    <section className="match-details-section suspicion-panel">
+      <div className="match-details-section-head">
+        <h4>{t("match.suspicion")}</h4>
+        <span className="suspicion-note">{t("match.suspicionHint")}</span>
+      </div>
+      {suspicion.players.length > 0 ? (
+        <div className="suspicion-grid">
+          {suspicion.players.map((player) => (
+            <div
+              className="suspicion-card"
+              data-level={player.level}
+              key={`${player.playerName}-${player.race}`}
+            >
+              <div className="suspicion-card-head">
+                <div>
+                  <strong>{player.playerName}</strong>
+                  <span>
+                    {player.race} / {suspicionLevelText(player.level, t)}
+                  </span>
+                </div>
+                <b>{player.score}%</b>
+              </div>
+              <div className="suspicion-meter" aria-hidden="true">
+                <i style={{ width: `${player.score}%` }} />
+              </div>
+              <div className="suspicion-meta">
+                <span>
+                  {t("match.confidence")}: {player.confidence}%
+                </span>
+                <span>
+                  {t("match.evidence")}: {player.evidence.length}
+                </span>
+              </div>
+              {player.evidence.length > 0 ? (
+                <div className="suspicion-evidence-list">
+                  {player.evidence.slice(0, 5).map((item, index) => (
+                    <div
+                      className="suspicion-evidence"
+                      key={`${item.seconds}-${item.type}-${index}`}
+                    >
+                      <span>{formatDuration(item.seconds)}</span>
+                      <div>
+                        <strong>{item.label}</strong>
+                        <p>{item.details}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state">{t("match.emptySuspicion")}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">{t("match.emptySuspicion")}</div>
+      )}
+      {suspicion.parseError ? (
+        <p className="inline-warning">
+          {t("match.parser")}: {suspicion.parseError}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+function suspicionLevelText(
+  level: NonNullable<MatchDetails["suspicion"]>["players"][number]["level"],
+  t: Translator
+): string {
+  if (level === "high") {
+    return t("match.suspicionHigh");
+  }
+
+  if (level === "medium") {
+    return t("match.suspicionMedium");
+  }
+
+  return t("match.suspicionLow");
 }
 
 function MetricCard({
@@ -2179,6 +2309,7 @@ function InfoView({ t }: { readonly t: Translator }) {
           <li>{t("info.tipDiagnostics")}</li>
           <li>{t("info.tipStorage")}</li>
           <li>{t("info.tipNotes")}</li>
+          <li>{t("info.tipVoice")}</li>
           <li>{t("info.tipReadonly")}</li>
         </ul>
       </div>
@@ -3119,10 +3250,12 @@ function SettingsView(props: SettingsViewProps) {
               props.onChange({
                 ...props.settingsDraft,
                 overlayEnabled: enabled,
+                overlayPlacementMode: enabled ? props.settingsDraft.overlayPlacementMode : false,
               });
               if (enabled) {
                 void window.sc2Assistant?.showOverlay();
               } else {
+                void window.sc2Assistant?.setOverlayPlacementMode(false);
                 void window.sc2Assistant?.hideOverlay();
               }
             }}
@@ -3131,22 +3264,22 @@ function SettingsView(props: SettingsViewProps) {
           {props.t("settings.enableOverlay")}
         </label>
 
-        <fieldset
-          className="overlay-position-fieldset"
-          disabled={!props.settingsDraft.overlayEnabled}
-        >
-          <legend>{props.t("settings.overlayPosition")}</legend>
-          <OverlayPositionPicker
-            value={props.settingsDraft.overlayPosition}
-            onChange={(position) => {
+        <label className="toggle-row">
+          <input
+            checked={props.settingsDraft.overlayPlacementMode}
+            disabled={!props.settingsDraft.overlayEnabled}
+            onChange={(event) => {
+              const enabled = event.currentTarget.checked;
               props.onChange({
                 ...props.settingsDraft,
-                overlayPosition: position,
+                overlayPlacementMode: enabled,
               });
-              void window.sc2Assistant?.setOverlayPosition(position);
+              void window.sc2Assistant?.setOverlayPlacementMode(enabled);
             }}
+            type="checkbox"
           />
-        </fieldset>
+          {props.t("settings.overlayPlacementMode")}
+        </label>
 
         <fieldset
           className="source-settings"
@@ -3497,6 +3630,7 @@ function headerEyebrow(view: ActiveView, t: Translator): string {
     opponents: t("header.localDatabase"),
     diagnostics: t("header.diagnostics"),
     settings: t("header.settings"),
+    voice: t("header.voice"),
     info: t("header.about"),
   };
 
@@ -3512,6 +3646,7 @@ function headerTitle(
     opponents: t("header.localDatabase"),
     diagnostics: t("diagnostics.title"),
     settings: t("header.settingsTitle"),
+    voice: t("header.voiceTitle"),
     info: t("header.aboutTitle"),
   };
 
@@ -3723,6 +3858,24 @@ function findCurrentMatchOpponent(
     return undefined;
   }
 
+  const opponentPlayer = findCurrentMatchOpponentPlayer(
+    session.players,
+    userName,
+  );
+  const opponentName = normalizePlayerIdentityName(opponentPlayer?.name);
+  if (opponentName) {
+    const sessionOpponent = opponents.find(
+      (opponent) =>
+        !isLocalOpponentRecord(opponent, userName) &&
+        [opponent.nickname, opponent.battleTag ?? "", ...opponent.aliases].some(
+          (name) => normalizePlayerIdentityName(name) === opponentName,
+        ),
+    );
+    if (sessionOpponent) {
+      return sessionOpponent;
+    }
+  }
+
   if (monitoring?.lastSavedMatchId) {
     const currentMatch = matches.find(
       (item) => item.match.id === monitoring.lastSavedMatchId,
@@ -3738,22 +3891,7 @@ function findCurrentMatchOpponent(
     }
   }
 
-  const opponentPlayer = findCurrentMatchOpponentPlayer(
-    session.players,
-    userName,
-  );
-  const opponentName = normalizePlayerIdentityName(opponentPlayer?.name);
-  if (!opponentName) {
-    return undefined;
-  }
-
-  return opponents.find(
-    (opponent) =>
-      !isLocalOpponentRecord(opponent, userName) &&
-      [opponent.nickname, opponent.battleTag ?? "", ...opponent.aliases].some(
-        (name) => normalizePlayerIdentityName(name) === opponentName,
-      ),
-  );
+  return undefined;
 }
 
 function findCurrentMatchOpponentPlayer(
@@ -3834,6 +3972,7 @@ function settingsDraftFromSettings(settings: AppSettings): SettingsDraft {
     externalSources: settings.externalSources,
     overlayEnabled: settings.overlayEnabled,
     overlayPosition: settings.overlayPosition,
+    overlayPlacementMode: settings.overlayPlacementMode,
   };
 }
 
@@ -3977,111 +4116,6 @@ function defaultOpponentProfileDraft(): OpponentProfileDraft {
   };
 }
 
-const OVERLAY_POSITION_TOP_CELLS: readonly (OverlayPosition | null)[] = [
-  "top-left",
-  "top-center",
-  "top-right",
-  "middle-left",
-  null,
-  "middle-right",
-];
-
-const OVERLAY_POSITION_BOTTOM_CELLS: readonly OverlayPosition[] = [
-  "bottom-1",
-  "bottom-2",
-  "bottom-3",
-  "bottom-4",
-  "bottom-5",
-  "bottom-6",
-];
-
-const OVERLAY_POSITION_LABELS: Record<OverlayPosition, string> = {
-  "top-left": "Top left",
-  "top-center": "Top center",
-  "top-right": "Top right",
-  "middle-left": "Middle left",
-  "middle-right": "Middle right",
-  "bottom-1": "Bottom slot 1",
-  "bottom-2": "Bottom slot 2",
-  "bottom-3": "Bottom slot 3",
-  "bottom-4": "Bottom slot 4",
-  "bottom-5": "Bottom slot 5",
-  "bottom-6": "Bottom slot 6",
-};
-
-function OverlayPositionPicker({
-  value,
-  onChange,
-}: {
-  readonly value: OverlayPosition;
-  readonly onChange: (position: OverlayPosition) => void;
-}) {
-  return (
-    <div
-      className="overlay-position-picker"
-      role="radiogroup"
-      aria-label="Overlay position"
-    >
-      <div className="overlay-position-grid overlay-position-grid-top">
-        {OVERLAY_POSITION_TOP_CELLS.map((cell, index) => {
-          if (cell === null) {
-            return (
-              <span
-                aria-hidden="true"
-                className="overlay-position-cell overlay-position-cell-empty"
-                key={`empty-${index}`}
-              />
-            );
-          }
-          return (
-            <OverlayPositionCell
-              cell={cell}
-              key={cell}
-              onChange={onChange}
-              selected={cell === value}
-            />
-          );
-        })}
-      </div>
-      <div className="overlay-position-grid overlay-position-grid-bottom">
-        {OVERLAY_POSITION_BOTTOM_CELLS.map((cell) => (
-          <OverlayPositionCell
-            cell={cell}
-            key={cell}
-            onChange={onChange}
-            selected={cell === value}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function OverlayPositionCell({
-  cell,
-  selected,
-  onChange,
-}: {
-  readonly cell: OverlayPosition;
-  readonly selected: boolean;
-  readonly onChange: (position: OverlayPosition) => void;
-}) {
-  return (
-    <button
-      aria-checked={selected}
-      aria-label={OVERLAY_POSITION_LABELS[cell]}
-      className="overlay-position-cell"
-      data-selected={selected ? "true" : "false"}
-      onClick={() => onChange(cell)}
-      role="radio"
-      title={OVERLAY_POSITION_LABELS[cell]}
-      type="button"
-    >
-      <span className="overlay-position-dot" aria-hidden="true" />
-    </button>
-  );
-}
-
 function defaultSettingsDraft(): SettingsDraft {
   return {
     playerName: "",
@@ -4097,6 +4131,7 @@ function defaultSettingsDraft(): SettingsDraft {
     },
     overlayEnabled: false,
     overlayPosition: "top-right",
+    overlayPlacementMode: false,
   };
 }
 

@@ -35,6 +35,9 @@ describe("FileAppSettingsRepository", () => {
         defaultRace: "Protoss",
         replayDirectory: "A:\\Replays",
         pollingIntervalMs: 2000,
+        overlayEnabled: true,
+        overlayPlacementMode: true,
+        overlayCustomPosition: { x: 640, y: 360 },
         externalSources: {
           sc2Pulse: true,
           localFixture: true
@@ -69,6 +72,7 @@ describe("FileAppSettingsRepository", () => {
     const repository = new FileAppSettingsRepository(settingsPath);
 
     await expect(repository.read()).resolves.toMatchObject({
+      overlayPlacementMode: false,
       externalSources: {
         sc2Pulse: true,
         localFixture: true

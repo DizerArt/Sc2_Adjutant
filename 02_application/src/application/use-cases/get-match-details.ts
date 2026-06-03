@@ -7,7 +7,8 @@ import type {
   ReplayAnalysisGraph,
   ReplayAnalysisPlayer,
   ReplayAnalysisReaderPort,
-  ReplayBuildOrderPlayer
+  ReplayBuildOrderPlayer,
+  ReplaySuspicionAnalysis
 } from "../../domain/ports/replay-analysis-reader-port.js";
 
 export type GetMatchDetailsRequest = {
@@ -25,6 +26,7 @@ export type MatchDetails = {
   readonly players: readonly ReplayAnalysisPlayer[];
   readonly graphs: readonly ReplayAnalysisGraph[];
   readonly buildOrders: readonly ReplayBuildOrderPlayer[];
+  readonly suspicion?: ReplaySuspicionAnalysis;
   readonly parseError?: string;
 };
 
@@ -62,6 +64,7 @@ export class GetMatchDetails {
         players: analysis.players,
         graphs: analysis.graphs,
         buildOrders: analysis.buildOrders,
+        suspicion: analysis.suspicion,
         parseError: analysis.parseError
       }
     };

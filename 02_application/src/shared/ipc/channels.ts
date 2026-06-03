@@ -28,5 +28,8 @@ export const IPC_CHANNELS = {
   windowSetCompact: "window:set-compact",
   overlayShow: "overlay:show",
   overlayHide: "overlay:hide",
-  overlaySetPosition: "overlay:set-position"
+  overlaySetPosition: "overlay:set-position",
+  overlaySetPlacementMode: "overlay:set-placement-mode",
+  voiceSpeak: "voice:speak",
+  voiceListAvailable: "voice:list-available"
 } as const;

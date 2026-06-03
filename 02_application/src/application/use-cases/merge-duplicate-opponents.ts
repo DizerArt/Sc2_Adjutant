@@ -214,6 +214,7 @@ function pruneZeroMatchNicknameDuplicates(
 } {
   const matchCounts = countMatchesByOpponent(matches);
   const activeNameKeys = new Set<string>();
+  const activeStableNameKeys = new Set<string>();
 
   for (const opponent of opponents) {
     if ((matchCounts.get(opponent.id) ?? 0) === 0) {
@@ -222,6 +223,9 @@ function pruneZeroMatchNicknameDuplicates(
 
     for (const key of opponentNameKeys(opponent)) {
       activeNameKeys.add(key);
+      if (hasStableOpponentIdentity(opponent)) {
+        activeStableNameKeys.add(key);
+      }
     }
   }
 
@@ -233,6 +237,8 @@ function pruneZeroMatchNicknameDuplicates(
     const isStaleDuplicate =
       matchCount === 0 &&
       !isBarcodeNickname(opponent.nickname) &&
+      (!hasStableOpponentIdentity(opponent) ||
+        opponentNameKeys(opponent).some((key) => activeStableNameKeys.has(key))) &&
       opponentNameKeys(opponent).some((key) => activeNameKeys.has(key));
 
     if (isStaleDuplicate) {
@@ -247,6 +253,10 @@ function pruneZeroMatchNicknameDuplicates(
     opponents: kept,
     droppedOpponentIds
   };
+}
+
+function hasStableOpponentIdentity(opponent: Opponent): boolean {
+  return Boolean(normalizeIdentityKey(opponent.battleTag) || selectedStableProfileIdKey(opponent.id));
 }
 
 function countMatchesByOpponent(matches: readonly Match[]): Map<EntityId, number> {

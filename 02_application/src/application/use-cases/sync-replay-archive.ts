@@ -20,6 +20,7 @@ import type { EnrichmentCandidateRepository } from "../../domain/repositories/en
 import type { MatchRepository } from "../../domain/repositories/match-repository.js";
 import type { OpponentRepository } from "../../domain/repositories/opponent-repository.js";
 import { isBarcodeNickname } from "../../domain/value-objects/barcode.js";
+import { normalizeBattleTagKey } from "../../domain/value-objects/battle-tag.js";
 import { createStableEntityId } from "../../domain/value-objects/entity-id.js";
 import type { Race } from "../../domain/value-objects/race.js";
 import type { OpponentEnrichmentService } from "../services/opponent-enrichment-service.js";
@@ -274,13 +275,16 @@ export class SyncReplayArchive {
   ): Promise<Opponent> {
     const opponentId = buildOpponentId(replayOpponent, playedAt);
     const byId = await this.dependencies.opponentRepository.findById(opponentId);
-    if (byId) {
+    if (byId && !shouldAvoidNicknameOnlyStableOpponent(replayOpponent, byId)) {
       return mergeReplayOpponentSample(byId, replayOpponent, now);
     }
+    const createOpponentId = byId
+      ? createStableEntityId("opponent", `${replayOpponent.name}-${playedAt}`)
+      : opponentId;
 
     if (replayProfileQuery(replayOpponent)) {
       return createOpponent({
-        id: opponentId,
+        id: createOpponentId,
         nickname: replayOpponent.name,
         race: replayOpponent.race,
         now
@@ -290,6 +294,7 @@ export class SyncReplayArchive {
     if (!isBarcodeNickname(replayOpponent.name)) {
       const normalizedReplayName = normalizePlayerIdentityName(replayOpponent.name);
       const existing = (await this.dependencies.opponentRepository.findAll()).find((opponent) =>
+        !hasStableOpponentIdentity(opponent) &&
         opponentMatchesPlayerIdentity(opponent, normalizedReplayName)
       );
       if (existing) {
@@ -298,7 +303,7 @@ export class SyncReplayArchive {
     }
 
     return createOpponent({
-      id: opponentId,
+      id: createOpponentId,
       nickname: replayOpponent.name,
       race: replayOpponent.race,
       now
@@ -349,9 +354,20 @@ export class SyncReplayArchive {
     const raceRepairedMatch = repairMatchRacesFromReplay(match, players, now);
     const profileLink = replayProfileQuery(players.opponent);
     if (!profileLink) {
+      const existingOpponent = await this.dependencies.opponentRepository.findById(match.opponentId);
+      if (existingOpponent && shouldDetachNicknameOnlyReplay(match, existingOpponent, players.opponent)) {
+        const detachedOpponent = await this.findOrCreateNicknameOnlyOpponent(players.opponent, match.playedAt, now);
+        await this.dependencies.opponentRepository.save(detachedOpponent);
+        await this.dependencies.matchRepository.save({
+          ...raceRepairedMatch,
+          opponentId: detachedOpponent.id,
+          updatedAt: now
+        });
+        return;
+      }
+
       if (raceRepairedMatch !== match) {
         await this.dependencies.matchRepository.save(raceRepairedMatch);
-        const existingOpponent = await this.dependencies.opponentRepository.findById(match.opponentId);
         if (existingOpponent) {
           await this.dependencies.opponentRepository.save(
             mergeReplayOpponentSample(existingOpponent, players.opponent, now)
@@ -384,6 +400,31 @@ export class SyncReplayArchive {
     }
 
     await this.enrichOpponent(opponent, players.opponent, region, [userName, players.user.name], players.opponent.race);
+  }
+
+  private async findOrCreateNicknameOnlyOpponent(
+    replayOpponent: ReplayMetadataPlayer,
+    playedAt: string,
+    now: string
+  ): Promise<Opponent> {
+    const baseId = createStableEntityId("opponent", replayOpponent.name);
+    const byBaseId = await this.dependencies.opponentRepository.findById(baseId);
+    if (byBaseId && !hasStableOpponentIdentity(byBaseId)) {
+      return mergeReplayOpponentSample(byBaseId, replayOpponent, now);
+    }
+
+    const detachedId = byBaseId ? createStableEntityId("opponent", `${replayOpponent.name}-${playedAt}`) : baseId;
+    const byDetachedId = await this.dependencies.opponentRepository.findById(detachedId);
+    if (byDetachedId) {
+      return mergeReplayOpponentSample(byDetachedId, replayOpponent, now);
+    }
+
+    return createOpponent({
+      id: detachedId,
+      nickname: replayOpponent.name,
+      race: replayOpponent.race,
+      now
+    });
   }
 }
 
@@ -524,6 +565,43 @@ function buildOpponentId(replayOpponent: ReplayMetadataPlayer, playedAt: string)
   }
 
   return createStableEntityId("opponent", replayOpponent.name);
+}
+
+function hasStableOpponentIdentity(opponent: Opponent): boolean {
+  if (normalizeBattleTagKey(opponent.battleTag)) {
+    return true;
+  }
+
+  return opponent.id !== createStableEntityId("opponent", opponent.nickname);
+}
+
+function shouldAvoidNicknameOnlyStableOpponent(
+  replayOpponent: ReplayMetadataPlayer,
+  opponent: Opponent
+): boolean {
+  return !replayProfileQuery(replayOpponent) && hasStableOpponentIdentity(opponent);
+}
+
+function shouldDetachNicknameOnlyReplay(
+  match: Match,
+  opponent: Opponent,
+  replayOpponent: ReplayMetadataPlayer
+): boolean {
+  if (replayProfileQuery(replayOpponent) || !hasStableOpponentIdentity(opponent)) {
+    return false;
+  }
+
+  if (!opponentMatchesPlayerIdentity(opponent, normalizePlayerIdentityName(replayOpponent.name))) {
+    return false;
+  }
+
+  const matchTime = Date.parse(match.playedAt);
+  const createdTime = Date.parse(opponent.createdAt);
+  if (!Number.isFinite(matchTime) || !Number.isFinite(createdTime)) {
+    return false;
+  }
+
+  return matchTime < createdTime;
 }
 
 function replayProfileQuery(replayOpponent: ReplayMetadataPlayer): string | undefined {

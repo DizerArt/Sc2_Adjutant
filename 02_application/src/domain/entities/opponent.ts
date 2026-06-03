@@ -7,7 +7,7 @@ import type { MatchResult } from "./match.js";
 export const MAX_OPPONENT_NOTES = 5;
 export const MAX_OPPONENT_NOTE_LENGTH = 96;
 export const MAX_OPPONENT_STRATEGY_TAGS = 12;
-export const MAX_OPPONENT_STRATEGY_TAG_LENGTH = 11;
+export const MAX_OPPONENT_STRATEGY_TAG_LENGTH = 16;
 export const OPPONENT_MARKERS = ["skull", "heart", "blocked"] as const;
 
 export type OpponentMarker = (typeof OPPONENT_MARKERS)[number];
@@ -91,11 +91,16 @@ export function createOpponent(input: CreateOpponentInput): Opponent {
     markers: normalizeMarkers(input.markers),
     confidenceScore: input.confidenceScore,
     createdAt: now,
-    updatedAt: now
+    updatedAt: now,
   };
 }
 
-export function recordOpponentMatch(opponent: Opponent, result: MatchResult, playedAt: string, mmr?: number): Opponent {
+export function recordOpponentMatch(
+  opponent: Opponent,
+  result: MatchResult,
+  playedAt: string,
+  mmr?: number,
+): Opponent {
   return {
     ...opponent,
     encounters: opponent.encounters + 1,
@@ -103,11 +108,15 @@ export function recordOpponentMatch(opponent: Opponent, result: MatchResult, pla
     losses: result === "loss" ? opponent.losses + 1 : opponent.losses,
     mmrAtLastMatch: mmr ?? opponent.mmrAtLastMatch,
     lastMatchDate: playedAt,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 }
 
-export function updateOpponentMatchResult(opponent: Opponent, previous: MatchResult, next: MatchResult): Opponent {
+export function updateOpponentMatchResult(
+  opponent: Opponent,
+  previous: MatchResult,
+  next: MatchResult,
+): Opponent {
   if (previous === next || next === "unknown") {
     return opponent;
   }
@@ -116,11 +125,15 @@ export function updateOpponentMatchResult(opponent: Opponent, previous: MatchRes
     ...opponent,
     wins: opponent.wins + resultDelta(previous, next, "win"),
     losses: opponent.losses + resultDelta(previous, next, "loss"),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 }
 
-export function addOpponentNote(opponent: Opponent, note: string, race?: Race): Opponent {
+export function addOpponentNote(
+  opponent: Opponent,
+  note: string,
+  race?: Race,
+): Opponent {
   const normalizedNote = note.trim().slice(0, MAX_OPPONENT_NOTE_LENGTH);
   if (!normalizedNote) {
     return opponent;
@@ -136,25 +149,33 @@ export function addOpponentNote(opponent: Opponent, note: string, race?: Race): 
       ...opponent,
       raceProfiles: upsertRaceProfile(opponent.raceProfiles, targetRace, {
         notes: [...currentNotes, normalizedNote].slice(-MAX_OPPONENT_NOTES),
-        updatedAt: now
+        updatedAt: now,
       }),
-      updatedAt: now
+      updatedAt: now,
     };
   }
 
   return {
     ...opponent,
     notes: [...opponent.notes, normalizedNote].slice(-MAX_OPPONENT_NOTES),
-    updatedAt: now
+    updatedAt: now,
   };
 }
 
-export function removeOpponentNote(opponent: Opponent, noteIndex: number, race?: Race): Opponent {
+export function removeOpponentNote(
+  opponent: Opponent,
+  noteIndex: number,
+  race?: Race,
+): Opponent {
   const targetRace = race ? normalizeRace(race) : "Unknown";
 
   if (targetRace !== "Unknown") {
     const currentNotes = opponent.raceProfiles?.[targetRace]?.notes ?? [];
-    if (!Number.isInteger(noteIndex) || noteIndex < 0 || noteIndex >= currentNotes.length) {
+    if (
+      !Number.isInteger(noteIndex) ||
+      noteIndex < 0 ||
+      noteIndex >= currentNotes.length
+    ) {
       return opponent;
     }
 
@@ -163,38 +184,52 @@ export function removeOpponentNote(opponent: Opponent, noteIndex: number, race?:
       ...opponent,
       raceProfiles: upsertRaceProfile(opponent.raceProfiles, targetRace, {
         notes: currentNotes.filter((_note, index) => index !== noteIndex),
-        updatedAt: now
+        updatedAt: now,
       }),
-      updatedAt: now
+      updatedAt: now,
     };
   }
 
-  if (!Number.isInteger(noteIndex) || noteIndex < 0 || noteIndex >= opponent.notes.length) {
+  if (
+    !Number.isInteger(noteIndex) ||
+    noteIndex < 0 ||
+    noteIndex >= opponent.notes.length
+  ) {
     return opponent;
   }
 
   return {
     ...opponent,
     notes: opponent.notes.filter((_note, index) => index !== noteIndex),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 }
 
 export function updateOpponentProfile(
   opponent: Opponent,
   input: UpdateOpponentProfileInput,
-  now = new Date().toISOString()
+  now = new Date().toISOString(),
 ): Opponent {
-  const targetRace = hasOwn(input, "race") && input.race ? normalizeRace(input.race) : opponent.race;
+  const targetRace =
+    hasOwn(input, "race") && input.race
+      ? normalizeRace(input.race)
+      : opponent.race;
   const nextMmr = hasOwn(input, "mmrAtLastMatch")
     ? normalizeOptionalNumber(input.mmrAtLastMatch)
     : opponent.mmrAtLastMatch;
-  const nextLeague = hasOwn(input, "league") ? normalizeOptionalString(input.league) : opponent.league;
-  const nextTags = hasOwn(input, "strategyTags") && input.strategyTags
-    ? normalizeStrategyTags(input.strategyTags)
-    : opponent.strategyTags;
-  const nextConfidence = hasOwn(input, "confidenceScore") ? normalizeConfidence(input.confidenceScore) : opponent.confidenceScore;
-  const nextMarkers = hasOwn(input, "markers") ? normalizeMarkers(input.markers) : opponent.markers;
+  const nextLeague = hasOwn(input, "league")
+    ? normalizeOptionalString(input.league)
+    : opponent.league;
+  const nextTags =
+    hasOwn(input, "strategyTags") && input.strategyTags
+      ? normalizeStrategyTags(input.strategyTags)
+      : opponent.strategyTags;
+  const nextConfidence = hasOwn(input, "confidenceScore")
+    ? normalizeConfidence(input.confidenceScore)
+    : opponent.confidenceScore;
+  const nextMarkers = hasOwn(input, "markers")
+    ? normalizeMarkers(input.markers)
+    : opponent.markers;
   const shouldUpdateRaceProfile =
     hasOwn(input, "race") ||
     hasOwn(input, "mmrAtLastMatch") ||
@@ -204,7 +239,9 @@ export function updateOpponentProfile(
 
   return {
     ...opponent,
-    nickname: hasOwn(input, "nickname") ? normalizeOptionalString(input.nickname) ?? opponent.nickname : opponent.nickname,
+    nickname: hasOwn(input, "nickname")
+      ? (normalizeOptionalString(input.nickname) ?? opponent.nickname)
+      : opponent.nickname,
     race: targetRace,
     raceProfiles: shouldUpdateRaceProfile
       ? upsertRaceProfile(opponent.raceProfiles, targetRace, {
@@ -212,17 +249,22 @@ export function updateOpponentProfile(
           league: nextLeague,
           strategyTags: nextTags,
           confidenceScore: nextConfidence,
-          updatedAt: now
+          updatedAt: now,
         })
       : opponent.raceProfiles,
-    battleTag: hasOwn(input, "battleTag") ? normalizeOptionalString(input.battleTag) : opponent.battleTag,
-    aliases: hasOwn(input, "aliases") && input.aliases ? normalizeStringArray(input.aliases) : opponent.aliases,
+    battleTag: hasOwn(input, "battleTag")
+      ? normalizeOptionalString(input.battleTag)
+      : opponent.battleTag,
+    aliases:
+      hasOwn(input, "aliases") && input.aliases
+        ? normalizeStringArray(input.aliases)
+        : opponent.aliases,
     mmrAtLastMatch: nextMmr,
     league: nextLeague,
     strategyTags: nextTags,
     markers: nextMarkers,
     confidenceScore: nextConfidence,
-    updatedAt: now
+    updatedAt: now,
   };
 }
 
@@ -230,7 +272,7 @@ export function enrichOpponentFromCandidate(
   opponent: Opponent,
   candidate: OpponentDataCandidate,
   now = new Date().toISOString(),
-  targetRace?: Race
+  targetRace?: Race,
 ): Opponent {
   // Attribute the candidate's MMR / league / confidence to the race we
   // actually observed in the match (when supplied) rather than the
@@ -266,7 +308,8 @@ export function enrichOpponentFromCandidate(
     candidate.nickname &&
     candidate.nickname !== opponent.nickname &&
     !isBarcodeNickname(candidate.nickname);
-  const keepBarcodeAsNickname = opponentIsBarcode && Boolean(candidateRevealsRealName);
+  const keepBarcodeAsNickname =
+    opponentIsBarcode && Boolean(candidateRevealsRealName);
 
   const nextNickname = keepBarcodeAsNickname
     ? opponent.nickname
@@ -275,75 +318,96 @@ export function enrichOpponentFromCandidate(
     ? candidate.nickname
     : opponent.revealedNickname;
   const aliasBase =
-    !keepBarcodeAsNickname && candidate.nickname && candidate.nickname !== opponent.nickname
+    !keepBarcodeAsNickname &&
+    candidate.nickname &&
+    candidate.nickname !== opponent.nickname
       ? [...opponent.aliases, opponent.nickname]
       : opponent.aliases;
-  const hasObservedRace = Boolean(targetRace) && race !== "Unknown" && race !== "Random";
+  const hasObservedRace =
+    Boolean(targetRace) && race !== "Unknown" && race !== "Random";
 
   return {
     ...opponent,
     nickname: nextNickname,
     revealedNickname: nextRevealedNickname,
-    race: hasObservedRace || opponent.race === "Unknown" || race === "Random" ? race : opponent.race,
+    race:
+      hasObservedRace || opponent.race === "Unknown" || race === "Random"
+        ? race
+        : opponent.race,
     raceProfiles: upsertRaceProfile(opponent.raceProfiles, race, {
       mmrAtLastMatch: candidate.mmr ?? localMmr,
       league: candidate.league ?? localLeague,
-      totalGamesAtLastMatch: sourceTotalGames(candidate) ?? localRaceProfile?.totalGamesAtLastMatch,
+      totalGamesAtLastMatch:
+        sourceTotalGames(candidate) ?? localRaceProfile?.totalGamesAtLastMatch,
       strategyTags: localRaceProfile?.strategyTags ?? [],
       notes: localRaceProfile?.notes ?? [],
       confidenceScore: candidate.confidenceScore,
-      updatedAt: now
+      updatedAt: now,
     }),
     battleTag: opponent.battleTag ?? candidate.battleTag,
     aliases: mergeUniqueStrings(aliasBase, candidate.aliases),
     mmrAtLastMatch: candidate.mmr ?? localMmr,
     league: candidate.league ?? localLeague,
     confidenceScore: candidate.confidenceScore,
-    updatedAt: now
+    updatedAt: now,
   };
 }
 
-function sourceTotalGames(candidate: OpponentDataCandidate): number | undefined {
+function sourceTotalGames(
+  candidate: OpponentDataCandidate,
+): number | undefined {
   return normalizeOptionalNumber(candidate.totalGames);
 }
 
-function createRaceProfiles(input: CreateOpponentInput, now: string): Opponent["raceProfiles"] {
+function createRaceProfiles(
+  input: CreateOpponentInput,
+  now: string,
+): Opponent["raceProfiles"] {
   return upsertRaceProfile(undefined, input.race, {
     mmrAtLastMatch: input.mmrAtLastMatch,
     league: normalizeOptionalString(input.league),
     strategyTags: normalizeStrategyTags(input.strategyTags ?? []),
     notes: input.notes ?? [],
     confidenceScore: input.confidenceScore,
-    updatedAt: now
+    updatedAt: now,
   });
 }
 
 function upsertRaceProfile(
   profiles: Opponent["raceProfiles"],
   race: Race,
-  profile: OpponentRaceProfileData
+  profile: OpponentRaceProfileData,
 ): Opponent["raceProfiles"] {
   return {
     ...profiles,
     [race]: {
       ...profiles?.[race],
-      ...profile
-    }
+      ...profile,
+    },
   };
 }
 
-function resultDelta(previous: MatchResult, next: MatchResult, target: MatchResult): number {
+function resultDelta(
+  previous: MatchResult,
+  next: MatchResult,
+  target: MatchResult,
+): number {
   const previousValue = previous === target ? 1 : 0;
   const nextValue = next === target ? 1 : 0;
   return nextValue - previousValue;
 }
 
-function normalizeOptionalString(value: string | undefined): string | undefined {
+function normalizeOptionalString(
+  value: string | undefined,
+): string | undefined {
   const normalized = value?.trim();
   return normalized ? normalized : undefined;
 }
 
-function mergeUniqueStrings(first: readonly string[], second: readonly string[]): readonly string[] {
+function mergeUniqueStrings(
+  first: readonly string[],
+  second: readonly string[],
+): readonly string[] {
   const result = new Set<string>();
 
   for (const value of [...first, ...second]) {
@@ -361,13 +425,15 @@ function normalizeStringArray(values: readonly string[]): readonly string[] {
 }
 
 function normalizeStrategyTags(values: readonly string[]): readonly string[] {
-  return mergeUniqueStrings([], values.map((value) => value.slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH))).slice(
-    0,
-    MAX_OPPONENT_STRATEGY_TAGS
-  );
+  return mergeUniqueStrings(
+    [],
+    values.map((value) => value.slice(0, MAX_OPPONENT_STRATEGY_TAG_LENGTH)),
+  ).slice(0, MAX_OPPONENT_STRATEGY_TAGS);
 }
 
-function normalizeMarkers(values: readonly OpponentMarker[] | undefined): readonly OpponentMarker[] {
+function normalizeMarkers(
+  values: readonly OpponentMarker[] | undefined,
+): readonly OpponentMarker[] {
   const markers = new Set<OpponentMarker>();
 
   for (const value of values ?? []) {
@@ -379,8 +445,12 @@ function normalizeMarkers(values: readonly OpponentMarker[] | undefined): readon
   return [...markers];
 }
 
-function normalizeOptionalNumber(value: number | undefined): number | undefined {
-  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+function normalizeOptionalNumber(
+  value: number | undefined,
+): number | undefined {
+  return typeof value === "number" && Number.isFinite(value)
+    ? value
+    : undefined;
 }
 
 function normalizeConfidence(value: number | undefined): number | undefined {
@@ -391,6 +461,9 @@ function normalizeConfidence(value: number | undefined): number | undefined {
   return Math.min(Math.max(value, 0), 1);
 }
 
-function hasOwn<T extends object, K extends PropertyKey>(value: T, key: K): value is T & Record<K, unknown> {
+function hasOwn<T extends object, K extends PropertyKey>(
+  value: T,
+  key: K,
+): value is T & Record<K, unknown> {
   return Object.prototype.hasOwnProperty.call(value, key);
 }

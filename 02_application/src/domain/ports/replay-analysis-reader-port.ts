@@ -40,11 +40,43 @@ export type ReplayBuildOrderPlayer = {
   readonly entries: readonly ReplayBuildOrderEntry[];
 };
 
+export type ReplaySuspicionLevel = "low" | "medium" | "high";
+
+export type ReplaySuspicionEvidenceType =
+  | "hiddenCamera"
+  | "hiddenTarget"
+  | "hiddenEnemyCamera"
+  | "hiddenEnemyCommand";
+
+export type ReplaySuspicionEvidence = {
+  readonly seconds: number;
+  readonly playerName: string;
+  readonly type: ReplaySuspicionEvidenceType;
+  readonly label: string;
+  readonly details: string;
+  readonly weight: number;
+};
+
+export type ReplaySuspicionPlayer = {
+  readonly playerName: string;
+  readonly race: Race;
+  readonly score: number;
+  readonly confidence: number;
+  readonly level: ReplaySuspicionLevel;
+  readonly evidence: readonly ReplaySuspicionEvidence[];
+};
+
+export type ReplaySuspicionAnalysis = {
+  readonly players: readonly ReplaySuspicionPlayer[];
+  readonly parseError?: string;
+};
+
 export type ReplayAnalysis = {
   readonly players: readonly ReplayAnalysisPlayer[];
   readonly averageApm?: number;
   readonly graphs: readonly ReplayAnalysisGraph[];
   readonly buildOrders: readonly ReplayBuildOrderPlayer[];
+  readonly suspicion?: ReplaySuspicionAnalysis;
   readonly parseError?: string;
 };
 

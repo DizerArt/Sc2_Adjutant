@@ -21,6 +21,14 @@ import type { EnrichmentCandidateSnapshot } from "../../domain/entities/enrichme
 import type { Opponent, UpdateOpponentProfileInput } from "../../domain/entities/opponent.js";
 import type { Race } from "../../domain/value-objects/race.js";
 
+export type {
+  VoiceOpponentSpeechData,
+  VoiceMatchSpeechData,
+  VoiceSpeakEvent
+} from "./voice-contracts.js";
+
+import type { VoiceSpeakEvent } from "./voice-contracts.js";
+
 export type RendererDiagnosticsResponse = DiagnosticsReport;
 
 export type AppVersionResponse = {
@@ -185,4 +193,11 @@ export type Sc2AssistantBridge = {
   readonly showOverlay: () => Promise<void>;
   readonly hideOverlay: () => Promise<void>;
   readonly setOverlayPosition: (position: OverlayPosition) => Promise<void>;
+  readonly setOverlayPlacementMode: (enabled: boolean) => Promise<void>;
+  readonly onVoiceSpeak: (listener: (event: VoiceSpeakEvent) => void) => () => void;
+  readonly listAvailableVoices: () => Promise<ListAvailableVoicesResponse>;
+};
+
+export type ListAvailableVoicesResponse = {
+  readonly available: readonly string[];
 };

@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import type { MatchHistoryItem } from "../../application/use-cases/list-match-history.js";
 import type { Opponent } from "../../domain/entities/opponent.js";
-import type { Race } from "../../domain/value-objects/race.js";
+import { normalizeRace, type Race } from "../../domain/value-objects/race.js";
 import type { AppSettings } from "../../domain/entities/app-settings.js";
-import type { MonitoringStatus } from "../../shared/ipc/contracts.js";
+import type {
+  MonitoringSessionPlayer,
+  MonitoringStatus
+} from "../../shared/ipc/contracts.js";
 import protossModelUrl from "../assets/protoss-model.png";
 import randomModelUrl from "../assets/random-model.png";
 import terranModelUrl from "../assets/terran-model.png";
@@ -101,9 +104,21 @@ export function OverlayShell() {
     };
   }, []);
 
+  const displayRace = useMemo(
+    () =>
+      opponent
+        ? resolveOverlayRace(
+            opponent,
+            matches,
+            monitoring,
+            settings?.playerName ?? undefined
+          )
+        : "Unknown",
+    [opponent, matches, monitoring, settings?.playerName]
+  );
   const raceStats = useMemo(
-    () => (opponent ? opponentRaceStats(opponent, matches) : null),
-    [opponent, matches]
+    () => (opponent ? opponentRaceStats(opponent, matches, displayRace) : null),
+    [opponent, matches, displayRace]
   );
   const t = createTranslator(normalizeUiLanguage(settings?.language));
 
@@ -124,7 +139,7 @@ export function OverlayShell() {
     );
   }
 
-  const race = (opponent.race ?? "Unknown") as Race;
+  const race = displayRace;
   const theme = raceThemeFor(race);
   const portrait = RACE_PORTRAITS[theme];
   const stats = raceStats ?? {
@@ -206,27 +221,22 @@ export function OverlayShell() {
   );
 }
 
-type RaceStats = {
+export type RaceStats = {
   readonly encounters: number;
   readonly wins: number;
   readonly losses: number;
 };
 
-function opponentRaceStats(
+export function opponentRaceStats(
   opponent: Opponent,
-  matches: readonly MatchHistoryItem[]
+  matches: readonly MatchHistoryItem[],
+  race: Race
 ): RaceStats {
   const opponentMatches = matches.filter(
-    (item) => item.match.opponentId === opponent.id
+    (item) =>
+      item.match.opponentId === opponent.id &&
+      (race === "Unknown" || item.match.opponentRace === race)
   );
-
-  if (opponentMatches.length === 0) {
-    return {
-      encounters: opponent.encounters,
-      wins: opponent.wins,
-      losses: opponent.losses
-    };
-  }
 
   return {
     encounters: opponentMatches.length,
@@ -248,12 +258,48 @@ function strategyTagsForRace(opponent: Opponent, race: Race): readonly string[] 
   return raceTags.length > 0 ? raceTags : opponent.strategyTags;
 }
 
-function mmrForRace(opponent: Opponent, race: Race): string {
+export function mmrForRace(opponent: Opponent, race: Race): string {
   const mmr = opponent.raceProfiles?.[race]?.mmrAtLastMatch ?? opponent.mmrAtLastMatch;
   return typeof mmr === "number" && Number.isFinite(mmr) && mmr > 0 ? String(Math.round(mmr)) : "-";
 }
 
-function findCurrentMatchOpponent(
+export function resolveOverlayRace(
+  opponent: Opponent,
+  matches: readonly MatchHistoryItem[],
+  monitoring: MonitoringStatus | null,
+  userName: string | undefined
+): Race {
+  const session = monitoring?.currentSession;
+  if (session?.active && session.mode === "ranked-1v1") {
+    const sessionOpponentRace = normalizeRace(
+      findCurrentMatchOpponentPlayer(session.players, userName)?.race
+    );
+    if (sessionOpponentRace !== "Unknown") {
+      return visibleOverlayRace(sessionOpponentRace);
+    }
+  }
+
+  if (monitoring?.lastSavedMatchId) {
+    const matchRace = normalizeRace(
+      matches.find(
+        (item) =>
+          item.match.id === monitoring.lastSavedMatchId &&
+          item.match.opponentId === opponent.id
+      )?.match.opponentRace
+    );
+    if (matchRace !== "Unknown") {
+      return visibleOverlayRace(matchRace);
+    }
+  }
+
+  return visibleOverlayRace(normalizeRace(opponent.race));
+}
+
+function visibleOverlayRace(race: Race): Race {
+  return race === "Unknown" ? "Random" : race;
+}
+
+export function findCurrentMatchOpponent(
   opponents: readonly Opponent[],
   matches: readonly MatchHistoryItem[],
   monitoring: MonitoringStatus | null,
@@ -291,39 +337,45 @@ function findCurrentMatchOpponent(
     return undefined;
   }
 
+  const normalizedUser = normalizeIdentity(userName);
+  const opponentPlayer = findCurrentMatchOpponentPlayer(session.players, userName);
+  const opponentName = normalizeIdentity(opponentPlayer?.name);
+  if (opponentName) {
+    const sessionOpponent = opponents.find(
+      (opponent) =>
+        !isLocalRecord(opponent, normalizedUser) &&
+        [opponent.nickname, opponent.battleTag ?? "", ...opponent.aliases].some(
+          (name) => normalizeIdentity(name) === opponentName
+        )
+    );
+    if (sessionOpponent) {
+      return sessionOpponent;
+    }
+  }
+
   if (lastSavedMatchId) {
-    const liveOpponent = resolveOpponentForMatch(
+    return resolveOpponentForMatch(
       opponents,
       matches,
       lastSavedMatchId,
       userName
     );
-    if (liveOpponent) {
-      return liveOpponent;
-    }
   }
 
+  return undefined;
+}
+
+function findCurrentMatchOpponentPlayer(
+  players: readonly MonitoringSessionPlayer[],
+  userName: string | undefined
+): MonitoringSessionPlayer | undefined {
   const normalizedUser = normalizeIdentity(userName);
   const userPlayer = normalizedUser
-    ? session.players.find(
-        (player) => normalizeIdentity(player.name) === normalizedUser
-      ) ?? session.players.find((player) => player.isUser)
-    : session.players.find((player) => player.isUser);
-  const opponentPlayer = userPlayer
-    ? session.players.find((player) => player !== userPlayer)
-    : undefined;
-  const opponentName = normalizeIdentity(opponentPlayer?.name);
-  if (!opponentName) {
-    return undefined;
-  }
+    ? players.find((player) => normalizeIdentity(player.name) === normalizedUser) ??
+      players.find((player) => player.isUser)
+    : players.find((player) => player.isUser);
 
-  return opponents.find(
-    (opponent) =>
-      !isLocalRecord(opponent, normalizedUser) &&
-      [opponent.nickname, opponent.battleTag ?? "", ...opponent.aliases].some(
-        (name) => normalizeIdentity(name) === opponentName
-      )
-  );
+  return userPlayer ? players.find((player) => player !== userPlayer) : undefined;
 }
 
 function resolveOpponentForMatch(

@@ -1,6 +1,6 @@
 {
   "name": "sc2-assistant-application",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "private": true,
   "type": "module",
   "description": "Desktop-first SC2 opponent analysis application foundation.",
@@ -17,7 +17,11 @@
     "dist:win": "npm run build && electron-builder --win",
     "smoke:electron": "node scripts/electron-smoke.cjs",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "voice:download": "node scripts/download-voice-models.cjs",
+    "voice:download:all": "node scripts/download-voice-models.cjs --all",
+    "voice:wasm": "node scripts/copy-voice-wasm.cjs",
+    "postinstall": "node scripts/copy-voice-wasm.cjs"
   },
   "build": {
     "appId": "com.dizerart.sc2companion",
@@ -29,6 +33,26 @@
       "dist-electron/**/*",
       "dist-renderer/**/*",
       "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/voice-models",
+        "to": "voice-models",
+        "filter": [
+          "**/*.onnx",
+          "**/*.onnx.json"
+        ]
+      },
+      {
+        "from": "resources/voice-wasm",
+        "to": "voice-wasm",
+        "filter": [
+          "**/*.wasm",
+          "**/*.mjs",
+          "**/*.data",
+          "**/*.js"
+        ]
+      }
     ],
     "extraMetadata": {
       "main": "dist-electron/main/electron/main.js"
@@ -56,10 +80,13 @@
     }
   },
   "dependencies": {
+    "@diffusionstudio/piper-wasm": "^1.0.0",
+    "@mintplex-labs/piper-tts-web": "^1.0.4",
     "@replaysremastered/sc2readerjs": "^0.1.9",
     "csv-parse": "^6.2.1",
     "csv-stringify": "^6.7.0",
     "fast-xml-parser": "^5.8.0",
+    "onnxruntime-web": "^1.26.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

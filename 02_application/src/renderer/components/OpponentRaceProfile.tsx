@@ -610,6 +610,16 @@ export type OpponentRaceProfileProps = {
   readonly onHistoryMatchSelect: (item: MatchHistoryItem) => void | Promise<void>;
   readonly onMarkerToggle: (marker: OpponentMarker) => void | Promise<void>;
   readonly onOpenNotesClick: (race: Race) => void;
+  readonly onPreviewVoiceClick?: (data: {
+    readonly nickname: string;
+    readonly race: Race;
+    readonly mmr?: number;
+    readonly encounters: number;
+    readonly wins: number;
+    readonly losses: number;
+    readonly strategyTags: readonly string[];
+    readonly notes: readonly string[];
+  }) => void | Promise<void>;
   readonly onStrategyTagAdd: (
     race: Race,
     currentTags: readonly string[],
@@ -666,6 +676,7 @@ export function OpponentRaceProfile({
   onHistoryMatchSelect,
   onMarkerToggle,
   onOpenNotesClick,
+  onPreviewVoiceClick,
   onStrategyTagAdd,
   onStrategyTagRemove,
   t = createTranslator("en"),
@@ -824,7 +835,43 @@ export function OpponentRaceProfile({
 
       <section className="race-profile-right">
         <div className="opponent-title-row">
-          <header className="panel-title">{t("profile.opponent")}</header>
+          <div className="opponent-title-main">
+            <header className="panel-title">{t("profile.opponent")}</header>
+            {onPreviewVoiceClick ? (
+              <button
+                aria-label={t("profile.previewVoice")}
+                className="profile-voice-preview-button"
+                onClick={() =>
+                  void onPreviewVoiceClick({
+                    nickname: formatOpponentDisplayName(opponent),
+                    race: selectedRace,
+                    mmr: visibleProfile.mmrAtLastMatch,
+                    encounters: raceStats.encounters,
+                    wins: raceStats.wins,
+                    losses: raceStats.losses,
+                    strategyTags: visibleProfile.strategyTags,
+                    notes: visibleProfile.notes,
+                  })
+                }
+                title={t("profile.previewVoice")}
+                type="button"
+              >
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path
+                    d="M2 6.2h2.7L8.6 3v10L4.7 9.8H2z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M10.2 5.4c.8.8.8 4.4 0 5.2M12.2 3.8c1.8 1.8 1.8 6.6 0 8.4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeWidth="1.4"
+                  />
+                </svg>
+              </button>
+            ) : null}
+          </div>
           <div
             className="profile-marker-controls"
             aria-label={t("profile.markers")}
@@ -840,7 +887,7 @@ export function OpponentRaceProfile({
                 onClick={() => void onMarkerToggle(marker)}
                 title={opponentMarkerLabel(marker, t)}
                 type="button"
-              >
+            >
                 {OPPONENT_MARKER_SYMBOLS[marker]}
               </button>
             ))}

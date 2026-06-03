@@ -734,6 +734,153 @@ describe("SyncReplayArchive", () => {
     ]);
   });
 
+  it("does not attach nickname-only replay imports to a BattleTag-resolved opponent", async () => {
+    const resolvedBlume = createOpponent({
+      id: "opponent_blume-1434",
+      nickname: "Blume",
+      race: "Zerg",
+      battleTag: "Blume#1434",
+      mmrAtLastMatch: 3997,
+      now: "2026-06-03T10:09:00.000Z"
+    });
+    const currentMatch = createMatch({
+      id: "match_current_blume",
+      opponentId: resolvedBlume.id,
+      playedAt: "2026-06-03T10:09:00.000Z",
+      playerRace: "Terran",
+      opponentRace: "Zerg",
+      result: "win",
+      replayPath: "A:\\replays\\current-blume.SC2Replay",
+      now: "2026-06-03T10:09:00.000Z"
+    });
+    const matchRepository = new InMemoryMatchRepository([currentMatch]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      { ...resolvedBlume, encounters: 1, wins: 1 }
+    ]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: new FakeReplayScanner([
+        replayFile("A:\\replays\\old-blume.SC2Replay", "2026-03-20T00:03:00.000Z")
+      ]),
+      replayMetadataReader: new FakeReplayMetadataReader({
+        "A:\\replays\\old-blume.SC2Replay": {
+          replayPath: "A:\\replays\\old-blume.SC2Replay",
+          playedAt: "2026-03-20T00:03:00.000Z",
+          map: "Taito Citadel LE",
+          result: "win",
+          durationSeconds: 3,
+          players: [
+            { name: "RetorieS", race: "Terran", result: "win" },
+            { name: "Blume", race: "Zerg", result: "loss" }
+          ]
+        }
+      }),
+      matchRepository,
+      opponentRepository,
+      clock: () => "2026-06-03T10:20:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full",
+      region: "EU"
+    });
+
+    const matches = await matchRepository.findAll();
+    const opponents = await opponentRepository.findAll();
+
+    expect(matches).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "match_current_blume",
+          opponentId: "opponent_blume-1434"
+        }),
+        expect.objectContaining({
+          id: "match_a-replays-old-blume-sc2replay",
+          opponentId: "opponent_blume"
+        })
+      ])
+    );
+    expect(opponents).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "opponent_blume-1434",
+          battleTag: "Blume#1434",
+          encounters: 1
+        }),
+        expect.objectContaining({
+          id: "opponent_blume",
+          battleTag: undefined,
+          encounters: 1
+        })
+      ])
+    );
+  });
+
+  it("detaches already linked nickname-only replays that predate a BattleTag-resolved opponent", async () => {
+    const resolvedBlume = createOpponent({
+      id: "opponent_blume-1434",
+      nickname: "Blume",
+      race: "Zerg",
+      battleTag: "Blume#1434",
+      mmrAtLastMatch: 3997,
+      now: "2026-06-03T10:09:00.000Z"
+    });
+    const wronglyLinkedOldMatch = createMatch({
+      id: "match_old_blume",
+      opponentId: resolvedBlume.id,
+      playedAt: "2026-03-20T00:03:00.000Z",
+      playerRace: "Terran",
+      opponentRace: "Zerg",
+      result: "win",
+      replayPath: "A:\\replays\\old-blume-linked.SC2Replay",
+      now: "2026-03-20T00:03:00.000Z"
+    });
+    const matchRepository = new InMemoryMatchRepository([wronglyLinkedOldMatch]);
+    const opponentRepository = new InMemoryOpponentRepository([
+      { ...resolvedBlume, encounters: 3, wins: 3 }
+    ]);
+
+    await new SyncReplayArchive({
+      replayFileScanner: new FakeReplayScanner([
+        replayFile("A:\\replays\\old-blume-linked.SC2Replay", "2026-03-20T00:03:00.000Z")
+      ]),
+      replayMetadataReader: new FakeReplayMetadataReader({
+        "A:\\replays\\old-blume-linked.SC2Replay": {
+          replayPath: "A:\\replays\\old-blume-linked.SC2Replay",
+          playedAt: "2026-03-20T00:03:00.000Z",
+          map: "Taito Citadel LE",
+          result: "win",
+          durationSeconds: 3,
+          players: [
+            { name: "RetorieS", race: "Terran", result: "win" },
+            { name: "Blume", race: "Zerg", result: "loss" }
+          ]
+        }
+      }),
+      matchRepository,
+      opponentRepository,
+      clock: () => "2026-06-03T10:20:00.000Z"
+    }).execute({
+      directory: "A:\\replays",
+      userName: "RetorieS",
+      mode: "full",
+      region: "EU"
+    });
+
+    await expect(matchRepository.findById("match_old_blume")).resolves.toMatchObject({
+      opponentId: "opponent_blume"
+    });
+    await expect(opponentRepository.findById("opponent_blume-1434")).resolves.toMatchObject({
+      encounters: 0,
+      wins: 0
+    });
+    await expect(opponentRepository.findById("opponent_blume")).resolves.toMatchObject({
+      nickname: "Blume",
+      encounters: 1,
+      wins: 1
+    });
+  });
+
   it("computes the SC2Pulse Battle.net profile query from a replay toon for sparse barcode profiles", async () => {
     const scanner = new FakeReplayScanner([
       replayFile("A:\\replays\\hellhound.SC2Replay", "2026-05-11T00:30:00.000Z")
