@@ -40,7 +40,15 @@
         "to": "voice-models",
         "filter": [
           "**/*.onnx",
-          "**/*.onnx.json"
+          "**/*.onnx.json",
+          "**/*.pt"
+        ]
+      },
+      {
+        "from": "resources/silero",
+        "to": "silero",
+        "filter": [
+          "**/*.py"
         ]
       },
       {

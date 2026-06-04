@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Downloads default Piper TTS voice models into resources/voice-models.
+// Downloads local TTS voice models into resources/voice-models.
 // Usage: node scripts/download-voice-models.cjs [--all]
 // By default fetches the English voice bundled in the installer (GLaDOS).
-// Pass --all to also fetch optional English voices.
+// Pass --all to also fetch optional English voices and the Russian Silero model.
 
 "use strict";
 
@@ -26,6 +26,14 @@ const OPTIONAL_VOICES = [
   { id: "en_US-amy-medium", path: "en/en_US/amy/medium/en_US-amy-medium.onnx" }
 ];
 
+const SILERO_VOICES = [
+  {
+    id: "ru_RU-silero-xenia",
+    url: "https://models.silero.ai/models/tts/ru/v5_5_ru.pt",
+    file: "silero-v5_5_ru.pt"
+  }
+];
+
 const targetDir = path.resolve(__dirname, "..", "resources", "voice-models");
 fs.mkdirSync(targetDir, { recursive: true });
 
@@ -35,6 +43,11 @@ const voices = includeOptional ? [...DEFAULT_VOICES, ...OPTIONAL_VOICES] : DEFAU
 (async () => {
   for (const voice of voices) {
     await downloadVoice(voice);
+  }
+  if (includeOptional) {
+    for (const voice of SILERO_VOICES) {
+      await downloadSileroVoice(voice);
+    }
   }
   console.log(`\nDone. Models live in: ${targetDir}`);
 })().catch((error) => {
@@ -51,6 +64,13 @@ async function downloadVoice(voice) {
   console.log(`\n[${voice.id}]`);
   await downloadFile(jsonUrl, jsonFile);
   await downloadFile(onnxUrl, onnxFile);
+}
+
+async function downloadSileroVoice(voice) {
+  const modelFile = path.join(targetDir, voice.file);
+
+  console.log(`\n[${voice.id}]`);
+  await downloadFile(voice.url, modelFile);
 }
 
 function downloadFile(url, dest) {

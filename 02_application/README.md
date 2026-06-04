@@ -107,22 +107,65 @@ Relevant modules:
 
 ## Voice Assistant
 
-The Voice Assistant is an optional offline Piper-based narrator. It can announce application startup and the detected opponent card.
+The Voice Assistant is an optional offline narrator. It can announce application startup and the detected opponent card.
+
+Current engines:
+
+- English UI speech uses Piper ONNX voices in the renderer.
+- Russian UI speech uses the Silero v5.5 Russian model (`xenia`, `baya`) through a Python sidecar in the main process.
 
 Voice runtime resources are local-only:
 
-- `resources/voice-models/` contains `.onnx` model files and matching `.onnx.json` configs.
+- `resources/voice-models/` contains Piper `.onnx` files, matching `.onnx.json` configs, and the Silero `.pt` model.
 - `resources/voice-wasm/` contains ONNX Runtime and Piper phonemizer WASM assets.
+- `resources/silero/` contains the Python entrypoint used to run the Silero PyTorch model.
 - `voice-model://` is an Electron custom protocol that exposes those resources to the renderer.
 
 Download or refresh bundled voice assets with:
 
 ```powershell
 npm run voice:download
+npm run voice:download:all
 npm run voice:wasm
 ```
 
-The narrator waits until settings and the Piper runtime are ready before playing the launch greeting. Live opponent announcements are debounced briefly so late MMR/race enrichment can replace the first raw SC2 Client API snapshot before it is spoken.
+`voice:download` fetches the default English voice. `voice:download:all` also fetches optional English voices and `silero-v5_5_ru.pt`.
+
+The narrator waits until settings and the selected voice runtime are ready before playing the launch greeting. Live opponent announcements are debounced briefly so late MMR/race enrichment can replace the first raw SC2 Client API snapshot before it is spoken.
+
+Development note: Russian Silero speech requires Python with PyTorch available on `PATH` (or `SC2_ADJUTANT_PYTHON` pointing at the desired Python executable). If PyTorch is missing, the Voice Assistant panel will show the sidecar error instead of silently falling back.
+
+### Russian Silero voice setup on Windows
+
+The Silero Russian Voice installer bundles the Russian model file and the local
+sidecar script. It does **not** bundle Python or PyTorch. Install them once on
+the target machine:
+
+1. Install Python for Windows:
+   - https://www.python.org/downloads/windows/
+   - Enable **Add Python to PATH** in the installer.
+2. Install PyTorch CPU from PowerShell or CMD:
+
+```powershell
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+3. Verify that PyTorch is visible to the same Python executable:
+
+```powershell
+python --version
+python -c "import torch; print(torch.__version__)"
+```
+
+If Python is not on `PATH`, point SC2 Adjutant at a specific interpreter and
+restart the app:
+
+```powershell
+setx SC2_ADJUTANT_PYTHON "C:\Path\To\python.exe"
+```
+
+PyTorch official install selector:
+https://pytorch.org/get-started/locally/
 
 ## Future Replay Suspicion Review
 

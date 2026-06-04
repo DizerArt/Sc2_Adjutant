@@ -42,7 +42,7 @@ class RecordingPlayer {
   stopAll(): void {}
 }
 
-function makeNarrator(overrides: Partial<VoiceSettings> = {}, language: AppLanguage = "ru") {
+function makeNarrator(overrides: Partial<VoiceSettings> = {}, language: AppLanguage = "en") {
   const tts = new RecordingTts();
   const player = new RecordingPlayer();
   const settings: VoiceSettings = { ...defaultVoiceSettings(), enabled: true, ...overrides };
@@ -78,13 +78,22 @@ describe("VoiceNarratorService", () => {
     expect(tts.calls.length).toBe(0);
   });
 
-  it("speaks greeting in English even when UI language is Russian", async () => {
-    const { narrator, tts } = makeNarrator({}, "ru");
+  it("speaks greeting in English when UI language is English", async () => {
+    const { narrator, tts } = makeNarrator({}, "en");
     await narrator.announceLaunch();
     expect(tts.calls.length).toBe(1);
     expect(tts.calls[0].language).toBe("en");
     expect(tts.calls[0].voiceId).toBe("en_US-glados");
     expect(tts.calls[0].text).toMatch(/commander/i);
+  });
+
+  it("speaks greeting in Russian with the Silero voice when UI language is Russian", async () => {
+    const { narrator, tts } = makeNarrator({}, "ru");
+    await narrator.announceLaunch();
+    expect(tts.calls.length).toBe(1);
+    expect(tts.calls[0].language).toBe("ru");
+    expect(tts.calls[0].voiceId).toBe("ru_RU-silero-xenia");
+    expect(tts.calls[0].text).toContain("командир");
   });
 
   it("emits opponent HEAD as protected and TAIL as interruptable", async () => {
@@ -196,7 +205,7 @@ describe("VoiceNarratorService", () => {
   it("preview phrase uses explicit English voice parameters", async () => {
     const { narrator, tts, player } = makeNarrator();
     await narrator.previewPhrase({
-      language: "ru",
+      language: "en",
       voiceId: "en_US-amy-medium",
       volume: 0.4,
       speakingRate: 1.2,
@@ -205,6 +214,20 @@ describe("VoiceNarratorService", () => {
     expect(player.preemptInterruptableCalls).toBe(1);
     expect(tts.calls[0].language).toBe("en");
     expect(tts.calls[0].voiceId).toBe("en_US-amy-medium");
+  });
+
+  it("preview phrase can use explicit Russian Silero voice parameters", async () => {
+    const { narrator, tts, player } = makeNarrator({}, "ru");
+    await narrator.previewPhrase({
+      language: "ru",
+      voiceId: "ru_RU-silero-baya",
+      volume: 0.4,
+      speakingRate: 1.2,
+      kind: "opponent"
+    });
+    expect(player.preemptInterruptableCalls).toBe(1);
+    expect(tts.calls[0].language).toBe("ru");
+    expect(tts.calls[0].voiceId).toBe("ru_RU-silero-baya");
   });
 
   it("manual opponent card preview bypasses event toggle but keeps English speech", async () => {

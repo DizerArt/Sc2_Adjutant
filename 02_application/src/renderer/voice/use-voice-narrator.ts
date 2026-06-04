@@ -6,8 +6,10 @@ import type {
   VoiceRuntimeStatus,
   VoiceSynthesisPort
 } from "../../domain/ports/voice-synthesis-port.js";
+import { voiceIdLanguage, type VoiceId } from "../../domain/entities/voice-settings.js";
 import { VoiceAudioPlayer } from "./audio-player.js";
 import { PiperRuntime } from "./piper-runtime.js";
+import { SileroRuntime } from "./silero-runtime.js";
 import {
   VoiceNarratorService,
   type OpponentSpeechData
@@ -21,6 +23,7 @@ export type VoiceController = {
 type Runtime = {
   readonly audioContext: AudioContext;
   readonly piper: PiperRuntime;
+  readonly silero: SileroRuntime;
   readonly player: VoiceAudioPlayer;
   narrator: VoiceNarratorService;
   activeTts: VoiceSynthesisPort;
@@ -37,15 +40,18 @@ function ensureRuntime(getSettings: () => AppSettings | null): Runtime {
   const piper = new PiperRuntime(audioContext, {
     logger: (message) => console.log("[piper]", message)
   });
+  const silero = new SileroRuntime(audioContext);
   const player = new VoiceAudioPlayer(audioContext);
 
   const runtime: Runtime = {
     audioContext,
     piper,
+    silero,
     player,
     narrator: undefined as unknown as VoiceNarratorService,
-    activeTts: piper
+    activeTts: undefined as unknown as VoiceSynthesisPort
   };
+  runtime.activeTts = createRoutingTts(runtime);
   runtime.narrator = new VoiceNarratorService({
     tts: { synthesize: (req) => runtime.activeTts.synthesize(req), getStatus: () => runtime.activeTts.getStatus(), warmup: (id) => runtime.activeTts.warmup(id) },
     player,
@@ -56,7 +62,7 @@ function ensureRuntime(getSettings: () => AppSettings | null): Runtime {
       }
       return settings.voice;
     },
-    getUiLanguage: () => "en",
+    getUiLanguage: () => getSettings()?.language ?? "en",
     getTranslator: (language) => createTranslator(language)
   });
   runtimeSingleton = runtime;
@@ -85,13 +91,15 @@ export function useVoiceNarrator(settings: AppSettings | null): VoiceController 
     }
     const runtime = ensureRuntime(() => settingsRef.current);
     narratorRef.current = runtime.narrator;
+    const warmupVoiceId = resolveWarmupVoiceId(settings);
+    const selectedRuntime = voiceIdLanguage(warmupVoiceId) === "ru" ? runtime.silero : runtime.piper;
 
-    const unsubscribeStatus = runtime.piper.onStatusChange(setStatus);
+    const unsubscribeStatus = selectedRuntime.onStatusChange(setStatus);
 
-    // Keep Piper failures visible in the Voice Assistant panel. Silent fallback
+    // Keep TTS failures visible in the Voice Assistant panel. Silent fallback
     // would bypass the controlled priority/preemption queue.
-    void runtime.piper
-      .warmup(settings.voice.voiceEn)
+    void selectedRuntime
+      .warmup(warmupVoiceId)
       .then(() => {
         if (launchAnnouncedRef.current) {
           return;
@@ -104,13 +112,13 @@ export function useVoiceNarrator(settings: AppSettings | null): VoiceController 
         void runtime.narrator.announceLaunch();
       })
       .catch((error: unknown) => {
-        console.error("[useVoiceNarrator] Piper warmup failed:", error);
+        console.error("[useVoiceNarrator] voice warmup failed:", error);
       });
 
     return () => {
       unsubscribeStatus();
     };
-  }, [settings, voiceActive, settings?.voice.voiceEn]);
+  }, [settings, voiceActive, settings?.language, settings?.voice.voiceEn, settings?.voice.voiceRu]);
 
   useEffect(() => {
     if (!settings || !voiceActive) {
@@ -150,4 +158,20 @@ export function useVoiceNarrator(settings: AppSettings | null): VoiceController 
   }, [voiceActive]);
 
   return { narrator: narratorRef.current, status };
+}
+
+function createRoutingTts(runtime: Runtime): VoiceSynthesisPort {
+  return {
+    getStatus: () => runtime.piper.getStatus(),
+    warmup: (voiceId: VoiceId) => routedRuntime(runtime, voiceId).warmup(voiceId),
+    synthesize: (request) => routedRuntime(runtime, request.voiceId).synthesize(request)
+  };
+}
+
+function routedRuntime(runtime: Runtime, voiceId: VoiceId): VoiceSynthesisPort {
+  return voiceIdLanguage(voiceId) === "ru" ? runtime.silero : runtime.piper;
+}
+
+function resolveWarmupVoiceId(settings: AppSettings): VoiceId {
+  return settings.language === "ru" ? settings.voice.voiceRu : settings.voice.voiceEn;
 }

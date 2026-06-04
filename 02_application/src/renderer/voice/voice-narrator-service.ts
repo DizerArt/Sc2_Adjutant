@@ -1,6 +1,6 @@
 import type { AppLanguage } from "../../domain/entities/app-settings.js";
 import type {
-  PiperVoiceId,
+  VoiceId,
   VoiceSettings
 } from "../../domain/entities/voice-settings.js";
 import type { Race } from "../../domain/value-objects/race.js";
@@ -119,7 +119,7 @@ export class VoiceNarratorService {
   }
 
   async announceTestPhrase(_language: AppLanguage, kind: "greeting" | "opponent"): Promise<void> {
-    const language: AppLanguage = "en";
+    const language = this.resolveSpeechLanguage();
     const translate = this.deps.getTranslator(language);
     const key: TranslationKey =
       kind === "greeting" ? "voice.speech.test.greeting" : "voice.speech.test.opponent";
@@ -135,7 +135,7 @@ export class VoiceNarratorService {
    */
   async previewPhrase(params: {
     readonly language?: AppLanguage;
-    readonly voiceId: PiperVoiceId;
+    readonly voiceId: VoiceId;
     readonly volume: number;
     readonly speakingRate: number;
     readonly kind: "greeting" | "opponent";
@@ -144,7 +144,7 @@ export class VoiceNarratorService {
     // instead of queueing behind the previous one.
     this.deps.player.preemptInterruptable();
 
-    const language = "en";
+    const language = params.language ?? this.resolveSpeechLanguage();
     const translate = this.deps.getTranslator(language);
     const key: TranslationKey =
       params.kind === "greeting"
@@ -188,12 +188,12 @@ export class VoiceNarratorService {
   }
 
   private resolveSpeechLanguage(): AppLanguage {
-    return "en";
+    return this.deps.getUiLanguage();
   }
 
-  private resolveVoiceId(_language: AppLanguage): PiperVoiceId {
+  private resolveVoiceId(language: AppLanguage): VoiceId {
     const settings = this.deps.getSettings();
-    return settings.voiceEn;
+    return language === "ru" ? settings.voiceRu : settings.voiceEn;
   }
 
   private async speak(text: string, language: AppLanguage, priority: AudioPriority): Promise<void> {

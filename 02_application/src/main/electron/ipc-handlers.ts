@@ -71,12 +71,15 @@ import type {
   SaveSettingsRequest,
   SyncReplaysRequest,
   SyncReplaysResponse,
+  SileroSynthesizeRequest,
+  SileroSynthesizeResponse,
   UpdateOpponentProfileRequest,
   UpdateOpponentProfileResponse
 } from "../../shared/ipc/contracts.js";
 import { MonitoringController } from "./monitoring-controller.js";
 import { ReplayWatcherController, resolveReplayDirectory } from "./replay-watcher-controller.js";
 import { listAvailableVoiceIds } from "./voice-model-protocol.js";
+import { synthesizeSilero } from "./silero-tts-service.js";
 
 const APPLICATION_PACKAGE_NAME = "sc2-assistant-application";
 
@@ -431,6 +434,13 @@ export async function registerIpcHandlers(): Promise<void> {
   ipcMain.handle(IPC_CHANNELS.voiceListAvailable, async () => {
     return { available: listAvailableVoiceIds() };
   });
+
+  ipcMain.handle(
+    IPC_CHANNELS.voiceSileroSynthesize,
+    async (_event, request: SileroSynthesizeRequest): Promise<SileroSynthesizeResponse> => {
+      return synthesizeSilero(request);
+    }
+  );
 }
 
 function startRuntimeWhenSc2IsReachable(

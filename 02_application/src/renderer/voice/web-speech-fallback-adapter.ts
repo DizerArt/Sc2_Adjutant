@@ -1,4 +1,4 @@
-import type { PiperVoiceId } from "../../domain/entities/voice-settings.js";
+import type { VoiceId } from "../../domain/entities/voice-settings.js";
 import type {
   SynthesizeRequest,
   SynthesizedAudio,
@@ -29,7 +29,7 @@ export class WebSpeechFallbackAdapter implements VoiceSynthesisPort {
     return this.status;
   }
 
-  async warmup(_voiceId: PiperVoiceId): Promise<void> {
+  async warmup(_voiceId: VoiceId): Promise<void> {
     // The Web Speech API doesn't need warmup; system voices are always ready.
   }
 

@@ -1,9 +1,9 @@
-import type { PiperVoiceId } from "../entities/voice-settings.js";
+import type { VoiceId } from "../entities/voice-settings.js";
 
 export type SynthesizeRequest = {
   readonly text: string;
   readonly language: "ru" | "en";
-  readonly voiceId: PiperVoiceId;
+  readonly voiceId: VoiceId;
   readonly speakingRate: number;
 };
 
@@ -14,12 +14,12 @@ export type SynthesizedAudio = {
 
 export type VoiceRuntimeStatus =
   | { readonly kind: "idle" }
-  | { readonly kind: "loading"; readonly voiceId: PiperVoiceId }
-  | { readonly kind: "ready"; readonly loadedVoices: readonly PiperVoiceId[] }
+  | { readonly kind: "loading"; readonly voiceId: VoiceId }
+  | { readonly kind: "ready"; readonly loadedVoices: readonly VoiceId[] }
   | { readonly kind: "error"; readonly message: string };
 
 export interface VoiceSynthesisPort {
   getStatus(): VoiceRuntimeStatus;
-  warmup(voiceId: PiperVoiceId): Promise<void>;
+  warmup(voiceId: VoiceId): Promise<void>;
   synthesize(request: SynthesizeRequest): Promise<SynthesizedAudio>;
 }

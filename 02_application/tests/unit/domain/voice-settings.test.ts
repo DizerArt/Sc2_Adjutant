@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_VOICE_EN,
+  DEFAULT_VOICE_RU,
   defaultVoiceSettings,
   normalizePiperVoiceId,
+  normalizeSileroRuVoiceId,
   normalizeVoiceProvider,
   normalizeVoiceSettings,
   normalizeVolume,
@@ -22,6 +24,8 @@ describe("voice-settings", () => {
       expect(defaults.provider).toBe("piper");
       expect(defaults.voiceEn).toBe(DEFAULT_VOICE_EN);
       expect(defaults.voiceEn).toBe("en_US-glados");
+      expect(defaults.voiceRu).toBe(DEFAULT_VOICE_RU);
+      expect(defaults.voiceRu).toBe("ru_RU-silero-xenia");
       expect(defaults.speakingRate).toBe(1);
       expect(defaults.volume).toBeGreaterThan(0);
       expect(defaults.announceOnLaunch).toBe(true);
@@ -57,6 +61,18 @@ describe("voice-settings", () => {
 
     it("migrates legacy LibriTTS ids to the current English default", () => {
       expect(normalizePiperVoiceId("en_US-libritts-high", DEFAULT_VOICE_EN)).toBe(DEFAULT_VOICE_EN);
+    });
+  });
+
+  describe("normalizeSileroRuVoiceId", () => {
+    it("accepts the bundled Silero Russian voice id", () => {
+      expect(normalizeSileroRuVoiceId("ru_RU-silero-xenia", DEFAULT_VOICE_RU)).toBe("ru_RU-silero-xenia");
+      expect(normalizeSileroRuVoiceId("ru_RU-silero-baya", DEFAULT_VOICE_RU)).toBe("ru_RU-silero-baya");
+    });
+
+    it("uses fallback for old Piper Russian voice ids", () => {
+      expect(normalizeSileroRuVoiceId("ru_RU-irina-medium", DEFAULT_VOICE_RU)).toBe(DEFAULT_VOICE_RU);
+      expect(normalizeSileroRuVoiceId(null, DEFAULT_VOICE_RU)).toBe(DEFAULT_VOICE_RU);
     });
   });
 
@@ -96,15 +112,18 @@ describe("voice-settings", () => {
       expect(next.enabled).toBe(true);
       expect(next.volume).toBeCloseTo(0.3);
       expect(next.voiceEn).toBe(current.voiceEn);
+      expect(next.voiceRu).toBe(current.voiceRu);
     });
 
     it("normalizes invalid nested fields", () => {
       const next = normalizeVoiceSettings({
         voiceEn: "garbage" as never,
+        voiceRu: "garbage" as never,
         volume: 5,
         speakingRate: -1
       });
       expect(next.voiceEn).toBe(DEFAULT_VOICE_EN);
+      expect(next.voiceRu).toBe(DEFAULT_VOICE_RU);
       expect(next.volume).toBe(VOICE_VOLUME_MAX);
       expect(next.speakingRate).toBe(VOICE_RATE_MIN);
     });
@@ -114,6 +133,11 @@ describe("voice-settings", () => {
     it("maps bundled voices to English", () => {
       expect(voiceIdLanguage("en_US-glados")).toBe("en");
       expect(voiceIdLanguage("en_US-amy-medium")).toBe("en");
+    });
+
+    it("maps Silero Russian voices to Russian", () => {
+      expect(voiceIdLanguage("ru_RU-silero-xenia")).toBe("ru");
+      expect(voiceIdLanguage("ru_RU-silero-baya")).toBe("ru");
     });
   });
 });

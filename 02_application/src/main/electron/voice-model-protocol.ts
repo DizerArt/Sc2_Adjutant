@@ -2,6 +2,7 @@ import { app, protocol } from "electron";
 import { createReadStream, existsSync, readdirSync, statSync } from "node:fs";
 import { join, normalize } from "node:path";
 import { Readable } from "node:stream";
+import { SILERO_RU_VOICE_IDS } from "../../domain/entities/voice-settings.js";
 
 export const VOICE_MODEL_SCHEME = "voice-model";
 
@@ -103,10 +104,12 @@ export function listAvailableVoiceIds(): readonly string[] {
   }
   const onnxFiles = new Set(entries.filter((name) => name.endsWith(".onnx")));
   const configFiles = new Set(entries.filter((name) => name.endsWith(".onnx.json")));
-  return [...onnxFiles]
+  const piperVoices = [...onnxFiles]
     .map((name) => name.replace(/\.onnx$/, ""))
     .filter((voiceId) => configFiles.has(`${voiceId}.onnx.json`))
     .sort();
+  const sileroVoices = existsSync(join(root, "silero-v5_5_ru.pt")) ? [...SILERO_RU_VOICE_IDS] : [];
+  return [...piperVoices, ...sileroVoices].sort();
 }
 
 /**

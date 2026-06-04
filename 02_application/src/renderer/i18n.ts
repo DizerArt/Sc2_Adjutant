@@ -47,6 +47,7 @@ const dictionary = {
     "info.goodToKnow": "Good to know",
     "info.license": "License",
     "info.quickStart": "Quick start",
+    "info.voiceSetup": "Russian voice",
     "info.update": "Update",
     "info.version": "Version",
     "info.aboutBody1":
@@ -85,6 +86,18 @@ const dictionary = {
     "info.stepPlayTitle": "Play a match.",
     "info.stepPlayBody":
       "Open the Current match view, queue up a game, and the opponent card will populate as soon as the match loads. After the game ends, the replay is synced and the opponent is added to your local database for next time.",
+    "info.voiceSetupTitle": "Silero dependency setup",
+    "info.voiceSetupBody":
+      "The Silero Russian Voice installer includes the Russian voice model, but Windows still needs Python and PyTorch CPU so the local sidecar can run the model.",
+    "info.voiceSetupPythonTitle": "Install Python for Windows.",
+    "info.voiceSetupPythonBody":
+      "Download Python and enable Add Python to PATH during installation.",
+    "info.voiceSetupTorchTitle": "Install PyTorch CPU.",
+    "info.voiceSetupTorchBody":
+      "Run this command in PowerShell or CMD after Python is installed.",
+    "info.voiceSetupVerifyTitle": "Verify the runtime.",
+    "info.voiceSetupVerifyBody":
+      "If this command prints a Torch version, Russian voice synthesis is ready.",
     "info.tipsTitle": "Tips and nuances",
     "info.tipDiagnostics":
       "If the Current match view stays empty, check the Diagnostics tab. It shows whether monitoring and the replay watcher are running and reports any errors from the SC2 Client API.",
@@ -93,7 +106,7 @@ const dictionary = {
     "info.tipNotes":
       "Opponent notes, strategy tags, and manual profile data are yours to curate. Add a note right after a match while the game is still fresh.",
     "info.tipVoice":
-      "The voice assistant is English-only for now. It uses English TTS voices and reads English words correctly; Russian text is not supported for narration.",
+      "The Silero Russian Voice build can narrate Russian UI speech through Silero. It requires Python and PyTorch CPU installed on the machine.",
     "info.tipReadonly":
       "The app does not modify any StarCraft II files. It only reads the local client API and your replay folder.",
     "language.english": "English",
@@ -308,7 +321,7 @@ const dictionary = {
     "voice.section.preview": "Preview",
     "voice.field.enable": "Enable voice assistant",
     "voice.field.provider": "Provider",
-    "voice.provider.piper": "Piper (offline)",
+    "voice.provider.piper": "Local TTS (offline)",
     "voice.provider.off": "Off",
     "voice.field.languageMode": "Language mode",
     "voice.languageMode.auto": "Follow UI language",
@@ -316,9 +329,8 @@ const dictionary = {
     "voice.languageMode.en": "English only",
     "voice.field.voiceRu": "Russian voice",
     "voice.field.voiceEn": "English voice",
-    "voice.voice.ru_RU-irina-medium": "Irina (female, calm)",
-    "voice.voice.ru_RU-denis-medium": "Denis (male)",
-    "voice.voice.ru_RU-ruslan-medium": "Ruslan (male)",
+    "voice.voice.ru_RU-silero-xenia": "Silero Xenia (female, Russian)",
+    "voice.voice.ru_RU-silero-baya": "Silero Baya (female, Russian)",
     "voice.voice.en_US-glados": "GLaDOS (synthetic AI voice)",
     "voice.voice.en_US-amy-medium": "Amy (female, neutral)",
     "voice.field.volume": "Volume",
@@ -387,6 +399,7 @@ const dictionary = {
     "info.goodToKnow": "Полезно знать",
     "info.license": "Лицензия",
     "info.quickStart": "Быстрый старт",
+    "info.voiceSetup": "Русский голос",
     "info.update": "Обновить",
     "info.version": "Версия",
     "info.aboutBody1":
@@ -426,6 +439,18 @@ const dictionary = {
     "info.stepPlayTitle": "Сыграйте матч.",
     "info.stepPlayBody":
       "Откройте Текущий матч, найдите игру, и карточка оппонента заполнится после загрузки матча. После игры реплей синхронизируется, а оппонент попадёт в локальную базу.",
+    "info.voiceSetupTitle": "Silero: зависимости для озвучки",
+    "info.voiceSetupBody":
+      "Сборка Silero Russian Voice уже включает русскую модель голоса, но Windows нужен Python и PyTorch CPU, чтобы локальный sidecar мог запустить модель.",
+    "info.voiceSetupPythonTitle": "Установите Python для Windows.",
+    "info.voiceSetupPythonBody":
+      "Скачайте Python и включите Add Python to PATH во время установки.",
+    "info.voiceSetupTorchTitle": "Установите PyTorch CPU.",
+    "info.voiceSetupTorchBody":
+      "После Python запустите эту команду в PowerShell или CMD.",
+    "info.voiceSetupVerifyTitle": "Проверьте среду.",
+    "info.voiceSetupVerifyBody":
+      "Если команда выводит версию Torch, русская озвучка готова.",
     "info.tipsTitle": "Советы и нюансы",
     "info.tipDiagnostics":
       "Если Текущий матч остаётся пустым, проверьте раздел Диагностика. Там видно, работает ли мониторинг и отслеживание реплеев, а также ошибки SC2 Client API.",
@@ -434,7 +459,7 @@ const dictionary = {
     "info.tipNotes":
       "Заметки, теги стратегии и ручные данные профиля редактируете вы. Лучше добавлять заметку сразу после матча, пока игра свежа в памяти.",
     "info.tipVoice":
-      "Голосовой помощник сейчас работает только на английском. Он использует английские TTS-голоса и корректно читает английские слова; русская озвучка текста не поддерживается.",
+      "Сборка Silero Russian Voice умеет озвучивать русскую речь через Silero. Для этого нужны Python и PyTorch CPU на машине.",
     "info.tipReadonly":
       "Приложение не изменяет файлы StarCraft II. Оно только читает локальный client API и папку реплеев.",
     "language.english": "English",
@@ -648,7 +673,7 @@ const dictionary = {
     "voice.section.preview": "\u041f\u0440\u043e\u0441\u043b\u0443\u0448\u0430\u0442\u044c",
     "voice.field.enable": "\u0412\u043a\u043b\u044e\u0447\u0438\u0442\u044c \u0433\u043e\u043b\u043e\u0441\u043e\u0432\u043e\u0439 \u043f\u043e\u043c\u043e\u0449\u043d\u0438\u043a",
     "voice.field.provider": "\u0414\u0432\u0438\u0436\u043e\u043a",
-    "voice.provider.piper": "Piper (\u043e\u0444\u043b\u0430\u0439\u043d)",
+    "voice.provider.piper": "\u041b\u043e\u043a\u0430\u043b\u044c\u043d\u044b\u0439 TTS (\u043e\u0444\u043b\u0430\u0439\u043d)",
     "voice.provider.off": "\u0412\u044b\u043a\u043b\u044e\u0447\u0435\u043d",
     "voice.field.languageMode": "\u0420\u0435\u0436\u0438\u043c \u044f\u0437\u044b\u043a\u0430",
     "voice.languageMode.auto": "\u041f\u043e \u044f\u0437\u044b\u043a\u0443 \u0438\u043d\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0430",
@@ -656,9 +681,8 @@ const dictionary = {
     "voice.languageMode.en": "\u0422\u043e\u043b\u044c\u043a\u043e \u0430\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439",
     "voice.field.voiceRu": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 \u0433\u043e\u043b\u043e\u0441",
     "voice.field.voiceEn": "\u0410\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439 \u0433\u043e\u043b\u043e\u0441",
-    "voice.voice.ru_RU-irina-medium": "\u0418\u0440\u0438\u043d\u0430 (\u0436\u0435\u043d\u0441\u043a\u0438\u0439, \u0441\u043f\u043e\u043a\u043e\u0439\u043d\u044b\u0439)",
-    "voice.voice.ru_RU-denis-medium": "\u0414\u0435\u043d\u0438\u0441 (\u043c\u0443\u0436\u0441\u043a\u043e\u0439)",
-    "voice.voice.ru_RU-ruslan-medium": "\u0420\u0443\u0441\u043b\u0430\u043d (\u043c\u0443\u0436\u0441\u043a\u043e\u0439)",
+    "voice.voice.ru_RU-silero-xenia": "Silero Xenia (\u0436\u0435\u043d\u0441\u043a\u0438\u0439, \u0440\u0443\u0441\u0441\u043a\u0438\u0439)",
+    "voice.voice.ru_RU-silero-baya": "Silero Baya (\u0436\u0435\u043d\u0441\u043a\u0438\u0439, \u0440\u0443\u0441\u0441\u043a\u0438\u0439)",
     "voice.voice.en_US-glados": "GLaDOS (\u0441\u0438\u043d\u0442\u0435\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 AI-\u0433\u043e\u043b\u043e\u0441)",
     "voice.voice.en_US-amy-medium": "Amy (\u0436\u0435\u043d\u0441\u043a\u0438\u0439, \u043d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u0439)",
     "voice.field.volume": "\u0413\u0440\u043e\u043c\u043a\u043e\u0441\u0442\u044c",

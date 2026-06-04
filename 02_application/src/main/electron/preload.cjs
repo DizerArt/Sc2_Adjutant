@@ -33,7 +33,8 @@ const IPC_CHANNELS = {
   overlaySetPosition: "overlay:set-position",
   overlaySetPlacementMode: "overlay:set-placement-mode",
   voiceSpeak: "voice:speak",
-  voiceListAvailable: "voice:list-available"
+  voiceListAvailable: "voice:list-available",
+  voiceSileroSynthesize: "voice:silero-synthesize"
 };
 
 contextBridge.exposeInMainWorld("sc2Assistant", {
@@ -79,5 +80,6 @@ contextBridge.exposeInMainWorld("sc2Assistant", {
     ipcRenderer.on(IPC_CHANNELS.voiceSpeak, handler);
     return () => ipcRenderer.removeListener(IPC_CHANNELS.voiceSpeak, handler);
   },
-  listAvailableVoices: () => ipcRenderer.invoke(IPC_CHANNELS.voiceListAvailable)
+  listAvailableVoices: () => ipcRenderer.invoke(IPC_CHANNELS.voiceListAvailable),
+  synthesizeSilero: (request) => ipcRenderer.invoke(IPC_CHANNELS.voiceSileroSynthesize, request)
 });

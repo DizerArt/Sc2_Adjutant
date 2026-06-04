@@ -2,7 +2,9 @@ import { type FormEvent, useEffect, useState } from "react";
 import type { AppSettings } from "../../domain/entities/app-settings.js";
 import {
   PIPER_VOICE_IDS,
+  SILERO_RU_VOICE_IDS,
   type PiperVoiceId,
+  type SileroRuVoiceId,
   type VoiceProvider,
   type VoiceSettings,
   VOICE_RATE_MAX,
@@ -16,6 +18,7 @@ import type { TranslationKey, Translator } from "../i18n.js";
 import type { VoiceNarratorService } from "../voice/voice-narrator-service.js";
 
 const EN_VOICES: readonly PiperVoiceId[] = PIPER_VOICE_IDS.filter((id) => id.startsWith("en_"));
+const RU_VOICES: readonly SileroRuVoiceId[] = SILERO_RU_VOICE_IDS;
 
 type SaveState = "idle" | "saving" | "saved" | "error";
 
@@ -60,7 +63,8 @@ export function VoiceSettingsPanel(props: VoiceSettingsPanelProps) {
     };
   }, []);
 
-  const previewVoiceId = draft.voiceEn;
+  const speechLanguage = props.settings?.language ?? "en";
+  const previewVoiceId = speechLanguage === "ru" ? draft.voiceRu : draft.voiceEn;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -78,7 +82,7 @@ export function VoiceSettingsPanel(props: VoiceSettingsPanelProps) {
       return;
     }
     await props.narrator.previewPhrase({
-      language: "en",
+      language: speechLanguage,
       voiceId: previewVoiceId,
       volume: draft.volume,
       speakingRate: draft.speakingRate,
@@ -144,6 +148,30 @@ export function VoiceSettingsPanel(props: VoiceSettingsPanelProps) {
               }
             >
               {EN_VOICES.map((voiceId) => (
+                <option
+                  key={voiceId}
+                  value={voiceId}
+                  disabled={availableVoices !== null && !availableVoices.has(voiceId)}
+                >
+                  {props.t(`voice.voice.${voiceId}` as TranslationKey)}
+                  {availableVoices !== null && !availableVoices.has(voiceId)
+                    ? ` - ${props.t("voice.notDownloaded")}`
+                    : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            {props.t("voice.field.voiceRu")}
+            <select
+              disabled={disabled}
+              value={draft.voiceRu}
+              onChange={(event) =>
+                setDraft({ ...draft, voiceRu: event.currentTarget.value as SileroRuVoiceId })
+              }
+            >
+              {RU_VOICES.map((voiceId) => (
                 <option
                   key={voiceId}
                   value={voiceId}

@@ -5,12 +5,20 @@ export const PIPER_VOICE_IDS = [
   "en_US-amy-medium"
 ] as const;
 
+export const SILERO_RU_VOICE_IDS = [
+  "ru_RU-silero-xenia",
+  "ru_RU-silero-baya"
+] as const;
+
 export type PiperVoiceId = (typeof PIPER_VOICE_IDS)[number];
+export type SileroRuVoiceId = (typeof SILERO_RU_VOICE_IDS)[number];
+export type VoiceId = PiperVoiceId | SileroRuVoiceId;
 
 export type VoiceSettings = {
   readonly enabled: boolean;
   readonly provider: VoiceProvider;
   readonly voiceEn: PiperVoiceId;
+  readonly voiceRu: SileroRuVoiceId;
   readonly volume: number;
   readonly speakingRate: number;
   readonly announceOnLaunch: boolean;
@@ -19,6 +27,7 @@ export type VoiceSettings = {
 };
 
 export const DEFAULT_VOICE_EN: PiperVoiceId = "en_US-glados";
+export const DEFAULT_VOICE_RU: SileroRuVoiceId = "ru_RU-silero-xenia";
 
 export const VOICE_VOLUME_MIN = 0;
 export const VOICE_VOLUME_MAX = 1;
@@ -30,6 +39,7 @@ export function defaultVoiceSettings(): VoiceSettings {
     enabled: false,
     provider: "piper",
     voiceEn: DEFAULT_VOICE_EN,
+    voiceRu: DEFAULT_VOICE_RU,
     volume: 0.7,
     speakingRate: 1,
     announceOnLaunch: true,
@@ -51,6 +61,18 @@ export function normalizePiperVoiceId(
   }
   return (PIPER_VOICE_IDS as readonly string[]).includes(value)
     ? (value as PiperVoiceId)
+    : fallback;
+}
+
+export function normalizeSileroRuVoiceId(
+  value: unknown,
+  fallback: SileroRuVoiceId
+): SileroRuVoiceId {
+  if (typeof value !== "string") {
+    return fallback;
+  }
+  return (SILERO_RU_VOICE_IDS as readonly string[]).includes(value)
+    ? (value as SileroRuVoiceId)
     : fallback;
 }
 
@@ -80,6 +102,7 @@ export function normalizeVoiceSettings(
     enabled: typeof input.enabled === "boolean" ? input.enabled : defaults.enabled,
     provider: normalizeVoiceProvider(input.provider ?? defaults.provider),
     voiceEn: normalizePiperVoiceId(input.voiceEn ?? defaults.voiceEn, defaults.voiceEn),
+    voiceRu: normalizeSileroRuVoiceId(input.voiceRu ?? defaults.voiceRu, defaults.voiceRu),
     volume: normalizeVolume(input.volume ?? defaults.volume),
     speakingRate: normalizeSpeakingRate(input.speakingRate ?? defaults.speakingRate),
     announceOnLaunch:
@@ -95,8 +118,8 @@ export function normalizeVoiceSettings(
   };
 }
 
-export function voiceIdLanguage(_voiceId: PiperVoiceId): "en" {
-  return "en";
+export function voiceIdLanguage(voiceId: VoiceId): "en" | "ru" {
+  return (SILERO_RU_VOICE_IDS as readonly string[]).includes(voiceId) ? "ru" : "en";
 }
 
 function clamp(value: number, min: number, max: number): number {

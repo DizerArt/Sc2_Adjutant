@@ -2302,6 +2302,40 @@ function InfoView({ t }: { readonly t: Translator }) {
 
       <div className="panel info-panel">
         <div className="panel-heading">
+          <p className="eyebrow">{t("info.voiceSetup")}</p>
+          <h3>{t("info.voiceSetupTitle")}</h3>
+        </div>
+        <p className="info-paragraph">{t("info.voiceSetupBody")}</p>
+        <ol className="info-guide-list">
+          <li>
+            <strong>{t("info.voiceSetupPythonTitle")}</strong>
+            <span>
+              {t("info.voiceSetupPythonBody")}{" "}
+              <a href="https://www.python.org/downloads/windows/" rel="noreferrer" target="_blank">
+                python.org
+              </a>
+            </span>
+          </li>
+          <li>
+            <strong>{t("info.voiceSetupTorchTitle")}</strong>
+            <span>
+              {t("info.voiceSetupTorchBody")}{" "}
+              <a href="https://pytorch.org/get-started/locally/" rel="noreferrer" target="_blank">
+                pytorch.org
+              </a>
+            </span>
+            <code>python -m pip install torch --index-url https://download.pytorch.org/whl/cpu</code>
+          </li>
+          <li>
+            <strong>{t("info.voiceSetupVerifyTitle")}</strong>
+            <span>{t("info.voiceSetupVerifyBody")}</span>
+            <code>python -c "import torch; print(torch.__version__)"</code>
+          </li>
+        </ol>
+      </div>
+
+      <div className="panel info-panel">
+        <div className="panel-heading">
           <p className="eyebrow">{t("info.goodToKnow")}</p>
           <h3>{t("info.tipsTitle")}</h3>
         </div>

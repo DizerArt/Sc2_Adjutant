@@ -1,5 +1,5 @@
 import { PATH_MAP, TtsSession } from "@mintplex-labs/piper-tts-web";
-import type { PiperVoiceId } from "../../domain/entities/voice-settings.js";
+import type { PiperVoiceId, VoiceId } from "../../domain/entities/voice-settings.js";
 import type {
   SynthesizeRequest,
   SynthesizedAudio,
@@ -64,7 +64,10 @@ export class PiperRuntime implements VoiceSynthesisPort {
     }
   }
 
-  async warmup(voiceId: PiperVoiceId): Promise<void> {
+  async warmup(voiceId: VoiceId): Promise<void> {
+    if (!isPiperVoiceId(voiceId)) {
+      throw new Error(`Piper runtime cannot load voice: ${voiceId}`);
+    }
     if (this.sessions.has(voiceId)) {
       return;
     }
@@ -83,6 +86,9 @@ export class PiperRuntime implements VoiceSynthesisPort {
   }
 
   async synthesize(request: SynthesizeRequest): Promise<SynthesizedAudio> {
+    if (!isPiperVoiceId(request.voiceId)) {
+      throw new Error(`Piper runtime cannot synthesize voice: ${request.voiceId}`);
+    }
     await this.warmup(request.voiceId);
     const session = this.sessions.get(request.voiceId);
     if (!session) {
@@ -124,6 +130,10 @@ export class PiperRuntime implements VoiceSynthesisPort {
 
 export function registerLocalVoicePath(voiceId: PiperVoiceId): void {
   PATH_MAP[voiceId] ??= `${voiceId}.onnx`;
+}
+
+function isPiperVoiceId(voiceId: VoiceId): voiceId is PiperVoiceId {
+  return voiceId.startsWith("en_");
 }
 
 /**
