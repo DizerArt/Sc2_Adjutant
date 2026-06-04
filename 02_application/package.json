@@ -17,11 +17,7 @@
     "dist:win": "npm run build && electron-builder --win",
     "smoke:electron": "node scripts/electron-smoke.cjs",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit",
-    "voice:download": "node scripts/download-voice-models.cjs",
-    "voice:download:all": "node scripts/download-voice-models.cjs --all",
-    "voice:wasm": "node scripts/copy-voice-wasm.cjs",
-    "postinstall": "node scripts/copy-voice-wasm.cjs"
+    "typecheck": "tsc --noEmit"
   },
   "build": {
     "appId": "com.dizerart.sc2companion",
@@ -34,34 +30,7 @@
       "dist-renderer/**/*",
       "package.json"
     ],
-    "extraResources": [
-      {
-        "from": "resources/voice-models",
-        "to": "voice-models",
-        "filter": [
-          "**/*.onnx",
-          "**/*.onnx.json",
-          "**/*.pt"
-        ]
-      },
-      {
-        "from": "resources/silero",
-        "to": "silero",
-        "filter": [
-          "**/*.py"
-        ]
-      },
-      {
-        "from": "resources/voice-wasm",
-        "to": "voice-wasm",
-        "filter": [
-          "**/*.wasm",
-          "**/*.mjs",
-          "**/*.data",
-          "**/*.js"
-        ]
-      }
-    ],
+    "extraResources": [],
     "extraMetadata": {
       "main": "dist-electron/main/electron/main.js"
     },
@@ -88,13 +57,10 @@
     }
   },
   "dependencies": {
-    "@diffusionstudio/piper-wasm": "^1.0.0",
-    "@mintplex-labs/piper-tts-web": "^1.0.4",
     "@replaysremastered/sc2readerjs": "^0.1.9",
     "csv-parse": "^6.2.1",
     "csv-stringify": "^6.7.0",
     "fast-xml-parser": "^5.8.0",
-    "onnxruntime-web": "^1.26.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

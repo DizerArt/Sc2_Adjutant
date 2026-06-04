@@ -10,11 +10,6 @@ import {
   type OverlayCustomPosition,
   type OverlayPosition
 } from "../../domain/entities/app-settings.js";
-import {
-  registerVoiceModelProtocol,
-  registerVoiceModelSchemePrivileges
-} from "./voice-model-protocol.js";
-import { setVoiceBroadcastTarget } from "./voice-broadcaster.js";
 
 const rendererDevUrl = process.env.SC2_ASSISTANT_RENDERER_URL ?? "http://127.0.0.1:5173";
 const currentDir = fileURLToPath(new URL(".", import.meta.url));
@@ -48,15 +43,11 @@ async function createMainWindow(): Promise<void> {
     }
   });
   mainWindowRef = mainWindow;
-  setVoiceBroadcastTarget(mainWindow);
   registerExternalNavigation(mainWindow);
   attachSmokeLifecycleIfRequested(mainWindow);
   registerWindowControlHandlers(mainWindow);
 
   mainWindow.on("closed", () => {
-    if (mainWindowRef === mainWindow) {
-      setVoiceBroadcastTarget(null);
-    }
     mainWindowRef = null;
     if (overlayWindowRef && !overlayWindowRef.isDestroyed()) {
       overlayWindowRef.close();
@@ -546,12 +537,9 @@ function smokeExitArg(): string | undefined {
   return process.argv.find((argument) => argument.startsWith("--smoke-exit-ms="))?.split("=")[1];
 }
 
-registerVoiceModelSchemePrivileges();
-
 app
   .whenReady()
   .then(async () => {
-    registerVoiceModelProtocol();
     await registerIpcHandlers();
     Menu.setApplicationMenu(null);
     await createMainWindow();

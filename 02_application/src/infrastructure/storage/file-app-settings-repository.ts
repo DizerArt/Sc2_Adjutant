@@ -32,8 +32,7 @@ export class FileAppSettingsRepository implements AppSettingsRepository {
       overlayEnabled: parsed.overlayEnabled,
       overlayPosition: parsed.overlayPosition,
       overlayPlacementMode: parsed.overlayPlacementMode,
-      overlayCustomPosition: parsed.overlayCustomPosition,
-      voice: parsed.voice
+      overlayCustomPosition: parsed.overlayCustomPosition
     }, parsed.updatedAt ?? new Date().toISOString());
   }
 

@@ -20,15 +20,6 @@ import type {
 import type { EnrichmentCandidateSnapshot } from "../../domain/entities/enrichment-candidate-snapshot.js";
 import type { Opponent, UpdateOpponentProfileInput } from "../../domain/entities/opponent.js";
 import type { Race } from "../../domain/value-objects/race.js";
-import type { SileroRuVoiceId } from "../../domain/entities/voice-settings.js";
-
-export type {
-  VoiceOpponentSpeechData,
-  VoiceMatchSpeechData,
-  VoiceSpeakEvent
-} from "./voice-contracts.js";
-
-import type { VoiceSpeakEvent } from "./voice-contracts.js";
 
 export type RendererDiagnosticsResponse = DiagnosticsReport;
 
@@ -195,21 +186,4 @@ export type Sc2AssistantBridge = {
   readonly hideOverlay: () => Promise<void>;
   readonly setOverlayPosition: (position: OverlayPosition) => Promise<void>;
   readonly setOverlayPlacementMode: (enabled: boolean) => Promise<void>;
-  readonly onVoiceSpeak: (listener: (event: VoiceSpeakEvent) => void) => () => void;
-  readonly listAvailableVoices: () => Promise<ListAvailableVoicesResponse>;
-  readonly synthesizeSilero: (request: SileroSynthesizeRequest) => Promise<SileroSynthesizeResponse>;
-};
-
-export type ListAvailableVoicesResponse = {
-  readonly available: readonly string[];
-};
-
-export type SileroSynthesizeRequest = {
-  readonly text: string;
-  readonly voiceId: SileroRuVoiceId;
-  readonly speakingRate: number;
-};
-
-export type SileroSynthesizeResponse = {
-  readonly wavBase64: string;
 };

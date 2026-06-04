@@ -29,8 +29,5 @@ export const IPC_CHANNELS = {
   overlayShow: "overlay:show",
   overlayHide: "overlay:hide",
   overlaySetPosition: "overlay:set-position",
-  overlaySetPlacementMode: "overlay:set-placement-mode",
-  voiceSpeak: "voice:speak",
-  voiceListAvailable: "voice:list-available",
-  voiceSileroSynthesize: "voice:silero-synthesize"
+  overlaySetPlacementMode: "overlay:set-placement-mode"
 } as const;

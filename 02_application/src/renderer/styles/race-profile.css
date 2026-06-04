@@ -125,8 +125,7 @@
   gap: 6px;
 }
 
-.profile-marker-controls button,
-.profile-voice-preview-button {
+.profile-marker-controls button {
   display: grid;
   width: 28px;
   height: 28px;
@@ -142,8 +141,7 @@
 }
 
 .profile-marker-controls button:hover,
-.profile-marker-controls button[data-active="true"],
-.profile-voice-preview-button:hover {
+.profile-marker-controls button[data-active="true"] {
   border-color: var(--race-primary);
   color: var(--race-primary);
   text-shadow: 0 0 8px color-mix(in srgb, var(--race-primary) 48%, transparent);
@@ -172,11 +170,6 @@
   border-color: rgba(255, 42, 42, 0.78);
   color: #ff5b5b;
   text-shadow: 0 0 8px rgba(255, 42, 42, 0.48);
-}
-
-.profile-voice-preview-button svg {
-  width: 16px;
-  height: 16px;
 }
 
 .race-stage {

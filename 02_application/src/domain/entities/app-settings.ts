@@ -1,9 +1,4 @@
 import { normalizeRace, type Race } from "../value-objects/race.js";
-import {
-  defaultVoiceSettings,
-  normalizeVoiceSettings,
-  type VoiceSettings
-} from "./voice-settings.js";
 
 export type AppRegion = "us" | "eu" | "kr" | "cn" | "unknown";
 export type AppLanguage = "en" | "ru";
@@ -53,16 +48,14 @@ export type AppSettings = {
   readonly overlayPosition: OverlayPosition;
   readonly overlayPlacementMode: boolean;
   readonly overlayCustomPosition?: OverlayCustomPosition;
-  readonly voice: VoiceSettings;
   readonly updatedAt: string;
 };
 
 export type UpdateAppSettingsInput = Partial<
-  Omit<AppSettings, "updatedAt" | "externalSources" | "voice" | "overlayCustomPosition">
+  Omit<AppSettings, "updatedAt" | "externalSources" | "overlayCustomPosition">
 > & {
   readonly externalSources?: Partial<ExternalSourceSettings>;
   readonly overlayCustomPosition?: OverlayCustomPosition | null;
-  readonly voice?: Partial<VoiceSettings>;
 };
 
 export function defaultAppSettings(now = new Date().toISOString()): AppSettings {
@@ -76,7 +69,6 @@ export function defaultAppSettings(now = new Date().toISOString()): AppSettings 
     overlayEnabled: false,
     overlayPosition: "top-right",
     overlayPlacementMode: false,
-    voice: defaultVoiceSettings(),
     updatedAt: now
   };
 }
@@ -134,7 +126,6 @@ export function updateAppSettings(
     overlayCustomPosition: Object.prototype.hasOwnProperty.call(input, "overlayCustomPosition")
       ? normalizeOverlayCustomPosition(input.overlayCustomPosition)
       : current.overlayCustomPosition,
-    voice: normalizeVoiceSettings(input.voice, current.voice),
     updatedAt: now
   };
 }

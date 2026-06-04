@@ -43,13 +43,9 @@ import {
   normalizeUiLanguage,
   type Translator,
 } from "../i18n.js";
-import { useVoiceNarrator } from "../voice/use-voice-narrator.js";
-import type { OpponentSpeechData } from "../voice/voice-narrator-service.js";
-import { VoiceSettingsPanel } from "./VoiceSettingsPanel.js";
-import type { VoiceSettings } from "../../domain/entities/voice-settings.js";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
-type ActiveView = "match" | "opponents" | "diagnostics" | "settings" | "voice" | "info";
+type ActiveView = "match" | "opponents" | "diagnostics" | "settings" | "info";
 type OpponentsTab = "known" | "history";
 type OpponentSortKey = "lastSeen" | "mmr" | "race" | "confidence";
 type MatchHistorySortKey = "lastSeen" | "race" | "result";
@@ -195,23 +191,6 @@ export function AppShell() {
   const runtimeSnapshotRef = useRef("");
   const language = normalizeUiLanguage(settingsDraft.language);
   const t = useMemo(() => createTranslator(language), [language]);
-
-  const voiceController = useVoiceNarrator(dashboardState.settings);
-
-  const saveVoiceSettings = useCallback(
-    async (next: VoiceSettings) => {
-      if (!window.sc2Assistant) {
-        throw new Error("Electron bridge is not available.");
-      }
-      const response = await window.sc2Assistant.saveSettings({ voice: next });
-      setDashboardState((current) => ({
-        ...current,
-        settings: response.settings,
-        loadState: "ready",
-      }));
-    },
-    [],
-  );
 
   const loadDashboard = useCallback(
     async (mode: "full" | "silent" = "full") => {
@@ -1071,7 +1050,6 @@ export function AppShell() {
               ["opponents", t("nav.opponents")],
               ["diagnostics", t("nav.diagnostics")],
               ["settings", t("nav.settings")],
-              ["voice", t("nav.voice")],
               ["info", t("nav.info")],
             ].map(([view, label]) => (
               <button
@@ -1163,14 +1141,6 @@ export function AppShell() {
               storageOpenState={storageOpenState}
               t={t}
             />
-          ) : activeView === "voice" ? (
-            <VoiceSettingsPanel
-              settings={dashboardState.settings}
-              onSave={saveVoiceSettings}
-              narrator={voiceController.narrator}
-              runtimeStatus={voiceController.status}
-              t={t}
-            />
           ) : infoEditorOpen ? (
             <OpponentInfoEditor
               candidates={dashboardState.candidates}
@@ -1216,9 +1186,6 @@ export function AppShell() {
               onOpponentFiltersChange={setOpponentFilters}
               onOpponentSelect={selectOpponent}
               onOpponentMarkerToggle={toggleOpponentMarker}
-              onOpponentVoicePreview={(data) =>
-                void voiceController.narrator?.previewOpponentCard(data)
-              }
               onOpponentsTabChange={setOpponentsTab}
               onProfileHistoryMatchSelect={openProfileHistoryMatch}
               onRevealReplay={revealReplay}
@@ -1477,7 +1444,6 @@ type OpponentWorkspaceProps = {
   readonly onOpponentFiltersChange: (filters: OpponentListFilters) => void;
   readonly onOpponentSelect: (opponentId: string) => void | Promise<void>;
   readonly onOpponentMarkerToggle: (marker: OpponentMarker) => void | Promise<void>;
-  readonly onOpponentVoicePreview: (data: OpponentSpeechData) => void | Promise<void>;
   readonly onOpponentsTabChange: (tab: OpponentsTab) => void;
   readonly onProfileHistoryMatchSelect: (
     item: MatchHistoryItem,
@@ -1559,7 +1525,6 @@ function OpponentWorkspace(props: OpponentWorkspaceProps) {
             matches={props.dashboardState.matches}
             onAddInfoClick={props.onAddInfo}
             onMarkerToggle={props.onOpponentMarkerToggle}
-            onPreviewVoiceClick={props.onOpponentVoicePreview}
             onOpenNotesClick={props.onOpenNotes}
             onHistoryMatchSelect={props.onProfileHistoryMatchSelect}
             onStrategyTagAdd={props.onStrategyTagAdd}
@@ -2302,40 +2267,6 @@ function InfoView({ t }: { readonly t: Translator }) {
 
       <div className="panel info-panel">
         <div className="panel-heading">
-          <p className="eyebrow">{t("info.voiceSetup")}</p>
-          <h3>{t("info.voiceSetupTitle")}</h3>
-        </div>
-        <p className="info-paragraph">{t("info.voiceSetupBody")}</p>
-        <ol className="info-guide-list">
-          <li>
-            <strong>{t("info.voiceSetupPythonTitle")}</strong>
-            <span>
-              {t("info.voiceSetupPythonBody")}{" "}
-              <a href="https://www.python.org/downloads/windows/" rel="noreferrer" target="_blank">
-                python.org
-              </a>
-            </span>
-          </li>
-          <li>
-            <strong>{t("info.voiceSetupTorchTitle")}</strong>
-            <span>
-              {t("info.voiceSetupTorchBody")}{" "}
-              <a href="https://pytorch.org/get-started/locally/" rel="noreferrer" target="_blank">
-                pytorch.org
-              </a>
-            </span>
-            <code>python -m pip install torch --index-url https://download.pytorch.org/whl/cpu</code>
-          </li>
-          <li>
-            <strong>{t("info.voiceSetupVerifyTitle")}</strong>
-            <span>{t("info.voiceSetupVerifyBody")}</span>
-            <code>python -c "import torch; print(torch.__version__)"</code>
-          </li>
-        </ol>
-      </div>
-
-      <div className="panel info-panel">
-        <div className="panel-heading">
           <p className="eyebrow">{t("info.goodToKnow")}</p>
           <h3>{t("info.tipsTitle")}</h3>
         </div>
@@ -2343,7 +2274,6 @@ function InfoView({ t }: { readonly t: Translator }) {
           <li>{t("info.tipDiagnostics")}</li>
           <li>{t("info.tipStorage")}</li>
           <li>{t("info.tipNotes")}</li>
-          <li>{t("info.tipVoice")}</li>
           <li>{t("info.tipReadonly")}</li>
         </ul>
       </div>
@@ -3664,7 +3594,6 @@ function headerEyebrow(view: ActiveView, t: Translator): string {
     opponents: t("header.localDatabase"),
     diagnostics: t("header.diagnostics"),
     settings: t("header.settings"),
-    voice: t("header.voice"),
     info: t("header.about"),
   };
 
@@ -3680,7 +3609,6 @@ function headerTitle(
     opponents: t("header.localDatabase"),
     diagnostics: t("diagnostics.title"),
     settings: t("header.settingsTitle"),
-    voice: t("header.voiceTitle"),
     info: t("header.aboutTitle"),
   };
 
