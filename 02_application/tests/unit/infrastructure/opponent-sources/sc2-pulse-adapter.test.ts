@@ -339,7 +339,7 @@ describe("Sc2PulseAdapter", () => {
     });
   });
 
-  it("rejects profile-link candidates with a different Blizzard profile id", async () => {
+  it("rejects replay profile-link candidates with a different Blizzard profile id", async () => {
     const payload = [
       {
         leagueMax: 5,
@@ -360,8 +360,87 @@ describe("Sc2PulseAdapter", () => {
 
     const candidates = await adapter.searchOpponent({
       nickname: "Asyl",
-      profileLink: "battlenet:://starcraft/profile/2/16215737210316521472",
+      profileLink: "https://starcraft2.blizzard.com/profile/2/1/16215737",
       race: "Protoss",
+      region: "EU"
+    });
+
+    expect(candidates).toEqual([]);
+  });
+
+  it("accepts an exact Battle.net deep-link result when SC2Pulse returns a short battlenetId", async () => {
+    const payload = [
+      {
+        leagueMax: 6,
+        ratingMax: 5090,
+        totalGamesPlayed: 1924,
+        currentStats: { rating: null, gamesPlayed: null, rank: null },
+        previousStats: { rating: null, gamesPlayed: null, rank: null },
+        members: {
+          character: {
+            id: 341023615,
+            realm: 1,
+            region: "EU",
+            battlenetId: 10273804,
+            tag: "nickname",
+            name: "nickname#1"
+          },
+          account: { battleTag: "IllIlIllIl#2484", tag: "IllIlIllIl" },
+          raceGames: { ZERG: 1924 }
+        }
+      }
+    ];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    const adapter = new Sc2PulseAdapter({
+      baseUrl: "https://example.test/sc2/api",
+      httpClient: buildClient(fetchImpl)
+    });
+
+    const candidates = await adapter.searchOpponent({
+      nickname: "nickname",
+      profileLink: "battlenet:://starcraft/profile/2/1277908579088596992",
+      region: "EU"
+    });
+
+    expect(candidates).toHaveLength(1);
+    expect(candidates[0]).toMatchObject({
+      nickname: "nickname",
+      battleTag: "IllIlIllIl#2484",
+      region: "EU",
+      totalGames: 1924
+    });
+  });
+
+  it("rejects ambiguous multi-result responses for a Battle.net deep link", async () => {
+    const payload = [
+      {
+        leagueMax: 1,
+        ratingMax: 2298,
+        members: {
+          character: { id: 341080357, realm: 1, region: "EU", battlenetId: 10258826, tag: "nickname" },
+          account: { battleTag: "Erik#24646" },
+          raceGames: { TERRAN: 378 }
+        }
+      },
+      {
+        leagueMax: 6,
+        ratingMax: 5090,
+        members: {
+          character: { id: 341023615, realm: 1, region: "EU", battlenetId: 10273804, tag: "nickname" },
+          account: { battleTag: "IllIlIllIl#2484" },
+          raceGames: { ZERG: 1924 }
+        }
+      }
+    ];
+    const fetchImpl = vi.fn<typeof fetch>(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    const adapter = new Sc2PulseAdapter({
+      baseUrl: "https://example.test/sc2/api",
+      httpClient: buildClient(fetchImpl)
+    });
+
+    const candidates = await adapter.searchOpponent({
+      nickname: "nickname",
+      profileLink: "battlenet:://starcraft/profile/2/1277908579088596992",
       region: "EU"
     });
 

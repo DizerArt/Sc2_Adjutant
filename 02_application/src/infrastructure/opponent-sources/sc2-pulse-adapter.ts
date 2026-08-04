@@ -160,7 +160,7 @@ export class Sc2PulseAdapter implements OpponentDataSourcePort {
       if (isBarcodeQuery && !isSafeBarcodeCandidate(trimmedNickname, candidate)) {
         continue;
       }
-      if (!matchesRequestedProfileLink(entry, trimmedProfileLink)) {
+      if (!matchesRequestedProfileLink(entry, trimmedProfileLink, responseEntries.length)) {
         continue;
       }
       if (!matchesRequestedBattleTag(candidate, query.battleTag)) {
@@ -235,15 +235,23 @@ function matchesRequestedBattleTag(candidate: OpponentDataCandidate, requestedBa
   return battleTagsMatch(candidate.battleTag, requestedBattleTag);
 }
 
-type RequestedProfileIdentity = {
-  readonly region: NonNullable<OpponentDataCandidate["region"]>;
-  readonly realm?: number;
-  readonly profileId: string;
-};
+type RequestedProfileIdentity =
+  | {
+      readonly kind: "battlenet-deep-link";
+      readonly region: NonNullable<OpponentDataCandidate["region"]>;
+      readonly opaqueProfileId: string;
+    }
+  | {
+      readonly kind: "blizzard-web-profile";
+      readonly region: NonNullable<OpponentDataCandidate["region"]>;
+      readonly realm: number;
+      readonly profileId: string;
+    };
 
 function matchesRequestedProfileLink(
   entry: Sc2PulseLadderDistinctCharacter,
-  requestedProfileLink: string | undefined
+  requestedProfileLink: string | undefined,
+  responseEntryCount: number
 ): boolean {
   const requested = parseRequestedProfileLink(requestedProfileLink);
   if (!requested) {
@@ -255,18 +263,27 @@ function matchesRequestedProfileLink(
     return false;
   }
 
-  const candidateProfileId = characterProfileId(character);
-  if (!candidateProfileId || candidateProfileId !== requested.profileId) {
-    return false;
-  }
-
   const candidateRegion = normalizeCandidateRegion(character.region);
   if (candidateRegion !== requested.region) {
     return false;
   }
 
+  // The numeric value in an in-game `battlenet::` deep link is opaque and is
+  // not the same value as SC2Pulse's short `character.battlenetId`. SC2Pulse
+  // resolves that deep link server-side, so only accept an unambiguous
+  // singleton response from the requested region. Replay/web profile URLs use
+  // the short id and can still be verified field-by-field below.
+  if (requested.kind === "battlenet-deep-link") {
+    return responseEntryCount === 1;
+  }
+
+  const candidateProfileId = characterProfileId(character);
+  if (!candidateProfileId || candidateProfileId !== requested.profileId) {
+    return false;
+  }
+
   const candidateRealm = numberValue(character.realm);
-  return requested.realm === undefined || candidateRealm === requested.realm;
+  return candidateRealm === requested.realm;
 }
 
 function parseRequestedProfileLink(value: string | undefined): RequestedProfileIdentity | null {
@@ -278,8 +295,10 @@ function parseRequestedProfileLink(value: string | undefined): RequestedProfileI
   const battlenetMatch = trimmed.match(/^battlenet::\/\/starcraft\/profile\/(\d+)\/(\d+)$/i);
   if (battlenetMatch) {
     const region = regionFromProfileRegionId(battlenetMatch[1]);
-    const profileId = battlenetMatch[2];
-    return region && profileId ? { region, profileId } : null;
+    const opaqueProfileId = battlenetMatch[2];
+    return region && opaqueProfileId
+      ? { kind: "battlenet-deep-link", region, opaqueProfileId }
+      : null;
   }
 
   const webMatch = trimmed.match(/^https?:\/\/starcraft2\.blizzard\.com\/profile\/(\d+)\/(\d+)\/(\d+)/i);
@@ -287,7 +306,9 @@ function parseRequestedProfileLink(value: string | undefined): RequestedProfileI
     const region = regionFromProfileRegionId(webMatch[1]);
     const realm = Number(webMatch[2]);
     const profileId = webMatch[3];
-    return region && Number.isInteger(realm) && profileId ? { region, realm, profileId } : null;
+    return region && Number.isInteger(realm) && profileId
+      ? { kind: "blizzard-web-profile", region, realm, profileId }
+      : null;
   }
 
   return null;
