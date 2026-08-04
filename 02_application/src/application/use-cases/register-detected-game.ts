@@ -285,7 +285,7 @@ function buildOpponentId(opponent: GameSessionPlayer, session: GameSession): str
     return createStableEntityId("opponent", battleTagKey);
   }
 
-  if (isBarcodeNickname(opponent.name) && opponent.profileLink) {
+  if (opponent.profileLink) {
     return createStableEntityId("opponent", opponent.profileLink);
   }
 
@@ -344,6 +344,10 @@ async function findExistingOpponent(
   }
 
   if (normalizeBattleTagKey(opponentPlayer.battleTag)) {
+    return null;
+  }
+
+  if (normalizeProfileLink(opponentPlayer.profileLink)) {
     return null;
   }
 
