@@ -49,7 +49,12 @@ export class OpponentEnrichmentService {
   async enrich(opponent: Opponent, query?: OpponentEnrichmentQuery): Promise<OpponentEnrichmentResult> {
     const searchQuery: OpponentSearchQuery = {
       nickname: query?.nickname ?? opponent.nickname,
-      battleTag: query && hasOwn(query, "battleTag") ? query.battleTag : opponent.battleTag,
+      battleTag:
+        query && hasOwn(query, "battleTag")
+          ? query.battleTag
+          : query?.profileLink?.trim()
+            ? undefined
+            : opponent.battleTag,
       profileLink: query?.profileLink,
       race: query?.race ?? opponent.race,
       region: query?.region,
@@ -97,15 +102,69 @@ export class OpponentEnrichmentService {
       this.maxNicknameOnlyMmrDelta
     );
     const eligibleCandidates = filterExcludedCandidates(mmrCandidates, query?.excludedNicknames ?? []);
-    const bestCandidate = selectBestCandidate(eligibleCandidates, this.minConfidenceScore);
+    const bestCandidate = hasAmbiguousNicknameOnlyIdentity(eligibleCandidates, searchQuery)
+      ? null
+      : selectBestCandidate(eligibleCandidates, this.minConfidenceScore);
+    const enrichmentBase = shouldReplaceStoredBattleTag(opponent, bestCandidate, searchQuery)
+      ? { ...opponent, battleTag: undefined }
+      : opponent;
 
     return {
-      opponent: bestCandidate ? enrichOpponentFromCandidate(opponent, bestCandidate, this.clock(), searchQuery.race) : opponent,
+      opponent: bestCandidate
+        ? enrichOpponentFromCandidate(enrichmentBase, bestCandidate, this.clock(), searchQuery.race)
+        : opponent,
       bestCandidate,
       candidates: [...eligibleCandidates].sort(compareCandidates),
       warnings
     };
   }
+}
+
+function hasAmbiguousNicknameOnlyIdentity(
+  candidates: readonly OpponentDataCandidate[],
+  query: OpponentSearchQuery
+): boolean {
+  if (normalizeBattleTagKey(query.battleTag) || query.profileLink?.trim()) {
+    return false;
+  }
+
+  const requestedIdentity = normalizePlayerIdentityName(query.nickname);
+  if (!requestedIdentity) {
+    return false;
+  }
+
+  const exactMatchesBySource = new Map<string, number>();
+  for (const candidate of candidates) {
+    const isExactMatch = [candidate.nickname, ...candidate.aliases]
+      .map(normalizePlayerIdentityName)
+      .some((identity) => identity === requestedIdentity);
+    if (!isExactMatch) {
+      continue;
+    }
+
+    const sourceKey = candidate.source.trim().toLowerCase();
+    const nextCount = (exactMatchesBySource.get(sourceKey) ?? 0) + 1;
+    if (nextCount > 1) {
+      return true;
+    }
+    exactMatchesBySource.set(sourceKey, nextCount);
+  }
+
+  return false;
+}
+
+function shouldReplaceStoredBattleTag(
+  opponent: Opponent,
+  candidate: OpponentDataCandidate | null,
+  query: OpponentSearchQuery
+): boolean {
+  if (!query.profileLink?.trim() || !candidate) {
+    return false;
+  }
+
+  const storedBattleTag = normalizeBattleTagKey(opponent.battleTag);
+  const resolvedBattleTag = normalizeBattleTagKey(candidate.battleTag);
+  return Boolean(storedBattleTag && resolvedBattleTag && storedBattleTag !== resolvedBattleTag);
 }
 
 function filterNicknameOnlyMmrCandidates(

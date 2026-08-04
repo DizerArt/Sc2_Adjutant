@@ -169,6 +169,47 @@ describe("RegisterDetectedGame", () => {
     expect(opponents.map((opponent) => opponent.battleTag).sort()).toEqual(["Showtime#2619", "Showtime#9999"]);
   });
 
+  it("keeps two same-name opponents separate when their profile links differ", async () => {
+    const opponentRepository = new InMemoryOpponentRepository();
+    const matchRepository = new InMemoryMatchRepository();
+    const useCase = new RegisterDetectedGame({
+      opponentRepository,
+      matchRepository,
+      clock: () => "2026-08-04T12:00:00.000Z"
+    });
+
+    const sessionFor = (id: string, detectedAt: string, profileLink: string): GameSession => ({
+      id,
+      isActive: true,
+      mode: "ranked-1v1",
+      detectedAt,
+      players: [
+        { name: "nickname", race: "Zerg", result: "Undecided", profileLink },
+        { name: "RetorieS", race: "Terran", result: "Undecided", isUser: true }
+      ]
+    });
+
+    const first = await useCase.execute({
+      session: sessionFor(
+        "nickname-a",
+        "2026-08-04T12:00:00.000Z",
+        "battlenet:://starcraft/profile/2/1277908579088596992"
+      ),
+      userName: "RetorieS"
+    });
+    const second = await useCase.execute({
+      session: sessionFor(
+        "nickname-b",
+        "2026-08-04T13:00:00.000Z",
+        "battlenet:://starcraft/profile/2/9999999999999999999"
+      ),
+      userName: "RetorieS"
+    });
+
+    expect(first?.opponent.id).not.toBe(second?.opponent.id);
+    expect(await opponentRepository.findAll()).toHaveLength(2);
+  });
+
   it("reuses an unresolved live match after monitoring restarts during the same game", async () => {
     const opponentRepository = new InMemoryOpponentRepository();
     const matchRepository = new InMemoryMatchRepository();

@@ -411,6 +411,81 @@ describe("OpponentEnrichmentService", () => {
     expect(result.opponent.mmrAtLastMatch).toBe(3929);
   });
 
+  it("does not select one of several same-name identities without a stable lookup", async () => {
+    const opponent = createOpponent({
+      id: "opponent_nickname",
+      nickname: "nickname",
+      race: "Zerg",
+      mmrAtLastMatch: 1835,
+      now: "2026-08-04T12:00:00.000Z"
+    });
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "nickname",
+          battleTag: "Erik#24646",
+          race: "Zerg",
+          mmr: 1835,
+          profileUrl: "https://sc2pulse.nephest.com/sc2/?type=character&id=341080357&m=1",
+          confidenceScore: 1
+        }),
+        candidate({
+          source: "SC2Pulse",
+          nickname: "nickname",
+          battleTag: "IllIlIllIl#2484",
+          race: "Zerg",
+          profileUrl: "https://sc2pulse.nephest.com/sc2/?type=character&id=341023615&m=1",
+          confidenceScore: 0.9
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      nickname: "nickname",
+      race: "Zerg",
+      region: "EU",
+      observedMmr: 1835
+    });
+
+    expect(result.bestCandidate).toBeNull();
+    expect(result.opponent).toEqual(opponent);
+  });
+
+  it("lets an exact profile-link lookup replace a stale name-only BattleTag", async () => {
+    const opponent = createOpponent({
+      id: "opponent_nickname",
+      nickname: "nickname",
+      race: "Zerg",
+      battleTag: "Erik#24646",
+      mmrAtLastMatch: 1835,
+      now: "2026-08-04T12:00:00.000Z"
+    });
+    const service = new OpponentEnrichmentService([
+      new FakeSource("SC2Pulse", [
+        candidate({
+          source: "SC2Pulse",
+          nickname: "nickname",
+          battleTag: "IllIlIllIl#2484",
+          race: "Zerg",
+          totalGames: 1924,
+          confidenceScore: 1
+        })
+      ])
+    ]);
+
+    const result = await service.enrich(opponent, {
+      nickname: "nickname",
+      profileLink: "https://starcraft2.blizzard.com/profile/2/1/10273804",
+      race: "Zerg",
+      region: "EU"
+    });
+
+    expect(result.bestCandidate?.battleTag).toBe("IllIlIllIl#2484");
+    expect(result.opponent.battleTag).toBe("IllIlIllIl#2484");
+    expect(result.opponent.raceProfiles?.Zerg?.totalGamesAtLastMatch).toBe(1924);
+  });
+
   it("rejects local player candidates when SC2 reports the user name with a clan suffix", async () => {
     const opponent = createOpponent({
       id: "opponent_barcode",
