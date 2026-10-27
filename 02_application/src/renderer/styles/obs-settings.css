@@ -1,0 +1,26 @@
+.settings-layout.settings-layout-with-obs { overflow: auto; align-content: start; align-items: start; grid-template-rows: repeat(3, max-content); grid-auto-rows: max-content; padding-bottom: 2px; }
+.settings-layout-with-obs > .panel { min-height: max-content; height: auto; align-content: start; }
+.settings-layout-with-obs > .obs-settings { grid-column: 1 / -1; grid-row: 1; }
+.settings-layout-with-obs > .settings-form { grid-row: 2 / span 2; overflow: visible; }
+.settings-layout-with-obs > .replay-sync-panel { grid-row: 2; }
+.settings-layout-with-obs > .danger-zone { grid-row: 3; }
+.obs-settings { display: grid; gap: 10px; min-width: 0; }
+.obs-settings-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.obs-settings-heading h3 { margin: 0; font-size: 1rem; color: #eef4ff; }
+.obs-source-status { font-size: 0.78rem; color: #e6bd83; }
+.obs-source-status[data-ready="true"] { color: #a8dfbf; }
+.obs-settings-connection { display: grid; grid-template-columns: minmax(180px, 1fr) auto; align-items: end; gap: 12px; }
+.obs-settings label { display: grid; gap: 5px; min-width: 0; color: #c5d3e5; font-size: 0.78rem; }
+.obs-settings input:not([type="checkbox"]), .obs-settings select { width: 100%; min-width: 0; min-height: 36px; padding: 0 10px; border: 1px solid rgba(220, 180, 80, 0.42); border-radius: 3px; background: #0c1521; color: #eef4ff; font: inherit; }
+.obs-settings input:focus-visible, .obs-settings select:focus-visible, .obs-settings button:focus-visible { outline: 2px solid #79cfff; outline-offset: 2px; }
+.obs-settings select option { background: #0c1521; color: #eef4ff; }
+.obs-settings-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.obs-settings-controls { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(160px, 0.6fr) minmax(160px, 0.6fr); align-items: end; gap: 12px; }
+.obs-settings label.obs-enable { display: flex; align-items: center; gap: 8px; align-self: center; min-height: 36px; }
+.obs-enable input { accent-color: #79cfff; }
+.obs-settings button:disabled, .obs-settings select:disabled, .obs-settings input:disabled { opacity: 0.55; cursor: not-allowed; }
+.obs-settings-notice { min-height: 1.2em; margin: 0; color: #a8dfbf; font-size: 0.78rem; }
+.obs-settings-recovery { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.obs-native-label { margin: 14px 0 2px; padding-top: 12px; border-top: 1px solid rgba(121, 207, 255, 0.2); font-size: 0.85rem; font-weight: 600; color: #dce6f4; }
+@media (max-width: 1100px) { .obs-settings-connection { grid-template-columns: 1fr; } .obs-settings-controls { grid-template-columns: 1fr 1fr; } .obs-settings .obs-enable { grid-column: 1 / -1; } }
+@media (max-width: 860px) { .settings-layout-with-obs > .settings-form, .settings-layout-with-obs > .replay-sync-panel, .settings-layout-with-obs > .danger-zone { grid-column: 1; grid-row: auto; } .obs-settings-controls { grid-template-columns: 1fr; } }

@@ -46,6 +46,7 @@ import {
 import { useVoiceNarrator } from "../voice/use-voice-narrator.js";
 import type { OpponentSpeechData } from "../voice/voice-narrator-service.js";
 import { VoiceSettingsPanel } from "./VoiceSettingsPanel.js";
+import { ObsOverlaySettings } from "./ObsOverlaySettings.js";
 import type { VoiceSettings } from "../../domain/entities/voice-settings.js";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
@@ -3121,7 +3122,8 @@ function SettingsView(props: SettingsViewProps) {
     parseReplaySyncLimit(props.replaySyncDraft.limit) !== null;
 
   return (
-    <section className="settings-layout">
+    <section className="settings-layout settings-layout-with-obs">
+      <ObsOverlaySettings language={props.settingsDraft.language} />
       <form className="panel settings-form" onSubmit={props.onSubmit}>
         <div className="panel-heading">
           <p className="eyebrow">{props.t("settings.playerProfile")}</p>
@@ -3242,6 +3244,7 @@ function SettingsView(props: SettingsViewProps) {
           {props.t("settings.externalSources")}
         </label>
 
+        <p className="obs-native-label">{props.settingsDraft.language === "ru" ? "На экране игрока — отдельное окно" : "On the player's screen — separate window"}</p>
         <label className="toggle-row">
           <input
             checked={props.settingsDraft.overlayEnabled}

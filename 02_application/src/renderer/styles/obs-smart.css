@@ -1,0 +1,11 @@
+.smart-overlay-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.smart-frame-image { width: 100%; height: 100%; display: block; object-fit: contain; }
+.smart-phase-loading { background: #000; }
+/* The original SVG already embeds the HUD at (1,984) inside a 2560×1440 canvas. */
+.smart-pause-scrim { position: absolute; inset: 0; background: #101518; opacity: 0.28; animation: smart-pause-shade 3s cubic-bezier(.77,0,.175,1) infinite alternate; }
+.smart-pause-label { position: absolute; top: 12%; left: 50%; transform: translateX(-50%); padding: 1vh 2vw; border: 1px solid #334047; background: #101518; color: #eef3f2; font: 600 clamp(14px,2vw,36px)/1.4 system-ui,sans-serif; }
+@keyframes smart-pause-shade { from { opacity: 0.22; } to { opacity: 0.5; } }
+.smart-media-error { position: absolute; top: 46%; left: 12%; width: 76%; color: #eef4ff; font: 24px/1.5 system-ui, sans-serif; text-align: center; }
+.smart-media-error-compact { top: auto; bottom: 12px; font-size: 16px; }
+.smart-preview-empty { position: absolute; inset: 35% 10% auto; margin: 0; color: #c5d3e5; text-align: center; font: 13px/1.5 system-ui, sans-serif; }
+@media (prefers-reduced-motion: reduce) { .smart-pause-scrim { animation: none; opacity: 0.35; } }

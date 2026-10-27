@@ -21,7 +21,23 @@
     "voice:download": "node scripts/download-voice-models.cjs",
     "voice:download:all": "node scripts/download-voice-models.cjs --all",
     "voice:wasm": "node scripts/copy-voice-wasm.cjs",
-    "postinstall": "node scripts/copy-voice-wasm.cjs"
+    "postinstall": "node scripts/copy-voice-wasm.cjs",
+    "build:compose-resources": "tsc --noEmit && node scripts/build-compose-resources.cjs && vite build && vite build --config vite.obs.config.ts && node scripts/stage-postmatch-assets.cjs",
+    "dev:compose": "npm run build:compose-resources && node scripts/compose.cjs dev",
+    "build:compose": "node scripts/compose.cjs build",
+    "check:compose": "node scripts/compose.cjs check",
+    "test:compose": "node scripts/compose.cjs test",
+    "fmt:compose": "node scripts/compose.cjs fmt",
+    "clippy:compose": "node scripts/compose.cjs clippy",
+    "stage:compose": "node scripts/stage-compose.cjs",
+    "stage:compose-installer": "node scripts/stage-compose-installer.cjs",
+    "smoke:compose": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/smoke-compose.ps1",
+    "smoke:compat": "node scripts/smoke-compat.cjs",
+    "build:obs": "vite build --config vite.obs.config.ts && node scripts/stage-postmatch-assets.cjs",
+    "review:browser": "npm run build:compose-resources && node scripts/review-browser.cjs",
+    "review:browser:serve": "node scripts/review-browser.cjs",
+    "review:compose": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/review-compose.ps1",
+    "test:review": "node --test scripts/review-browser.node-check.cjs"
   },
   "build": {
     "appId": "com.dizerart.sc2companion",
@@ -83,6 +99,7 @@
     "@diffusionstudio/piper-wasm": "^1.0.0",
     "@mintplex-labs/piper-tts-web": "^1.0.4",
     "@replaysremastered/sc2readerjs": "^0.1.9",
+    "@tauri-apps/api": "^2.12.4",
     "csv-parse": "^6.2.1",
     "csv-stringify": "^6.7.0",
     "fast-xml-parser": "^5.8.0",
@@ -91,6 +108,7 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.12.4",
     "@types/node": "^22.15.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -98,6 +116,7 @@
     "concurrently": "^9.2.1",
     "electron": "^41.5.0",
     "electron-builder": "^26.8.1",
+    "esbuild": "^0.28.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "vite": "^7.3.2",

@@ -1,5 +1,10 @@
 # SC2 Adjutant
 
+> **Compose branch:** an experimental Tauri/Rust migration is in progress.
+> Scope, paused shorts work and unified overlay requirements: [docs/compose/SCOPE.md](docs/compose/SCOPE.md).
+> Build instructions and data isolation: [docs/compose/DEVELOPMENT.md](docs/compose/DEVELOPMENT.md).
+> The Electron commands and release pipeline below remain available; feature parity is not yet certified.
+
 SC2 Adjutant is a Windows desktop assistant for StarCraft II players. It detects live ranked 1v1 matches, identifies the opponent, stores local match history, enriches profiles with SC2Pulse data when possible, and helps review opponents through replay synchronization.
 
 ## Download and Install

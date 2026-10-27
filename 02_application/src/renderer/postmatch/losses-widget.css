@@ -1,0 +1,79 @@
+*{box-sizing:border-box}body{margin:0;background:transparent;color:#eef3f2;font-family:Segoe UI,system-ui,sans-serif;overflow:hidden}#waterfall{height:100vh;display:flex;flex-direction:column;padding:24px 32px;border-radius:12px;background:rgba(16,21,24,.92)}[hidden]{display:none!important}header{display:flex;justify-content:space-between;align-items:start;gap:24px}.team{width:35%;display:grid;gap:5px}.team span{font-size:clamp(14px,2.2vw,28px);overflow-wrap:anywhere}.team strong{font-size:clamp(32px,5vw,64px);font-variant-numeric:tabular-nums;line-height:1}.team small,.match-clock small{font-size:12px;letter-spacing:.08em}.team-a{color:#73dcc8}.team-b{color:#f0c780;text-align:right}.match-clock{display:grid;text-align:center;gap:8px;white-space:nowrap}.match-clock span{font-size:28px;font-variant-numeric:tabular-nums}.match-clock small{color:#adb9bf}#stream{position:relative;flex:1;min-height:60px;overflow:hidden;margin:16px -32px}.paths{width:100%;height:100%;position:absolute;opacity:.25}.paths path{fill:none;stroke:#73dcc8;stroke-width:1}.paths path+path{stroke:#f0c780}.loss-icon{position:absolute;left:0;top:0;width:74px;height:74px;border:2px solid #73dcc8;border-radius:8px;background:#181e22;display:grid;place-items:center;will-change:transform,opacity}.loss-icon.other{border-color:#f0c780}.loss-icon img{width:100%;height:100%;object-fit:contain}.loss-icon b{position:absolute;left:-2px;bottom:-2px;background:#101518;padding:1px 5px;font-size:17px;border-radius:4px;border:1px solid currentColor}.loss-icon .fallback{font-size:10px;padding:2px;overflow-wrap:anywhere;text-align:center}footer{display:flex;align-items:center;gap:20px;color:#adb9bf;font-size:14px}.progress{height:3px;background:#334047;flex:1;overflow:hidden}#progress{height:100%;width:100%;background:#c1a2f5;transform-origin:left;transform:scaleX(0)}@media(min-width:601px) and (max-width:1000px){.loss-icon{width:58px;height:58px}}@media(max-width:600px){#waterfall{padding:16px}header{gap:10px}.match-clock span{font-size:20px}.team small,.match-clock small{font-size:9px}.loss-icon{width:38px;height:38px}.loss-icon b{font-size:12px}footer{font-size:11px;gap:9px}#stream{margin:12px -16px}}@media(prefers-reduced-motion:reduce){.loss-icon{will-change:opacity}.paths{display:none}}
+.resources{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:5px}.resource{display:flex;align-items:center;gap:6px;white-space:nowrap}.team .resource span{font-size:clamp(16px,2vw,26px);font-variant-numeric:tabular-nums}.resource svg{width:24px;height:24px;flex:none}.resource.minerals{color:#71ddea}.resource.gas{color:#8ce3a0}.team-b .resources{justify-content:flex-end}@media(max-width:600px){.resources{flex-direction:column;gap:3px;margin-top:3px}.team-b .resources{align-items:flex-end}.resource svg{width:18px;height:18px}.team .resource span{font-size:15px}.resource{gap:4px}}
+.story-scene{position:absolute;inset:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:32px;min-height:0}
+.story-column{display:flex;flex-direction:column;min-width:0;min-height:0;z-index:1}
+.column-label,.column-note{font-size:12px;color:#adb9bf;margin-bottom:12px;line-height:1.4}
+.column-note{margin:8px 0 0;overflow-wrap:anywhere}
+.story-rows{min-height:0;flex:1;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+.army-row{display:flex;align-items:center;gap:12px;min-height:38px;padding:2px 0;border-bottom:1px solid #334047}
+.army-name{font-size:15px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.army-count{font-size:22px;font-variant-numeric:tabular-nums}
+.side-0 .army-count{color:#73dcc8}.side-1 .army-count{color:#f0c780}
+.story-unit{position:relative;display:inline-grid;place-items:center;flex:none;width:36px;height:36px;border:2px solid #73dcc8;border-radius:6px;background:#181e22;overflow:visible}
+.side-1 .story-unit{border-color:#f0c780}.story-unit img{width:100%;height:100%;object-fit:contain}
+.unit-fallback{font-size:8px;max-width:100%;overflow-wrap:anywhere;text-align:center}
+.story-unit b{position:absolute;left:-2px;bottom:-2px;font-size:10px;padding:0 3px;border:1px solid #334047;background:#101518;border-radius:3px}
+.story-flight{position:absolute;left:0;top:0;width:40px;height:40px;z-index:4;will-change:transform,opacity;pointer-events:none}
+.battle_map{grid-template-columns:15% 1fr 15%;gap:16px}
+.battle_map .side-1{grid-column:3;grid-row:1}
+.battle_map .army-name{display:none}.battle_map .army-row{gap:8px}.battle_map .column-note{font-size:10px}
+.battle-chart{position:absolute;left:18%;right:18%;top:0;bottom:0;border:1px solid #334047;background:#181e22;border-radius:8px;overflow:hidden}
+.battle-chart svg{width:100%;height:100%;opacity:.5}.battle-chart path{fill:none;stroke:#334047;stroke-width:1}
+.chart-caption{position:absolute;left:12px;bottom:10px;font-size:12px;color:#adb9bf}
+.battle-pulse{position:absolute;width:40px;height:40px;border:1px solid #73dcc8;border-radius:50%;z-index:3;will-change:transform,opacity;pointer-events:none}
+.battle-pulse.side-1{border-color:#f0c780}
+.hero-card{display:grid;grid-template-columns:48px 1fr auto;align-items:center;gap:4px 12px;padding:8px 0;border-bottom:1px solid #334047;min-height:0}
+.hero-card>.story-unit{width:48px;height:48px}
+.hero-details{display:grid;gap:4px;min-width:0}.hero-details strong{font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero-owner{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hero-details small{font-size:10px;color:#adb9bf}
+.hero-score{font-size:36px;font-variant-numeric:tabular-nums}.side-0 .hero-score{color:#73dcc8}.side-1 .hero-score{color:#f0c780}
+.hero-victims{grid-column:2/-1;display:flex;align-items:center;gap:6px;color:#adb9bf;font-size:10px}
+.hero-victims .story-unit{width:28px;height:28px}
+.story-empty{position:absolute;inset:25% 10% auto;text-align:center;z-index:2;color:#adb9bf;font-size:14px;line-height:1.5;margin:0;pointer-events:none}
+@media(max-width:600px){.story-scene{inset:0 12px;gap:16px}.column-label,.column-note{font-size:9px;margin-bottom:6px}.army-row{gap:6px;min-height:28px}.army-name{font-size:10px}.army-count{font-size:16px}.story-unit{width:26px;height:26px}.battle_map{grid-template-columns:16% 1fr 16%;gap:4px}.battle-chart{left:20%;right:20%}.battle_map .army-count{font-size:12px}.battle_map .army-row{gap:3px}.battle_map .column-note{font-size:8px}.battle_map .story-unit{width:22px;height:22px}.chart-caption{font-size:9px;left:6px;bottom:6px}.hero-card{grid-template-columns:28px 1fr auto;gap:3px 5px;padding:4px 0}.hero-card>.story-unit{width:28px;height:28px}.hero-details{gap:2px}.hero-details strong{font-size:11px}.hero-owner,.hero-details small{font-size:8px}.hero-score{font-size:20px}.hero-victims{gap:3px;font-size:8px}.hero-victims .story-unit{width:18px;height:18px}.story-empty{font-size:11px}.match-clock small{max-width:90px;white-space:normal;line-height:1.4}}
+@media(prefers-reduced-motion:reduce){.story-flight,.battle-pulse{will-change:opacity}}
+.map-presentation header,.map-presentation footer{position:relative;z-index:5;pointer-events:none}
+.terrain-map{position:fixed;inset:0;display:block;z-index:0;isolation:isolate}
+.terrain-map .battle-chart{inset:0;border:0;border-radius:0;background:transparent}
+.terrain-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:brightness(.55)}
+.terrain-map .battle-chart svg{display:none}
+.terrain-map .story-column{position:absolute;top:200px;bottom:48px;width:16%;padding:12px;background:rgba(16,21,24,.88);border-radius:6px}
+.terrain-map .side-0{left:24px}.terrain-map .side-1{right:24px}
+.troop-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.troop-legend{position:absolute;bottom:0;left:20%;right:20%;z-index:2;display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 8px;background:rgba(16,21,24,.9);border-radius:4px;font-size:10px;color:#eef3f2;pointer-events:none}
+.army-symbol,.worker-symbol{display:inline-block;width:7px;height:7px;border:1px solid currentColor;flex:none}.army-symbol{border-radius:50%;background:currentColor}.worker-symbol{width:5px;height:5px;background:currentColor;margin-left:5px}
+.stale-legend{color:#adb9bf;margin-left:8px}
+.terrain-map .troop-legend{bottom:40px;left:22%;right:22%}
+@media(max-width:600px){.troop-legend{font-size:8px;gap:4px}.terrain-map .troop-legend{bottom:34px;left:24%;right:24%}.stale-legend{margin-left:0}}
+@media(max-width:600px){.terrain-map .story-column{top:180px;bottom:35px;width:19%;padding:4px}.terrain-map .side-0{left:8px}.terrain-map .side-1{right:8px}}
+.multi-team-header{display:grid;grid-template-columns:repeat(var(--team-columns),minmax(0,1fr));gap:8px 12px;max-height:40vh;overflow:auto;flex:none}
+.multi-team-header .match-clock{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px}
+.multi-team-header .team{width:auto;text-align:left;gap:2px;min-width:0}
+.multi-team-header .team>span{font-size:clamp(10px,1.4vw,18px);line-height:1.25}
+.multi-team-header .team>strong{font-size:clamp(20px,3vw,32px)}
+.multi-team-header .team small{font-size:9px}
+.multi-team-header .resources{justify-content:flex-start;align-items:flex-start;flex-direction:row;gap:3px 8px;margin:0}
+.multi-team-header .team .resource span{font-size:clamp(10px,1.3vw,16px)}
+.multi-team-header .resource svg{width:16px;height:16px}
+.multi-team-ledgers{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--team-columns),minmax(0,1fr));grid-template-rows:repeat(var(--team-rows),minmax(0,1fr));gap:12px;min-height:0}
+.multi-team .story-column{grid-column:auto;grid-row:auto}
+.column-team{font-size:12px;color:var(--team-color,#73dcc8);overflow-wrap:anywhere;margin-bottom:3px}
+.multi-team .army-count,.multi-team .hero-score{color:var(--team-color,#73dcc8)}
+.multi-team .column-label{font-size:10px;margin-bottom:4px}
+.multi-team .column-note{font-size:9px;margin-top:3px}
+.multi-team .army-row{gap:5px}
+.multi-team .army-name{font-size:11px}
+.multi-team .army-count{font-size:18px}
+.multi-team .hero-card{grid-template-columns:28px minmax(0,1fr) auto;gap:3px 5px}
+.multi-team .hero-card>.story-unit{width:28px;height:28px}
+.multi-team .hero-details strong{font-size:12px}
+.multi-team .hero-owner,.multi-team .hero-details small{font-size:9px}
+.multi-team .hero-score{font-size:24px}
+.multi-team.battle_map .multi-team-ledgers{top:58%}
+.multi-team.battle_map .battle-chart{left:0;right:0;top:0;bottom:45%}
+.multi-team.battle_map .troop-legend{left:0;right:0;bottom:45%}
+.multi-team.battle_map .army-name{display:block}
+.multi-team.terrain-map{position:absolute;inset:0}
+.multi-team.terrain-map .story-column{position:relative;inset:auto;width:auto;padding:4px;background:rgba(16,21,24,.88)}
+.terrain-map .chart-caption{padding:3px 5px;background:rgba(16,21,24,.88);border-radius:3px;max-width:calc(100% - 24px)}
+@media(max-width:600px){.multi-team-header{gap:4px 6px}.multi-team-header .match-clock span{font-size:16px}.multi-team-ledgers{gap:5px}.column-team{font-size:9px}.multi-team .column-label,.multi-team .column-note{font-size:8px}.multi-team .army-name{font-size:9px}.multi-team .story-unit{width:22px;height:22px}.multi-team .hero-victims .story-unit{width:16px;height:16px}}

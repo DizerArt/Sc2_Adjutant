@@ -30,6 +30,8 @@ export class ProcessNewReplay {
   }
 
   async execute(metadata: ReplayMetadata): Promise<ProcessNewReplayResult | null> {
+    // This repository models one opponent; team/FFA replays belong to the overlay analysis.
+    if (metadata.players && metadata.players.length > 2) return null;
     const match = await this.findLinkTarget(metadata);
 
     if (!match) {

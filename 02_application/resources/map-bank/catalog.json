@@ -1,0 +1,762 @@
+{
+  "schema_version": 1,
+  "registration": "approximate-camera-bounds",
+  "maps": [
+    {
+      "title": "At Eternity's Edge LE",
+      "mode": "1v1",
+      "image": "at-eternity-s-edge-le.png",
+      "image_sha256": "866a26316c3f38d1130402cf5f25467f3ffbb89f0a48c8595ada5119c2888e6a",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "c78abc3ed8b54de36e62191952d3ec04f9b8946d4ff55df9d806bd31b3283359",
+      "source_filename": "At Eternity's Edge LE.tga",
+      "map_sha256": [
+        "d340aff4e6cefd978986f38f8a01d63e7b87e56ca764db706a418d97a4113b34"
+      ],
+      "bounds": {
+        "min_x": 30,
+        "min_y": 54,
+        "max_x": 178,
+        "max_y": 202
+      }
+    },
+    {
+      "title": "Blackrock LE",
+      "mode": "1v1",
+      "image": "blackrock-le.png",
+      "image_sha256": "5035e64722147f759c4cba5127e6bc0ad7e698761a1fb5ee0b8c87d760390e31",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "a6c0fd9a42a0683adad025cd9c6f8a778646bc974d6abf75464d0e4c185d25ce",
+      "source_filename": "Blackrock LE.tga",
+      "map_sha256": [
+        "8d36855e0556dfcb38f59b9d7c24c9a959c001a215030d3c8150ad9ea391bfe6"
+      ],
+      "bounds": {
+        "min_x": 20,
+        "min_y": 26,
+        "max_x": 158,
+        "max_y": 164
+      }
+    },
+    {
+      "title": "Fear and Faith LE",
+      "mode": "1v1",
+      "image": "fear-and-faith-le.png",
+      "image_sha256": "ffe5ac581f849b03cee3f7e30a36fc76d629879e70f36203c5f9dc73d09b1f52",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "1bf0dc8c302a8b9dc852c2b4d8da974ae1096deb47e31bd8a633594f670dc13c",
+      "source_filename": "Fear and Faith LE.tga",
+      "map_sha256": [
+        "5f3d3d8f928d06222c2f31028ebf47e2d9124e6222188a259267e3d9851d7e04"
+      ],
+      "bounds": {
+        "min_x": 9,
+        "min_y": 7,
+        "max_x": 167,
+        "max_y": 165
+      }
+    },
+    {
+      "title": "Lockdown LE",
+      "mode": "1v1",
+      "image": "lockdown-le.png",
+      "image_sha256": "e419fc227b14d0dacc886a0f119a170d90ce96fb4895410932b147874ba352f8",
+      "image_size": [
+        2048,
+        1932
+      ],
+      "source_sha256": "6f40627d27162f81becf6d9da767abbd59de702c93dcf125f9fa3608acfd6500",
+      "source_filename": "Lockdown LE.tga",
+      "map_sha256": [
+        "c344272e2067890edc8a888e53cbdb52e5186eae953e6891365ee66eb87c37a9"
+      ],
+      "bounds": {
+        "min_x": 9,
+        "min_y": 9,
+        "max_x": 151,
+        "max_y": 143
+      }
+    },
+    {
+      "title": "Old Sun Temple LE",
+      "mode": "1v1",
+      "image": "old-sun-temple-le.png",
+      "image_sha256": "b2bb2264829ebf3dd6391822d1ebd4a19ba5d91728fe8bee1dd51e03a4af6429",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "399039356e2b6c205fb35b76ad3ac571db56fc042e29a5b8dfcb28894d8cf77e",
+      "source_filename": "Old Sun Temple LE.tga",
+      "map_sha256": [
+        "7ed558024c008d5ec29e275a93f9210e1c2c9a2aac1344081bf374dd7ec86eb4"
+      ],
+      "bounds": {
+        "min_x": 26,
+        "min_y": 24,
+        "max_x": 182,
+        "max_y": 180
+      }
+    },
+    {
+      "title": "Rainfall LE",
+      "mode": "1v1",
+      "image": "rainfall-le.png",
+      "image_sha256": "7b2903df9d0e3ca6e5a37722f8da13f6d41f840158b01b64468f7e0dca0e1e36",
+      "image_size": [
+        2048,
+        1987
+      ],
+      "source_sha256": "ec4c226c0cddae40ab216b0664f8baae8c89e18864ac4b1be0f2212a597aad3d",
+      "source_filename": "Rainfall LE.tga",
+      "map_sha256": [
+        "a697c6346cf091c062a1c3bb0eebd3b5a63d1b4517a8b1e38b9ea20b6804888b"
+      ],
+      "bounds": {
+        "min_x": 24,
+        "min_y": 24,
+        "max_x": 160,
+        "max_y": 156
+      }
+    },
+    {
+      "title": "Rorschach LE",
+      "mode": "1v1",
+      "image": "rorschach-le.png",
+      "image_sha256": "83f15662aa317669365a6901c1672cf221e388deb55161fe9dc2b9076abd0d05",
+      "image_size": [
+        2048,
+        1643
+      ],
+      "source_sha256": "e2bda80966038170e8ba232e40368a0aaa6214f3e548f65e5a39a0d40d955ebb",
+      "source_filename": "Rorschach LE.tga",
+      "map_sha256": [
+        "b78623123c7394482d190cc33414844ff7b2fca34e803447a75bf01316ac4c9c"
+      ],
+      "bounds": {
+        "min_x": 42,
+        "min_y": 58,
+        "max_x": 194,
+        "max_y": 180
+      }
+    },
+    {
+      "title": "Sanctuary III LE",
+      "mode": "1v1",
+      "image": "sanctuary-iii-le.png",
+      "image_sha256": "4c54989aee866bbbbcdf1b457ea85f306d4c02e78c9680ffb24183ed3deffe48",
+      "image_size": [
+        2048,
+        2168
+      ],
+      "source_sha256": "edc3cd94e267fc9d251bc61a14fc34a173b2fefe4c3784d521880f7e2868172d",
+      "source_filename": "Sanctuary III LE.tga",
+      "map_sha256": [
+        "de8717e3aff6ad5e5a716714e3c70f22f3432a0d9f01b6cfaea09e3acb4e0071"
+      ],
+      "bounds": {
+        "min_x": 24,
+        "min_y": 22,
+        "max_x": 160,
+        "max_y": 166
+      }
+    },
+    {
+      "title": "Washout LE",
+      "mode": "1v1",
+      "image": "washout-le.png",
+      "image_sha256": "e44d0da879f6fd031cbdd5904fe55a522560ab3187038da6a16a87f18238d869",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "b568549f641d5d6d887e2f06512b29f32c1b9cb2c9f68743dcbef659725d4600",
+      "source_filename": "Washout LE.tga",
+      "map_sha256": [
+        "985f80ae0a5f0cb0b9ac9da63325732e4b5a192fe28979f4b2fa3295418a89fd"
+      ],
+      "bounds": {
+        "min_x": 21,
+        "min_y": 14,
+        "max_x": 155,
+        "max_y": 148
+      }
+    },
+    {
+      "title": "Fields of Death CE",
+      "mode": "2v2",
+      "image": "fields-of-death-ce.png",
+      "image_sha256": "36c3dfef11c4d26b527584e37c3329a192c558f3fd33e05f593c23f3c71f874b",
+      "image_size": [
+        2048,
+        2122
+      ],
+      "source_sha256": "e7b1f39350521d983377949350c6806ebb7191a880852557860015d253016a15",
+      "source_filename": "Fields of Death CE.tga",
+      "map_sha256": [],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 7,
+        "max_x": 174,
+        "max_y": 177
+      },
+      "candidate_map_sha256": [
+        "28c2794071078892f25d6058cd2c86544d54684e37b19575f1c17fc52cab1164",
+        "a76deb95741e1d3d24527f0a303914824455bc9d68411fa143d23cc4edee9c27"
+      ],
+      "unresolved_reason": "Candidate archives contain render-relevant differences; exact exported revision is unconfirmed."
+    },
+    {
+      "title": "Gemgarden LE",
+      "mode": "2v2",
+      "image": "gemgarden-le.png",
+      "image_sha256": "c691140f0816d3e5fe209307b889452db93e78ea87f3f3b23a3645c7267d876b",
+      "image_size": [
+        2048,
+        1507
+      ],
+      "source_sha256": "cebdd01cc29154770efe034cd3de57ed30b148ee3cbb9d66feedfe7a2ecdbe92",
+      "source_filename": "Gemgarden LE.tga",
+      "map_sha256": [
+        "fe974ecea2a8d6632f3851b9ca73b234954ab6d6476fb2a51223653280625881"
+      ],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 8,
+        "max_x": 222,
+        "max_y": 164
+      }
+    },
+    {
+      "title": "New Bed of Chaos LE",
+      "mode": "2v2",
+      "image": "new-bed-of-chaos-le.png",
+      "image_sha256": "119e8ada34db46b85210b8104058a9e27a14adb5d0c141eb44e11507d9034923",
+      "image_size": [
+        2048,
+        2544
+      ],
+      "source_sha256": "ca31c04f086ce6ffc77cd5114143ef75e9298758c1be4aa65a480f1faa61687f",
+      "source_filename": "New Bed of Chaos LE.tga",
+      "map_sha256": [
+        "22a4adaca76052ddf15b2d27cd7541e3875a84ec9b4a2fd3997710972ceaabc0"
+      ],
+      "bounds": {
+        "min_x": 18,
+        "min_y": 16,
+        "max_x": 150,
+        "max_y": 180
+      }
+    },
+    {
+      "title": "Reclamation LE",
+      "mode": "2v2",
+      "image": "reclamation-le.png",
+      "image_sha256": "89151f6361e4bfa866736e5fa4153bbc951ddcdab364d5878c9cd9677d54fdb4",
+      "image_size": [
+        2048,
+        2101
+      ],
+      "source_sha256": "1a74573f8610b7086209130931b6f4aa8d4940747675d23b226ea7bec5943408",
+      "source_filename": "Reclamation LE.tga",
+      "map_sha256": [
+        "cb94140feb30373585a944535d4523b5ec487d4a572b3293d4739dfec2a0e38c"
+      ],
+      "bounds": {
+        "min_x": 19,
+        "min_y": 15,
+        "max_x": 173,
+        "max_y": 173
+      }
+    },
+    {
+      "title": "Rhoskallian LE",
+      "mode": "2v2",
+      "image": "rhoskallian-le.png",
+      "image_sha256": "800606f2c04b699f36b510c9d7787d45b390baef17410534d150c5e629045328",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "a25ca8d8b0406ce7dd9c0ea12bd54c9720d855ac5c7c73c461c7ed2b572c48ab",
+      "source_filename": "Rhoskallian LE.tga",
+      "map_sha256": [
+        "6eac412c1e3bc04134ba3f32bb53366414d7b7b30c7df53b1bbcd9c5a4156a79",
+        "babd8ddd64eeddc5dc98b0b92a90fb28d9cb6877cb2916e50d4b8fbea7fd04b2"
+      ],
+      "bounds": {
+        "min_x": 16,
+        "min_y": 16,
+        "max_x": 168,
+        "max_y": 168
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Rust Bucket LE",
+      "mode": "2v2",
+      "image": "rust-bucket-le.png",
+      "image_sha256": "a0c7e18e4ffc697965c21ac2cc850b030424f032dfa90ef5c2f028772601f37c",
+      "image_size": [
+        2048,
+        2304
+      ],
+      "source_sha256": "336e2b85d10f2ce6d43c0720072b717648efe2ae493bfbf6a78559342e91c4f3",
+      "source_filename": "Rust Bucket LE.tga",
+      "map_sha256": [
+        "c44c5c496a205cf159721abed95cf6301b70fd3a57138f78daf9ccf1b38c6a82"
+      ],
+      "bounds": {
+        "min_x": 16,
+        "min_y": 17,
+        "max_x": 160,
+        "max_y": 179
+      }
+    },
+    {
+      "title": "Sludge City",
+      "mode": "2v2",
+      "image": "sludge-city.png",
+      "image_sha256": "0bdfed752668ff6af76d8042677f4aebe2c84bf3747c223fa655ab7d89ce1172",
+      "image_size": [
+        2048,
+        2072
+      ],
+      "source_sha256": "d4831892a43ceeb3fbdd8b414ecac68f6129c1ea78902003b1cee115182c4cfd",
+      "source_filename": "Sludge City LE.tga",
+      "map_sha256": [
+        "9af20647d8cb4f7fe5ba430a100cd19c0ba723179721ee987efd5fde7e657b7a"
+      ],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 5,
+        "max_x": 174,
+        "max_y": 171
+      }
+    },
+    {
+      "title": "Undercurrent LE",
+      "mode": "2v2",
+      "image": "undercurrent-le.png",
+      "image_sha256": "aede1eb73802d603ee6a3dea6c2369b04c231e46634a3514b8571055a1a76436",
+      "image_size": [
+        2048,
+        1996
+      ],
+      "source_sha256": "040ebd8c5d48badb6be07e10b5418199263eb4d4c658bf797cb73bb9884002a1",
+      "source_filename": "Undercurrent LE.tga",
+      "map_sha256": [
+        "ce2868d95f359fdc3157f003eefbb9fc12d651bc63486162ef92713e9c268b8b"
+      ],
+      "bounds": {
+        "min_x": 40,
+        "min_y": 24,
+        "max_x": 200,
+        "max_y": 180
+      }
+    },
+    {
+      "title": "Yellowjacket",
+      "mode": "2v2",
+      "image": "yellowjacket.png",
+      "image_sha256": "76ef24e1da7fe08151142d7a3632796e8dcb786c2a821f2125f285f169e5f36f",
+      "image_size": [
+        2048,
+        1877
+      ],
+      "source_sha256": "760b3c1e6302a22ca13f4047c60c176bbd7bd7467822529a3457c0ad47deec60",
+      "source_filename": "Yellowjacket LE.tga",
+      "map_sha256": [
+        "5469470e3dbd460cd2a63a788ca113c886356a14aef627d936c4332590a298fa"
+      ],
+      "bounds": {
+        "min_x": 36,
+        "min_y": 46,
+        "max_x": 204,
+        "max_y": 200
+      }
+    },
+    {
+      "title": "Augustine Fall LE",
+      "mode": "3v3",
+      "image": "augustine-fall-le.png",
+      "image_sha256": "e585d82e2ef06556b9325e4982fea94c90204ee235d4a3489529b8aeb02a744b",
+      "image_size": [
+        2048,
+        1914
+      ],
+      "source_sha256": "56e53da3c35920d5c92f93c3c99fc2eea3434759f9371a732d74ec42b09a13d6",
+      "source_filename": "Augustine Fall LE.tga",
+      "map_sha256": [
+        "59516605e7d4cbbabc942ea19ae387a05b57ae985d5ac57690533fcc2bed01ce",
+        "82caf8e9a999448d0216f97278f8cab0228b897dbfecbe74c56504bfd717e9b1"
+      ],
+      "bounds": {
+        "min_x": 20,
+        "min_y": 24,
+        "max_x": 204,
+        "max_y": 196
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Canyon of Tribulation",
+      "mode": "3v3",
+      "image": "canyon-of-tribulation.png",
+      "image_sha256": "4052773365f8c5e13e42bf046b73b4385f39806708b2c5b9fb8528d56f2d89b1",
+      "image_size": [
+        2048,
+        2912
+      ],
+      "source_sha256": "dea23b1e24262449589d5c507da80ee02c7313bd8dafcc23495ebd1b44efc4b6",
+      "source_filename": "Canyon of Tribulation LE.tga",
+      "map_sha256": [
+        "1366013bdefd2d94d39538ca4086a99f72a8e68c98cdf8b38e640404668f8fbb",
+        "33de66f1049dec7597b5a65ee2d3307b6a1e57c96a5f89e0f16259f01ef786b7"
+      ],
+      "bounds": {
+        "min_x": 16,
+        "min_y": 11,
+        "max_x": 144,
+        "max_y": 193
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Megastructure",
+      "mode": "3v3",
+      "image": "megastructure.png",
+      "image_sha256": "1e9841881bb626abbf2e2ba9fc9c80043563be1440bdba6f5f3526a4ab74649f",
+      "image_size": [
+        2048,
+        1590
+      ],
+      "source_sha256": "1283dcff7890d56a7df906437fad670fdaeaec3db191682c21bb293fc8855820",
+      "source_filename": "Megastructure LE.tga",
+      "map_sha256": [
+        "452a10730630f97a65428187ccda6eca0d4d7d29a35a1a612cf5c1598a2b8311"
+      ],
+      "bounds": {
+        "min_x": 25,
+        "min_y": 28,
+        "max_x": 231,
+        "max_y": 188
+      }
+    },
+    {
+      "title": "Radiator LE",
+      "mode": "3v3",
+      "image": "radiator-le.png",
+      "image_sha256": "4ce3e59bf5e163f41aacf1566f7e7323c91e32ed0d3aa2e42f057232d804d0d4",
+      "image_size": [
+        2048,
+        2145
+      ],
+      "source_sha256": "cbd39f875187341a660a2b9f5c1c5bbf77446825f6e2735925487020965cae48",
+      "source_filename": "Radiator LE.tga",
+      "map_sha256": [
+        "fa7e6465172eada43cf9ebb8799c493c7db1c83c508c2d8e16bac68f21116be2"
+      ],
+      "bounds": {
+        "min_x": 44,
+        "min_y": 40,
+        "max_x": 212,
+        "max_y": 216
+      }
+    },
+    {
+      "title": "Sandstorm CE",
+      "mode": "3v3",
+      "image": "sandstorm-ce.png",
+      "image_sha256": "9ff3aef80784de3e187c8cb9de7033ae8833f0eeb99e88b0edcf3a81c313aa23",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "459722985467b7b2f5086002b2c96b00b82f16a075f7ef12dfb294e85f99cdd6",
+      "source_filename": "Sandstorm CE.tga",
+      "map_sha256": [
+        "20f3152088fe90617286c1c780631254e8a8e13e2ae2d6f26a8c06ab4eb49769"
+      ],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 24,
+        "max_x": 190,
+        "max_y": 204
+      }
+    },
+    {
+      "title": "Sentinel CE",
+      "mode": "3v3",
+      "image": "sentinel-ce.png",
+      "image_sha256": "2a3a7cc1d904e3344dd9c4e1c8399812abaf5ed371594d1ad8fd276f5c140a93",
+      "image_size": [
+        2048,
+        1749
+      ],
+      "source_sha256": "db53b2f9bd08a04da305148e19f71bbcbc1f6ab40aac4ada796d38436f5af1cb",
+      "source_filename": "Sentinel CE.tga",
+      "map_sha256": [],
+      "bounds": {
+        "min_x": 28,
+        "min_y": 32,
+        "max_x": 220,
+        "max_y": 196
+      },
+      "candidate_map_sha256": [
+        "54affe92accc883d856b99151c69de5a3d2759527fc0ed702fc8cbd0fece1826",
+        "590fcc3f50c2a07d9c9fe83a1d72611d3dfbd96a6d045350387a8da212e9de88",
+        "e819dd22e03a81e2176b899b4472484f1ef784a215549ed3334f32cc1d5f37ce"
+      ],
+      "unresolved_reason": "Candidate archives contain render-relevant differences; exact exported revision is unconfirmed."
+    },
+    {
+      "title": "Ujari",
+      "mode": "3v3",
+      "image": "ujari.png",
+      "image_sha256": "57d91e6740e4134c24af32a02cb1efc8087c33ad3f9a6aa8828afb91b336685c",
+      "image_size": [
+        2048,
+        1346
+      ],
+      "source_sha256": "3720a572af6be4a294d2792c0f60a1ae035b0cee0810b38d52147790230db299",
+      "source_filename": "Ujari.tga",
+      "map_sha256": [
+        "de97151b7f6e7081a1fee84a53186543314351e2d19ab734315e79377c7d5b7a"
+      ],
+      "bounds": {
+        "min_x": 20,
+        "min_y": 62,
+        "max_x": 236,
+        "max_y": 204
+      }
+    },
+    {
+      "title": "Voracity",
+      "mode": "3v3",
+      "image": "voracity.png",
+      "image_sha256": "969b0adec073f688897354e6361069b4e61096ce03dca44bbfc4f2cd6a57c610",
+      "image_size": [
+        2048,
+        2048
+      ],
+      "source_sha256": "1b3ae3ba5ae73899b75c660d8f8676cb50c80bdbc3f5c46b2cbd45971e8f25d5",
+      "source_filename": "Voracity.tga",
+      "map_sha256": [
+        "849c81cd84d54f0a1096cd6d6ff1e16b305971419136363529470bd9174b81fa"
+      ],
+      "bounds": {
+        "min_x": 4,
+        "min_y": 4,
+        "max_x": 172,
+        "max_y": 172
+      }
+    },
+    {
+      "title": "Whitewater Line LE",
+      "mode": "3v3",
+      "image": "whitewater-line-le.png",
+      "image_sha256": "402c7d8964923c966ed4c3d44c78b85046123fdf587368e1ddd43376f236442c",
+      "image_size": [
+        2048,
+        1945
+      ],
+      "source_sha256": "f05dd2395b17c59a7c0bae6f19f56ef90d25f4ffd719283780fd8a88e90869f0",
+      "source_filename": "Whitewater Line LE.tga",
+      "map_sha256": [
+        "1b77eb3b05a34df66262b913364eeb8c2b7c4965b055fa59c418bf14eead6203",
+        "dcf19284289792e6cc506da1a3f8611f2cbf34bca117c9b88b7ffccd660bb49f"
+      ],
+      "bounds": {
+        "min_x": 16,
+        "min_y": 16,
+        "max_x": 176,
+        "max_y": 168
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Concord LE",
+      "mode": "4v4",
+      "image": "concord-le.png",
+      "image_sha256": "399c23d4818a2c633d6ee7a4d50704bbd564a85f37d6070e4b9a206bd46a6658",
+      "image_size": [
+        2048,
+        2068
+      ],
+      "source_sha256": "b2173f4f94809b99977e52cdaa1fd85d9ff75a8dc37af522191d271c539bf422",
+      "source_filename": "Concord LE.tga",
+      "map_sha256": [
+        "a61b7a381530b32891747c5d0e40679e3b8ffa8ec984751f9b66cd02f4bc4d2b",
+        "c22d2c0ca03eb0bc97cac1434429a8e4b624ba29a5d8bbd9b5a4c18209e5d9f4"
+      ],
+      "bounds": {
+        "min_x": 30,
+        "min_y": 19,
+        "max_x": 226,
+        "max_y": 217
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Floodplain",
+      "mode": "4v4",
+      "image": "floodplain.png",
+      "image_sha256": "3f82ba00da708f0fbcf16062d3e83eb17eb366baf3f50794a874184425b7253c",
+      "image_size": [
+        2048,
+        2993
+      ],
+      "source_sha256": "8d2756a1cd7fb1bcd446316404208840f66091804d18f92c691b45c4f7a041f0",
+      "source_filename": "Floodplain LE.tga",
+      "map_sha256": [
+        "edbd104b8f804e255d2a5c96f0f583ac404c22b5987a29c7a16090c1c72189a5"
+      ],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 8,
+        "max_x": 166,
+        "max_y": 236
+      }
+    },
+    {
+      "title": "Old Estate",
+      "mode": "4v4",
+      "image": "old-estate.png",
+      "image_sha256": "fe3ccd28bdcc5668fbeebfb5ffcfd32f5c06cc497095c963696c24f251641fb8",
+      "image_size": [
+        2048,
+        2135
+      ],
+      "source_sha256": "0222837626880cde5dc96c09b6d2f314a27585e548c1aaac0eaf1a3e165f8c56",
+      "source_filename": "Old Estate.tga",
+      "map_sha256": [
+        "8df8ad7e5c33bc09a32de8adf23bc6d018ec55035be7b9957cfec2fdc9b13d3d",
+        "931358d5bfd79f01c892ee4120928dc78badad7cbfda2e61839d6885a83bebdc"
+      ],
+      "bounds": {
+        "min_x": 10,
+        "min_y": 8,
+        "max_x": 198,
+        "max_y": 204
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    },
+    {
+      "title": "Research Site JD-2",
+      "mode": "4v4",
+      "image": "research-site-jd-2.png",
+      "image_sha256": "61f4e8103e9aa80055e08c72714caef80b48734db6348b6defc815978b67fadc",
+      "image_size": [
+        2048,
+        2452
+      ],
+      "source_sha256": "1455d5c37c1c7ef5fbe8026e10a2cb6adef0a69436a52e8c5054f644078573d9",
+      "source_filename": "Research Site JD-2.tga",
+      "map_sha256": [
+        "3653a05b0c628b5a163760648b327dec09b9792bf837ba8e9768bff161da1037"
+      ],
+      "bounds": {
+        "min_x": 0,
+        "min_y": 0,
+        "max_x": 152,
+        "max_y": 182
+      }
+    },
+    {
+      "title": "Riptide",
+      "mode": "4v4",
+      "image": "riptide.png",
+      "image_sha256": "b800c92cd8de809b9446c79f0e717290b373e7fcd0df89f25e9e845ab9d62e85",
+      "image_size": [
+        2048,
+        1964
+      ],
+      "source_sha256": "1224dd56d4c57b5d8a7c1d9182b3eee0759cfb3301358a1a7c2990314f575181",
+      "source_filename": "Riptide.tga",
+      "map_sha256": [
+        "a2c0fa5e43dd645dc6f89308adf0ee5378b6e5de1bebefa5485c3c0f822a304d"
+      ],
+      "bounds": {
+        "min_x": 26,
+        "min_y": 30,
+        "max_x": 222,
+        "max_y": 218
+      }
+    },
+    {
+      "title": "Slowdive",
+      "mode": "4v4",
+      "image": "slowdive.png",
+      "image_sha256": "f236cdf206d9b318703e9383b8d372ac1e7857f8a2ac75dc555e3a8497f8585c",
+      "image_size": [
+        2048,
+        2149
+      ],
+      "source_sha256": "7c5c1b07c22bf8b88ccfddf79a1a6901c73f42ea705732d1acffad69218441c4",
+      "source_filename": "Slowdive.tga",
+      "map_sha256": [
+        "e9c24bd7baa410c7dc2959c317102b86707e8fbda1b7e5e8214d2034ded67cf6"
+      ],
+      "bounds": {
+        "min_x": 23,
+        "min_y": 18,
+        "max_x": 225,
+        "max_y": 230
+      }
+    },
+    {
+      "title": "Tropic Shores",
+      "mode": "4v4",
+      "image": "tropic-shores.png",
+      "image_sha256": "ca26bd9f0353856487c9c4e676b8e4a3b8e522577a044be500cae82a89ae4a7a",
+      "image_size": [
+        2048,
+        1809
+      ],
+      "source_sha256": "e39f1509f69a4a016e91866d7774ca498639297c52abc8180ba6504b71efa694",
+      "source_filename": "Tropic Shores.tga",
+      "map_sha256": [
+        "f4112f11c1a69a351a0d2d107e2f45bbb48f0c08e09b2d29035a6e4b12341ed2"
+      ],
+      "bounds": {
+        "min_x": 14,
+        "min_y": 10,
+        "max_x": 186,
+        "max_y": 162
+      }
+    },
+    {
+      "title": "Tuonela LE",
+      "mode": "4v4",
+      "image": "tuonela-le.png",
+      "image_sha256": "f2991ab906d76468a7d0fe00b822a68fbd9bef3d49e33081de3a46c73db78362",
+      "image_size": [
+        2048,
+        1592
+      ],
+      "source_sha256": "cd366fe93df8583950f4b36450a9ac7842ceb5d0ded3947b38bf6dd3f14975e6",
+      "source_filename": "Tuonela LE.tga",
+      "map_sha256": [
+        "0f81092971921050c7e841d02c09d640620651db08b505f7d708c0f15877b2b8",
+        "657b9aacea54ca69af534369a90879ff279ff19f46413bd72044902a89abd954"
+      ],
+      "bounds": {
+        "min_x": 16,
+        "min_y": 22,
+        "max_x": 232,
+        "max_y": 190
+      },
+      "equivalence": "All listed archive members match except DocumentHeader and GameText.version."
+    }
+  ]
+}

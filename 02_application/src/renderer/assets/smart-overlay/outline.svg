@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440">
+  <title>Контуры терранского интерфейса StarCraft II</title>
+  <desc>Прозрачная обводка миникарты, панели выбора, портрета и приказов. Геометрия по пользовательскому фрагменту 2558×455, смещение (1,984) в кадре 2560×1440. Группы войск и верхнее меню повтора исключены.</desc>
+  <defs>
+    <g id="terran-hud-outline" transform="translate(1 984)" fill="none" stroke-linejoin="round" stroke-linecap="round">
+      <g id="minimap" data-region="minimap">
+        <path id="minimap-shell" d="M1 454V43L7 35L15 40H65L72 36H174L188 43L220 71H351V57L360 47H443L450 54V70H459L475 85V114H463L473 124V174H474V316L468 324V393L474 401V454Z"/>
+        <path id="minimap-opening" d="M30 96H383L398 111V430L390 438H38L30 430Z"/>
+      </g>
+      <g id="selection" data-region="selection">
+        <path id="selection-shell" d="M1058 174H825L818 170H485L475 184V454H1832V182L1818 170H1492L1484 174H1162"/>
+        <path id="selection-opening" d="M495 191H1802L1814 202V422L1801 437H496L483 424V203Z"/>
+      </g>
+      <g id="portrait" data-region="portrait">
+        <path id="portrait-shell" d="M1837 454V181L1848 170H2016L2030 182V454Z"/>
+        <path id="portrait-opening" d="M1852 187L1859 180H2009L2017 188V435L2010 442H1853Z"/>
+      </g>
+      <g id="commands" data-region="commands">
+        <!-- Only the command-card body; no replay toolbar, menu buttons or army tabs. -->
+        <path id="commands-shell" d="M2034 173V143H2553V438L2539 453H2043L2034 442Z"/>
+        <path id="commands-opening" d="M2051 147H2515L2527 159V421L2516 435H2051L2041 425V161Z"/>
+      </g>
+    </g>
+  </defs>
+  <use href="#terran-hud-outline" stroke="#101518" stroke-width="4" opacity=".72"/>
+  <use href="#terran-hud-outline" stroke="#73dcc8" stroke-width="1.6" opacity=".88"/>
+</svg>

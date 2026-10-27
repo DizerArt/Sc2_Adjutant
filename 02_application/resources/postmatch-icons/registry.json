@@ -1,0 +1,474 @@
+{
+  "aliases": {
+    "WIDOWMINEBURROWED": "WIDOWMINE",
+    "SIEGETANKSIEGED": "SIEGETANK",
+    "VIKING": "VIKINGFIGHTER",
+    "VIKINGASSAULT": "VIKINGFIGHTER",
+    "WARPPRISMPHASING": "WARPPRISM",
+    "OBSERVERSIEGEMODE": "OBSERVER",
+    "THORAP": "THOR",
+    "LIBERATORAG": "LIBERATOR",
+    "COMMANDCENTERFLYING": "COMMANDCENTER",
+    "ORBITALCOMMANDFLYING": "ORBITALCOMMAND",
+    "SUPPLYDEPOTLOWERED": "SUPPLYDEPOT",
+    "BARRACKSFLYING": "BARRACKS",
+    "FACTORYFLYING": "FACTORY",
+    "STARPORTFLYING": "STARPORT",
+    "OVERSEERSIEGEMODE": "OVERSEER",
+    "LURKER": "LURKERMP",
+    "LURKERMPBURROWED": "LURKERMP",
+    "LURKERBURROWED": "LURKERMP",
+    "SWARMHOSTBURROWEDMP": "SWARMHOSTMP",
+    "SWARMHOST": "SWARMHOSTMP",
+    "NYDUSWORM": "NYDUSCANAL",
+    "LURKERDEN": "LURKERDENMP",
+    "DRONEBURROWED": "DRONE",
+    "HYDRALISKBURROWED": "HYDRALISK",
+    "INFESTORBURROWED": "INFESTOR",
+    "QUEENBURROWED": "QUEEN",
+    "ROACHBURROWED": "ROACH",
+    "RAVAGERBURROWED": "RAVAGER",
+    "ULTRALISKBURROWED": "ULTRALISK",
+    "ZERGLINGBURROWED": "ZERGLING",
+    "BANELINGBURROWED": "BANELING"
+  },
+  "icons": {
+    "ADEPT": {
+      "file": "ADEPT.png",
+      "sha256": "bc4fba6ee60acffdd6d438a3f06a3971fc5f5b05acedc9aa77beceba1181319e"
+    },
+    "ARMORY": {
+      "file": "ARMORY.png",
+      "sha256": "32436fad4e2c58d5f8b63e29c7d32841bb5c58d6d5c103b1d6f80a6e84c39048"
+    },
+    "ASSIMILATOR": {
+      "file": "ASSIMILATOR.png",
+      "sha256": "569f0b1134594ace11d24f66cb3072700f6ae2f78551fb6a101eb99efbfda38a"
+    },
+    "BANELING": {
+      "file": "BANELING.png",
+      "sha256": "f7b5f2db4e10c6c94d7c3442e2448ce40afdd9938a79532e99231364a005c0e3"
+    },
+    "BANELINGNEST": {
+      "file": "BANELINGNEST.png",
+      "sha256": "3933d4f8eccbeaec3a84e4a36b20c1c5bbd882707514490ef85fa827620c0a07"
+    },
+    "BANSHEE": {
+      "file": "BANSHEE.png",
+      "sha256": "930ffc1df2bc0febe814b46ae95b0817f8894ead6aa1af52b3f6c600965acfbd"
+    },
+    "BARRACKS": {
+      "file": "BARRACKS.png",
+      "sha256": "993364d0e31c9d27adbed70398fdd0da7f706e41f81242e83d19d29a74017400"
+    },
+    "BARRACKSTECHLAB": {
+      "file": "BARRACKSTECHLAB.png",
+      "sha256": "0f16b35dd734ddb3a4695710c98c8b6d78494d1cac79beeb64a0ff4d317b5aff"
+    },
+    "BARRACKSREACTOR": {
+      "file": "BARRACKSREACTOR.png",
+      "sha256": "cdb0e6fa89ab114375e24bb54d1716ab32e4f128ab2520703cbe72829a9ba148"
+    },
+    "BATTLECRUISER": {
+      "file": "BATTLECRUISER.png",
+      "sha256": "2c1640a0908c843b4f723546883e41209460224d8cf2dc9a32283762a9bdd809"
+    },
+    "BROODLORD": {
+      "file": "BROODLORD.png",
+      "sha256": "ee5386df0249e39d60cce24230135b95c2a5a1ee368b171a80cc3ae2e2438ff0"
+    },
+    "BUNKER": {
+      "file": "BUNKER.png",
+      "sha256": "d1ec740ed18f87ea05d7eb8116a31a322a6b51e5c7394657f387223706385a8d"
+    },
+    "CARRIER": {
+      "file": "CARRIER.png",
+      "sha256": "7029eaccd6154489411c2a47e07808653efbda6e303a63a76847c2f24a1be8c0"
+    },
+    "COLOSSUS": {
+      "file": "COLOSSUS.png",
+      "sha256": "8a25c88066f3e9abcda66bfd5be9bc2374a8897294756a45f7d2d89b2ebaec19"
+    },
+    "COMMANDCENTER": {
+      "file": "COMMANDCENTER.png",
+      "sha256": "8bfa884da05475e783c4080acd57127771ab400ca627960817d28ed26a3b8aee"
+    },
+    "CORRUPTOR": {
+      "file": "CORRUPTOR.png",
+      "sha256": "c1dfd71d4c64ac0345e4406ee7407f0fb6a54668b2b361d34729fdae2f4a6f47"
+    },
+    "CYBERNETICSCORE": {
+      "file": "CYBERNETICSCORE.png",
+      "sha256": "36bb31bd56a7068383d5ac3daa57694588389b826fb5fffded8ab16d21738986"
+    },
+    "CYCLONE": {
+      "file": "CYCLONE.png",
+      "sha256": "98f7a0a2e157dfd8947a9fc480b27faeb53a8975f0c2f79d92c4393e3d6ac44d"
+    },
+    "DARKSHRINE": {
+      "file": "DARKSHRINE.png",
+      "sha256": "190292e12a4c39fd8e3d3f7af60734c1ada46f156b1beacc1fb5429621a61e0b"
+    },
+    "DARKTEMPLAR": {
+      "file": "DARKTEMPLAR.png",
+      "sha256": "2aaaceb054abf36b0a0e48fc90ef74b56b7c2598ad08fabe92af51417b0fbfab"
+    },
+    "DISRUPTOR": {
+      "file": "DISRUPTOR.png",
+      "sha256": "e9775c8ef4e085cc43af6498512778165b8cb53c4750a3b4f23a061d665409d0"
+    },
+    "DRONE": {
+      "file": "DRONE.png",
+      "sha256": "14af2fdcaa30792b31a5f27d4dc08cb5342cedce582836f79796097fa1f24c2c"
+    },
+    "ENGINEERINGBAY": {
+      "file": "ENGINEERINGBAY.png",
+      "sha256": "455ada568c7830017a0048d91dd580bf7fabcbdbecb36002e243f1a2a22cfd56"
+    },
+    "EVOLUTIONCHAMBER": {
+      "file": "EVOLUTIONCHAMBER.png",
+      "sha256": "9979bf8a60bf442939eb6a9de266194de134cba4b5a6bbab813be61d254eecb6"
+    },
+    "EXTRACTOR": {
+      "file": "EXTRACTOR.png",
+      "sha256": "a4349ea7c74652cdd82b3f57e0f2642a4fa7b5780a3a4fd8daf186d6b53fdab3"
+    },
+    "FACTORY": {
+      "file": "FACTORY.png",
+      "sha256": "2e68d24c4847ddfe75666c4a2d0efd79f25220b698db0fb417683245fe92bb30"
+    },
+    "FACTORYTECHLAB": {
+      "file": "FACTORYTECHLAB.png",
+      "sha256": "f1c62c100987106e5afb60ee181c443feffb65b27102581bd3b51c3cbe968ebd"
+    },
+    "FACTORYREACTOR": {
+      "file": "FACTORYREACTOR.png",
+      "sha256": "de01d4ea61e3a56b211c092d0b4896134b46d9d21ccce6f1814bba5ecc8bdf2a"
+    },
+    "FLEETBEACON": {
+      "file": "FLEETBEACON.png",
+      "sha256": "0e086eb1ad2120eaefba742cd80ffea43574dd5357b7b9f851d85694b3566e8e"
+    },
+    "FORGE": {
+      "file": "FORGE.png",
+      "sha256": "6fdad04ac0cee54f6d3637e43fc0c565d2fbf978f77f6ce34bf007df93068cd7"
+    },
+    "FUSIONCORE": {
+      "file": "FUSIONCORE.png",
+      "sha256": "cafd9c151fbd814bb5e8d31325785200c42019e67d412644819671bd4d2f7f8c"
+    },
+    "GATEWAY": {
+      "file": "GATEWAY.png",
+      "sha256": "048d6f4dbe20c25847c849860ba95da5cb2cde7faa5ebbbbeffc24be638afd13"
+    },
+    "GHOST": {
+      "file": "GHOST.png",
+      "sha256": "664ffc836990c8b140be43e7a9313013a691552efd27b46fd26ff411d99b3387"
+    },
+    "GHOSTACADEMY": {
+      "file": "GHOSTACADEMY.png",
+      "sha256": "eb727fd28102ea17fea8cdba479d4e94a7660755c51164c7dc3956e971b48ece"
+    },
+    "GREATERSPIRE": {
+      "file": "GREATERSPIRE.png",
+      "sha256": "4044f62965f1b7abc4372fca52c006b975328b05dc72d83a2c2e22ed631e7711"
+    },
+    "HATCHERY": {
+      "file": "HATCHERY.png",
+      "sha256": "cbb418660cb71b71f60af84829e44b0863f5551bd10c1601af364ef2487e6ed1"
+    },
+    "HELLION": {
+      "file": "HELLION.png",
+      "sha256": "0203c349366eb4afa14d2dc362f4b0b0bff31c393206782c1dc97e59f011529b"
+    },
+    "HELLIONTANK": {
+      "file": "HELLIONTANK.png",
+      "sha256": "ce96a328385d309c45e64d365eb1ce8614872d495ca720bfd84a827b41397f46"
+    },
+    "HIGHTEMPLAR": {
+      "file": "HIGHTEMPLAR.png",
+      "sha256": "f1d958c9aa759cbbd4f6e8d7e68d9dfff0d45419c29c48bc9baba6a15490060c"
+    },
+    "HIVE": {
+      "file": "HIVE.png",
+      "sha256": "94c1ad20adba79d4c022f19456510df3c0940d10b87c3cc1c58573c6a84eb7b4"
+    },
+    "HYDRALISK": {
+      "file": "HYDRALISK.png",
+      "sha256": "34724e958e6307096c0abc88771ef2438934d11179c345ea6ceccca67b984e84"
+    },
+    "HYDRALISKDEN": {
+      "file": "HYDRALISKDEN.png",
+      "sha256": "1ab22d5c04ce1c0d9e494ec21b2807c4b50c4eb560743bd1a8f180a9daa14c53"
+    },
+    "IMMORTAL": {
+      "file": "IMMORTAL.png",
+      "sha256": "23c9b8332e9da714bc2565b476527a1c02380acafe1a0143f11ff9225e00e006"
+    },
+    "INFESTATIONPIT": {
+      "file": "INFESTATIONPIT.png",
+      "sha256": "8c32e7cd15d6b02e4954a4cfc0836ef96fba0ac7dae63d48b6d1a3a7de8d97ce"
+    },
+    "INFESTOR": {
+      "file": "INFESTOR.png",
+      "sha256": "fb2590f51e2110deed07a12811638b57de9e56b7a340ddd4494cc3ada259a7c6"
+    },
+    "LAIR": {
+      "file": "LAIR.png",
+      "sha256": "4a0701b28f2793299f068c2a24e573168cd822e5ed85cdf89e9d7e256c68251e"
+    },
+    "LIBERATOR": {
+      "file": "LIBERATOR.png",
+      "sha256": "415f464bce848673a9eab1b45288ac584d5436b94b1a553554c06c208d92ad5c"
+    },
+    "LURKERDENMP": {
+      "file": "LURKERDENMP.png",
+      "sha256": "62aecc12fab3e65e704c04afea161bae0a1b1375c58a5c4f3cbec77e3310b66c"
+    },
+    "LURKERMP": {
+      "file": "LURKERMP.png",
+      "sha256": "345d3da9a05e311f345b1479d6297929b87470d96fa5eeef28a00f17e4e143ce"
+    },
+    "MARAUDER": {
+      "file": "MARAUDER.png",
+      "sha256": "fc156351ef4dd3a29f1c8e13c752c044dbc5fd62e2fe9c0c11fda246e1d54e6a"
+    },
+    "MARINE": {
+      "file": "MARINE.png",
+      "sha256": "0e8bd559f9f2926b75f3dbe7eadbe144163ad25662f34e2d3ed70d472d7567be"
+    },
+    "MEDIVAC": {
+      "file": "MEDIVAC.png",
+      "sha256": "98a3ac34e905b07a22981b7e7aee8e1a1ca186384b527061cb099f5b0da65c54"
+    },
+    "MISSILETURRET": {
+      "file": "MISSILETURRET.png",
+      "sha256": "440252b2895a82db2dbde31a3922e0ed2958f346221a98d55245b5203bcb5205"
+    },
+    "MOTHERSHIP": {
+      "file": "MOTHERSHIP.png",
+      "sha256": "e6b8df3befb82581a324ba4dab570ee41c43538461f076cfdb9f3929487cf88e"
+    },
+    "MUTALISK": {
+      "file": "MUTALISK.png",
+      "sha256": "bc26c5b81ee4d2e180115a0328b09f1d6c842708919b0217e9fb40aa64f30a9d"
+    },
+    "NEXUS": {
+      "file": "NEXUS.png",
+      "sha256": "60347fda4c50964ed6fddf242f2853bb0fa6f9136cbc42040560b7c2d4bab1e1"
+    },
+    "NYDUSCANAL": {
+      "file": "NYDUSCANAL.png",
+      "sha256": "fb01211834864f87e2d538d19228ec11501d896ef6ddd96a9a7650dc2c3d6450"
+    },
+    "NYDUSNETWORK": {
+      "file": "NYDUSNETWORK.png",
+      "sha256": "f9aeb9f105b39db4fa445e02bfa42a78e1e1c29b7e64047f5f8f069f9222f28a"
+    },
+    "OBSERVER": {
+      "file": "OBSERVER.png",
+      "sha256": "5f9fb6e0685ccd0f4e6028a9d41fa6504f623cacc1437b71bd3d16defac594ed"
+    },
+    "ORACLE": {
+      "file": "ORACLE.png",
+      "sha256": "b251c2d09ee7d2dccf308742d90eefbce1019757fd7284e1765aee98530b635a"
+    },
+    "ORBITALCOMMAND": {
+      "file": "ORBITALCOMMAND.png",
+      "sha256": "8f1bdecd6be326aa16c6e098aa9fd7051891275a3bbd42ac15d023f4c5da627c"
+    },
+    "OVERLORD": {
+      "file": "OVERLORD.png",
+      "sha256": "2d8fd83c853f60ed8016622c1907d881d3758b4b749a738c5410745495ea29ad"
+    },
+    "OVERSEER": {
+      "file": "OVERSEER.png",
+      "sha256": "083d3ed259e9039aa81a5a118ef7643a6c098d61e72fcc1e4adb4d7111d3070d"
+    },
+    "PHOENIX": {
+      "file": "PHOENIX.png",
+      "sha256": "dd928675566b5b7b5e41065bc441ff2355c9a703ad19c8fe6a7394540bec3c52"
+    },
+    "PHOTONCANNON": {
+      "file": "PHOTONCANNON.png",
+      "sha256": "a1bde7b690a2e47d9314341c38aebfe98f34a670545265be3b18c8cc6745dc44"
+    },
+    "PLANETARYFORTRESS": {
+      "file": "PLANETARYFORTRESS.png",
+      "sha256": "7d0e29fa6cbef9cdf4a9e3200c0392df7b05d625a6c6957d2a5073332d746e2e"
+    },
+    "PROBE": {
+      "file": "PROBE.png",
+      "sha256": "77c13054c54971bd901149692db1bb3d163135c58218b04c1a4ff572f01a18db"
+    },
+    "PYLON": {
+      "file": "PYLON.png",
+      "sha256": "ed9a0f98adb3cd7ff763e82a89ddd4f3d94244e2a7a41c2cd37f86a3b7aa3acd"
+    },
+    "QUEEN": {
+      "file": "QUEEN.png",
+      "sha256": "58d503d2880bfcffa4a0c3754488d30e5129b9ab3f9e083fc0e8398b6bb250d1"
+    },
+    "RAVAGER": {
+      "file": "RAVAGER.png",
+      "sha256": "945ff928c2f19615e61054e3f33af10bc3f50b931d23ba39cfe6206e66571014"
+    },
+    "RAVEN": {
+      "file": "RAVEN.png",
+      "sha256": "ad18afc9c378ec1e78925e7a41e2e717ee5274c22992ba8f0d151c4a2baf1b51"
+    },
+    "REAPER": {
+      "file": "REAPER.png",
+      "sha256": "c403e0887ec8234487ae35ec863aedcbdcd50e4af9e20f4b5568405508d90213"
+    },
+    "REFINERY": {
+      "file": "REFINERY.png",
+      "sha256": "a731b1ecf76f7f138f20eb5172def35bb5af796bfdbefbc04d09e3f944db8aac"
+    },
+    "ROACH": {
+      "file": "ROACH.png",
+      "sha256": "897b12bfcb6cba4eccd668fadb74f8dae9fc10ae9c3875b9493e323d26ac3f38"
+    },
+    "ROACHWARREN": {
+      "file": "ROACHWARREN.png",
+      "sha256": "6dc65bfe9dafa4e0bf921638cf87da1f1ddf1ff286788390e3efa56c3e8739d9"
+    },
+    "ROBOTICSBAY": {
+      "file": "ROBOTICSBAY.png",
+      "sha256": "52880930e0ae83fd5d6fad04bbd5f5f7cdd500f05a78ea6cd1049de078c9400f"
+    },
+    "ROBOTICSFACILITY": {
+      "file": "ROBOTICSFACILITY.png",
+      "sha256": "2a730006ad853f4fe809c3d86f639abcb54228e9f79074e43fbd506de8160769"
+    },
+    "SCV": {
+      "file": "SCV.png",
+      "sha256": "61df3cc800fafef01a19ea0cb7195d03c4e6d8f4f7285780a8ef206dacaf2605"
+    },
+    "SENSORTOWER": {
+      "file": "SENSORTOWER.png",
+      "sha256": "de54807fab9da9c4390f0691588013cc51e06717af2dfe9237ef372f40b94641"
+    },
+    "SENTRY": {
+      "file": "SENTRY.png",
+      "sha256": "0b2aa10137f1e860f9e606a714e7c898ff9aa29c0e21e746c8dbf0fbeb69b950"
+    },
+    "SHIELDBATTERY": {
+      "file": "SHIELDBATTERY.png",
+      "sha256": "6c2a0192ed0020e3bf523bb16424cb4a5bcb5d4d99b3a3a71861dae3d55e4cc0"
+    },
+    "SIEGETANK": {
+      "file": "SIEGETANK.png",
+      "sha256": "af2c17a4be1992580f00dccc5f4c63c71881b0b98938d23f75b9d569284deaa5"
+    },
+    "SPAWNINGPOOL": {
+      "file": "SPAWNINGPOOL.png",
+      "sha256": "f86464829a8b02a89244c21edf5122a0b971e2c9a52728cd7837b23cb0eccca5"
+    },
+    "SPINECRAWLER": {
+      "file": "SPINECRAWLER.png",
+      "sha256": "c4e22dc3e7cb0caf8b8d3513be12423a5440b39f64aff32afd6251ba48d7fe45"
+    },
+    "SPIRE": {
+      "file": "SPIRE.png",
+      "sha256": "25d7363ee8d6d9bd6de840497b5f34939a6d9cd6fb44074a9f657e0759b9b4b5"
+    },
+    "SPORECRAWLER": {
+      "file": "SPORECRAWLER.png",
+      "sha256": "a74b3301b52a4eefb1f45ce44a1295b4e147c94e862ebb65370a015e71f7aca6"
+    },
+    "STALKER": {
+      "file": "STALKER.png",
+      "sha256": "982707d022d282d0f11193ab497cfb4226452c84a12bcf24a6fd0333608e11e5"
+    },
+    "STARGATE": {
+      "file": "STARGATE.png",
+      "sha256": "4baaf8bdab7809bc2e47190453ed86e9b0690cc6664713f939f4ce83b59b51cb"
+    },
+    "STARPORT": {
+      "file": "STARPORT.png",
+      "sha256": "7d4f128e3f322218d62a57e520e9fd715c92e1e278bdf6859429acf23e770319"
+    },
+    "STARPORTTECHLAB": {
+      "file": "STARPORTTECHLAB.png",
+      "sha256": "bf1ec3f289253256205b8dda6a5547e9ce8a2726914467bd744071e842fc67fc"
+    },
+    "STARPORTREACTOR": {
+      "file": "STARPORTREACTOR.png",
+      "sha256": "e7bcd53b1ddf9bdd00eda81f03513b65897fee7de460d073046653ffdf24469e"
+    },
+    "SUPPLYDEPOT": {
+      "file": "SUPPLYDEPOT.png",
+      "sha256": "3ad51a389d37f545a5e584dad29e00813f776214b021aa564cfa4fcb99371d8d"
+    },
+    "SWARMHOSTMP": {
+      "file": "SWARMHOSTMP.png",
+      "sha256": "ff6b38eb5239e69e5376d2c8f63b2cf5f640d6a8b068af0366e75924220e153d"
+    },
+    "TEMPEST": {
+      "file": "TEMPEST.png",
+      "sha256": "524c744b7ca0ffb1aaec7c86dfceb74db3d0458af765c3fba14a553c773e2453"
+    },
+    "TEMPLARARCHIVE": {
+      "file": "TEMPLARARCHIVE.png",
+      "sha256": "43c5b25f50fbe2de05552c2ec7fbe827975d98d08e4ad86f082a933ccdacb8d5"
+    },
+    "THOR": {
+      "file": "THOR.png",
+      "sha256": "2b8a45351663d65a72bfb85089494b1ba3d5e15af67f2297bb32e646fbaf2451"
+    },
+    "TWILIGHTCOUNCIL": {
+      "file": "TWILIGHTCOUNCIL.png",
+      "sha256": "e248e0e2c040b830b619db46cc782912d8f011b56e316a6bdcd36904ade20406"
+    },
+    "ULTRALISK": {
+      "file": "ULTRALISK.png",
+      "sha256": "659fe746a55c17f08e7b22b2bb348b75b4642500361033969f2ef6fd35ecf103"
+    },
+    "ULTRALISKCAVERN": {
+      "file": "ULTRALISKCAVERN.png",
+      "sha256": "288911d568d6edb1c715c25d5d59e150dee31cc7d4440ffafa184527e99bb1c8"
+    },
+    "VIKINGFIGHTER": {
+      "file": "VIKINGFIGHTER.png",
+      "sha256": "3e61917444bc4803b4b6bd05dc2693ed780e29e88e2faf5c8c11eba3b3997e0d"
+    },
+    "VIPER": {
+      "file": "VIPER.png",
+      "sha256": "0acf36e6901d1eb66751e35a945a218d034ae7005c952913a4a879c51d12b260"
+    },
+    "VOIDRAY": {
+      "file": "VOIDRAY.png",
+      "sha256": "6df74b8dea4afe0103c551a59c98093f1bd03e9a68449abb2f686b5c041a1f7c"
+    },
+    "WARPGATE": {
+      "file": "WARPGATE.png",
+      "sha256": "a261410b6da86962d316af3afce9854ddf7fa1b68c98af90cef8cc0bd33d6df1"
+    },
+    "WARPPRISM": {
+      "file": "WARPPRISM.png",
+      "sha256": "5d0c34fb415e1a1ddaa788f271bca39b1549734d546cd1ba57ee17e5c5a5af02"
+    },
+    "WIDOWMINE": {
+      "file": "WIDOWMINE.png",
+      "sha256": "cb5ce620454d19c7cbfef8eaa9c82e145dda1b7cc940b4199de530cbcd0b7b62"
+    },
+    "ZEALOT": {
+      "file": "ZEALOT.png",
+      "sha256": "04645e9e70ad1d8acad2f3209baa8378390ef1dc6b6cbe4d3271c516924f350d"
+    },
+    "ZERGLING": {
+      "file": "ZERGLING.png",
+      "sha256": "001bcc3a1e2374e3c1c361d184a62dc8099e7d396cf20a73f91c74c6a0d1649f"
+    }
+  },
+  "schema_version": 1,
+  "source": {
+    "repository": "https://github.com/BurnySc2/sc2-planner",
+    "commit": "b2187f11919de868671b6a60099f66f2727bc9a0",
+    "asset_base_url": "https://raw.githubusercontent.com/BurnySc2/sc2-planner/b2187f11919de868671b6a60099f66f2727bc9a0/",
+    "copyright": "Blizzard Entertainment; artwork is not covered by the code MIT license",
+    "reviewed_on": "2026-10-02",
+    "usage_policy": "https://www.blizzard.com/en-gb/legal/687de033-8e0a-4d0f-beda-b48712cb387f/blizzard-video-policy"
+  }
+}

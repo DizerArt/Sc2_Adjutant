@@ -196,6 +196,54 @@ export type Sc2AssistantBridge = {
   readonly setOverlayPlacementMode: (enabled: boolean) => Promise<void>;
   readonly onVoiceSpeak: (listener: (event: VoiceSpeakEvent) => void) => () => void;
   readonly listAvailableVoices: () => Promise<ListAvailableVoicesResponse>;
+  readonly getObsOverlayInfo?: () => Promise<ObsOverlayInfo>;
+  readonly configureObsOverlay?: (request: ConfigureObsOverlayRequest) => Promise<ObsOverlayInfo>;
+  readonly openObsOverlayPreview?: () => Promise<void>;
+  readonly getSmartOverlaySettings?: () => Promise<SmartOverlaySettingsInfo>;
+  readonly saveSmartOverlayDraft?: (request: SmartOverlayDraftRequest) => Promise<SmartOverlaySettingsInfo>;
+  readonly applySmartOverlay?: (request: { readonly revision: number }) => Promise<SmartOverlaySettingsInfo>;
+  readonly chooseSmartOverlayImage?: (request: { readonly revision: number; readonly mode: SmartOverlayPhase }) => Promise<SmartOverlaySettingsInfo | null>;
+  readonly getPostmatchStatus?: () => Promise<PostmatchStatus>;
+  readonly preparePostmatch?: (request: { readonly matchId: string }) => Promise<PostmatchStatus>;
+  readonly choosePostmatchReplay?: () => Promise<PostmatchStatus | null>;
+};
+
+export type PostmatchStatus = { readonly status: "empty" | "processing" | "ready" | "error"; readonly id?: string; readonly matchId?: string | null; readonly error?: string; readonly errorCode?: string; readonly startedAt?: number; readonly available: boolean; readonly visible: boolean };
+export type MenuWidgetKind = "fountain" | "battle_map" | "armies" | "heroes";
+export type MenuWidgetPlacement = { readonly enabled: boolean; readonly x: number; readonly y: number; readonly w: number; readonly h: number };
+export type MenuWidgetLayout = { readonly columns: 32; readonly rows: 64; readonly widgets: Readonly<Record<MenuWidgetKind, MenuWidgetPlacement>> };
+
+export type SmartOverlayPhase = "menu" | "loading" | "game" | "pause";
+export type SmartOverlayImage = {
+  readonly id: string;
+  readonly mime: string;
+  readonly width: number;
+  readonly height: number;
+  readonly animated: boolean;
+  readonly url: string;
+  readonly posterUrl?: string;
+  readonly name?: string;
+};
+export type SmartOverlayMode = { readonly enabled: boolean; readonly image?: SmartOverlayImage | null };
+export type SmartOverlayConfig = { readonly enabled: boolean; readonly modes: Readonly<Record<SmartOverlayPhase, SmartOverlayMode>>; readonly menuLayout?: MenuWidgetLayout };
+export type SmartOverlaySettingsInfo = { readonly revision: number; readonly appliedRevision: number; readonly draft: SmartOverlayConfig; readonly applied: SmartOverlayConfig };
+export type SmartOverlayDraftRequest = SmartOverlayConfig & { readonly revision: number };
+
+export type ObsOverlayInfo = {
+  readonly running: boolean;
+  readonly url?: string;
+  readonly error?: string;
+  readonly width: number;
+  readonly height: number;
+  readonly enabled: boolean;
+  readonly position: OverlayPosition;
+};
+
+export type ConfigureObsOverlayRequest = {
+  readonly enabled: boolean;
+  readonly position: OverlayPosition;
+  readonly width?: number;
+  readonly height?: number;
 };
 
 export type ListAvailableVoicesResponse = {

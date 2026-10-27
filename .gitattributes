@@ -1,0 +1,3 @@
+# This file is verified byte-for-byte against compose-runtime.lock.json.
+# Preserve upstream LF on Windows checkouts with core.autocrlf=true.
+02_application/resources/compose-node-LICENSE.txt text eol=lf -whitespace

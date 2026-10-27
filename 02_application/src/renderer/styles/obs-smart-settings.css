@@ -1,0 +1,14 @@
+.smart-settings { display: grid; gap: 12px; min-width: 0; border-top: 1px solid rgba(121, 207, 255, 0.22); margin-top: 8px; padding-top: 16px; }
+.smart-draft-status { font-size: 0.78rem; color: #c5d3e5; }
+.smart-frame-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.smart-frame-tabs button[aria-pressed="true"] { border-color: #79cfff; color: #eef4ff; background: #18324a; }
+.smart-frame-editor { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(260px, 1.2fr); align-items: start; gap: 20px; }
+.smart-frame-options { display: grid; gap: 12px; align-content: start; }
+.smart-frame-options h4 { margin: 0; color: #eef4ff; }
+.smart-image-name { overflow-wrap: anywhere; }
+.smart-preview-label { margin: 0 0 8px; color: #c5d3e5; font-size: 0.78rem; }
+.smart-draft-preview { position: relative; aspect-ratio: 16 / 9; width: 100%; border: 1px solid rgba(121, 207, 255, 0.25); overflow: hidden; background: repeating-conic-gradient(#1c2836 0% 25%, #121c28 0% 50%) 0 0 / 24px 24px; }
+.smart-draft-preview .smart-media-error { font-size: 13px; }
+.smart-draft-preview .smart-pause-label { font-size: 14px; padding: 4px 12px; }
+.smart-apply-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+@media (max-width: 1100px) { .smart-frame-editor { grid-template-columns: 1fr; } }

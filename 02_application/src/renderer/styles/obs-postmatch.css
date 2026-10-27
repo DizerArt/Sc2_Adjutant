@@ -1,0 +1,4 @@
+html,body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+#waterfall { position: absolute; inset: 0; width: 100%; height: 100%; box-sizing: border-box; min-height: 0; padding: clamp(6px,2vw,32px); }
+#postmatch-empty { position: absolute; inset: 0; display: grid; place-items: center; box-sizing: border-box; margin: 0; padding: 12px; border: 1px solid #334047; border-radius: 5px; color: #c5d3e5; background: rgba(16,21,24,.75); font: 12px/1.5 system-ui,sans-serif; text-align: center; }
+@media(max-width:400px) { header { gap: 4px; } .team strong { font-size: 24px; } .team span { font-size: 12px; } .team .resource span { font-size: 12px; } .match-clock span { font-size: 14px; } #stream { margin: 6px -6px; } .story-scene { inset: 0 2px; gap: 8px; } .army-name { font-size: 10px; } .army-count { font-size: 15px; } footer { font-size: 9px; } }

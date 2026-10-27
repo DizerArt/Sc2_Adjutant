@@ -18,6 +18,13 @@ import type { OpponentRepository } from "../../../src/domain/repositories/oppone
 import type { EntityId } from "../../../src/domain/value-objects/entity-id.js";
 
 describe("ProcessNewReplay", () => {
+  it("does not attach a team replay to an unrelated single-opponent record", async () => {
+    const original=match("match_old", "2026-05-03T10:00:00.000Z");
+    const repository=new InMemoryMatchRepository([original]);
+    const result=await new ProcessNewReplay(repository).execute({replayPath:"A:\\Replays\\team.SC2Replay",playedAt:original.playedAt,result:"win",players:Array.from({length:4},(_,i)=>({name:`Player${i}`,race:"Terran" as const}))});
+    expect(result).toBeNull();
+    expect(await repository.findById(original.id)).toEqual(original);
+  });
   it("links replay metadata to the latest match without a replay path", async () => {
     const repository = new InMemoryMatchRepository([
       match("match_old", "2026-05-03T10:00:00.000Z"),

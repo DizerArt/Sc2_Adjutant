@@ -1,4 +1,5 @@
 import { PATH_MAP, TtsSession } from "@mintplex-labs/piper-tts-web";
+import { voiceResourceBase } from "../platform/resources.js";
 import type { PiperVoiceId } from "../../domain/entities/voice-settings.js";
 import type {
   SynthesizeRequest,
@@ -7,8 +8,8 @@ import type {
   VoiceSynthesisPort
 } from "../../domain/ports/voice-synthesis-port.js";
 
-const VOICE_MODEL_BASE = "voice-model://local";
-const VOICE_WASM_BASE = "voice-model://wasm";
+const VOICE_MODEL_BASE = voiceResourceBase("local");
+const VOICE_WASM_BASE = voiceResourceBase("wasm");
 const OPFS_PIPER_DIR = "piper";
 
 // Override the library's default CDN URLs to local resources. Without these,

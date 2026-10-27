@@ -55,3 +55,13 @@ desktop.ini
 # Security audit reports (local, do not commit)
 SECURITY_AUDIT.md
 security-audit*.md
+
+# Compose migration: local compiler/cache and Rust build artifacts
+.compose-tools/
+target/
+02_application/src-tauri/target/
+02_application/.compose-test-data/
+02_application/resources/compose-runtime/
+02_application/dist-compose/
+02_application/dist-obs/
+02_application/src-tauri/gen/
