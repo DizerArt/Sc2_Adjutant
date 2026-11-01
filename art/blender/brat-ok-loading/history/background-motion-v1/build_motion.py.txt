@@ -1,0 +1,249 @@
+import bpy, math, json
+from mathutils import Vector
+ROOT="<ORIGINAL_PROJECT>/output/brat-ok-loading/background-motion-v1"
+EXPECTED="<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1/BRAT_OK_giant_unit_v4.blend"
+if bpy.data.filepath.replace("\\","/")!=EXPECTED:
+    raise RuntimeError("Connected file changed; inspect first.")
+main=bpy.context.scene
+if main.name!="BRAT_OK — масштаб ультралиска":
+    raise RuntimeError("Active scene changed.")
+if bpy.data.scenes.get("BRAT_OK — фон: город и щит"):
+    raise RuntimeError("Motion study already exists; do not repeat.")
+preserved={o.name:tuple(v for row in o.matrix_world for v in row) for o in main.objects if o.name!="Фон — без неподвижной ноги"}
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/work/brat-ok-background-motion-v1/before-motion.blend",copy=True,relative_remap=False)
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+background=main.objects["Фон — без неподвижной ноги"]
+mat=background.data.materials[0].copy()
+mat.name="Фон — живопись в движении"
+background.data.materials[0]=mat
+nodes,links=mat.node_tree.nodes,mat.node_tree.links
+base=next(n for n in nodes if n.type=="TEX_IMAGE")
+img=bpy.data.images.load(ROOT+"/assets/environment-protoss.png",check_existing=False)
+img.pack()
+img.filepath="//assets/environment-protoss.png"
+base.image=img
+base.label="Неподвижный исходник для масок огня"
+emission=next(n for n in nodes if n.type=="EMISSION")
+ops=[i.identifier for i in bpy.types.ShaderNodeMath.bl_rna.properties["operation"].enum_items]
+vops=[i.identifier for i in bpy.types.ShaderNodeVectorMath.bl_rna.properties["operation"].enum_items]
+controls=[]
+def link_or_value(value,socket,tree_links):
+    if isinstance(value,(int,float)):
+        socket.default_value=value
+    else:
+        tree_links.new(value,socket)
+def calc(tree,op,a,b=None):
+    n=tree.nodes.new("ShaderNodeMath")
+    n.operation=ops[ops.index(op)]
+    link_or_value(a,n.inputs[0],tree.links)
+    if b is not None: link_or_value(b,n.inputs[1],tree.links)
+    return n.outputs[0]
+def anim(tree,name,values):
+    n=tree.nodes.new("ShaderNodeValue")
+    n.name=name
+    n.label=name
+    for i,value in enumerate(values):
+        n.outputs[0].default_value=value
+        n.outputs[0].keyframe_insert(data_path="default_value",frame=i+1)
+    controls.append((tree,n))
+    return n.outputs[0]
+def wave(tree,name,cycles,phase=0):
+    return anim(tree,name,[math.sin(2*math.pi*cycles*i/384+phase) for i in range(385)])
+def ellipse(tree,u,v,cx,cy,rx,ry):
+    x=calc(tree,"DIVIDE",calc(tree,"SUBTRACT",u,cx),rx)
+    y=calc(tree,"DIVIDE",calc(tree,"SUBTRACT",v,cy),ry)
+    d=calc(tree,"ADD",calc(tree,"MULTIPLY",x,x),calc(tree,"MULTIPLY",y,y))
+    return calc(tree,"POWER",calc(tree,"MAXIMUM",calc(tree,"SUBTRACT",1,d),0),2)
+def add(tree,a,b): return calc(tree,"ADD",a,b)
+def mul(tree,a,b): return calc(tree,"MULTIPLY",a,b)
+def total(tree,values):
+    result=values[0]
+    for value in values[1:]: result=add(tree,result,value)
+    return result
+tree=mat.node_tree
+uv=nodes.new("ShaderNodeTexCoord")
+sep=nodes.new("ShaderNodeSeparateXYZ")
+links.new(uv.outputs["UV"],sep.inputs[0])
+u,v=sep.outputs["X"],sep.outputs["Y"]
+fire_masks=[]
+for x,y,rx,ry in [(128,175,32,57),(360,254,24,37),(488,356,38,50),(550,408,27,36),(602,456,21,32),(381,455,21,29)]:
+    fire_masks.append(ellipse(tree,u,v,x/1672,1-y/941,rx/1672,ry/941))
+fire=calc(tree,"MINIMUM",total(tree,fire_masks),1)
+smoke_masks=[ellipse(tree,u,v,515/1672,1-160/941,93/1672,145/941),
+             ellipse(tree,u,v,394/1672,1-105/941,83/1672,110/941),
+             ellipse(tree,u,v,228/1672,1-77/941,61/1672,88/941)]
+smoke=calc(tree,"MINIMUM",total(tree,smoke_masks),1)
+clouds=total(tree,[ellipse(tree,u,v,.55,.925,.19,.071),ellipse(tree,u,v,.60,.705,.12,.075)])
+banner1=ellipse(tree,u,v,156/1672,1-332/941,34/1672,65/941)
+banner2=ellipse(tree,u,v,384/1672,1-362/941,19/1672,42/941)
+banners=add(tree,banner1,banner2)
+f1=wave(tree,"Огонь — дрожание 41",41)
+f2=wave(tree,"Огонь — дрожание 29",29,.75)
+s1=wave(tree,"Дым — поперечный ветер",2)
+s2=wave(tree,"Дым — восходящий поток",3,.45)
+c1=wave(tree,"Облака — медленный поток",1)
+b1=wave(tree,"Стяги — тяжёлое колыхание",4)
+b2=wave(tree,"Стяги — мелкие складки",7,1.3)
+spatial=calc(tree,"SINE",mul(tree,v,85))
+dx=total(tree,[mul(tree,mul(tree,fire,f1),.0025),mul(tree,mul(tree,mul(tree,smoke,s1),spatial),.005),
+               mul(tree,mul(tree,clouds,c1),.0045),mul(tree,mul(tree,banners,add(tree,mul(tree,b1,.75),mul(tree,b2,.25))),.0022)])
+dy=total(tree,[mul(tree,mul(tree,fire,f2),.0036),mul(tree,mul(tree,smoke,s2),.0044),mul(tree,mul(tree,clouds,c1),.00055)])
+combine=nodes.new("ShaderNodeCombineXYZ")
+links.new(add(tree,u,dx),combine.inputs["X"])
+links.new(add(tree,v,dy),combine.inputs["Y"])
+warped=nodes.new("ShaderNodeTexImage")
+warped.image=img
+extensions=[i.identifier for i in warped.bl_rna.properties["extension"].enum_items]
+warped.extension=extensions[extensions.index("CLIP")]
+links.new(combine.outputs[0],warped.inputs["Vector"])
+links.new(warped.outputs["Color"],emission.inputs["Color"])
+colorsep=nodes.new("ShaderNodeSeparateColor")
+links.new(base.outputs["Color"],colorsep.inputs[0])
+warm=mul(tree,calc(tree,"MAXIMUM",calc(tree,"SUBTRACT",calc(tree,"SUBTRACT",colorsep.outputs[0],colorsep.outputs[1]),.12),0),
+              calc(tree,"MAXIMUM",calc(tree,"SUBTRACT",colorsep.outputs[1],colorsep.outputs[2]),0))
+warm=calc(tree,"MINIMUM",mul(tree,warm,20),1)
+brightness=add(tree,1,mul(tree,mul(tree,fire,warm),add(tree,mul(tree,f1,.23),mul(tree,f2,.12))))
+links.new(brightness,emission.inputs["Strength"])
+mat["technique"]="Local feathered UV deformations of the painted fire/smoke/standards/clouds; no camera drift, no fluid simulation."
+effects=bpy.data.collections.new("05 Фон — силовой купол")
+main.collection.children.link(effects)
+def effect_material(name,color,strength):
+    m=bpy.data.materials.new(name)
+    m.use_nodes=True
+    methods=[i.identifier for i in m.bl_rna.properties["surface_render_method"].enum_items]
+    if "BLENDED" in methods: m.surface_render_method=methods[methods.index("BLENDED")]
+    m.use_transparent_shadow=False
+    ns=m.node_tree.nodes
+    ns.clear()
+    e=ns.new("ShaderNodeEmission")
+    e.inputs["Color"].default_value=color
+    e.inputs["Strength"].default_value=strength
+    t=ns.new("ShaderNodeBsdfTransparent")
+    mix=ns.new("ShaderNodeMixShader")
+    out=ns.new("ShaderNodeOutputMaterial")
+    m.node_tree.links.new(t.outputs[0],mix.inputs[1])
+    m.node_tree.links.new(e.outputs[0],mix.inputs[2])
+    m.node_tree.links.new(mix.outputs[0],out.inputs["Surface"])
+    return m,mix
+shield,shieldmix=effect_material("Щит — расходящиеся волны",(.055,.50,1,1),2)
+st=shield.node_tree
+texcoords=st.nodes.new("ShaderNodeTexCoord")
+ss=st.nodes.new("ShaderNodeSeparateXYZ")
+st.links.new(texcoords.outputs["UV"],ss.inputs[0])
+su,sv=ss.outputs[0],ss.outputs[1]
+cx,cy,rx,ry=1438/1672,1-377/941,206/1672,202/941
+X=calc(st,"DIVIDE",calc(st,"SUBTRACT",su,cx),rx)
+Y=calc(st,"DIVIDE",calc(st,"SUBTRACT",sv,cy),ry)
+rho=add(st,mul(st,X,X),mul(st,Y,Y))
+Z=calc(st,"SQRT",calc(st,"MAXIMUM",calc(st,"SUBTRACT",1,rho),0))
+inside=mul(st,calc(st,"LESS_THAN",rho,.993),calc(st,"GREATER_THAN",Y,.015))
+rimfade=calc(st,"MINIMUM",mul(st,calc(st,"MAXIMUM",calc(st,"SUBTRACT",1,rho),0),25),1)
+mask=mul(st,inside,rimfade)
+hits=[(1.4,(-.52,.57)),(5.6,(.48,.63)),(9.5,(-.14,.82))]
+ringterms=[]
+for index,(start,point) in enumerate(hits):
+    px,py=point
+    pz=math.sqrt(1-px*px-py*py)
+    dot=total(st,[mul(st,X,px),mul(st,Y,py),mul(st,Z,pz)])
+    dot=calc(st,"MAXIMUM",calc(st,"MINIMUM",dot,1),-1)
+    distance=calc(st,"ARCCOSINE",dot)
+    def radius_fn(t,start=start):
+        age=(t-start)%12.8
+        return .025+1.85*min(age/2.7,1) if age<2.7 else 0
+    def opacity_fn(t,start=start):
+        age=(t-start)%12.8
+        return min(age/.10,1)*max(1-age/2.7,0)**1.1 if age<2.7 else 0
+    radius=anim(st,"Удар "+str(index+1)+" — радиус",[radius_fn(i/30) for i in range(385)])
+    alpha=anim(st,"Удар "+str(index+1)+" — затухание",[opacity_fn(i/30) for i in range(385)])
+    rings=[]
+    for delay,gain in [(0,1),(.19,.70),(.38,.43)]:
+        center=calc(st,"SUBTRACT",radius,delay)
+        diff=calc(st,"ABSOLUTE",calc(st,"SUBTRACT",distance,center))
+        width=calc(st,"POWER",calc(st,"MAXIMUM",calc(st,"SUBTRACT",1,calc(st,"DIVIDE",diff,.018)),0),2)
+        active=calc(st,"GREATER_THAN",center,0)
+        rings.append(mul(st,mul(st,width,active),gain))
+    flash=calc(st,"EXPONENT",mul(st,mul(st,distance,distance),-95))
+    ringterms.append(mul(st,alpha,add(st,mul(st,total(st,rings),.55),mul(st,flash,.17))))
+shield_alpha=calc(st,"MINIMUM",mul(st,total(st,ringterms),mask),.70)
+st.links.new(shield_alpha,shieldmix.inputs[0])
+mesh=bpy.data.meshes.new("Купол — полная прозрачная плоскость")
+mesh.from_pydata([(-9.6,-5.4,0),(9.6,-5.4,0),(9.6,5.4,0),(-9.6,5.4,0)],[],[(0,1,2,3)])
+uvlayer=mesh.uv_layers.new(name="UV")
+for item,coord in zip(uvlayer.data,[(0,0),(1,0),(1,1),(0,1)]): item.uv=coord
+overlay=bpy.data.objects.new("Купол — волны после попадания",mesh)
+effects.objects.link(overlay)
+overlay.location.z=.30
+overlay.data.materials.append(shield)
+overlay["dome_uv"]=[cx,cy,rx,ry]
+overlay["impact_times"]=[h[0] for h in hits]
+overlay["surface"]="Wavefronts use angular/geodesic distance on a projected sphere, clipped to a hemisphere."
+ends=[(-.91,.22),(-.15,.95),(.52,.75),(.87,.35),(.20,.18)]
+for index,(start,point) in enumerate(hits):
+    material,mix=effect_material("Разряд "+str(index+1),(.19,.67,1,1),3)
+    def electric_fn(t,start=start):
+        age=(t-start)%12.8
+        if age>.8: return 0
+        return min(age/.035,1)*math.exp(-age*5.3)*(.64+.36*math.cos(age*28))
+    electric=anim(material.node_tree,"Разряд "+str(index+1)+" — вспышка",[electric_fn(i/30) for i in range(385)])
+    material.node_tree.links.new(electric,mix.inputs[0])
+    for branch,end in enumerate(ends):
+        curve=bpy.data.curves.new("Молния — путь","CURVE")
+        curve.dimensions=next(i.identifier for i in curve.bl_rna.properties["dimensions"].enum_items if i.identifier=="3D")
+        curve.bevel_depth=.008
+        curve.bevel_resolution=1
+        spline_type=next(i.identifier for i in curve.splines.bl_rna.functions["new"].parameters["type"].enum_items if i.identifier=="POLY")
+        spline=curve.splines.new(spline_type)
+        spline.points.add(25)
+        a=Vector((point[0],point[1],math.sqrt(1-point[0]**2-point[1]**2)))
+        b=Vector((end[0],end[1],math.sqrt(max(1-end[0]**2-end[1]**2,0))))
+        for j,p in enumerate(spline.points):
+            fraction=j/25
+            vec=(1-fraction)*a+fraction*b
+            vec.x+=.026*math.sin(j*2.11+branch)*math.sin(math.pi*fraction)
+            vec.y+=.022*math.sin(j*2.87+index)*math.sin(math.pi*fraction)
+            vec.normalize()
+            wx=-9.6+(cx+rx*vec.x)*19.2
+            wy=-5.4+(cy+ry*vec.y)*10.8
+            p.co=(wx,wy,.33,1)
+        obj=bpy.data.objects.new("Купол — разряд "+str(index+1)+"/"+str(branch+1),curve)
+        effects.objects.link(obj)
+        obj.data.materials.append(material)
+study=bpy.data.scenes.new("BRAT_OK — фон: город и щит")
+study.collection.objects.link(background)
+study.collection.objects.link(main.camera)
+study.collection.children.link(effects)
+study.camera=main.camera
+study.world=main.world
+study.render.engine=main.render.engine
+study.view_settings.view_transform=main.view_settings.view_transform
+for s in [main,study]:
+    s.frame_start=1
+    s.frame_end=384
+    s.render.fps=30
+    s.render.resolution_x=1920
+    s.render.resolution_y=1080
+    s.render.resolution_percentage=100
+    s["background_loop_seconds"]=12.8
+    s["background_motion"]="Fire/smoke/metal standards/clouds plus three local shield impacts, expanding spherical rings and short electrical arcs."
+study["purpose"]="Background-only motion preview; unit poses and foreground title are excluded from this scene, retained in the full composition."
+for tree,n in controls:
+    if tree.animation_data and tree.animation_data.action:
+        for layer in tree.animation_data.action.layers:
+            for strip in layer.strips:
+                for bag in strip.channelbags:
+                    for fc in bag.fcurves:
+                        for key in fc.keyframe_points:
+                            key.interpolation=next(i.identifier for i in key.bl_rna.properties["interpolation"].enum_items if i.identifier=="LINEAR")
+bpy.context.window.scene=study
+study.frame_set(53)
+study.render.filepath=ROOT+"/preview.png"
+study.render.image_settings.file_format=next(i.identifier for i in study.render.image_settings.bl_rna.properties["file_format"].enum_items if i.identifier=="PNG")
+study.render.resolution_percentage=50
+bpy.ops.render.render(write_still=True)
+study.render.resolution_percentage=100
+assert all(tuple(v for row in main.objects[name].matrix_world for v in row)==matrix for name,matrix in preserved.items())
+assert len(bpy.data.scenes["BRAT_OK — 2D"].objects)==106
+bpy.ops.wm.save_as_mainfile(filepath=ROOT+"/BRAT_OK_background_motion_v1.blend",relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"active_scene":study.name,"full_scene":main.name,"controls":len(controls),"effects":len(effects.objects),"study_objects":len(study.objects),"main_objects":len(main.objects),"hits":[h[0] for h in hits],"original_objects_preserved":True,"loop_frames":384},ensure_ascii=False))
+

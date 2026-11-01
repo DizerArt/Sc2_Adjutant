@@ -1,0 +1,56 @@
+import bpy, math, json
+s=bpy.context.scene
+if s.name!="BRAT_OK — гидралиск: ползучая волна" or bpy.data.filepath.replace("\\","/")!="<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend":
+    raise RuntimeError("Connected scene/file changed.")
+spec=json.loads(r'''{"size":[1536,1024],"grid":[96,64],"pixel_scale":0.0034,"ground_y":-1.65,"anchor_x":650,"contact_y":1009,"tail_x_start":820,"tail_x_full":1536,"tail_y_start":770,"tail_y_full":910,"tail_y_release_start":1180,"tail_y_release_full":1250,"tail_amp_y":45,"tail_amp_x":14,"tail_waves":1.1,"body_amp_x":10,"body_amp_y":2.5,"body_y_pin":700,"body_y_full":180,"body_x_window":[230,330,800,900],"claw_center":[1090,766],"claw_radii":[70,65],"claw_fade_ratio":0.8,"belly_y_start":950,"belly_y_full":990,"belly_x_pin_end":920,"belly_x_release_end":1040}''')
+W,H=spec["size"]
+cols,rows=spec["grid"]
+scale=spec["pixel_scale"]
+contact=spec["contact_y"]
+obj=s.objects["Гидралиск — цельный деформируемый рисунок"]
+keys=list(obj.data.shape_keys.key_blocks)
+basis=keys[0]
+def smooth(value):
+    t = min(1.0, max(0.0, value))
+    return t*t*(3-2*t)
+
+def offsets(x, y):
+    progress = min(1.0,max(0.0,(x-spec["tail_x_start"])/(spec["tail_x_full"]-spec["tail_x_start"])))
+    release = smooth((x-spec["tail_y_release_start"])/(spec["tail_y_release_full"]-spec["tail_y_release_start"]))
+    below = smooth((y-spec["tail_y_start"])/(spec["tail_y_full"]-spec["tail_y_start"]))
+    weight = smooth(progress)*(below*(1-release)+release)
+    cx,cy = spec["claw_center"]
+    rx,ry = spec["claw_radii"]
+    claw_distance = math.sqrt(((x-cx)/rx)**2+((y-cy)/ry)**2)
+    weight *= smooth((claw_distance-1)/spec["claw_fade_ratio"])
+    belly_pin = (1-smooth((x-spec["belly_x_pin_end"])/(spec["belly_x_release_end"]-spec["belly_x_pin_end"])))*smooth((y-spec["belly_y_start"])/(spec["belly_y_full"]-spec["belly_y_start"]))
+    weight *= 1-belly_pin
+    phase = 2*math.pi*spec["tail_waves"]*progress
+    # The lowermost row cannot move through the fixed ground contact.
+    amp_y = min(spec["tail_amp_y"], max(0.0,contact-y-2))*weight
+    amp_x = spec["tail_amp_x"]*weight
+    body_y = smooth((spec["body_y_pin"]-y)/(spec["body_y_pin"]-spec["body_y_full"]))
+    lx0,lx1,rx0,rx1 = spec["body_x_window"]
+    body_x = smooth((x-lx0)/(lx1-lx0))*smooth((rx1-x)/(rx1-rx0))
+    body = body_y*body_x
+    return [(amp_x*math.cos(phase),amp_y*math.sin(phase)),(-amp_x*math.sin(phase),amp_y*math.cos(phase)),(spec["body_amp_x"]*body,0),(0,spec["body_amp_y"]*body)]
+
+
+for index,base in enumerate(basis.data):
+    x=W*(index%(cols+1))/cols
+    y=H*(index//(cols+1))/rows
+    for key,(dx,dy) in zip(keys[1:],offsets(x,y)):
+        key.data[index].co=(base.co.x+dx*scale,base.co.y+dy*scale,base.co.z)
+s["spec_json"]=json.dumps(spec,ensure_ascii=False)
+s["mask_contract"]="Broad smooth tail/claw transition: y770..910, ellipse fade.8; belly and claw controls pinned, original PNG/UV unchanged."
+s.frame_set(10)
+s.render.resolution_percentage=50
+s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-hydralisk-slither-v1/quality-frame-10.png"
+bpy.ops.render.render(write_still=True)
+s.frame_set(1)
+s.render.filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/preview.png"
+bpy.ops.render.render(write_still=True)
+s.render.resolution_percentage=100
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend",relative_remap=False)
+print(json.dumps({"updated":"tail/claw soft-transition","spec":spec,"frame":s.frame_current},ensure_ascii=False))
+

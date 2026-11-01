@@ -1,0 +1,20 @@
+{
+  "file": "work\\brat-ok-zergling-run-v1\\frames\\frame-03.png",
+  "background_rgb": [
+    44,
+    50,
+    57
+  ],
+  "components": [
+    {
+      "area": 70642,
+      "bbox": [
+        237,
+        84,
+        730,
+        420
+      ]
+    }
+  ],
+  "previous_orphan_region_clear": true
+}

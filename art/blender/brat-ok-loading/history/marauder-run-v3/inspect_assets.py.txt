@@ -1,0 +1,37 @@
+from pathlib import Path
+from PIL import Image
+from collections import deque
+import json
+
+root = Path('output/brat-ok-loading/marauder-run-v3/assets')
+report = {}
+for p in sorted(root.glob('pair-*.png')):
+    im = Image.open(p)
+    w, h = im.size
+    alpha = im.getchannel('A').tobytes()
+    seen = bytearray(w * h)
+    components = []
+    for start in range(w * h):
+        if seen[start] or alpha[start] <= 128:
+            continue
+        todo = deque([start])
+        seen[start] = 1
+        x0, y0, x1, y1, count = w, h, 0, 0, 0
+        while todo:
+            index = todo.popleft()
+            y, x = divmod(index, w)
+            count += 1
+            x0, y0, x1, y1 = min(x0, x), min(y0, y), max(x1, x), max(y1, y)
+            for ny, nx in ((y, x-1), (y, x+1), (y-1, x), (y+1, x)):
+                if 0 <= nx < w and 0 <= ny < h:
+                    ni = ny*w + nx
+                    if not seen[ni] and alpha[ni] > 128:
+                        seen[ni] = 1
+                        todo.append(ni)
+        if count > 100:
+            components.append({'area': count, 'bbox': [x0, y0, x1+1, y1+1]})
+    report[p.name] = {'size': [w, h], 'mode': im.mode,
+                      'alpha': im.getchannel('A').getextrema(),
+                      'components': sorted(components, key=lambda v: -v['area'])[:8]}
+Path('work/brat-ok-marauder-run-v3/asset-inspection.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+print(json.dumps(report))

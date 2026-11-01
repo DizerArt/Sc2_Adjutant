@@ -1,0 +1,47 @@
+{
+  "all_passed": true,
+  "checks": {
+    "root_traversal_actions_exactly_unchanged": true,
+    "all_other_object_action_ids_unchanged": true,
+    "all_scene_counts_preserved": true,
+    "other_scene_frames_preserved": true,
+    "exact_speed_ratio_1_5": true,
+    "exact_visibility_sequence_all577frames": true,
+    "all_eight_poses_preserved_both_units": true,
+    "complete_cycle_32_frames_four_frames_each": true,
+    "far_offscreen_after_frame288": true
+  },
+  "units": [
+    {
+      "unit": "Мародёр",
+      "old_cycle": 48,
+      "new_cycle": 32,
+      "seconds": 1.0666666666666667,
+      "hold_frames": 4,
+      "offset": 0
+    },
+    {
+      "unit": "Зилот",
+      "old_cycle": 48,
+      "new_cycle": 32,
+      "seconds": 1.0666666666666667,
+      "hold_frames": 4,
+      "offset": 8
+    }
+  ],
+  "global_loop_seconds": 19.2,
+  "translation_speed": 3.6,
+  "source_counts": {
+    "BRAT_OK — 2D": 106,
+    "BRAT_OK — вся сцена: общий проход": 98,
+    "BRAT_OK — гидралиск: ползучая волна": 5,
+    "BRAT_OK — зерглинг: галоп": 12,
+    "BRAT_OK — зилот: бег на носках": 12,
+    "BRAT_OK — мародёр: бег": 12,
+    "BRAT_OK — мародёр: две ноги": 17,
+    "BRAT_OK — мародёр: цельный цикл v3": 12,
+    "BRAT_OK — масштаб ультралиска": 29,
+    "BRAT_OK — фон: город и щит": 18,
+    "BRAT_OK — хоровод: четверка и ультралиск": 118
+  }
+}

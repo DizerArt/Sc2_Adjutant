@@ -1,0 +1,892 @@
+{
+  "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\hydralisk-slither-v1\\BRAT_OK_hydralisk_slither_v1.blend",
+  "scene": "BRAT_OK — гидралиск: ползучая волна",
+  "checks": {
+    "grid_6305_vertices_6144_quads": true,
+    "basis_plus_four_native_keys": true,
+    "unaltered_uv_coordinates": true,
+    "basis_matches_approved_source_plane": true,
+    "native_negative_slider_bounds": true,
+    "all49_sampled_linear_keyframes": true,
+    "correct_traveling_wave_and_sway_coefficients": true,
+    "evaluated_mesh_matches_shape_key_values": true,
+    "48_distinct_continuous_native_states": true,
+    "endpoint49_equals_frame1": true,
+    "claw_arm_and_belly_controls_pinned": true,
+    "native_deformation_stays_in_pixel_amplitude_bounds": true,
+    "visible_triangles_keep_at_least_40_percent_basis_area": true,
+    "visible_triangles_stretch_at_most_200_percent_basis_area": true,
+    "no_triangle_flips_on_any_of_49_native_states": true,
+    "mesh_visible_every_frame": true,
+    "camera_contains_all_deformed_vertices": true,
+    "root_static": true,
+    "camera_static": true,
+    "only_shape_keys_animated": true,
+    "no_key_drivers": true,
+    "one_packed_canonical_rgba_texture": true,
+    "48frames_30fps_1_6seconds": true,
+    "eight_prior_scene_counts_preserved": true,
+    "all_source_frames_preserved": true,
+    "nine_total_scenes_five_new_objects": true
+  },
+  "all_passed": true,
+  "states": [
+    {
+      "frame": 1,
+      "theta": 0,
+      "shape_values": [
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "frame": 2,
+      "theta": 0.13089969,
+      "shape_values": [
+        0.99144489,
+        -0.13052619,
+        0.13052619,
+        0.99144489
+      ]
+    },
+    {
+      "frame": 3,
+      "theta": 0.26179939,
+      "shape_values": [
+        0.96592581,
+        -0.25881904,
+        0.25881904,
+        0.96592581
+      ]
+    },
+    {
+      "frame": 4,
+      "theta": 0.39269908,
+      "shape_values": [
+        0.9238795,
+        -0.38268343,
+        0.38268343,
+        0.9238795
+      ]
+    },
+    {
+      "frame": 5,
+      "theta": 0.52359878,
+      "shape_values": [
+        0.86602539,
+        -0.5,
+        0.5,
+        0.86602539
+      ]
+    },
+    {
+      "frame": 6,
+      "theta": 0.65449847,
+      "shape_values": [
+        0.79335332,
+        -0.60876143,
+        0.60876143,
+        0.79335332
+      ]
+    },
+    {
+      "frame": 7,
+      "theta": 0.78539816,
+      "shape_values": [
+        0.70710677,
+        -0.70710677,
+        0.70710677,
+        0.70710677
+      ]
+    },
+    {
+      "frame": 8,
+      "theta": 0.91629786,
+      "shape_values": [
+        0.60876143,
+        -0.79335332,
+        0.79335332,
+        0.60876143
+      ]
+    },
+    {
+      "frame": 9,
+      "theta": 1.04719755,
+      "shape_values": [
+        0.5,
+        -0.86602539,
+        0.86602539,
+        0.5
+      ]
+    },
+    {
+      "frame": 10,
+      "theta": 1.17809725,
+      "shape_values": [
+        0.38268343,
+        -0.9238795,
+        0.9238795,
+        0.38268343
+      ]
+    },
+    {
+      "frame": 11,
+      "theta": 1.30899694,
+      "shape_values": [
+        0.25881904,
+        -0.96592581,
+        0.96592581,
+        0.25881904
+      ]
+    },
+    {
+      "frame": 12,
+      "theta": 1.43989663,
+      "shape_values": [
+        0.13052619,
+        -0.99144489,
+        0.99144489,
+        0.13052619
+      ]
+    },
+    {
+      "frame": 13,
+      "theta": 1.57079633,
+      "shape_values": [
+        0,
+        -1,
+        1,
+        0
+      ]
+    },
+    {
+      "frame": 14,
+      "theta": 1.70169602,
+      "shape_values": [
+        -0.13052619,
+        -0.99144489,
+        0.99144489,
+        -0.13052619
+      ]
+    },
+    {
+      "frame": 15,
+      "theta": 1.83259571,
+      "shape_values": [
+        -0.25881904,
+        -0.96592581,
+        0.96592581,
+        -0.25881904
+      ]
+    },
+    {
+      "frame": 16,
+      "theta": 1.96349541,
+      "shape_values": [
+        -0.38268343,
+        -0.9238795,
+        0.9238795,
+        -0.38268343
+      ]
+    },
+    {
+      "frame": 17,
+      "theta": 2.0943951,
+      "shape_values": [
+        -0.5,
+        -0.86602539,
+        0.86602539,
+        -0.5
+      ]
+    },
+    {
+      "frame": 18,
+      "theta": 2.2252948,
+      "shape_values": [
+        -0.60876143,
+        -0.79335332,
+        0.79335332,
+        -0.60876143
+      ]
+    },
+    {
+      "frame": 19,
+      "theta": 2.35619449,
+      "shape_values": [
+        -0.70710677,
+        -0.70710677,
+        0.70710677,
+        -0.70710677
+      ]
+    },
+    {
+      "frame": 20,
+      "theta": 2.48709418,
+      "shape_values": [
+        -0.79335332,
+        -0.60876143,
+        0.60876143,
+        -0.79335332
+      ]
+    },
+    {
+      "frame": 21,
+      "theta": 2.61799388,
+      "shape_values": [
+        -0.86602539,
+        -0.5,
+        0.5,
+        -0.86602539
+      ]
+    },
+    {
+      "frame": 22,
+      "theta": 2.74889357,
+      "shape_values": [
+        -0.9238795,
+        -0.38268343,
+        0.38268343,
+        -0.9238795
+      ]
+    },
+    {
+      "frame": 23,
+      "theta": 2.87979327,
+      "shape_values": [
+        -0.96592581,
+        -0.25881904,
+        0.25881904,
+        -0.96592581
+      ]
+    },
+    {
+      "frame": 24,
+      "theta": 3.01069296,
+      "shape_values": [
+        -0.99144489,
+        -0.13052619,
+        0.13052619,
+        -0.99144489
+      ]
+    },
+    {
+      "frame": 25,
+      "theta": 3.14159265,
+      "shape_values": [
+        -1,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "frame": 26,
+      "theta": 3.27249235,
+      "shape_values": [
+        -0.99144489,
+        0.13052619,
+        -0.13052619,
+        -0.99144489
+      ]
+    },
+    {
+      "frame": 27,
+      "theta": 3.40339204,
+      "shape_values": [
+        -0.96592581,
+        0.25881904,
+        -0.25881904,
+        -0.96592581
+      ]
+    },
+    {
+      "frame": 28,
+      "theta": 3.53429174,
+      "shape_values": [
+        -0.9238795,
+        0.38268343,
+        -0.38268343,
+        -0.9238795
+      ]
+    },
+    {
+      "frame": 29,
+      "theta": 3.66519143,
+      "shape_values": [
+        -0.86602539,
+        0.5,
+        -0.5,
+        -0.86602539
+      ]
+    },
+    {
+      "frame": 30,
+      "theta": 3.79609112,
+      "shape_values": [
+        -0.79335332,
+        0.60876143,
+        -0.60876143,
+        -0.79335332
+      ]
+    },
+    {
+      "frame": 31,
+      "theta": 3.92699082,
+      "shape_values": [
+        -0.70710677,
+        0.70710677,
+        -0.70710677,
+        -0.70710677
+      ]
+    },
+    {
+      "frame": 32,
+      "theta": 4.05789051,
+      "shape_values": [
+        -0.60876143,
+        0.79335332,
+        -0.79335332,
+        -0.60876143
+      ]
+    },
+    {
+      "frame": 33,
+      "theta": 4.1887902,
+      "shape_values": [
+        -0.5,
+        0.86602539,
+        -0.86602539,
+        -0.5
+      ]
+    },
+    {
+      "frame": 34,
+      "theta": 4.3196899,
+      "shape_values": [
+        -0.38268343,
+        0.9238795,
+        -0.9238795,
+        -0.38268343
+      ]
+    },
+    {
+      "frame": 35,
+      "theta": 4.45058959,
+      "shape_values": [
+        -0.25881904,
+        0.96592581,
+        -0.96592581,
+        -0.25881904
+      ]
+    },
+    {
+      "frame": 36,
+      "theta": 4.58148929,
+      "shape_values": [
+        -0.13052619,
+        0.99144489,
+        -0.99144489,
+        -0.13052619
+      ]
+    },
+    {
+      "frame": 37,
+      "theta": 4.71238898,
+      "shape_values": [
+        0,
+        1,
+        -1,
+        0
+      ]
+    },
+    {
+      "frame": 38,
+      "theta": 4.84328867,
+      "shape_values": [
+        0.13052619,
+        0.99144489,
+        -0.99144489,
+        0.13052619
+      ]
+    },
+    {
+      "frame": 39,
+      "theta": 4.97418837,
+      "shape_values": [
+        0.25881904,
+        0.96592581,
+        -0.96592581,
+        0.25881904
+      ]
+    },
+    {
+      "frame": 40,
+      "theta": 5.10508806,
+      "shape_values": [
+        0.38268343,
+        0.9238795,
+        -0.9238795,
+        0.38268343
+      ]
+    },
+    {
+      "frame": 41,
+      "theta": 5.23598776,
+      "shape_values": [
+        0.5,
+        0.86602539,
+        -0.86602539,
+        0.5
+      ]
+    },
+    {
+      "frame": 42,
+      "theta": 5.36688745,
+      "shape_values": [
+        0.60876143,
+        0.79335332,
+        -0.79335332,
+        0.60876143
+      ]
+    },
+    {
+      "frame": 43,
+      "theta": 5.49778714,
+      "shape_values": [
+        0.70710677,
+        0.70710677,
+        -0.70710677,
+        0.70710677
+      ]
+    },
+    {
+      "frame": 44,
+      "theta": 5.62868684,
+      "shape_values": [
+        0.79335332,
+        0.60876143,
+        -0.60876143,
+        0.79335332
+      ]
+    },
+    {
+      "frame": 45,
+      "theta": 5.75958653,
+      "shape_values": [
+        0.86602539,
+        0.5,
+        -0.5,
+        0.86602539
+      ]
+    },
+    {
+      "frame": 46,
+      "theta": 5.89048623,
+      "shape_values": [
+        0.9238795,
+        0.38268343,
+        -0.38268343,
+        0.9238795
+      ]
+    },
+    {
+      "frame": 47,
+      "theta": 6.02138592,
+      "shape_values": [
+        0.96592581,
+        0.25881904,
+        -0.25881904,
+        0.96592581
+      ]
+    },
+    {
+      "frame": 48,
+      "theta": 6.15228561,
+      "shape_values": [
+        0.99144489,
+        0.13052619,
+        -0.13052619,
+        0.99144489
+      ]
+    },
+    {
+      "frame": 49,
+      "theta": 0,
+      "shape_values": [
+        1,
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "control_indices": {
+    "belly_contact": 6152,
+    "lower_belly_edge": 6163,
+    "right_claw": 4725,
+    "claw_tip_overlap": 4918,
+    "right_upper_arm": 2871,
+    "head": 1204,
+    "tail_tip": 5134
+  },
+  "control_samples": [
+    {
+      "frame": 1,
+      "controls": {
+        "belly_contact": [
+          0.0204,
+          0.0034,
+          0.1
+        ],
+        "lower_belly_edge": [
+          0.6188,
+          0.0034,
+          0.1
+        ],
+        "right_claw": [
+          1.5436,
+          0.8194,
+          0.1
+        ],
+        "claw_tip_overlap": [
+          1.4892,
+          0.7106,
+          0.1
+        ],
+        "right_upper_arm": [
+          0.9452,
+          1.853,
+          0.1
+        ],
+        "head": [
+          -0.034,
+          2.7862868,
+          0.1
+        ],
+        "tail_tip": [
+          2.7292628,
+          0.5590335,
+          0.1
+        ]
+      }
+    },
+    {
+      "frame": 13,
+      "controls": {
+        "belly_contact": [
+          0.0204,
+          0.0034,
+          0.1
+        ],
+        "lower_belly_edge": [
+          0.6188,
+          0.0034,
+          0.1
+        ],
+        "right_claw": [
+          1.5436,
+          0.8194,
+          0.1
+        ],
+        "claw_tip_overlap": [
+          1.4892,
+          0.7106,
+          0.1
+        ],
+        "right_upper_arm": [
+          0.9452,
+          1.853,
+          0.1
+        ],
+        "head": [
+          -0.0000535,
+          2.7778001,
+          0.1
+        ],
+        "tail_tip": [
+          2.6726949,
+          0.4627417,
+          0.1
+        ]
+      }
+    },
+    {
+      "frame": 25,
+      "controls": {
+        "belly_contact": [
+          0.0204,
+          0.0034,
+          0.1
+        ],
+        "lower_belly_edge": [
+          0.6188,
+          0.0034,
+          0.1
+        ],
+        "right_claw": [
+          1.5436,
+          0.8194,
+          0.1
+        ],
+        "claw_tip_overlap": [
+          1.4892,
+          0.7106,
+          0.1
+        ],
+        "right_upper_arm": [
+          0.9452,
+          1.853,
+          0.1
+        ],
+        "head": [
+          -0.034,
+          2.7693133,
+          0.1
+        ],
+        "tail_tip": [
+          2.6427374,
+          0.6445666,
+          0.1
+        ]
+      }
+    },
+    {
+      "frame": 37,
+      "controls": {
+        "belly_contact": [
+          0.0204,
+          0.0034,
+          0.1
+        ],
+        "lower_belly_edge": [
+          0.6188,
+          0.0034,
+          0.1
+        ],
+        "right_claw": [
+          1.5436,
+          0.8194,
+          0.1
+        ],
+        "claw_tip_overlap": [
+          1.4892,
+          0.7106,
+          0.1
+        ],
+        "right_upper_arm": [
+          0.9452,
+          1.853,
+          0.1
+        ],
+        "head": [
+          -0.0679465,
+          2.7778001,
+          0.1
+        ],
+        "tail_tip": [
+          2.6993053,
+          0.7408584,
+          0.1
+        ]
+      }
+    },
+    {
+      "frame": 49,
+      "controls": {
+        "belly_contact": [
+          0.0204,
+          0.0034,
+          0.1
+        ],
+        "lower_belly_edge": [
+          0.6188,
+          0.0034,
+          0.1
+        ],
+        "right_claw": [
+          1.5436,
+          0.8194,
+          0.1
+        ],
+        "claw_tip_overlap": [
+          1.4892,
+          0.7106,
+          0.1
+        ],
+        "right_upper_arm": [
+          0.9452,
+          1.853,
+          0.1
+        ],
+        "head": [
+          -0.034,
+          2.7862868,
+          0.1
+        ],
+        "tail_tip": [
+          2.7292628,
+          0.5590335,
+          0.1
+        ]
+      }
+    }
+  ],
+  "key_displacement_bounds": [
+    {
+      "name": "Хвост — синус пространства",
+      "max_dx_pixels": 13.683683731976679,
+      "max_dy_pixels": 35.160218968110925,
+      "max_dz": 0
+    },
+    {
+      "name": "Хвост — косинус пространства",
+      "max_dx_pixels": 10.938714532291188,
+      "max_dy_pixels": 43.983249103321754,
+      "max_dz": 0
+    },
+    {
+      "name": "Голова — плавный наклон",
+      "max_dx_pixels": 10.000011500190286,
+      "max_dy_pixels": 0,
+      "max_dz": 0
+    },
+    {
+      "name": "Голова — вертикальное покачивани",
+      "max_dx_pixels": 0,
+      "max_dy_pixels": 2.5000291712143845,
+      "max_dz": 0
+    }
+  ],
+  "evaluated_triangle_area_inspection": {
+    "measurement": "signed XY triangle area / corresponding Basis triangle area on evaluated native mesh; two triangles per quad",
+    "visibility_mask": "source RGBA alpha >= 0.05 at original quad centroid; sampled once before animation",
+    "visible_cell_count": 1917,
+    "all_cell_count": 6144,
+    "checked_frames": 49,
+    "all_triangle_minimum": {
+      "ratio": 0.00038845298967256744,
+      "frame": 18,
+      "cell": [
+        95,
+        61
+      ],
+      "triangle": 1,
+      "source_center_pixel": [
+        1528,
+        984
+      ],
+      "source_alpha": 0
+    },
+    "all_triangle_maximum": {
+      "ratio": 1.7317345411576777,
+      "frame": 41,
+      "cell": [
+        94,
+        61
+      ],
+      "triangle": 1,
+      "source_center_pixel": [
+        1512,
+        984
+      ],
+      "source_alpha": 0
+    },
+    "visible_triangle_minimum": {
+      "ratio": 0.5595100301164792,
+      "frame": 12,
+      "cell": [
+        71,
+        53
+      ],
+      "triangle": 0,
+      "source_center_pixel": [
+        1144,
+        856
+      ],
+      "source_alpha": 0.992157
+    },
+    "visible_triangle_maximum": {
+      "ratio": 1.4770852915930748,
+      "frame": 36,
+      "cell": [
+        71,
+        53
+      ],
+      "triangle": 0,
+      "source_center_pixel": [
+        1144,
+        856
+      ],
+      "source_alpha": 0.992157
+    },
+    "flipped_triangle_samples": 0
+  },
+  "source_counts": {
+    "BRAT_OK — 2D": 106,
+    "BRAT_OK — зерглинг: галоп": 12,
+    "BRAT_OK — зилот: бег на носках": 12,
+    "BRAT_OK — мародёр: бег": 12,
+    "BRAT_OK — мародёр: две ноги": 17,
+    "BRAT_OK — мародёр: цельный цикл v3": 12,
+    "BRAT_OK — масштаб ультралиска": 29,
+    "BRAT_OK — фон: город и щит": 18
+  },
+  "source_frames": {
+    "BRAT_OK — 2D": 3,
+    "BRAT_OK — зерглинг: галоп": 0,
+    "BRAT_OK — зилот: бег на носках": 35,
+    "BRAT_OK — мародёр: бег": 14,
+    "BRAT_OK — мародёр: две ноги": 26,
+    "BRAT_OK — мародёр: цельный цикл v3": 6,
+    "BRAT_OK — масштаб ультралиска": 53,
+    "BRAT_OK — фон: город и щит": 118
+  },
+  "spec": {
+    "size": [
+      1536,
+      1024
+    ],
+    "grid": [
+      96,
+      64
+    ],
+    "pixel_scale": 0.0034,
+    "ground_y": -1.65,
+    "anchor_x": 650,
+    "contact_y": 1009,
+    "tail_x_start": 820,
+    "tail_x_full": 1536,
+    "tail_y_start": 770,
+    "tail_y_full": 910,
+    "tail_y_release_start": 1180,
+    "tail_y_release_full": 1250,
+    "tail_amp_y": 45,
+    "tail_amp_x": 14,
+    "tail_waves": 1.1,
+    "body_amp_x": 10,
+    "body_amp_y": 2.5,
+    "body_y_pin": 700,
+    "body_y_full": 180,
+    "body_x_window": [
+      230,
+      330,
+      800,
+      900
+    ],
+    "claw_center": [
+      1090,
+      766
+    ],
+    "claw_radii": [
+      70,
+      65
+    ],
+    "claw_fade_ratio": 0.8,
+    "belly_y_start": 950,
+    "belly_y_full": 990,
+    "belly_x_pin_end": 920,
+    "belly_x_release_end": 1040
+  }
+}

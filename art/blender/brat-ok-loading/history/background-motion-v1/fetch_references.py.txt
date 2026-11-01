@@ -1,0 +1,21 @@
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
+import urllib.request,json
+rows=json.loads("[{\"name\":\"nexus.png\",\"url\":\"https://liquipedia.net/commons/images/2/23/Building_nexus_close.png\",\"page\":\"https://liquipedia.net/starcraft2/Nexus_(Legacy_of_the_Void)\"},{\"name\":\"gateway.png\",\"url\":\"https://liquipedia.net/commons/images/0/0c/Gateway.png\",\"page\":\"https://liquipedia.net/starcraft2/Gateway_(Legacy_of_the_Void)\"},{\"name\":\"stargate.jpg\",\"url\":\"https://liquipedia.net/commons/images/3/35/SC2Stargate.jpg\",\"page\":\"https://liquipedia.net/starcraft2/Stargate_(Legacy_of_the_Void)\"},{\"name\":\"shakuras-gate.jpg\",\"url\":\"https://www.thiagoklafke.com/images/thiagoklafke_sc2lotv_shakuras_gate.jpg\",\"page\":\"https://polycount.com/discussion/160866/starcraft-2-legacy-of-the-void-art-dump/p2\"}]")
+root=Path('work/brat-ok-background-motion-v1/references')
+root.mkdir(exist_ok=True)
+def fetch(row):
+    try:
+        req=urllib.request.Request(row['url'],headers={'User-Agent':'Mozilla/5.0'})
+        with urllib.request.urlopen(req,timeout=20) as response:
+            data=response.read(8_000_000)
+        path=root/row['name']
+        path.write_bytes(data)
+        return {**row,'file':str(path.resolve()),'bytes':len(data),'status':'downloaded for visual reference'}
+    except Exception as err:
+        return {**row,'status':'unavailable','error':str(err)}
+with ThreadPoolExecutor(max_workers=4) as pool:
+    results=list(pool.map(fetch,rows))
+(root/'sources.json').write_text(json.dumps(results,indent=2),encoding='utf-8')
+print(json.dumps(results))
+

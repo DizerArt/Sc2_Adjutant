@@ -1,0 +1,97 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+from PIL import Image
+
+ROOT = Path("<ORIGINAL_PROJECT>")
+WORK = ROOT / "work/brat-ok-full-scene-v2"
+OUT = ROOT / "output/brat-ok-loading/full-scene-v2"
+FFMPEG = Path("<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe")
+FFPROBE = FFMPEG.with_name("ffprobe.exe")
+FRAME_COUNT = 576
+FPS = 30
+CYCLE_MS = 19200
+REPORT = WORK / "export-inspection.json"
+expected_paths = [WORK / "frames" / f"frame-{index:04d}.png" for index in range(1, FRAME_COUNT + 1)]
+actual_paths = sorted((WORK / "frames").glob("frame-*.png"))
+if actual_paths != expected_paths:
+    raise RuntimeError("Exactly frame-0001.png through frame-0576.png must be rendered before export.")
+if not (WORK / "loop-end.png").is_file():
+    raise RuntimeError("A separately rendered frame577 is required for seam verification.")
+if not OUT.is_dir():
+    raise RuntimeError("The owning scene builder must create the new output folder first.")
+
+native_hashes = []
+native_size_ok = True
+for path in expected_paths:
+    with Image.open(path) as image:
+        native_size_ok = native_size_ok and image.size == (960, 540)
+        native_hashes.append(hashlib.sha256(image.convert("RGBA").tobytes()).hexdigest())
+with Image.open(WORK / "loop-end.png") as endpoint:
+    endpoint_size_ok = endpoint.size == (960, 540)
+    endpoint_hash = hashlib.sha256(endpoint.convert("RGBA").tobytes()).hexdigest()
+report = {
+    "native_frame_count": len(expected_paths),
+    "native_unique_states": len(set(native_hashes)),
+    "native_frame_dimensions": [960, 540],
+    "fps": FPS,
+    "cycle_seconds": CYCLE_MS / 1000,
+    "all_576_native_states_distinct": len(set(native_hashes)) == FRAME_COUNT,
+    "all_native_dimensions_correct": native_size_ok and endpoint_size_ok,
+    "native_frame1_equals_frame577_rgba": native_hashes[0] == endpoint_hash,
+    "input_frame_hashes": native_hashes,
+}
+if not all(report[key] for key in ["all_576_native_states_distinct", "all_native_dimensions_correct", "native_frame1_equals_frame577_rgba"]):
+    report["all_passed"] = False
+    REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+    raise RuntimeError("Native frame inspection failed; inspect export-inspection.json before exporting.")
+
+def encode(args):
+    subprocess.run([str(FFMPEG), "-y", "-hide_banner", "-loglevel", "error", *args], check=True, timeout=120)
+
+mp4_path = OUT / "full-scene.mp4"
+gif_path = OUT / "full-scene.gif"
+input_args = ["-framerate", str(FPS), "-start_number", "1", "-i", str(WORK / "frames/frame-%04d.png"), "-frames:v", str(FRAME_COUNT)]
+encode([*input_args, "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(mp4_path)])
+# Passthrough keeps every native sample; GIF quantizes timestamps to centiseconds.
+encode([*input_args, "-filter_complex", "scale=768:432:flags=lanczos,split[a][b];[a]palettegen=max_colors=256[p];[b][p]paletteuse=dither=sierra2_4a", "-fps_mode", "passthrough", "-loop", "0", str(gif_path)])
+probe = subprocess.run([str(FFPROBE), "-v", "error", "-count_frames", "-show_entries", "stream=width,height,r_frame_rate,nb_frames,nb_read_frames:format=duration", "-of", "json", str(mp4_path)], capture_output=True, text=True, check=True, timeout=20)
+report["mp4"] = json.loads(probe.stdout)
+stream = report["mp4"]["streams"][0]
+report["mp4_dimensions_960x540"] = [stream["width"], stream["height"]] == [960, 540]
+report["mp4_frame_count_576"] = int(stream["nb_frames"]) == FRAME_COUNT and int(stream["nb_read_frames"]) == FRAME_COUNT
+report["mp4_fps_30"] = stream["r_frame_rate"] == "30/1"
+report["mp4_duration_19_2_seconds"] = abs(float(report["mp4"]["format"]["duration"]) - CYCLE_MS / 1000) <= .01
+gif_durations = []
+gif_hashes = []
+with Image.open(gif_path) as gif:
+    gif_size = gif.size
+    gif_loop = gif.info.get("loop")
+    for index in range(gif.n_frames):
+        gif.seek(index)
+        gif_durations.append(gif.info.get("duration", 0))
+        gif_hashes.append(hashlib.sha256(gif.convert("RGBA").tobytes()).hexdigest())
+expected_durations = [round((index + 1) * 1000 / FPS / 10) * 10 - round(index * 1000 / FPS / 10) * 10 for index in range(FRAME_COUNT)]
+report["gif"] = {
+    "dimensions": list(gif_size),
+    "encoded_frames": len(gif_durations),
+    "distinct_decoded_states": len(set(gif_hashes)),
+    "loop": gif_loop,
+    "duration_ms": sum(gif_durations),
+    "sample_duration_ms": gif_durations,
+    "expected_quantized_sample_duration_ms": expected_durations,
+    "sample_timing_tolerance_ms": 10,
+    "total_timing_tolerance_ms": 60,
+    "all_576_decoded_states_preserved": len(gif_durations) == FRAME_COUNT and len(set(gif_hashes)) == FRAME_COUNT,
+    "sample_timing_correct": len(gif_durations) == FRAME_COUNT and all(abs(actual - expected) <= 10 for actual, expected in zip(gif_durations, expected_durations)),
+    "cycle_timing_correct": abs(sum(gif_durations) - CYCLE_MS) <= 60,
+    "dimensions_768x432": gif_size == (768, 432),
+    "infinite_loop": gif_loop == 0,
+}
+report["all_passed"] = all(report[key] for key in ["all_576_native_states_distinct", "all_native_dimensions_correct", "native_frame1_equals_frame577_rgba", "mp4_dimensions_960x540", "mp4_frame_count_576", "mp4_fps_30", "mp4_duration_19_2_seconds"]) and all(report["gif"][key] for key in ["all_576_decoded_states_preserved", "sample_timing_correct", "cycle_timing_correct", "dimensions_768x432", "infinite_loop"])
+REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+print(json.dumps({"report": str(REPORT), "all_passed": report["all_passed"], "native_states": report["native_unique_states"], "mp4_frames": int(stream["nb_frames"]), "mp4_seconds": float(report["mp4"]["format"]["duration"]), "gif_states": report["gif"]["distinct_decoded_states"], "gif_ms": report["gif"]["duration_ms"], "gif_loop": gif_loop}, ensure_ascii=False))
+if not report["all_passed"]:
+    raise RuntimeError("Full-scene export inspection failed; inspect export-inspection.json before claiming success.")

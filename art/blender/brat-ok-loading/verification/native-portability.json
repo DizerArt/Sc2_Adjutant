@@ -1,0 +1,1003 @@
+{
+  "schema": 1,
+  "result": "PASS",
+  "originals_read_only": true,
+  "relocated_unicode_path": true,
+  "scene_and_animation_facts_preserved": true,
+  "audit": {
+    "blender": "5.2.2 LTS",
+    "mode": "audit",
+    "files": [
+      {
+        "file": "scenes/alphabet-v1/BRAT_OK_letter_library_v1.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — библиотека латинских букв",
+              "frames": [
+                1,
+                1
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1320
+              ],
+              "objects": 57
+            },
+            {
+              "name": "BRAT_OK — вся сцена: общий проход",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 98
+            },
+            {
+              "name": "BRAT_OK — гидралиск: ползучая волна",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 5
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — зилот: бег на носках",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: бег",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: две ноги",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 17
+            },
+            {
+              "name": "BRAT_OK — мародёр: цельный цикл v3",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — примеры набора букв",
+              "frames": [
+                1,
+                1
+              ],
+              "fps": 24,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 28
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            },
+            {
+              "name": "BRAT_OK — хоровод: четверка и ультралиск",
+              "frames": [
+                1,
+                576
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 118
+            },
+            {
+              "name": "BRAT_OK — экспорт отдельных букв",
+              "frames": [
+                1,
+                1
+              ],
+              "fps": 24,
+              "fps_base": 1.0,
+              "size": [
+                441,
+                557
+              ],
+              "objects": 2
+            }
+          ],
+          "objects": 508,
+          "meshes": 384,
+          "materials": 299,
+          "images": 29,
+          "actions": 526,
+          "animation_sha256": "46febd86cb0839489bc312be73b03f688b23923ecf3b81cea00ef18467cfd88c",
+          "glyph_assets": 53
+        },
+        "dependencies": {
+          "packed_images": 29,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/background-motion-v1/BRAT_OK_background_motion_v2.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            }
+          ],
+          "objects": 135,
+          "meshes": 104,
+          "materials": 109,
+          "images": 11,
+          "actions": 184,
+          "animation_sha256": "0b4f8d7342826827d6e55adf6bbb00784f0afe1f615bd6192e0e3aab6441aa54",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 11,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/full-scene-v3/BRAT_OK_full_scene_v3.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — вся сцена: общий проход",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 98
+            },
+            {
+              "name": "BRAT_OK — гидралиск: ползучая волна",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 5
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — зилот: бег на носках",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: бег",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: две ноги",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 17
+            },
+            {
+              "name": "BRAT_OK — мародёр: цельный цикл v3",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            },
+            {
+              "name": "BRAT_OK — хоровод: четверка и ультралиск",
+              "frames": [
+                1,
+                576
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 118
+            }
+          ],
+          "objects": 421,
+          "meshes": 329,
+          "materials": 295,
+          "images": 27,
+          "actions": 526,
+          "animation_sha256": "46febd86cb0839489bc312be73b03f688b23923ecf3b81cea00ef18467cfd88c",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 27,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — гидралиск: ползучая волна",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 5
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — зилот: бег на носках",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: бег",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: две ноги",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 17
+            },
+            {
+              "name": "BRAT_OK — мародёр: цельный цикл v3",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            }
+          ],
+          "objects": 205,
+          "meshes": 156,
+          "materials": 137,
+          "images": 27,
+          "actions": 225,
+          "animation_sha256": "a22b78051e74bb22a1cbbe21627b4b25609454ba66aa5e1032618c932e2583e0",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 27,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/marauder-run-v3/BRAT_OK_marauder_run_v3.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: бег",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: две ноги",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 17
+            },
+            {
+              "name": "BRAT_OK — мародёр: цельный цикл v3",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            }
+          ],
+          "objects": 188,
+          "meshes": 143,
+          "materials": 124,
+          "images": 18,
+          "actions": 216,
+          "animation_sha256": "862cb402b5e42a68abfd460b87e0131a79e79866d9ce5b47144dde7cea3855cb",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 18,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/ultralisk-v1/BRAT_OK_giant_unit_v4.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 13
+            }
+          ],
+          "objects": 119,
+          "meshes": 103,
+          "materials": 105,
+          "images": 10,
+          "actions": 179,
+          "animation_sha256": "8e5f3b205c093d53f866dcbdbe2cf95f636556335fb11c128223cea85e01129c",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 10,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/zealot-run-v1/BRAT_OK_zealot_run_v1.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — зилот: бег на носках",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: бег",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — мародёр: две ноги",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 17
+            },
+            {
+              "name": "BRAT_OK — мародёр: цельный цикл v3",
+              "frames": [
+                1,
+                48
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            }
+          ],
+          "objects": 200,
+          "meshes": 153,
+          "materials": 134,
+          "images": 26,
+          "actions": 224,
+          "animation_sha256": "ad291bef40aebe473dd382b8b5812097a18c84879281cdbd6c82683991557213",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 26,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      },
+      {
+        "file": "scenes/zergling-run-v1/BRAT_OK_zergling_gallop_v4.blend",
+        "facts": {
+          "scenes": [
+            {
+              "name": "BRAT_OK — 2D",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 106
+            },
+            {
+              "name": "BRAT_OK — зерглинг: галоп",
+              "frames": [
+                1,
+                24
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 12
+            },
+            {
+              "name": "BRAT_OK — масштаб ультралиска",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 29
+            },
+            {
+              "name": "BRAT_OK — фон: город и щит",
+              "frames": [
+                1,
+                384
+              ],
+              "fps": 30,
+              "fps_base": 1.0,
+              "size": [
+                1920,
+                1080
+              ],
+              "objects": 18
+            }
+          ],
+          "objects": 147,
+          "meshes": 114,
+          "materials": 112,
+          "images": 12,
+          "actions": 192,
+          "animation_sha256": "36e96517ec2b7327eac86c6334b2e443ded55dfb22d288e786f0875d083463fe",
+          "glyph_assets": 0
+        },
+        "dependencies": {
+          "packed_images": 12,
+          "packed_fonts": 1,
+          "external": []
+        },
+        "relative_render_paths": true
+      }
+    ]
+  },
+  "render_checks": [
+    {
+      "file": "renders/BRAT_OK_full_scene_v3/BRAT_OK-хоровод-четверка-и-ультралиск/frame-0001.png",
+      "size": [
+        960,
+        540
+      ],
+      "rgba_equal": true
+    },
+    {
+      "file": "renders/glyphs/upper-A.png",
+      "size": [
+        511,
+        557
+      ],
+      "rgba_equal": true
+    }
+  ]
+}

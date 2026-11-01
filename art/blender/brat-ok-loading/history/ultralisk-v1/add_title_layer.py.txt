@@ -1,0 +1,52 @@
+import bpy, json
+ROOT = "<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1"
+scene = bpy.context.scene
+if scene.name != "BRAT_OK — масштаб ультралиска":
+    raise RuntimeError("Active scene changed.")
+if scene.collection.children.get("04 BRAT_OK — передний слой"):
+    raise RuntimeError("Title already exists; do not repeat.")
+background = scene.objects.get("Фон — без неподвижной ноги")
+texture = next(n for n in background.data.materials[0].node_tree.nodes if n.type == "TEX_IMAGE")
+environment = bpy.data.images.load(ROOT + "/assets/environment.png", check_existing=False)
+environment.pack()
+environment.filepath = "//assets/environment.png"
+texture.image = environment
+image = bpy.data.images.load(ROOT + "/assets/title.png", check_existing=False)
+image.pack()
+image.filepath = "//assets/title.png"
+mat = background.data.materials[0].copy()
+mat.name = "BRAT_OK — отдельная прозрачная надпись"
+next(n for n in mat.node_tree.nodes if n.type == "TEX_IMAGE").image = image
+iw, ih = 2169, 725
+xmin,ymin,xmax,ymax = 85,164,2091,522
+scale = 9.8 / (xmax-xmin)
+left = -4.9
+top = 4.38
+bottom = top - (ymax-ymin)*scale
+fullleft = left - xmin*scale
+fullbottom = bottom - (ih-ymax)*scale
+width,height = iw*scale, ih*scale
+mesh = bpy.data.meshes.new("BRAT_OK — полная плоскость")
+mesh.from_pydata([(0,0,0),(width,0,0),(width,height,0),(0,height,0)],[],[(0,1,2,3)])
+uv = mesh.uv_layers.new(name="Полная надпись UV")
+for item,coord in zip(uv.data,[(0,0),(1,0),(1,1),(0,1)]):
+    item.uv = coord
+col = bpy.data.collections.new("04 BRAT_OK — передний слой")
+scene.collection.children.link(col)
+title = bpy.data.objects.new("BRAT_OK — поверх юнитов",mesh)
+col.objects.link(title)
+title.location = (fullleft,fullbottom,2.5)
+title.data.materials.append(mat)
+title["role"] = "Separate foreground wordmark so giant scythes do not obscure the streamer's name."
+scene["title_separate"] = True
+scene["background_has_baked_title_or_claw"] = False
+scene.render.filepath = ROOT + "/preview-final.png"
+scene.render.resolution_percentage = 50
+bpy.ops.render.render(write_still=True)
+scene.render.resolution_percentage = 100
+bpy.ops.wm.save_as_mainfile(filepath=ROOT + "/BRAT_OK_giant_unit_v2.blend",relative_remap=False)
+unit_roots = [o for o in scene.objects if o.get("unit")]
+ultra = next(o for o in unit_roots if o["unit"] == "Ультралиск")
+report = {"file":bpy.data.filepath,"scene":scene.name,"new_scene_objects":len(scene.objects),"unit_count":len(unit_roots),"ultralisk_bounds":list(ultra["visible_bounds_world"]),"title_z":title.location.z,"all_units_behind_title":all(c.matrix_world.translation.z<title.location.z for o in unit_roots for c in o.children),"old_scene_objects":len(bpy.data.scenes["BRAT_OK — 2D"].objects),"packed_count":sum(bool(n.image.packed_file) for o in scene.objects if o.type=="MESH" for m in o.data.materials for n in m.node_tree.nodes if n.type=="TEX_IMAGE"),"animation_stage":"static"}
+print(json.dumps(report,ensure_ascii=False))
+

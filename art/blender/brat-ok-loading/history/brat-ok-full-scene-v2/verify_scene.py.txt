@@ -1,0 +1,79 @@
+import bpy, json, math
+s = bpy.context.scene
+if s.name != 'BRAT_OK — хоровод: четверка и ультралиск':
+    raise RuntimeError('Queue scene required.')
+counts = json.loads(s['source_counts_json'])
+frames = json.loads(s['source_frames_json'])
+routes = json.loads(s['routes_json'])
+dust = json.loads(s['dust_events_json'])
+saved = s.frame_current
+checks = {
+    'ten_source_scene_counts_preserved': all(len(bpy.data.scenes[n].objects)==c for n,c in counts.items()),
+    'ten_source_scene_frames_preserved': all(bpy.data.scenes[n].frame_current==f for n,f in frames.items()),
+    '576_frames_30fps':(s.frame_start,s.frame_end,s.render.fps,s.render.fps_base)==(1,576,30,1),
+    'same_speed_all_five':all(r['speed']==.12 for r in routes),
+    'five_units_order': [r['unit'] for r in routes]==['Мародёр','Зерглинг','Зилот','Гидралиск','Ультралиск'],
+    'camera_fixed_19_2':abs(s.camera.data.ortho_scale-19.2)<.00001 and tuple(s.camera.location)==(0,0,30),
+    'copied_objects_and_data':all(o!=bpy.data.objects[o['source_object']] and (o.type=='EMPTY' or o.data!=bpy.data.objects[o['source_object']].data) for o in s.objects if 'source_object' in o),
+    'packed_textures':all(n.image.packed_file for o in s.objects if o.type in ['MESH','CURVE'] for m in o.data.materials if m.use_nodes for n in m.node_tree.nodes if n.type=='TEX_IMAGE' and n.image),
+    'dust_no_unit_parent':all(s.objects[d['object']].parent is None for d in dust),
+}
+previous = s.objects[s['previous_giant_root']]
+unit_objects = [o for r in routes for o in s.objects[r['root']].children]+list(previous.children)
+checks['body_alpha16_clamped'] = all(m.get('body_alpha_multiplier')==16 and next(n for n in m.node_tree.nodes if n.name=='Плотный силуэт без просвечивания').use_clamp for o in unit_objects for m in o.data.materials)
+checks['unit_uv_geometry_unchanged'] = all(len(o.data.vertices)==len(bpy.data.objects[o['source_object']].data.vertices) and all((a.co-b.co).length<.0000001 for a,b in zip(o.data.vertices,bpy.data.objects[o['source_object']].data.vertices)) and all((a.uv-b.uv).length<.0000001 for a,b in zip(o.data.uv_layers.active.data,bpy.data.objects[o['source_object']].data.uv_layers.active.data)) for o in unit_objects)
+checks['unit_materials_independent'] = all(m not in bpy.data.objects[o['source_object']].data.materials[:] for o in unit_objects for m in o.data.materials)
+checks['pose_actions_independent'] = all(not o.animation_data or o.animation_data.action != bpy.data.objects[o['source_object']].animation_data.action for o in unit_objects if bpy.data.objects[o['source_object']].animation_data)
+hydra = next(o for o in unit_objects if o.data.shape_keys)
+oldhydra = bpy.data.objects[hydra['source_object']]
+checks['hydra_keys_action_independent'] = hydra.data.shape_keys!=oldhydra.data.shape_keys and hydra.data.shape_keys.animation_data.action!=oldhydra.data.shape_keys.animation_data.action
+checks['hydra_shape_geometry_unchanged'] = all((a.co-b.co).length<.0000001 for ka,kb in zip(hydra.data.shape_keys.key_blocks,oldhydra.data.shape_keys.key_blocks) for a,b in zip(ka.data,kb.data))
+order_ok, phase_ok, slither_ok, dust_ok = True, True, True, True
+max_speed_error = 0
+endstates = []
+try:
+    for f in range(1,578):
+        s.frame_set(f)
+        xs = [s.objects[r['root']].location.x for r in routes]
+        if f <= 576:
+            order_ok = order_ok and all(a<b for a,b in zip(xs,xs[1:]))
+            for r,x in zip(routes,xs):
+                max_speed_error=max(max_speed_error,abs(x-(r['startx']-.12*(f-1))))
+        for r in routes[:3]:
+            shown = [o for o in s.objects[r['root']].children if not o.hide_render]
+            expected=((f-1+r['offset'])%r['cycle'])//(r['cycle']//8)
+            phase_ok=phase_ok and len(shown)==1 and int(shown[0]['phase_index'])==expected
+        r=routes[3]
+        theta=2*math.pi*((f-1+r['offset'])%48)/48
+        values=[math.cos(theta),-math.sin(theta),math.sin(theta),math.cos(theta)]
+        slither_ok=slither_ok and all(abs(k.value-v)<.000001 for k,v in zip(list(hydra.data.shape_keys.key_blocks)[1:],values))
+        for d in dust:
+            o=s.objects[d['object']]
+            age=(f-d['emit'])%576
+            life=d['expires']-d['emit']
+            active=age<life
+            fade=next(n for n in o.data.materials[0].node_tree.nodes if n.name=='Плотность остающейся пыли')
+            expected=.33*min(1,age/5)*max(0,1-age/life) if active else 0
+            dust_ok=dust_ok and o.hide_render!=active and abs(fade.outputs[0].default_value-expected)<.000001
+        if f in [1,577]:
+            state={}
+            for o in s.objects:
+                state[o.name]=list(o.location)+list(o.scale)+[float(o.hide_render)]
+            state['hydra_values']=[k.value for k in list(hydra.data.shape_keys.key_blocks)[1:]]
+            endstates.append(state)
+    checks['all577frames_queue_order'] = order_ok
+    checks['same_translation_speed_native'] = max_speed_error<.00001
+    checks['all577frames_pose_sequence'] = phase_ok
+    checks['all577frames_hydra_continuous'] = slither_ok
+    checks['actual_dust_visibility_fade_keys'] = dust_ok
+    checks['all_object_endpoint_states_equal'] = endstates[0]==endstates[1]
+    giant=s.objects[routes[-1]['root']]
+    s.frame_set(576)
+    last=list(giant.location)
+    s.frame_set(577)
+    first=list(previous.location)
+    checks['giant_crosses_seam_with_previous_pass_copy'] = abs((first[0]-last[0])+.12)<.00001 and abs(first[1]-last[1])<.01
+    checks['body_translation_only_honestly_recorded'] = 'no articulated leg cycle' in s['ultralisk_motion']
+finally:
+    s.frame_set(saved)
+print(json.dumps({'checks':checks,'all_passed':all(checks.values()),'max_speed_error':max_speed_error,'routes':routes,'objects':len(s.objects),'dust_events':len(dust),'previous_giant_root':previous.name,'source_counts':counts,'source_frames':frames,'preservation_limit':'Counts/frames, clone geometry/UV/actions checked; not a full snapshot/datablock diff.'},ensure_ascii=False))

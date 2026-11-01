@@ -1,0 +1,194 @@
+{
+  "pose-01.png": {
+    "size": [
+      1312,
+      1199
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      44,
+      23,
+      1286,
+      1157
+    ],
+    "clear_margins_px": [
+      44,
+      23,
+      26,
+      42
+    ],
+    "sha256": "002a782c7b409fc5090ebb0f596e83b1922129b7ac1abcaf1b3829c2ccfe95d4"
+  },
+  "pose-02.png": {
+    "size": [
+      1312,
+      1199
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      38,
+      21,
+      1294,
+      1168
+    ],
+    "clear_margins_px": [
+      38,
+      21,
+      18,
+      31
+    ],
+    "sha256": "71475089a6d228f686b5d61a8e1cfd516f1525a9641cf45eb353362ed687e170"
+  },
+  "pose-03.png": {
+    "size": [
+      1188,
+      1324
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      26,
+      116,
+      1172,
+      1267
+    ],
+    "clear_margins_px": [
+      26,
+      116,
+      16,
+      57
+    ],
+    "sha256": "72be4ddb265e6761a7866c9e390dc3e35611abffe40eb42a6519d2ae9eb6bb20"
+  },
+  "pose-04.png": {
+    "size": [
+      1312,
+      1199
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      31,
+      55,
+      1298,
+      1150
+    ],
+    "clear_margins_px": [
+      31,
+      55,
+      14,
+      49
+    ],
+    "sha256": "6fd33e76d61959f66367a471673f9976953ed65d6c11f50dead6840ac00a387f"
+  },
+  "pose-05.png": {
+    "size": [
+      1188,
+      1324
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      33,
+      116,
+      1163,
+      1259
+    ],
+    "clear_margins_px": [
+      33,
+      116,
+      25,
+      65
+    ],
+    "sha256": "31576f87657dab4b0ed3abfa8c30679a561b793cf8f9f78e65a27df178b6d94c"
+  },
+  "pose-06.png": {
+    "size": [
+      1188,
+      1324
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      21,
+      122,
+      1182,
+      1256
+    ],
+    "clear_margins_px": [
+      21,
+      122,
+      6,
+      68
+    ],
+    "sha256": "0b18c3406550f61b5b79ae78fbe49518a3b445be3ca9431a14588bbd6957c3cb"
+  },
+  "pose-07.png": {
+    "size": [
+      1312,
+      1199
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      22,
+      26,
+      1301,
+      1149
+    ],
+    "clear_margins_px": [
+      22,
+      26,
+      11,
+      50
+    ],
+    "sha256": "6f75ab8718114e9720a61aee4625f31a369b0f092b10500ae6f1666258b6b16d"
+  },
+  "pose-08.png": {
+    "size": [
+      1312,
+      1199
+    ],
+    "mode": "RGBA",
+    "alpha": [
+      0,
+      255
+    ],
+    "body_bbox": [
+      30,
+      22,
+      1305,
+      1167
+    ],
+    "clear_margins_px": [
+      30,
+      22,
+      7,
+      32
+    ],
+    "sha256": "df1688bcddeff3a9ab19d6cbf28ac4e45f6cff4b40a739fca62cd576169cb06c"
+  }
+}

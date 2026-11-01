@@ -1,0 +1,27 @@
+from pathlib import Path
+from PIL import Image, ImageChops
+import subprocess,json,hashlib
+ROOT=Path(r'<ORIGINAL_PROJECT>')
+work=ROOT/'work/brat-ok-background-motion-v1'
+out=ROOT/'output/brat-ok-loading/background-motion-v1'
+ffmpeg=Path(r'<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe')
+ffprobe=ffmpeg.with_name('ffprobe.exe')
+frames=sorted((work/'frames').glob('frame-*.png'))
+assert len(frames)==256
+subprocess.run([str(ffmpeg),'-y','-hide_banner','-loglevel','error','-framerate','20','-i',str(work/'frames/frame-%04d.png'),'-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',str(out/'background-motion.mp4')],check=True,timeout=180)
+subprocess.run([str(ffmpeg),'-y','-hide_banner','-loglevel','error','-i',str(out/'background-motion.mp4'),'-filter_complex','fps=10,scale=768:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=192[p];[b][p]paletteuse=dither=sierra2_4a','-loop','0',str(out/'background-motion.gif')],check=True,timeout=180)
+probe=json.loads(subprocess.run([str(ffprobe),'-v','error','-show_entries','stream=width,height,r_frame_rate,nb_frames:format=duration','-of','json',str(out/'background-motion.mp4')],capture_output=True,text=True,check=True,timeout=30).stdout)
+with Image.open(work/'loop-start.png') as start,Image.open(work/'loop-end.png') as end:
+    diff=ImageChops.difference(start.convert('RGB'),end.convert('RGB'))
+    seam={'pixel_identical':diff.getbbox() is None,'max_channel_delta':max(v[1] for v in diff.getextrema())}
+with Image.open(frames[0]) as a,Image.open(frames[204]) as b:
+    diff=ImageChops.difference(a.convert('RGB'),b.convert('RGB'))
+    w,h=a.size
+    regions={'ground':(0,round(h*.75),w,h),'antenna':(124,16,140,112),'fire':(47,65,95,120),'smoke':(245,30,320,150),'clouds':(360,15,680,65),'shield':(710,100,950,225)}
+    motion={key:{'changed':diff.crop(box).getbbox() is not None,'max_channel_delta':max(v[1] for v in diff.crop(box).getextrema())} for key,box in regions.items()}
+with Image.open(out/'background-motion.gif') as gif:
+    gif_report={'size':gif.size,'frames':gif.n_frames,'frame_duration_ms':gif.info.get('duration'),'loop':gif.info.get('loop')}
+report={'mp4':probe,'gif':gif_report,'loop':seam,'sample_regions':motion,'environment_sha256':hashlib.sha256((out/'assets/environment-protoss.png').read_bytes()).hexdigest()}
+(work/'export-inspection.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))
+

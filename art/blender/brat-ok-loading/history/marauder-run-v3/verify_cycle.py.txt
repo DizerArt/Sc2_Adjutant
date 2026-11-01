@@ -1,0 +1,90 @@
+import bpy, json
+
+NAME = "BRAT_OK — мародёр: цельный цикл v3"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/marauder-run-v3/BRAT_OK_marauder_run_v3.blend"
+if bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("Unexpected connected file.")
+s = bpy.data.scenes[NAME]
+layout = json.loads(s["layout_json"])
+def phase_index(obj):
+    return obj["phase_index"]
+
+poses = sorted([o for o in s.objects if o.get("phase_index") is not None], key=phase_index)
+expected = [i for i, p in enumerate(layout["poses"]) for _ in range(p["hold"])]
+expected.append(0)
+visibility = []
+constant = True
+only_visibility = True
+packed = True
+canonical = True
+uv_correct = True
+geometry_correct = True
+camera_contains_all_poses = True
+curve_count = 0
+camera_half_width = s.camera.data.ortho_scale / 2
+camera_half_height = camera_half_width * s.render.resolution_y / s.render.resolution_x
+for obj, info in zip(poses, layout["poses"]):
+    curves = [fc for layer in obj.animation_data.action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+    curve_count += len(curves)
+    constant = constant and all(k.interpolation == "CONSTANT" for fc in curves for k in fc.keyframe_points)
+    only_visibility = only_visibility and len(curves) == 2 and {fc.data_path for fc in curves} == {"hide_render", "hide_viewport"}
+    for mat in obj.data.materials:
+        for node in mat.node_tree.nodes:
+            if node.type == "TEX_IMAGE":
+                packed = packed and bool(node.image.packed_file)
+                canonical = canonical and node.image.filepath == "//assets/" + info["file"]
+    w, h = info["size"]
+    x0, y0, x1, y1 = info["rect"]
+    target_uv = [(x0/w,1-y1/h),(x1/w,1-y1/h),(x1/w,1-y0/h),(x0/w,1-y0/h)]
+    uv_correct = uv_correct and len(obj.data.uv_layers.active.data) == 4 and all(abs(actual.uv[0]-want[0]) < .000001 and abs(actual.uv[1]-want[1]) < .000001 for actual, want in zip(obj.data.uv_layers.active.data, target_uv))
+    ax, ay = info["anchor"]
+    scale = info.get("pixel_scale", layout["pixel_scale"])
+    height = info["height"]
+    left, right = (x0-ax)*scale, (x1-ax)*scale
+    bottom, top = (ay-y1+height)*scale, (ay-y0+height)*scale
+    target_vertices = [(left,bottom,.1),(right,bottom,.1),(right,top,.1),(left,top,.1)]
+    geometry_correct = geometry_correct and len(obj.data.vertices) == 4 and all(all(abs(vertex.co[j]-coord[j]) < .000001 for j in range(3)) for vertex, coord in zip(obj.data.vertices, target_vertices)) and obj.parent == s.objects["Мародёр v3 — опорная точка"]
+    camera_contains_all_poses = camera_contains_all_poses and left > s.camera.location.x-camera_half_width and right < s.camera.location.x+camera_half_width and bottom+layout["ground_y"] > s.camera.location.y-camera_half_height and top+layout["ground_y"] < s.camera.location.y+camera_half_height
+for frame in range(1, 50):
+    row = []
+    viewport_row = []
+    for obj in poses:
+        curves = [fc for layer in obj.animation_data.action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+        if round(next(fc for fc in curves if fc.data_path == "hide_render").evaluate(frame)) == 0:
+            row.append(obj["phase_index"])
+        if round(next(fc for fc in curves if fc.data_path == "hide_viewport").evaluate(frame)) == 0:
+            viewport_row.append(obj["phase_index"])
+    visibility.append({"frame": frame, "render": row, "viewport": viewport_row})
+counts = json.loads(s["source_counts_json"])
+frames = json.loads(s["source_frames_json"])
+checks = {
+    "expected_pose_count": len(poses) == len(layout["poses"]) and len(poses) in (8,16),
+    "48_native_frames_30fps": s.frame_start == 1 and s.frame_end == 48 and s.render.fps == 30 and s.render.fps_base == 1,
+    "cycle_duration_1_6_seconds": abs(s["cycle_seconds"]-1.6) < .000001,
+    "unique_pose_render_and_viewport_all_49": all(len(v["render"]) == 1 and v["render"] == v["viewport"] for v in visibility),
+    "correct_holds_and_phase_order": [v["render"] for v in visibility] == [[i] for i in expected],
+    "same_first_endpoint": visibility[0]["render"] == visibility[-1]["render"],
+    "constant_pose_keys": constant,
+    "only_pose_visibility_animated": only_visibility,
+    "root_static": not s.objects["Мародёр v3 — опорная точка"].animation_data,
+    "camera_static": not s.camera.animation_data,
+    "packed_all_pngs": packed,
+    "canonical_asset_paths": canonical,
+    "uv_matches_one_pose_crop": uv_correct,
+    "plane_geometry_matches_measured_anchors_scales": geometry_correct,
+    "static_camera_contains_all_pose_crops": camera_contains_all_poses,
+    "no_unit_drivers": all(not o.animation_data or not o.animation_data.drivers for o in s.objects),
+    "six_source_scene_counts_preserved": len(counts) == 6 and all(len(bpy.data.scenes[name].objects) == count for name,count in counts.items()),
+    "all_source_frames_preserved": all(bpy.data.scenes[name].frame_current == frame for name,frame in frames.items()),
+    "new_scene_count": len(bpy.data.scenes) == 7,
+    "new_objects_only_wholebody_and_support": len(s.objects) == len(poses)+4,
+}
+report = {"file": bpy.data.filepath, "scene": NAME, "checks": checks, "all_passed": all(checks.values()), "visibility": visibility, "curve_count": curve_count, "source_counts": counts, "source_frames": frames}
+if not report["all_passed"]:
+    print(json.dumps(report, ensure_ascii=False))
+    raise RuntimeError("Native checks failed; no successful verification claimed.")
+s.frame_set(1)
+s.render.resolution_percentage = 100
+s.render.filepath = "<ORIGINAL_PROJECT>/output/brat-ok-loading/marauder-run-v3/preview.png"
+bpy.ops.wm.save_as_mainfile(filepath=EXPECTED, relative_remap=False)
+print(json.dumps(report, ensure_ascii=False))

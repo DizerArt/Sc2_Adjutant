@@ -1,0 +1,18 @@
+import bpy,json
+s=bpy.context.scene
+if s.name!="BRAT_OK — зерглинг: галоп":raise RuntimeError("Scene changed.")
+obj=s.objects["Зерглинг — фаза 2"]
+for index in [1,2]:
+    obj.data.vertices[index].co.x=(915-696)*(5.4/469)
+    obj.data.uv_layers.active.data[index].uv.x=915/1774
+obj["source_rect"]=[484,82,915,410]
+s.render.resolution_percentage=50
+for frame in range(4,7):
+    s.frame_set(frame)
+    s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-zergling-run-v1/frames/frame-"+str(frame-1).zfill(2)+".png"
+    bpy.ops.render.render(write_still=True)
+s.frame_set(7)
+s.render.resolution_percentage=100
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/zergling-run-v1/BRAT_OK_zergling_gallop_v4.blend",relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"phase2_right":915,"frames_updated":[4,6]}))
+

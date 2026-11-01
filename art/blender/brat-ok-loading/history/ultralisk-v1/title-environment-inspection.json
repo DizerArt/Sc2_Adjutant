@@ -1,0 +1,27 @@
+[
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\assets\\environment.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "bbox128": null,
+    "sha256": "33c1c73655de4c6d8635e525cc273312ca6cbfbc2e46463e23e86919e9324930"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\assets\\title.png",
+    "size": [
+      2169,
+      725
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      85,
+      164,
+      2091,
+      522
+    ],
+    "sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349"
+  }
+]

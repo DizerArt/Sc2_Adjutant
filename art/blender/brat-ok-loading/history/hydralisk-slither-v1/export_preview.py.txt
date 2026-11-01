@@ -1,0 +1,61 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+from PIL import Image, ImageChops, ImageStat
+
+ROOT = Path("<ORIGINAL_PROJECT>")
+WORK = ROOT/"work/brat-ok-hydralisk-slither-v1"
+OUT = ROOT/"output/brat-ok-loading/hydralisk-slither-v1"
+SOURCE = ROOT/"output/brat-ok-loading/units-v1/hydralisk.png"
+FFMPEG = Path("<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe")
+FFPROBE = FFMPEG.with_name("ffprobe.exe")
+paths = sorted((WORK/"frames").glob("frame-*.png"))
+if paths != [WORK/"frames"/f"frame-{i:02d}.png" for i in range(48)]:
+    raise RuntimeError("Exactly 48 consecutively rendered native states are required.")
+if not (WORK/"loop-end.png").is_file():
+    raise RuntimeError("Separate native frame49 is required for loop inspection.")
+source_same = hashlib.sha256(SOURCE.read_bytes()).hexdigest() == hashlib.sha256((OUT/"assets/hydralisk-source.png").read_bytes()).hexdigest()
+if not source_same:
+    raise RuntimeError("Copied source PNG differs from the approved original.")
+images = []
+fingerprints = []
+for path in paths:
+    with Image.open(path) as image:
+        rgb = image.convert("RGB")
+        images.append(rgb)
+        fingerprints.append(hashlib.sha256(rgb.tobytes()).hexdigest())
+report = {"rendered_png_count":48,"all48_render_states_distinct":len(set(fingerprints)) == 48,"approved_source_png_unchanged":source_same,"normal_cycle_seconds":1.6,"slow_cycle_seconds":4.8,"native_motion":"continuous relative shape keys"}
+with Image.open(WORK/"loop-end.png") as last:
+    report["loop_endpoints_identical"] = ImageChops.difference(images[0],last.convert("RGB")).getbbox() is None
+
+def encode(args):
+    subprocess.run([str(FFMPEG),"-y","-hide_banner","-loglevel","error",*args],check=True,timeout=120)
+
+for speed,fps in [("normal",30),("slow",10)]:
+    cycle = WORK/f"{speed}-cycle.mp4"
+    encode(["-framerate",str(fps),"-i",str(WORK/"frames/frame-%02d.png"),"-frames:v","48","-c:v","libx264","-crf","18","-pix_fmt","yuv420p","-movflags","+faststart",str(cycle)])
+    encode(["-stream_loop","2" if speed == "normal" else "0","-i",str(cycle),"-t","4.8","-c","copy","-movflags","+faststart",str(OUT/f"{speed}.mp4")])
+    encode(["-framerate",str(fps),"-i",str(WORK/"frames/frame-%02d.png"),"-frames:v","48","-filter_complex","scale=768:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=256[p];[b][p]paletteuse=dither=sierra2_4a","-fps_mode","passthrough","-loop","0",str(OUT/f"{speed}.gif")])
+    probe = subprocess.run([str(FFPROBE),"-v","error","-show_entries","stream=width,height,r_frame_rate,nb_frames:format=duration","-of","json",str(OUT/f"{speed}.mp4")],capture_output=True,text=True,check=True,timeout=20)
+    report[speed] = json.loads(probe.stdout)
+    durations = []
+    gif_hashes = []
+    with Image.open(OUT/f"{speed}.gif") as gif:
+        for index in range(gif.n_frames):
+            gif.seek(index)
+            sample = gif.convert("RGB")
+            durations.append(gif.info.get("duration",0))
+            gif_hashes.append(hashlib.sha256(sample.tobytes()).hexdigest())
+    wanted_duration = 1600 if speed == "normal" else 4800
+    wanted_samples = [round((index+1)*1000/fps/10)*10-round(index*1000/fps/10)*10 for index in range(48)]
+    report[f"{speed}_gif"] = {"encoded_frames":len(durations),"distinct_decoded_states":len(set(gif_hashes)),"duration_ms":sum(durations),"sample_duration_ms":durations,"all48states_preserved":len(durations) == 48 and len(set(gif_hashes)) == 48,"cycle_timing_correct":abs(sum(durations)-wanted_duration) <= 60,"sample_timing_correct":len(durations) == 48 and all(abs(a-b) <= 10 for a,b in zip(durations,wanted_samples))}
+report["adjacent_render_change_means"] = [round(sum(ImageStat.Stat(ImageChops.difference(images[i],images[(i+1)%48])).mean)/3,6) for i in range(48)]
+report["normal_mp4_144_frames"] = int(report["normal"]["streams"][0]["nb_frames"]) == 144
+report["slow_mp4_48_frames"] = int(report["slow"]["streams"][0]["nb_frames"]) == 48
+report["all_passed"] = all(report[key] for key in ["all48_render_states_distinct","approved_source_png_unchanged","loop_endpoints_identical","normal_mp4_144_frames","slow_mp4_48_frames"]) and all(report[f"{speed}_gif"][key] for speed in ["normal","slow"] for key in ["all48states_preserved","cycle_timing_correct","sample_timing_correct"])
+(WORK/"export-inspection.json").write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding="utf-8")
+print(json.dumps(report,ensure_ascii=False))
+if not report["all_passed"]:
+    raise RuntimeError("Export inspection failed; inspect the evidence before claiming success.")

@@ -1,0 +1,1437 @@
+{
+  "glyphs": [
+    {
+      "char": "A",
+      "case": "upper",
+      "object": "Latin upper-A",
+      "file": "upper-A.png",
+      "advance": 2.390437158469945,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2.3278688524590163,
+        2.0765027322404372
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        511,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 458.96393442622946,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "B",
+      "case": "upper",
+      "object": "Latin upper-B",
+      "file": "upper-B.png",
+      "advance": 2.1827868852459016,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2.120218579234973,
+        2.087431693989071
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        471,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 419.0950819672131,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "C",
+      "case": "upper",
+      "object": "Latin upper-C",
+      "file": "upper-C.png",
+      "advance": 2.226502732240437,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2.1639344262295084,
+        2.087431693989071
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        479,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 427.48852459016393,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "D",
+      "case": "upper",
+      "object": "Latin upper-D",
+      "file": "upper-D.png",
+      "advance": 2.2046448087431694,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2.1420765027322406,
+        2.087431693989071
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        475,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 423.2918032786885,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "E",
+      "case": "upper",
+      "object": "Latin upper-E",
+      "file": "upper-E.png",
+      "advance": 2.226502732240437,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2.1639344262295084,
+        2.087431693989071
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        479,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 427.48852459016393,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "F",
+      "case": "upper",
+      "object": "Latin upper-F",
+      "file": "upper-F.png",
+      "advance": 2.0625683060109288,
+      "bounds": [
+        -0.08743169398907104,
+        -0.08743169398907104,
+        2,
+        2.087431693989071
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01092896174863388,
+      "png_size": [
+        448,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.14688524590164,
+        432
+      ],
+      "png_advance_px": 396.0131147540983,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "G",
+      "case": "upper",
+      "object": "Latin upper-G",
+      "file": "upper-G.png",
+      "advance": 2.091018766756032,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        2.026809651474531,
+        2.0804289544235925
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        453,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 401.47560321715815,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "H",
+      "case": "upper",
+      "object": "Latin upper-H",
+      "file": "upper-H.png",
+      "advance": 2.1339142091152814,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        2.06970509383378,
+        2.0804289544235925
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        461,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 409.71152815013403,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "I",
+      "case": "upper",
+      "object": "Latin upper-I",
+      "file": "upper-I.png",
+      "advance": 1.0722520107238607,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        1.0080428954423593,
+        2.1018766756032172
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        257,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 205.87238605898125,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "J",
+      "case": "upper",
+      "object": "Latin upper-J",
+      "file": "upper-J.png",
+      "advance": 2.1660857908847184,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        2.1018766756032172,
+        2.091152815013405
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        467,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 415.88847184986594,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "K",
+      "case": "upper",
+      "object": "Latin upper-K",
+      "file": "upper-K.png",
+      "advance": 2.273324396782842,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        2.2091152815013406,
+        2.091152815013405
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        488,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 436.47828418230563,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "L",
+      "case": "upper",
+      "object": "Latin upper-L",
+      "file": "upper-L.png",
+      "advance": 2.123190348525469,
+      "bounds": [
+        -0.08579088471849866,
+        -0.08579088471849866,
+        2.058981233243968,
+        2.0804289544235925
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010723860589812333,
+      "png_size": [
+        459,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.831849865951746,
+        432
+      ],
+      "png_advance_px": 407.65254691689006,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "M",
+      "case": "upper",
+      "object": "Latin upper-M",
+      "file": "upper-M.png",
+      "advance": 2.3946808510638298,
+      "bounds": [
+        -0.0851063829787234,
+        -0.0851063829787234,
+        2.329787234042553,
+        2.074468085106383
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        511,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 459.7787234042553,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "N",
+      "case": "upper",
+      "object": "Latin upper-N",
+      "file": "upper-N.png",
+      "advance": 2.075531914893617,
+      "bounds": [
+        -0.0851063829787234,
+        -0.0851063829787234,
+        2.0106382978723403,
+        2.074468085106383
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        450,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 398.5021276595745,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "O",
+      "case": "upper",
+      "object": "Latin upper-O",
+      "file": "upper-O.png",
+      "advance": 2.1074468085106384,
+      "bounds": [
+        -0.0851063829787234,
+        -0.0851063829787234,
+        2.0425531914893615,
+        2.0851063829787235
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        456,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 404.62978723404257,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "P",
+      "case": "upper",
+      "object": "Latin upper-P",
+      "file": "upper-P.png",
+      "advance": 2.15,
+      "bounds": [
+        -0.0851063829787234,
+        -0.0851063829787234,
+        2.0851063829787235,
+        2.0851063829787235
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        464,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 412.79999999999995,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "Q",
+      "case": "upper",
+      "object": "Latin upper-Q",
+      "file": "upper-Q.png",
+      "advance": 2.3308510638297872,
+      "bounds": [
+        -0.0851063829787234,
+        -0.20212765957446807,
+        2.2659574468085104,
+        2.0851063829787235
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        499,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 447.5234042553192,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "R",
+      "case": "upper",
+      "object": "Latin upper-R",
+      "file": "upper-R.png",
+      "advance": 2.3095744680851062,
+      "bounds": [
+        -0.0851063829787234,
+        -0.0851063829787234,
+        2.24468085106383,
+        2.0851063829787235
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.010638297872340425,
+      "png_size": [
+        495,
+        557
+      ],
+      "png_origin_from_top_left": [
+        31.700425531914895,
+        432
+      ],
+      "png_advance_px": 443.4382978723404,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "S",
+      "case": "upper",
+      "object": "Latin upper-S",
+      "file": "upper-S.png",
+      "advance": 2.3545454545454545,
+      "bounds": [
+        -0.09090909090909091,
+        -0.09090909090909091,
+        2.2954545454545454,
+        2.090909090909091
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        505,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.81454545454545,
+        432
+      ],
+      "png_advance_px": 452.07272727272726,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "T",
+      "case": "upper",
+      "object": "Latin upper-T",
+      "file": "upper-T.png",
+      "advance": 2.4,
+      "bounds": [
+        -0.09090909090909091,
+        -0.09090909090909091,
+        2.340909090909091,
+        2.0795454545454546
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        513,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.81454545454545,
+        432
+      ],
+      "png_advance_px": 460.79999999999995,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "U",
+      "case": "upper",
+      "object": "Latin upper-U",
+      "file": "upper-U.png",
+      "advance": 2.2636363636363637,
+      "bounds": [
+        -0.09090909090909091,
+        -0.09090909090909091,
+        2.2045454545454546,
+        2.090909090909091
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        487,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.81454545454545,
+        432
+      ],
+      "png_advance_px": 434.6181818181818,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "V",
+      "case": "upper",
+      "object": "Latin upper-V",
+      "file": "upper-V.png",
+      "advance": 2.456818181818182,
+      "bounds": [
+        -0.09090909090909091,
+        -0.09090909090909091,
+        2.375,
+        2.0795454545454546
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        524,
+        557
+      ],
+      "png_origin_from_top_left": [
+        32.81454545454545,
+        432
+      ],
+      "png_advance_px": 471.70909090909095,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "W",
+      "case": "upper",
+      "object": "Latin upper-W",
+      "file": "upper-W.png",
+      "advance": 2.8204545454545453,
+      "bounds": [
+        -0.06818181818181818,
+        -0.09090909090909091,
+        2.6931818181818183,
+        2.090909090909091
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        590,
+        557
+      ],
+      "png_origin_from_top_left": [
+        28.799999999999997,
+        432
+      ],
+      "png_advance_px": 541.5272727272727,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "X",
+      "case": "upper",
+      "object": "Latin upper-X",
+      "file": "upper-X.png",
+      "advance": 2.4795454545454545,
+      "bounds": [
+        -0.022727272727272728,
+        -0.09090909090909091,
+        2.4204545454545454,
+        2.090909090909091
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011363636363636364,
+      "png_size": [
+        525,
+        557
+      ],
+      "png_origin_from_top_left": [
+        28.799999999999997,
+        432
+      ],
+      "png_advance_px": 476.07272727272726,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "Y",
+      "case": "upper",
+      "object": "Latin upper-Y",
+      "file": "upper-Y.png",
+      "advance": 2.68968253968254,
+      "bounds": [
+        -0.1015873015873016,
+        -0.1015873015873016,
+        2.6412698412698417,
+        2.1079365079365084
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.0126984126984127,
+      "png_size": [
+        571,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.864761904761906,
+        432
+      ],
+      "png_advance_px": 516.4190476190477,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "Z",
+      "case": "upper",
+      "object": "Latin upper-Z",
+      "file": "upper-Z.png",
+      "advance": 2.5753968253968256,
+      "bounds": [
+        -0.1015873015873016,
+        -0.1015873015873016,
+        2.5269841269841273,
+        2.0952380952380953
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.0126984126984127,
+      "png_size": [
+        549,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.864761904761906,
+        432
+      ],
+      "png_advance_px": 494.4761904761905,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "_",
+      "case": "symbol",
+      "object": "Latin upper-_",
+      "file": "upper-_.png",
+      "advance": 2.7912698412698416,
+      "bounds": [
+        -0.1015873015873016,
+        -0.1396825396825397,
+        2.7428571428571433,
+        0.761904761904762
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.0126984126984127,
+      "png_size": [
+        590,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.864761904761906,
+        432
+      ],
+      "png_advance_px": 535.9238095238096,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "a",
+      "case": "lower",
+      "object": "Latin lower-a",
+      "file": "lower-a.png",
+      "advance": 1.9755855855855857,
+      "bounds": [
+        -0.09801801801801803,
+        -0.08576576576576578,
+        1.923603603603604,
+        1.4580180180180182
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        433,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 379.31243243243244,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "b",
+      "case": "lower",
+      "object": "Latin lower-b",
+      "file": "lower-b.png",
+      "advance": 1.9143243243243244,
+      "bounds": [
+        -0.09801801801801803,
+        -0.09801801801801803,
+        1.8623423423423426,
+        1.935855855855856
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        421,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 367.5502702702703,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "c",
+      "case": "lower",
+      "object": "Latin lower-c",
+      "file": "lower-c.png",
+      "advance": 1.9633333333333334,
+      "bounds": [
+        -0.09801801801801803,
+        -0.09801801801801803,
+        1.9113513513513516,
+        1.4580180180180182
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        431,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 376.96000000000004,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "d",
+      "case": "lower",
+      "object": "Latin lower-d",
+      "file": "lower-d.png",
+      "advance": 1.8530630630630631,
+      "bounds": [
+        -0.09801801801801803,
+        -0.09801801801801803,
+        1.8010810810810813,
+        1.935855855855856
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        410,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 355.78810810810813,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "e",
+      "case": "lower",
+      "object": "Latin lower-e",
+      "file": "lower-e.png",
+      "advance": 2.0613513513513517,
+      "bounds": [
+        -0.09801801801801803,
+        -0.09801801801801803,
+        2.0093693693693697,
+        1.4702702702702704
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        450,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 395.77945945945953,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "f",
+      "case": "lower",
+      "object": "Latin lower-f",
+      "file": "lower-f.png",
+      "advance": 1.693783783783784,
+      "bounds": [
+        -0.09801801801801803,
+        -0.09801801801801803,
+        1.641801801801802,
+        1.935855855855856
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.012252252252252254,
+      "png_size": [
+        379,
+        557
+      ],
+      "png_origin_from_top_left": [
+        34.179459459459466,
+        432
+      ],
+      "png_advance_px": 325.2064864864865,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "g",
+      "case": "lower",
+      "object": "Latin lower-g",
+      "file": "lower-g.png",
+      "advance": 1.881965811965812,
+      "bounds": [
+        -0.092991452991453,
+        -0.2964102564102565,
+        1.8249572649572652,
+        1.4820512820512823
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        414,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 361.3374358974359,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "h",
+      "case": "lower",
+      "object": "Latin lower-h",
+      "file": "lower-h.png",
+      "advance": 1.7773504273504275,
+      "bounds": [
+        -0.092991452991453,
+        -0.07555555555555557,
+        1.7203418803418806,
+        1.8772649572649576
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        394,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 341.2512820512821,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "i",
+      "case": "lower",
+      "object": "Latin lower-i",
+      "file": "lower-i.png",
+      "advance": 0.9171794871794873,
+      "bounds": [
+        -0.092991452991453,
+        -0.09880341880341882,
+        0.8601709401709403,
+        1.8772649572649576
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        229,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 176.09846153846155,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "j",
+      "case": "lower",
+      "object": "Latin lower-j",
+      "file": "lower-j.png",
+      "advance": 1.4170085470085472,
+      "bounds": [
+        -0.092991452991453,
+        -0.24991452991452995,
+        1.36,
+        1.888888888888889
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        325,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 272.06564102564107,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "k",
+      "case": "lower",
+      "object": "Latin lower-k",
+      "file": "lower-k.png",
+      "advance": 1.8935897435897437,
+      "bounds": [
+        -0.092991452991453,
+        -0.08717948717948719,
+        1.836581196581197,
+        1.888888888888889
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        416,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 363.5692307692308,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "l",
+      "case": "lower",
+      "object": "Latin lower-l",
+      "file": "lower-l.png",
+      "advance": 1.1612820512820514,
+      "bounds": [
+        -0.092991452991453,
+        -0.09880341880341882,
+        1.1042735042735043,
+        1.888888888888889
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        276,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 222.96615384615387,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "m",
+      "case": "lower",
+      "object": "Latin lower-m",
+      "file": "lower-m.png",
+      "advance": 2.3023478260869568,
+      "bounds": [
+        -0.09460869565217392,
+        -0.09460869565217392,
+        2.2469565217391305,
+        1.454608695652174
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        495,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 442.0507826086957,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "n",
+      "case": "lower",
+      "object": "Latin lower-n",
+      "file": "lower-n.png",
+      "advance": 1.8647826086956523,
+      "bounds": [
+        -0.09460869565217392,
+        -0.09460869565217392,
+        1.8093913043478262,
+        1.454608695652174
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        411,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 358.03826086956525,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "o",
+      "case": "lower",
+      "object": "Latin lower-o",
+      "file": "lower-o.png",
+      "advance": 1.923913043478261,
+      "bounds": [
+        -0.09460869565217392,
+        -0.15373913043478263,
+        1.868521739130435,
+        1.454608695652174
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        423,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 369.3913043478261,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "p",
+      "case": "lower",
+      "object": "Latin lower-p",
+      "file": "lower-p.png",
+      "advance": 1.8884347826086956,
+      "bounds": [
+        -0.09460869565217392,
+        -0.40208695652173915,
+        1.8330434782608698,
+        1.501913043478261
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        416,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 362.57947826086956,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "q",
+      "case": "lower",
+      "object": "Latin lower-q",
+      "file": "lower-q.png",
+      "advance": 2.0540000000000003,
+      "bounds": [
+        -0.09460869565217392,
+        -0.3666086956521739,
+        1.998608695652174,
+        1.5373913043478262
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        448,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 394.36800000000005,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "r",
+      "case": "lower",
+      "object": "Latin lower-r",
+      "file": "lower-r.png",
+      "advance": 1.6873913043478261,
+      "bounds": [
+        -0.09460869565217392,
+        -0.09460869565217392,
+        1.6320000000000001,
+        1.4427826086956523
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.01182608695652174,
+      "png_size": [
+        377,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.52486956521739,
+        432
+      ],
+      "png_advance_px": 323.97913043478263,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "s",
+      "case": "lower",
+      "object": "Latin lower-s",
+      "file": "lower-s.png",
+      "advance": 1.959491525423729,
+      "bounds": [
+        -0.09220338983050849,
+        -0.09220338983050849,
+        1.9016949152542377,
+        1.4637288135593223
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        429,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 376.22237288135597,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "t",
+      "case": "lower",
+      "object": "Latin lower-t",
+      "file": "lower-t.png",
+      "advance": 1.486949152542373,
+      "bounds": [
+        -0.09220338983050849,
+        -0.09220338983050849,
+        1.4291525423728817,
+        1.7749152542372886
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        338,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 285.49423728813565,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "u",
+      "case": "lower",
+      "object": "Latin lower-u",
+      "file": "lower-u.png",
+      "advance": 1.9249152542372885,
+      "bounds": [
+        -0.09220338983050849,
+        -0.09220338983050849,
+        1.867118644067797,
+        1.4522033898305087
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        422,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 369.5837288135594,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "v",
+      "case": "lower",
+      "object": "Latin lower-v",
+      "file": "lower-v.png",
+      "advance": 1.9479661016949155,
+      "bounds": [
+        -0.09220338983050849,
+        -0.08067796610169493,
+        1.8901694915254241,
+        1.4522033898305087
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        427,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 374.00949152542375,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "w",
+      "case": "lower",
+      "object": "Latin lower-w",
+      "file": "lower-w.png",
+      "advance": 2.4550847457627123,
+      "bounds": [
+        -0.09220338983050849,
+        -0.09220338983050849,
+        2.3972881355932207,
+        1.4522033898305087
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        524,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 471.37627118644076,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "x",
+      "case": "lower",
+      "object": "Latin lower-x",
+      "file": "lower-x.png",
+      "advance": 2.1093220338983056,
+      "bounds": [
+        -0.09220338983050849,
+        -0.09220338983050849,
+        2.051525423728814,
+        1.4522033898305087
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011525423728813562,
+      "png_size": [
+        458,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.06305084745763,
+        432
+      ],
+      "png_advance_px": 404.9898305084747,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "y",
+      "case": "lower",
+      "object": "Latin lower-y",
+      "file": "lower-y.png",
+      "advance": 1.974957264957265,
+      "bounds": [
+        -0.092991452991453,
+        -0.3138461538461539,
+        1.9179487179487182,
+        1.4529914529914532
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        432,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 379.1917948717949,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    },
+    {
+      "char": "z",
+      "case": "lower",
+      "object": "Latin lower-z",
+      "file": "lower-z.png",
+      "advance": 2.0214529914529917,
+      "bounds": [
+        -0.092991452991453,
+        -0.092991452991453,
+        1.9644444444444447,
+        1.4529914529914532
+      ],
+      "baseline": 0,
+      "pixel_scale": 0.011623931623931626,
+      "png_size": [
+        441,
+        557
+      ],
+      "png_origin_from_top_left": [
+        33.21435897435898,
+        432
+      ],
+      "png_advance_px": 388.1189743589744,
+      "png_units_per_pixel": 0.005208333333333333,
+      "custom_asset_preview_loaded": true,
+      "png_camera_sensor_fit": "HORIZONTAL"
+    }
+  ],
+  "base_cap_height_units": 2,
+  "common_png_baseline_px": 432
+}

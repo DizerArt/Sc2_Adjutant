@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "five_independent_units": true,
+    "ultralisk_single_separate_plane": true,
+    "giant_taller_than_camera": true,
+    "ultralisk_exits_top_and_right": true,
+    "full_uv_source_preserved": true,
+    "separate_title_in_front": true,
+    "background_is_clean_environment": true,
+    "seven_scene_images_packed": true,
+    "old_scene_preserved": true,
+    "new_units_static_no_drivers": true,
+    "versioned_final_saved": true
+  },
+  "all_passed": true,
+  "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\BRAT_OK_giant_unit_v2.blend",
+  "scene": "BRAT_OK — масштаб ультралиска",
+  "unit_count": 5,
+  "ultralisk_height": 14,
+  "frame": 0
+}

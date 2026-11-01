@@ -1,0 +1,241 @@
+{
+  "cycle_frames": 48,
+  "pixel_scale": 0.0033,
+  "ground_y": -1.65,
+  "motion_contract": "Ordinary alternating run, foretoe support and lifted heels, no hopping or accent push-off.",
+  "registration": "Each fullbody plane scaled to common crest-to-support-toe height, cyan chest axis aligned; 1% load compression.",
+  "poses": [
+    {
+      "file": "pose-01.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "rect": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "anchor": [
+        620,
+        595
+      ],
+      "height": 561,
+      "pixel_scale": 0.003265666372462489,
+      "phase": "Ближняя левая — опора на носки",
+      "hold": 6,
+      "body_bbox": [
+        44,
+        23,
+        1286,
+        1157
+      ],
+      "support_toe_y": 1156,
+      "forefoot_support_leg": "near_left"
+    },
+    {
+      "file": "pose-02.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "rect": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "anchor": [
+        615,
+        595
+      ],
+      "height": 572,
+      "pixel_scale": 0.003193717277486911,
+      "phase": "Ближняя левая — принятие веса",
+      "hold": 6,
+      "body_bbox": [
+        38,
+        21,
+        1294,
+        1168
+      ],
+      "support_toe_y": 1167,
+      "forefoot_support_leg": "near_left"
+    },
+    {
+      "file": "pose-03.png",
+      "size": [
+        1188,
+        1324
+      ],
+      "rect": [
+        0,
+        0,
+        1188,
+        1324
+      ],
+      "anchor": [
+        595,
+        678
+      ],
+      "height": 588,
+      "pixel_scale": 0.0032173913043478265,
+      "phase": "Ближняя опора, дальняя правая переносится вперёд",
+      "hold": 6,
+      "body_bbox": [
+        26,
+        116,
+        1172,
+        1267
+      ],
+      "support_toe_y": 1266,
+      "forefoot_support_leg": "near_left"
+    },
+    {
+      "file": "pose-04.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "rect": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "anchor": [
+        625,
+        630
+      ],
+      "height": 519,
+      "pixel_scale": 0.0033820840950639854,
+      "phase": "Дальняя правая — вынос вперёд",
+      "hold": 6,
+      "body_bbox": [
+        31,
+        55,
+        1298,
+        1150
+      ],
+      "support_toe_y": 1149,
+      "forefoot_support_leg": "far_right"
+    },
+    {
+      "file": "pose-05.png",
+      "size": [
+        1188,
+        1324
+      ],
+      "rect": [
+        0,
+        0,
+        1188,
+        1324
+      ],
+      "anchor": [
+        596,
+        678
+      ],
+      "height": 580,
+      "pixel_scale": 0.0032399299474605956,
+      "phase": "Дальняя правая — опора на носки",
+      "hold": 6,
+      "body_bbox": [
+        33,
+        116,
+        1163,
+        1259
+      ],
+      "support_toe_y": 1258,
+      "forefoot_support_leg": "far_right"
+    },
+    {
+      "file": "pose-06.png",
+      "size": [
+        1188,
+        1324
+      ],
+      "rect": [
+        0,
+        0,
+        1188,
+        1324
+      ],
+      "anchor": [
+        600,
+        688
+      ],
+      "height": 567,
+      "pixel_scale": 0.0032303618711385703,
+      "phase": "Дальняя правая — принятие веса",
+      "hold": 6,
+      "body_bbox": [
+        21,
+        122,
+        1182,
+        1256
+      ],
+      "support_toe_y": 1255,
+      "forefoot_support_leg": "far_right"
+    },
+    {
+      "file": "pose-07.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "rect": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "anchor": [
+        630,
+        598
+      ],
+      "height": 550,
+      "pixel_scale": 0.0032976827094474154,
+      "phase": "Дальняя опора, ближняя левая переносится вперёд",
+      "hold": 6,
+      "body_bbox": [
+        22,
+        26,
+        1301,
+        1149
+      ],
+      "support_toe_y": 1148,
+      "forefoot_support_leg": "far_right"
+    },
+    {
+      "file": "pose-08.png",
+      "size": [
+        1312,
+        1199
+      ],
+      "rect": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "anchor": [
+        630,
+        599
+      ],
+      "height": 567,
+      "pixel_scale": 0.003234265734265734,
+      "phase": "Ближняя левая — вынос вперёд",
+      "hold": 6,
+      "body_bbox": [
+        30,
+        22,
+        1305,
+        1167
+      ],
+      "support_toe_y": 1166,
+      "forefoot_support_leg": "near_left"
+    }
+  ]
+}

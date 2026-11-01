@@ -1,0 +1,19 @@
+import bpy, json
+start = FRAME_START
+end = FRAME_END
+s = bpy.context.scene
+if s.name != 'BRAT_OK — хоровод: четверка и ультралиск' or not (1 <= start <= end <= 577 and end - start < 32):
+    raise RuntimeError('Expected assembly scene and at most 32 native frames.')
+saved = (s.frame_current, s.render.resolution_percentage, s.render.filepath)
+s.render.resolution_percentage = 50
+try:
+    for f in range(start, end + 1):
+        s.frame_set(f)
+        filename = '/loop-end.png' if f == 577 else '/frames/frame-' + str(f).zfill(4) + '.png'
+        s.render.filepath = '<ORIGINAL_PROJECT>/work/brat-ok-full-scene-v3' + filename
+        bpy.ops.render.render(write_still=True)
+finally:
+    s.frame_set(saved[0])
+    s.render.resolution_percentage = saved[1]
+    s.render.filepath = saved[2]
+print(json.dumps({'rendered_through':end,'restored':saved[0]}))

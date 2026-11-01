@@ -1,0 +1,12 @@
+from pathlib import Path
+import shutil
+root=Path('<ORIGINAL_PROJECT>')
+old=root/'work/brat-ok-full-scene-v2'
+new=root/'work/brat-ok-full-scene-v3'
+for name in ['render_frames.py','verify_scene.py']:
+    text=(old/name).read_text(encoding='utf-8-sig').replace('full-scene-v2','full-scene-v3')
+    (new/name).write_text(text,encoding='utf-8')
+for f in range(289,577):
+    name=f'frame-{f:04d}.png'
+    shutil.copy2(old/'frames'/name,new/'frames'/name)
+print('Copied unchanged offscreen half of loop; native bounds check is in speed-verification.json.')

@@ -1,0 +1,29 @@
+import bpy, json
+
+NAME = "BRAT_OK — гидралиск: ползучая волна"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend"
+WORK = "<ORIGINAL_PROJECT>/work/brat-ok-hydralisk-slither-v1"
+start = FRAME_START
+end = FRAME_END
+if bpy.context.scene.name != NAME or bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("File or active scene changed; inspect before rendering.")
+if not (1 <= start <= end <= 49 and end-start < 8):
+    raise RuntimeError("Render at most eight frames in 1..49.")
+s = bpy.context.scene
+obj = s.objects["Гидралиск — цельный деформируемый рисунок"]
+saved_frame,saved_percent,saved_path = s.frame_current,s.render.resolution_percentage,s.render.filepath
+s.render.resolution_percentage = 50
+states = []
+try:
+    for frame in range(start,end+1):
+        s.frame_set(frame)
+        if obj.hide_render or obj.hide_viewport:
+            raise RuntimeError("Continuous mesh must remain visible in every frame.")
+        states.append({"frame":frame,"shape_values":[round(key.value,8) for key in list(obj.data.shape_keys.key_blocks)[1:]]})
+        s.render.filepath = WORK+("/loop-end.png" if frame == 49 else "/frames/frame-"+str(frame-1).zfill(2)+".png")
+        bpy.ops.render.render(write_still=True)
+finally:
+    s.frame_set(saved_frame)
+    s.render.resolution_percentage = saved_percent
+    s.render.filepath = saved_path
+print(json.dumps({"rendered":len(states),"states":states,"restored_frame":saved_frame}))

@@ -1,0 +1,140 @@
+import bpy, json
+from mathutils import Vector
+ROOT = "<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/blender-v1/BRAT_OK_2D_layers_v1.blend"
+if bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("Connected file changed. Inspect before continuing.")
+if bpy.data.scenes.get("BRAT_OK — масштаб ультралиска"):
+    raise RuntimeError("Scene already exists; do not repeat creation.")
+old_scene = bpy.context.scene
+old_objects = len(old_scene.objects)
+old_engine = old_scene.render.engine
+old_view_transform = old_scene.view_settings.view_transform
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/work/brat-ok-ultralisk-v1/before-giant-layout.blend", copy=True, relative_remap=False)
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+scene = bpy.data.scenes.new("BRAT_OK — масштаб ультралиска")
+bpy.context.window.scene = scene
+scene.render.engine = old_engine
+scene.view_settings.view_transform = old_view_transform
+scene.render.resolution_x = 1920
+scene.render.resolution_y = 1080
+scene.render.resolution_percentage = 100
+scene.render.fps = 30
+scene.frame_start = 1
+scene.frame_end = 384
+scene.render.film_transparent = False
+scene["stage"] = "Static composition and scale draft; no new gait animation or skeletal rig."
+scene["ultralisk_role"] = "Independent unit, deliberately larger than camera; old baked claw removed from background."
+scene["camera_width"] = 19.2
+scene["camera_height"] = 10.8
+scene["old_scene_preserved"] = old_scene.name
+world = bpy.data.worlds.new("Ультралиск — окружение")
+world.use_nodes = True
+world_background = next(n for n in world.node_tree.nodes if n.type == "BACKGROUND")
+world_background.inputs[0].default_value = (0,0,0,1)
+world_background.inputs[1].default_value = 0
+scene.world = world
+cols = {}
+for name in ["00 Камера масштаба", "01 Очищенный фон", "02 Новые юниты", "03 Ультралиск — гигант"]:
+    col = bpy.data.collections.new(name)
+    scene.collection.children.link(col)
+    cols[name] = col
+camera_data = bpy.data.cameras.new("Масштаб — ортографическая камера")
+camera_data.type = next(i.identifier for i in camera_data.bl_rna.properties["type"].enum_items if i.identifier == "ORTHO")
+camera_data.ortho_scale = 19.2
+camera_data.clip_start = 0.01
+camera_data.clip_end = 100
+camera = bpy.data.objects.new("Камера — новый макет", camera_data)
+camera.location = (0,0,30)
+cols["00 Камера масштаба"].objects.link(camera)
+scene.camera = camera
+
+def material(filename):
+    img = bpy.data.images.load(ROOT + "/assets/" + filename, check_existing=False)
+    img.pack()
+    img.filepath = "//assets/" + filename
+    mat = bpy.data.materials.new("Новый рисунок — " + filename)
+    mat.use_nodes = True
+    methods = [i.identifier for i in mat.bl_rna.properties["surface_render_method"].enum_items]
+    if "BLENDED" in methods:
+        mat.surface_render_method = methods[methods.index("BLENDED")]
+    mat.use_transparent_shadow = False
+    nodes = mat.node_tree.nodes
+    nodes.clear()
+    tex = nodes.new("ShaderNodeTexImage")
+    tex.image = img
+    extensions = [i.identifier for i in tex.bl_rna.properties["extension"].enum_items]
+    tex.extension = extensions[extensions.index("CLIP")]
+    emission = nodes.new("ShaderNodeEmission")
+    transparent = nodes.new("ShaderNodeBsdfTransparent")
+    mix = nodes.new("ShaderNodeMixShader")
+    output = nodes.new("ShaderNodeOutputMaterial")
+    links = mat.node_tree.links
+    links.new(tex.outputs["Color"], emission.inputs["Color"])
+    links.new(tex.outputs["Alpha"], mix.inputs[0])
+    links.new(transparent.outputs[0], mix.inputs[1])
+    links.new(emission.outputs[0], mix.inputs[2])
+    links.new(mix.outputs[0], output.inputs["Surface"])
+    return mat
+
+def plane(name, x0, y0, width, height, z, mat, col):
+    mesh = bpy.data.meshes.new(name + " — полная плоскость")
+    mesh.from_pydata([(0,0,0),(width,0,0),(width,height,0),(0,height,0)], [], [(0,1,2,3)])
+    uv = mesh.uv_layers.new(name="Полный рисунок UV")
+    for item, coord in zip(uv.data, [(0,0),(1,0),(1,1),(0,1)]):
+        item.uv = coord
+    obj = bpy.data.objects.new(name, mesh)
+    col.objects.link(obj)
+    obj.location = (x0,y0,z)
+    obj.data.materials.append(mat)
+    return obj
+
+background = plane("Фон — без неподвижной ноги", -9.6,-5.4,19.2,10.8,0,material("background-clean.png"),cols["01 Очищенный фон"])
+specs = [
+    ("Мародёр", "marauder-left-v2.png", (1295,1215), (61,54,1230,1181), -8.6,3.1,-3.7,1.5),
+    ("Зерглинг", "zergling.png", (1536,1024), (100,30,1512,1005), -5.0,1.9,-3.7,1.6),
+    ("Зилот", "zealot.png", (1188,1324), (13,18,1176,1302), -1.8,3.2,-3.7,1.7),
+    ("Гидралиск", "hydralisk.png", (1536,1024), (75,8,1502,1010), 1.1,3.35,-3.7,1.8),
+    ("Ультралиск", "ultralisk.png", (1536,1024), (43,12,1498,1003), -0.7,14.0,-3.9,1.0),
+]
+units = []
+for name, filename, size, bounds, left, visible_height, ground, z in specs:
+    iw, ih = size
+    xmin,ymin,xmax,ymax = bounds
+    scale = visible_height / (ymax-ymin)
+    col = cols["03 Ультралиск — гигант"] if name == "Ультралиск" else cols["02 Новые юниты"]
+    root = bpy.data.objects.new(name + " — отдельный юнит", None)
+    col.objects.link(root)
+    root.location = (left,ground,z)
+    root["unit"] = name
+    root["source_image"] = filename
+    root["visible_height"] = visible_height
+    root["motion_contract"] = {"Мародёр":"human run","Зерглинг":"four-legged canine gallop","Зилот":"springy kangaroo-like legs","Гидралиск":"serpent slither, no legs","Ультралиск":"massive heavy quadrupedal locomotion"}[name]
+    obj = plane(name + " — полный рисунок", -xmin*scale,-(ih-ymax)*scale,iw*scale,ih*scale,0,material(filename),col)
+    obj.parent = root
+    root["visible_bounds_world"] = [left,ground,left+(xmax-xmin)*scale,ground+visible_height]
+    units.append(root)
+ultra = next(o for o in units if o["unit"] == "Ультралиск")
+for obj in bpy.context.view_layer.objects:
+    obj.select_set(False)
+ultra.select_set(True)
+bpy.context.view_layer.objects.active = ultra
+scene.frame_set(1)
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type == "VIEW_3D":
+            area.spaces.active.region_3d.view_perspective = "CAMERA"
+            area.spaces.active.overlay.show_overlays = False
+            modes = [i.identifier for i in area.spaces.active.shading.bl_rna.properties["type"].enum_items]
+            if "MATERIAL" in modes:
+                area.spaces.active.shading.type = modes[modes.index("MATERIAL")]
+scene.render.image_settings.file_format = next(i.identifier for i in scene.render.image_settings.bl_rna.properties["file_format"].enum_items if i.identifier == "PNG")
+scene.render.filepath = ROOT + "/preview.png"
+scene.render.resolution_percentage = 50
+bpy.ops.render.render(write_still=True)
+scene.render.resolution_percentage = 100
+assert len(old_scene.objects) == old_objects
+bpy.ops.wm.save_as_mainfile(filepath=ROOT + "/BRAT_OK_giant_unit_v1.blend", relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"scene":scene.name,"old_scene_objects":len(old_scene.objects),"new_scene_objects":len(scene.objects),"unit_count":len(units),"ultralisk_visible_bounds":list(ultra["visible_bounds_world"]),"ultralisk_to_camera_height":14/10.8,"ultralisk_to_marauder_height":14/3.1,"images":[{"file":n.image.filepath,"packed":bool(n.image.packed_file)} for o in scene.objects if o.type=="MESH" for mat in o.data.materials for n in mat.node_tree.nodes if n.type=="TEX_IMAGE"]},ensure_ascii=False))
+

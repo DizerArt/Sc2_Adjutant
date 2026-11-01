@@ -1,0 +1,19 @@
+import bpy,json
+s=bpy.context.scene
+if s.name!="BRAT_OK — зерглинг: галоп": raise RuntimeError("Scene changed.")
+s.render.resolution_percentage=50
+states=[]
+for frame in range(1,25):
+    s.frame_set(frame)
+    visible=[o.get("phase_index") for o in s.objects if o.get("phase_index") is not None and not o.hide_render]
+    if len(visible)!=1: raise RuntimeError("Pose visibility is not unique.")
+    states.append(visible[0])
+    s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-zergling-run-v1/frames/frame-"+str(frame-1).zfill(2)+".png"
+    bpy.ops.render.render(write_still=True)
+s.frame_set(25)
+s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-zergling-run-v1/loop-end.png"
+bpy.ops.render.render(write_still=True)
+s.frame_set(7)
+s.render.resolution_percentage=100
+print(json.dumps({"rendered":24,"visible_sequence":states,"cycle_end_pose":[o.get("phase_index") for o in s.objects if o.get("phase_index") is not None and not o.hide_render]}))
+

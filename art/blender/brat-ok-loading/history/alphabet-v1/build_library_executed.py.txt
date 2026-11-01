@@ -1,0 +1,4291 @@
+import bpy, json, math
+layout = json.loads(r'''{
+  "version": 2,
+  "grid": [
+    6,
+    5
+  ],
+  "adaptive_geometry": true,
+  "alpha_threshold": 16,
+  "padding_max_px": 8,
+  "identity_source": "fixed requested position order; parent visual review is independent; no OCR",
+  "normalization": {
+    "capital_reference_px": 183,
+    "lowercase_x_height_reference_px": 117,
+    "lowercase_target_x_height_ratio": 0.68,
+    "method": "common geometry scale per row; retain natural widths/heights, Q and lowercase descenders; no raster modifications",
+    "baseline_rows_global_y": {
+      "upper-row-0": 261.0,
+      "upper-row-1": 485.0,
+      "upper-row-2": 707,
+      "upper-row-3": 917.0,
+      "upper-row-4": 1102.0,
+      "lower-row-0": 362.0,
+      "lower-row-1": 559.5,
+      "lower-row-2": 757.0,
+      "lower-row-3": 952.0,
+      "lower-row-4": 1124
+    },
+    "row_scales": {
+      "upper-row-0": {
+        "scale": 1.0,
+        "reference_height_px": 183.0,
+        "xheight_fallback_to_atlas": false
+      },
+      "upper-row-1": {
+        "scale": 0.9812332439678284,
+        "reference_height_px": 186.5,
+        "xheight_fallback_to_atlas": false
+      },
+      "upper-row-2": {
+        "scale": 0.973404255319149,
+        "reference_height_px": 188,
+        "xheight_fallback_to_atlas": false
+      },
+      "upper-row-3": {
+        "scale": 1.0397727272727273,
+        "reference_height_px": 176.0,
+        "xheight_fallback_to_atlas": false
+      },
+      "upper-row-4": {
+        "scale": 1.161904761904762,
+        "reference_height_px": 157.5,
+        "xheight_fallback_to_atlas": false
+      },
+      "lower-row-0": {
+        "scale": 1.1210810810810812,
+        "reference_height_px": 111,
+        "xheight_fallback_to_atlas": false
+      },
+      "lower-row-1": {
+        "scale": 1.0635897435897437,
+        "reference_height_px": 117,
+        "xheight_fallback_to_atlas": true
+      },
+      "lower-row-2": {
+        "scale": 1.0820869565217393,
+        "reference_height_px": 115.0,
+        "xheight_fallback_to_atlas": false
+      },
+      "lower-row-3": {
+        "scale": 1.0545762711864408,
+        "reference_height_px": 118,
+        "xheight_fallback_to_atlas": false
+      },
+      "lower-row-4": {
+        "scale": 1.0635897435897437,
+        "reference_height_px": 117,
+        "xheight_fallback_to_atlas": false
+      }
+    }
+  },
+  "glyphs": [
+    {
+      "id": "upper-A",
+      "char": "A",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 0,
+      "cellrect": [
+        0,
+        0,
+        256,
+        280
+      ],
+      "bbox_global": [
+        42,
+        79,
+        247,
+        261
+      ],
+      "bbox_local": [
+        42,
+        79,
+        247,
+        261
+      ],
+      "paddedrect": [
+        34,
+        71,
+        255,
+        269
+      ],
+      "uvrect": [
+        0.024745269286754003,
+        0.7650655021834061,
+        0.185589519650655,
+        0.9379912663755459
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 205,
+      "visible_height_px": 182,
+      "pixels_alpha_above_16": 24603,
+      "alpha_component_label": 1,
+      "distance_to_cell_border_px": {
+        "left": 42,
+        "top": 79,
+        "right": 9,
+        "bottom": 19
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        144.5,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 182.0,
+      "normalized_advance_px": 215.98,
+      "ascent_px": 182.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-B",
+      "char": "B",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 1,
+      "cellrect": [
+        256,
+        0,
+        469,
+        280
+      ],
+      "bbox_global": [
+        266,
+        78,
+        452,
+        261
+      ],
+      "bbox_local": [
+        10,
+        78,
+        196,
+        261
+      ],
+      "paddedrect": [
+        258,
+        70,
+        460,
+        269
+      ],
+      "uvrect": [
+        0.18777292576419213,
+        0.7650655021834061,
+        0.33478893740902477,
+        0.9388646288209607
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 186,
+      "visible_height_px": 183,
+      "pixels_alpha_above_16": 29420,
+      "alpha_component_label": 2,
+      "distance_to_cell_border_px": {
+        "left": 10,
+        "top": 78,
+        "right": 17,
+        "bottom": 19
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        359.0,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 196.98,
+      "ascent_px": 183.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-C",
+      "char": "C",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 2,
+      "cellrect": [
+        469,
+        0,
+        689,
+        279
+      ],
+      "bbox_global": [
+        486,
+        78,
+        676,
+        261
+      ],
+      "bbox_local": [
+        17,
+        78,
+        207,
+        261
+      ],
+      "paddedrect": [
+        478,
+        70,
+        684,
+        269
+      ],
+      "uvrect": [
+        0.34788937409024745,
+        0.7650655021834061,
+        0.4978165938864629,
+        0.9388646288209607
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 190,
+      "visible_height_px": 183,
+      "pixels_alpha_above_16": 28784,
+      "alpha_component_label": 3,
+      "distance_to_cell_border_px": {
+        "left": 17,
+        "top": 78,
+        "right": 13,
+        "bottom": 18
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        581.0,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 200.98,
+      "ascent_px": 183.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-D",
+      "char": "D",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 3,
+      "cellrect": [
+        689,
+        0,
+        910,
+        279
+      ],
+      "bbox_global": [
+        703,
+        78,
+        891,
+        261
+      ],
+      "bbox_local": [
+        14,
+        78,
+        202,
+        261
+      ],
+      "paddedrect": [
+        695,
+        70,
+        899,
+        269
+      ],
+      "uvrect": [
+        0.5058224163027657,
+        0.7650655021834061,
+        0.6542940320232896,
+        0.9388646288209607
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 188,
+      "visible_height_px": 183,
+      "pixels_alpha_above_16": 29737,
+      "alpha_component_label": 4,
+      "distance_to_cell_border_px": {
+        "left": 14,
+        "top": 78,
+        "right": 19,
+        "bottom": 18
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        797.0,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 198.98,
+      "ascent_px": 183.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-E",
+      "char": "E",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 4,
+      "cellrect": [
+        910,
+        0,
+        1138,
+        279
+      ],
+      "bbox_global": [
+        930,
+        78,
+        1120,
+        261
+      ],
+      "bbox_local": [
+        20,
+        78,
+        210,
+        261
+      ],
+      "paddedrect": [
+        922,
+        70,
+        1128,
+        269
+      ],
+      "uvrect": [
+        0.6710334788937409,
+        0.7650655021834061,
+        0.8209606986899564,
+        0.9388646288209607
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 190,
+      "visible_height_px": 183,
+      "pixels_alpha_above_16": 29704,
+      "alpha_component_label": 5,
+      "distance_to_cell_border_px": {
+        "left": 20,
+        "top": 78,
+        "right": 18,
+        "bottom": 18
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        1025.0,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 200.98,
+      "ascent_px": 183.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-F",
+      "char": "F",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 0,
+      "column": 5,
+      "cellrect": [
+        1138,
+        0,
+        1374,
+        280
+      ],
+      "bbox_global": [
+        1157,
+        78,
+        1332,
+        261
+      ],
+      "bbox_local": [
+        19,
+        78,
+        194,
+        261
+      ],
+      "paddedrect": [
+        1149,
+        70,
+        1340,
+        269
+      ],
+      "uvrect": [
+        0.8362445414847162,
+        0.7650655021834061,
+        0.975254730713246,
+        0.9388646288209607
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 175,
+      "visible_height_px": 183,
+      "pixels_alpha_above_16": 22634,
+      "alpha_component_label": 6,
+      "distance_to_cell_border_px": {
+        "left": 19,
+        "top": 78,
+        "right": 42,
+        "bottom": 19
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 261.0,
+      "baseline_local_y": 261.0,
+      "anchor": [
+        1244.5,
+        261.0
+      ],
+      "render_scale": 1.0,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 185.98,
+      "ascent_px": 183.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-G",
+      "char": "G",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 0,
+      "cellrect": [
+        0,
+        280,
+        251,
+        502
+      ],
+      "bbox_global": [
+        47,
+        299,
+        228,
+        485
+      ],
+      "bbox_local": [
+        47,
+        19,
+        228,
+        205
+      ],
+      "paddedrect": [
+        39,
+        291,
+        236,
+        493
+      ],
+      "uvrect": [
+        0.028384279475982533,
+        0.5694323144104804,
+        0.1717612809315866,
+        0.7458515283842795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 181,
+      "visible_height_px": 186,
+      "pixels_alpha_above_16": 31293,
+      "alpha_component_label": 7,
+      "distance_to_cell_border_px": {
+        "left": 47,
+        "top": 19,
+        "right": 23,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 205.0,
+      "anchor": [
+        137.5,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 182.50938337801608,
+      "normalized_advance_px": 188.58321715817692,
+      "ascent_px": 186.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-H",
+      "char": "H",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 1,
+      "cellrect": [
+        251,
+        280,
+        499,
+        502
+      ],
+      "bbox_global": [
+        275,
+        299,
+        460,
+        485
+      ],
+      "bbox_local": [
+        24,
+        19,
+        209,
+        205
+      ],
+      "paddedrect": [
+        267,
+        291,
+        468,
+        493
+      ],
+      "uvrect": [
+        0.1943231441048035,
+        0.5694323144104804,
+        0.3406113537117904,
+        0.7458515283842795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 185,
+      "visible_height_px": 186,
+      "pixels_alpha_above_16": 30505,
+      "alpha_component_label": 8,
+      "distance_to_cell_border_px": {
+        "left": 24,
+        "top": 19,
+        "right": 39,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 205.0,
+      "anchor": [
+        367.5,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 182.50938337801608,
+      "normalized_advance_px": 192.50815013404824,
+      "ascent_px": 186.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-I",
+      "char": "I",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 2,
+      "cellrect": [
+        499,
+        279,
+        658,
+        502
+      ],
+      "bbox_global": [
+        538,
+        297,
+        624,
+        485
+      ],
+      "bbox_local": [
+        39,
+        18,
+        125,
+        206
+      ],
+      "paddedrect": [
+        530,
+        289,
+        632,
+        493
+      ],
+      "uvrect": [
+        0.38573508005822416,
+        0.5694323144104804,
+        0.45997088791848617,
+        0.7475982532751091
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 86,
+      "visible_height_px": 188,
+      "pixels_alpha_above_16": 16049,
+      "alpha_component_label": 9,
+      "distance_to_cell_border_px": {
+        "left": 39,
+        "top": 18,
+        "right": 34,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 206.0,
+      "anchor": [
+        581.0,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 184.47184986595175,
+      "normalized_advance_px": 95.36605898123325,
+      "ascent_px": 188.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-J",
+      "char": "J",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 3,
+      "cellrect": [
+        658,
+        279,
+        902,
+        502
+      ],
+      "bbox_global": [
+        692,
+        298,
+        880,
+        485
+      ],
+      "bbox_local": [
+        34,
+        19,
+        222,
+        206
+      ],
+      "paddedrect": [
+        684,
+        290,
+        888,
+        493
+      ],
+      "uvrect": [
+        0.4978165938864629,
+        0.5694323144104804,
+        0.6462882096069869,
+        0.7467248908296944
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 188,
+      "visible_height_px": 187,
+      "pixels_alpha_above_16": 22711,
+      "alpha_component_label": 10,
+      "distance_to_cell_border_px": {
+        "left": 34,
+        "top": 19,
+        "right": 22,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 206.0,
+      "anchor": [
+        786.0,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 183.49061662198392,
+      "normalized_advance_px": 195.45184986595174,
+      "ascent_px": 187.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-K",
+      "char": "K",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 4,
+      "cellrect": [
+        902,
+        279,
+        1141,
+        502
+      ],
+      "bbox_global": [
+        924,
+        298,
+        1122,
+        485
+      ],
+      "bbox_local": [
+        22,
+        19,
+        220,
+        206
+      ],
+      "paddedrect": [
+        916,
+        290,
+        1130,
+        493
+      ],
+      "uvrect": [
+        0.6666666666666666,
+        0.5694323144104804,
+        0.8224163027656477,
+        0.7467248908296944
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 198,
+      "visible_height_px": 187,
+      "pixels_alpha_above_16": 29448,
+      "alpha_component_label": 11,
+      "distance_to_cell_border_px": {
+        "left": 22,
+        "top": 19,
+        "right": 19,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 206.0,
+      "anchor": [
+        1023.0,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 183.49061662198392,
+      "normalized_advance_px": 205.26418230563002,
+      "ascent_px": 187.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-L",
+      "char": "L",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 1,
+      "column": 5,
+      "cellrect": [
+        1141,
+        280,
+        1374,
+        502
+      ],
+      "bbox_global": [
+        1160,
+        299,
+        1344,
+        485
+      ],
+      "bbox_local": [
+        19,
+        19,
+        203,
+        205
+      ],
+      "paddedrect": [
+        1152,
+        291,
+        1352,
+        493
+      ],
+      "uvrect": [
+        0.8384279475982532,
+        0.5694323144104804,
+        0.9839883551673945,
+        0.7458515283842795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 184,
+      "visible_height_px": 186,
+      "pixels_alpha_above_16": 20165,
+      "alpha_component_label": 12,
+      "distance_to_cell_border_px": {
+        "left": 19,
+        "top": 19,
+        "right": 30,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 485.0,
+      "baseline_local_y": 205.0,
+      "anchor": [
+        1252.0,
+        485.0
+      ],
+      "render_scale": 0.9812332439678284,
+      "normalized_visible_height_px": 182.50938337801608,
+      "normalized_advance_px": 191.52691689008043,
+      "ascent_px": 186.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-M",
+      "char": "M",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 0,
+      "cellrect": [
+        0,
+        502,
+        255,
+        724
+      ],
+      "bbox_global": [
+        27,
+        520,
+        238,
+        707
+      ],
+      "bbox_local": [
+        27,
+        18,
+        238,
+        205
+      ],
+      "paddedrect": [
+        19,
+        512,
+        246,
+        715
+      ],
+      "uvrect": [
+        0.013828238719068414,
+        0.37554585152838427,
+        0.17903930131004367,
+        0.5528384279475982
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 211,
+      "visible_height_px": 187,
+      "pixels_alpha_above_16": 33305,
+      "alpha_component_label": 13,
+      "distance_to_cell_border_px": {
+        "left": 27,
+        "top": 18,
+        "right": 17,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        132.5,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 182.02659574468086,
+      "normalized_advance_px": 216.36829787234043,
+      "ascent_px": 187,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-N",
+      "char": "N",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 1,
+      "cellrect": [
+        255,
+        502,
+        470,
+        724
+      ],
+      "bbox_global": [
+        273,
+        520,
+        454,
+        707
+      ],
+      "bbox_local": [
+        18,
+        18,
+        199,
+        205
+      ],
+      "paddedrect": [
+        265,
+        512,
+        462,
+        715
+      ],
+      "uvrect": [
+        0.19286754002911208,
+        0.37554585152838427,
+        0.33624454148471616,
+        0.5528384279475982
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 181,
+      "visible_height_px": 187,
+      "pixels_alpha_above_16": 31625,
+      "alpha_component_label": 14,
+      "distance_to_cell_border_px": {
+        "left": 18,
+        "top": 18,
+        "right": 16,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        363.5,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 182.02659574468086,
+      "normalized_advance_px": 187.16617021276596,
+      "ascent_px": 187,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-O",
+      "char": "O",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 2,
+      "cellrect": [
+        470,
+        502,
+        684,
+        724
+      ],
+      "bbox_global": [
+        487,
+        519,
+        671,
+        707
+      ],
+      "bbox_local": [
+        17,
+        17,
+        201,
+        205
+      ],
+      "paddedrect": [
+        479,
+        511,
+        679,
+        715
+      ],
+      "uvrect": [
+        0.3486171761280932,
+        0.37554585152838427,
+        0.49417758369723436,
+        0.5537117903930131
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 184,
+      "visible_height_px": 188,
+      "pixels_alpha_above_16": 30434,
+      "alpha_component_label": 15,
+      "distance_to_cell_border_px": {
+        "left": 17,
+        "top": 17,
+        "right": 13,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        579.0,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 190.0863829787234,
+      "ascent_px": 188,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-P",
+      "char": "P",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 3,
+      "cellrect": [
+        684,
+        502,
+        901,
+        724
+      ],
+      "bbox_global": [
+        698,
+        519,
+        886,
+        707
+      ],
+      "bbox_local": [
+        14,
+        17,
+        202,
+        205
+      ],
+      "paddedrect": [
+        690,
+        511,
+        894,
+        715
+      ],
+      "uvrect": [
+        0.5021834061135371,
+        0.37554585152838427,
+        0.6506550218340611,
+        0.5537117903930131
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 188,
+      "visible_height_px": 188,
+      "pixels_alpha_above_16": 26216,
+      "alpha_component_label": 16,
+      "distance_to_cell_border_px": {
+        "left": 14,
+        "top": 17,
+        "right": 15,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        792.0,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 193.98,
+      "ascent_px": 188,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-Q",
+      "char": "Q",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 4,
+      "cellrect": [
+        901,
+        502,
+        1134,
+        729
+      ],
+      "bbox_global": [
+        917,
+        519,
+        1122,
+        718
+      ],
+      "bbox_local": [
+        16,
+        17,
+        221,
+        216
+      ],
+      "paddedrect": [
+        909,
+        511,
+        1130,
+        726
+      ],
+      "uvrect": [
+        0.6615720524017468,
+        0.36593886462882097,
+        0.8224163027656477,
+        0.5537117903930131
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 205,
+      "visible_height_px": 199,
+      "pixels_alpha_above_16": 34030,
+      "alpha_component_label": 17,
+      "distance_to_cell_border_px": {
+        "left": 16,
+        "top": 17,
+        "right": 12,
+        "bottom": 11
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital-descender",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        1019.5,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 193.70744680851064,
+      "normalized_advance_px": 210.52787234042552,
+      "ascent_px": 188,
+      "descent_px": 11
+    },
+    {
+      "id": "upper-R",
+      "char": "R",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 2,
+      "column": 5,
+      "cellrect": [
+        1134,
+        502,
+        1374,
+        724
+      ],
+      "bbox_global": [
+        1146,
+        519,
+        1349,
+        707
+      ],
+      "bbox_local": [
+        12,
+        17,
+        215,
+        205
+      ],
+      "paddedrect": [
+        1138,
+        511,
+        1357,
+        715
+      ],
+      "uvrect": [
+        0.8282387190684134,
+        0.37554585152838427,
+        0.987627365356623,
+        0.5537117903930131
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 203,
+      "visible_height_px": 188,
+      "pixels_alpha_above_16": 31020,
+      "alpha_component_label": 18,
+      "distance_to_cell_border_px": {
+        "left": 12,
+        "top": 17,
+        "right": 25,
+        "bottom": 17
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 707,
+      "baseline_local_y": 205,
+      "anchor": [
+        1247.5,
+        707
+      ],
+      "render_scale": 0.973404255319149,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 208.58106382978724,
+      "ascent_px": 188,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-S",
+      "char": "S",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 0,
+      "cellrect": [
+        0,
+        724,
+        238,
+        930
+      ],
+      "bbox_global": [
+        31,
+        741,
+        225,
+        917
+      ],
+      "bbox_local": [
+        31,
+        17,
+        225,
+        193
+      ],
+      "paddedrect": [
+        23,
+        733,
+        233,
+        925
+      ],
+      "uvrect": [
+        0.016739446870451237,
+        0.19213973799126638,
+        0.16957787481804948,
+        0.359825327510917
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 194,
+      "visible_height_px": 176,
+      "pixels_alpha_above_16": 29168,
+      "alpha_component_label": 19,
+      "distance_to_cell_border_px": {
+        "left": 31,
+        "top": 17,
+        "right": 13,
+        "bottom": 13
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 193.0,
+      "anchor": [
+        128.0,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 212.69590909090908,
+      "ascent_px": 176.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-T",
+      "char": "T",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 1,
+      "cellrect": [
+        238,
+        724,
+        463,
+        931
+      ],
+      "bbox_global": [
+        252,
+        742,
+        450,
+        917
+      ],
+      "bbox_local": [
+        14,
+        18,
+        212,
+        193
+      ],
+      "paddedrect": [
+        244,
+        734,
+        458,
+        925
+      ],
+      "uvrect": [
+        0.17758369723435224,
+        0.19213973799126638,
+        0.3333333333333333,
+        0.3589519650655022
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 198,
+      "visible_height_px": 175,
+      "pixels_alpha_above_16": 18985,
+      "alpha_component_label": 20,
+      "distance_to_cell_border_px": {
+        "left": 14,
+        "top": 18,
+        "right": 13,
+        "bottom": 14
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 193.0,
+      "anchor": [
+        351.0,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 181.96022727272728,
+      "normalized_advance_px": 216.855,
+      "ascent_px": 175.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-U",
+      "char": "U",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 2,
+      "cellrect": [
+        463,
+        724,
+        674,
+        983
+      ],
+      "bbox_global": [
+        476,
+        741,
+        662,
+        917
+      ],
+      "bbox_local": [
+        13,
+        17,
+        199,
+        193
+      ],
+      "paddedrect": [
+        468,
+        733,
+        670,
+        925
+      ],
+      "uvrect": [
+        0.3406113537117904,
+        0.19213973799126638,
+        0.487627365356623,
+        0.359825327510917
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 186,
+      "visible_height_px": 176,
+      "pixels_alpha_above_16": 28370,
+      "alpha_component_label": 21,
+      "distance_to_cell_border_px": {
+        "left": 13,
+        "top": 17,
+        "right": 12,
+        "bottom": 66
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 193.0,
+      "anchor": [
+        569.0,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 204.37772727272727,
+      "ascent_px": 176.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-V",
+      "char": "V",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 3,
+      "cellrect": [
+        674,
+        724,
+        895,
+        930
+      ],
+      "bbox_global": [
+        686,
+        742,
+        889,
+        917
+      ],
+      "bbox_local": [
+        12,
+        18,
+        215,
+        193
+      ],
+      "paddedrect": [
+        678,
+        734,
+        895,
+        925
+      ],
+      "uvrect": [
+        0.49344978165938863,
+        0.19213973799126638,
+        0.6513828238719068,
+        0.3589519650655022
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        6,
+        8
+      ],
+      "visible_width_px": 203,
+      "visible_height_px": 175,
+      "pixels_alpha_above_16": 22606,
+      "alpha_component_label": 22,
+      "distance_to_cell_border_px": {
+        "left": 12,
+        "top": 18,
+        "right": 6,
+        "bottom": 13
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 193.0,
+      "anchor": [
+        787.5,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 181.96022727272728,
+      "normalized_advance_px": 222.05386363636364,
+      "ascent_px": 175.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-W",
+      "char": "W",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 4,
+      "cellrect": [
+        895,
+        729,
+        1138,
+        930
+      ],
+      "bbox_global": [
+        901,
+        741,
+        1136,
+        917
+      ],
+      "bbox_local": [
+        6,
+        12,
+        241,
+        188
+      ],
+      "paddedrect": [
+        895,
+        733,
+        1138,
+        925
+      ],
+      "uvrect": [
+        0.6513828238719068,
+        0.19213973799126638,
+        0.8282387190684134,
+        0.359825327510917
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        6,
+        8,
+        2,
+        8
+      ],
+      "visible_width_px": 235,
+      "visible_height_px": 176,
+      "pixels_alpha_above_16": 32865,
+      "alpha_component_label": 23,
+      "distance_to_cell_border_px": {
+        "left": 6,
+        "top": 12,
+        "right": 2,
+        "bottom": 13
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 188.0,
+      "anchor": [
+        1018.5,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 255.3265909090909,
+      "ascent_px": 176.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-X",
+      "char": "X",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 3,
+      "column": 5,
+      "cellrect": [
+        1138,
+        724,
+        1374,
+        930
+      ],
+      "bbox_global": [
+        1140,
+        741,
+        1345,
+        917
+      ],
+      "bbox_local": [
+        2,
+        17,
+        207,
+        193
+      ],
+      "paddedrect": [
+        1138,
+        733,
+        1353,
+        925
+      ],
+      "uvrect": [
+        0.8282387190684134,
+        0.19213973799126638,
+        0.9847161572052402,
+        0.359825327510917
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        2,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 205,
+      "visible_height_px": 176,
+      "pixels_alpha_above_16": 25818,
+      "alpha_component_label": 24,
+      "distance_to_cell_border_px": {
+        "left": 2,
+        "top": 17,
+        "right": 29,
+        "bottom": 13
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 917.0,
+      "baseline_local_y": 193.0,
+      "anchor": [
+        1242.5,
+        917.0
+      ],
+      "render_scale": 1.0397727272727273,
+      "normalized_visible_height_px": 183.0,
+      "normalized_advance_px": 224.13340909090908,
+      "ascent_px": 176.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-Y",
+      "char": "Y",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 4,
+      "column": 0,
+      "cellrect": [
+        0,
+        930,
+        244,
+        1145
+      ],
+      "bbox_global": [
+        32,
+        944,
+        232,
+        1102
+      ],
+      "bbox_local": [
+        32,
+        14,
+        232,
+        172
+      ],
+      "paddedrect": [
+        24,
+        936,
+        240,
+        1110
+      ],
+      "uvrect": [
+        0.017467248908296942,
+        0.03056768558951961,
+        0.17467248908296942,
+        0.18253275109170308
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 200,
+      "visible_height_px": 158,
+      "pixels_alpha_above_16": 17964,
+      "alpha_component_label": 25,
+      "distance_to_cell_border_px": {
+        "left": 32,
+        "top": 14,
+        "right": 12,
+        "bottom": 43
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 1102.0,
+      "baseline_local_y": 172.0,
+      "anchor": [
+        132.0,
+        1102.0
+      ],
+      "render_scale": 1.161904761904762,
+      "normalized_visible_height_px": 183.5809523809524,
+      "normalized_advance_px": 243.3609523809524,
+      "ascent_px": 158.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-Z",
+      "char": "Z",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 4,
+      "column": 1,
+      "cellrect": [
+        244,
+        931,
+        460,
+        1145
+      ],
+      "bbox_global": [
+        256,
+        945,
+        447,
+        1102
+      ],
+      "bbox_local": [
+        12,
+        14,
+        203,
+        171
+      ],
+      "paddedrect": [
+        248,
+        937,
+        455,
+        1110
+      ],
+      "uvrect": [
+        0.1804949053857351,
+        0.03056768558951961,
+        0.3311499272197962,
+        0.18165938864628817
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 191,
+      "visible_height_px": 157,
+      "pixels_alpha_above_16": 23563,
+      "alpha_component_label": 26,
+      "distance_to_cell_border_px": {
+        "left": 12,
+        "top": 14,
+        "right": 13,
+        "bottom": 43
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "capital",
+      "baseline_global_y": 1102.0,
+      "baseline_local_y": 171.0,
+      "anchor": [
+        351.5,
+        1102.0
+      ],
+      "render_scale": 1.161904761904762,
+      "normalized_visible_height_px": 182.41904761904763,
+      "normalized_advance_px": 232.90380952380954,
+      "ascent_px": 157.0,
+      "descent_px": 0
+    },
+    {
+      "id": "upper-_",
+      "char": "_",
+      "case": "upper",
+      "file": "uppercase.png",
+      "size": [
+        1374,
+        1145
+      ],
+      "row": 4,
+      "column": 2,
+      "cellrect": [
+        460,
+        983,
+        690,
+        1145
+      ],
+      "bbox_global": [
+        474,
+        1050,
+        682,
+        1105
+      ],
+      "bbox_local": [
+        14,
+        67,
+        222,
+        122
+      ],
+      "paddedrect": [
+        466,
+        1042,
+        690,
+        1113
+      ],
+      "uvrect": [
+        0.33915574963609896,
+        0.027947598253275086,
+        0.5021834061135371,
+        0.08995633187772922
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 208,
+      "visible_height_px": 55,
+      "pixels_alpha_above_16": 10043,
+      "alpha_component_label": 27,
+      "distance_to_cell_border_px": {
+        "left": 14,
+        "top": 67,
+        "right": 8,
+        "bottom": 40
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "underscore",
+      "baseline_global_y": 1102.0,
+      "baseline_local_y": 119.0,
+      "anchor": [
+        578.0,
+        1102.0
+      ],
+      "render_scale": 1.161904761904762,
+      "normalized_visible_height_px": 63.90476190476191,
+      "normalized_advance_px": 252.6561904761905,
+      "ascent_px": 52.0,
+      "descent_px": 3.0
+    },
+    {
+      "id": "lower-a",
+      "char": "a",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 0,
+      "cellrect": [
+        0,
+        0,
+        237,
+        400
+      ],
+      "bbox_global": [
+        59,
+        251,
+        208,
+        361
+      ],
+      "bbox_local": [
+        59,
+        251,
+        208,
+        361
+      ],
+      "paddedrect": [
+        51,
+        243,
+        216,
+        369
+      ],
+      "uvrect": [
+        0.04066985645933014,
+        0.7057416267942584,
+        0.1722488038277512,
+        0.80622009569378
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 149,
+      "visible_height_px": 110,
+      "pixels_alpha_above_16": 14368,
+      "alpha_component_label": 1,
+      "distance_to_cell_border_px": {
+        "left": 59,
+        "top": 251,
+        "right": 29,
+        "bottom": 39
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        133.5,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 123.31891891891892,
+      "normalized_advance_px": 178.0210810810811,
+      "ascent_px": 111.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-b",
+      "char": "b",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 1,
+      "cellrect": [
+        237,
+        0,
+        435,
+        384
+      ],
+      "bbox_global": [
+        266,
+        212,
+        410,
+        362
+      ],
+      "bbox_local": [
+        29,
+        212,
+        173,
+        362
+      ],
+      "paddedrect": [
+        258,
+        204,
+        418,
+        370
+      ],
+      "uvrect": [
+        0.20574162679425836,
+        0.7049441786283892,
+        0.3333333333333333,
+        0.8373205741626795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 144,
+      "visible_height_px": 150,
+      "pixels_alpha_above_16": 17516,
+      "alpha_component_label": 2,
+      "distance_to_cell_border_px": {
+        "left": 29,
+        "top": 212,
+        "right": 25,
+        "bottom": 22
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        338.0,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 168.1621621621622,
+      "normalized_advance_px": 172.4156756756757,
+      "ascent_px": 150.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-c",
+      "char": "c",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 2,
+      "cellrect": [
+        435,
+        0,
+        631,
+        384
+      ],
+      "bbox_global": [
+        460,
+        251,
+        608,
+        362
+      ],
+      "bbox_local": [
+        25,
+        251,
+        173,
+        362
+      ],
+      "paddedrect": [
+        452,
+        243,
+        616,
+        370
+      ],
+      "uvrect": [
+        0.36044657097288674,
+        0.7049441786283892,
+        0.49122807017543857,
+        0.80622009569378
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 148,
+      "visible_height_px": 111,
+      "pixels_alpha_above_16": 14293,
+      "alpha_component_label": 3,
+      "distance_to_cell_border_px": {
+        "left": 25,
+        "top": 251,
+        "right": 23,
+        "bottom": 22
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        534.0,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 176.9,
+      "ascent_px": 111.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-d",
+      "char": "d",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 3,
+      "cellrect": [
+        631,
+        0,
+        824,
+        383
+      ],
+      "bbox_global": [
+        655,
+        212,
+        794,
+        362
+      ],
+      "bbox_local": [
+        24,
+        212,
+        163,
+        362
+      ],
+      "paddedrect": [
+        647,
+        204,
+        802,
+        370
+      ],
+      "uvrect": [
+        0.5159489633173844,
+        0.7049441786283892,
+        0.6395534290271132,
+        0.8373205741626795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 139,
+      "visible_height_px": 150,
+      "pixels_alpha_above_16": 17278,
+      "alpha_component_label": 4,
+      "distance_to_cell_border_px": {
+        "left": 24,
+        "top": 212,
+        "right": 30,
+        "bottom": 21
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        724.5,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 168.1621621621622,
+      "normalized_advance_px": 166.81027027027028,
+      "ascent_px": 150.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-e",
+      "char": "e",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 4,
+      "cellrect": [
+        824,
+        0,
+        1040,
+        383
+      ],
+      "bbox_global": [
+        854,
+        250,
+        1010,
+        362
+      ],
+      "bbox_local": [
+        30,
+        250,
+        186,
+        362
+      ],
+      "paddedrect": [
+        846,
+        242,
+        1018,
+        370
+      ],
+      "uvrect": [
+        0.6746411483253588,
+        0.7049441786283892,
+        0.8118022328548644,
+        0.8070175438596492
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 156,
+      "visible_height_px": 112,
+      "pixels_alpha_above_16": 15883,
+      "alpha_component_label": 5,
+      "distance_to_cell_border_px": {
+        "left": 30,
+        "top": 250,
+        "right": 30,
+        "bottom": 21
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        932.0,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 125.56108108108108,
+      "normalized_advance_px": 185.86864864864864,
+      "ascent_px": 112.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-f",
+      "char": "f",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 0,
+      "column": 5,
+      "cellrect": [
+        1040,
+        0,
+        1254,
+        383
+      ],
+      "bbox_global": [
+        1070,
+        212,
+        1196,
+        362
+      ],
+      "bbox_local": [
+        30,
+        212,
+        156,
+        362
+      ],
+      "paddedrect": [
+        1062,
+        204,
+        1204,
+        370
+      ],
+      "uvrect": [
+        0.84688995215311,
+        0.7049441786283892,
+        0.960127591706539,
+        0.8373205741626795
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 126,
+      "visible_height_px": 150,
+      "pixels_alpha_above_16": 13444,
+      "alpha_component_label": 6,
+      "distance_to_cell_border_px": {
+        "left": 30,
+        "top": 212,
+        "right": 58,
+        "bottom": 21
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 362.0,
+      "baseline_local_y": 362.0,
+      "anchor": [
+        1133.0,
+        362.0
+      ],
+      "render_scale": 1.1210810810810812,
+      "normalized_visible_height_px": 168.1621621621622,
+      "normalized_advance_px": 152.2362162162162,
+      "ascent_px": 150.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-g",
+      "char": "g",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 0,
+      "cellrect": [
+        0,
+        400,
+        240,
+        609
+      ],
+      "bbox_global": [
+        56,
+        440,
+        205,
+        577
+      ],
+      "bbox_local": [
+        56,
+        40,
+        205,
+        177
+      ],
+      "paddedrect": [
+        48,
+        432,
+        213,
+        585
+      ],
+      "uvrect": [
+        0.03827751196172249,
+        0.5334928229665072,
+        0.16985645933014354,
+        0.6555023923444976
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 149,
+      "visible_height_px": 137,
+      "pixels_alpha_above_16": 18633,
+      "alpha_component_label": 7,
+      "distance_to_cell_border_px": {
+        "left": 56,
+        "top": 40,
+        "right": 35,
+        "bottom": 32
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "descender",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 159.5,
+      "anchor": [
+        130.5,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 145.7117948717949,
+      "normalized_advance_px": 169.4548717948718,
+      "ascent_px": 119.5,
+      "descent_px": 17.5
+    },
+    {
+      "id": "lower-h",
+      "char": "h",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 1,
+      "cellrect": [
+        240,
+        384,
+        457,
+        600
+      ],
+      "bbox_global": [
+        275,
+        406,
+        415,
+        558
+      ],
+      "bbox_local": [
+        35,
+        22,
+        175,
+        174
+      ],
+      "paddedrect": [
+        267,
+        398,
+        423,
+        566
+      ],
+      "uvrect": [
+        0.21291866028708134,
+        0.5486443381180224,
+        0.3373205741626794,
+        0.6826156299840511
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 140,
+      "visible_height_px": 152,
+      "pixels_alpha_above_16": 17907,
+      "alpha_component_label": 8,
+      "distance_to_cell_border_px": {
+        "left": 35,
+        "top": 22,
+        "right": 42,
+        "bottom": 42
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 175.5,
+      "anchor": [
+        345.0,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 161.66564102564104,
+      "normalized_advance_px": 159.88256410256412,
+      "ascent_px": 153.5,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-i",
+      "char": "i",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 2,
+      "cellrect": [
+        457,
+        384,
+        618,
+        601
+      ],
+      "bbox_global": [
+        499,
+        406,
+        565,
+        560
+      ],
+      "bbox_local": [
+        42,
+        22,
+        108,
+        176
+      ],
+      "paddedrect": [
+        491,
+        398,
+        573,
+        568
+      ],
+      "uvrect": [
+        0.3915470494417863,
+        0.5470494417862839,
+        0.4569377990430622,
+        0.6826156299840511
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 66,
+      "visible_height_px": 154,
+      "pixels_alpha_above_16": 9678,
+      "alpha_component_label": 9,
+      "distance_to_cell_border_px": {
+        "left": 42,
+        "top": 22,
+        "right": 53,
+        "bottom": 41
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "dotted-letter",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 175.5,
+      "anchor": [
+        532.0,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 163.79282051282053,
+      "normalized_advance_px": 81.17692307692309,
+      "ascent_px": 153.5,
+      "descent_px": 0.5
+    },
+    {
+      "id": "lower-j",
+      "char": "j",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 3,
+      "cellrect": [
+        618,
+        383,
+        825,
+        605
+      ],
+      "bbox_global": [
+        671,
+        405,
+        780,
+        573
+      ],
+      "bbox_local": [
+        53,
+        22,
+        162,
+        190
+      ],
+      "paddedrect": [
+        663,
+        397,
+        788,
+        581
+      ],
+      "uvrect": [
+        0.5287081339712919,
+        0.536682615629984,
+        0.6283891547049442,
+        0.6834130781499203
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 109,
+      "visible_height_px": 168,
+      "pixels_alpha_above_16": 12178,
+      "alpha_component_label": 10,
+      "distance_to_cell_border_px": {
+        "left": 53,
+        "top": 22,
+        "right": 45,
+        "bottom": 32
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "descender",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 176.5,
+      "anchor": [
+        725.5,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 178.68307692307692,
+      "normalized_advance_px": 126.91128205128206,
+      "ascent_px": 154.5,
+      "descent_px": 13.5
+    },
+    {
+      "id": "lower-k",
+      "char": "k",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 4,
+      "cellrect": [
+        825,
+        383,
+        1060,
+        597
+      ],
+      "bbox_global": [
+        871,
+        405,
+        1021,
+        559
+      ],
+      "bbox_local": [
+        46,
+        22,
+        196,
+        176
+      ],
+      "paddedrect": [
+        863,
+        397,
+        1029,
+        567
+      ],
+      "uvrect": [
+        0.6881977671451356,
+        0.5478468899521531,
+        0.8205741626794258,
+        0.6834130781499203
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 150,
+      "visible_height_px": 154,
+      "pixels_alpha_above_16": 17788,
+      "alpha_component_label": 11,
+      "distance_to_cell_border_px": {
+        "left": 46,
+        "top": 22,
+        "right": 39,
+        "bottom": 38
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 176.5,
+      "anchor": [
+        946.0,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 163.79282051282053,
+      "normalized_advance_px": 170.51846153846154,
+      "ascent_px": 154.5,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-l",
+      "char": "l",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 1,
+      "column": 5,
+      "cellrect": [
+        1060,
+        383,
+        1254,
+        601
+      ],
+      "bbox_global": [
+        1100,
+        405,
+        1187,
+        560
+      ],
+      "bbox_local": [
+        40,
+        22,
+        127,
+        177
+      ],
+      "paddedrect": [
+        1092,
+        397,
+        1195,
+        568
+      ],
+      "uvrect": [
+        0.8708133971291866,
+        0.5470494417862839,
+        0.9529505582137161,
+        0.6834130781499203
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 87,
+      "visible_height_px": 155,
+      "pixels_alpha_above_16": 11286,
+      "alpha_component_label": 12,
+      "distance_to_cell_border_px": {
+        "left": 40,
+        "top": 22,
+        "right": 67,
+        "bottom": 41
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 559.5,
+      "baseline_local_y": 176.5,
+      "anchor": [
+        1143.5,
+        559.5
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 164.85641025641027,
+      "normalized_advance_px": 103.5123076923077,
+      "ascent_px": 154.5,
+      "descent_px": 0.5
+    },
+    {
+      "id": "lower-m",
+      "char": "m",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 0,
+      "cellrect": [
+        0,
+        609,
+        244,
+        795
+      ],
+      "bbox_global": [
+        42,
+        642,
+        224,
+        757
+      ],
+      "bbox_local": [
+        42,
+        33,
+        224,
+        148
+      ],
+      "paddedrect": [
+        34,
+        634,
+        232,
+        765
+      ],
+      "uvrect": [
+        0.02711323763955343,
+        0.38995215311004783,
+        0.1850079744816587,
+        0.4944178628389154
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 182,
+      "visible_height_px": 115,
+      "pixels_alpha_above_16": 20324,
+      "alpha_component_label": 13,
+      "distance_to_cell_border_px": {
+        "left": 42,
+        "top": 33,
+        "right": 20,
+        "bottom": 38
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 148.0,
+      "anchor": [
+        133.0,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 207.91982608695653,
+      "ascent_px": 115.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-n",
+      "char": "n",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 1,
+      "cellrect": [
+        244,
+        600,
+        435,
+        781
+      ],
+      "bbox_global": [
+        264,
+        642,
+        409,
+        757
+      ],
+      "bbox_local": [
+        20,
+        42,
+        165,
+        157
+      ],
+      "paddedrect": [
+        256,
+        634,
+        417,
+        765
+      ],
+      "uvrect": [
+        0.20414673046251994,
+        0.38995215311004783,
+        0.33253588516746413,
+        0.4944178628389154
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 145,
+      "visible_height_px": 115,
+      "pixels_alpha_above_16": 15765,
+      "alpha_component_label": 14,
+      "distance_to_cell_border_px": {
+        "left": 20,
+        "top": 42,
+        "right": 26,
+        "bottom": 24
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 157.0,
+      "anchor": [
+        336.5,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 167.88260869565218,
+      "ascent_px": 115.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-o",
+      "char": "o",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 2,
+      "cellrect": [
+        435,
+        601,
+        641,
+        798
+      ],
+      "bbox_global": [
+        462,
+        642,
+        612,
+        762
+      ],
+      "bbox_local": [
+        27,
+        41,
+        177,
+        161
+      ],
+      "paddedrect": [
+        454,
+        634,
+        620,
+        770
+      ],
+      "uvrect": [
+        0.3620414673046252,
+        0.38596491228070173,
+        0.4944178628389155,
+        0.4944178628389154
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 150,
+      "visible_height_px": 120,
+      "pixels_alpha_above_16": 16359,
+      "alpha_component_label": 15,
+      "distance_to_cell_border_px": {
+        "left": 27,
+        "top": 41,
+        "right": 29,
+        "bottom": 36
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 156.0,
+      "anchor": [
+        537.0,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 129.85043478260872,
+      "normalized_advance_px": 173.29304347826087,
+      "ascent_px": 115.0,
+      "descent_px": 5.0
+    },
+    {
+      "id": "lower-p",
+      "char": "p",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 3,
+      "cellrect": [
+        641,
+        605,
+        841,
+        808
+      ],
+      "bbox_global": [
+        670,
+        638,
+        817,
+        783
+      ],
+      "bbox_local": [
+        29,
+        33,
+        176,
+        178
+      ],
+      "paddedrect": [
+        662,
+        630,
+        825,
+        791
+      ],
+      "uvrect": [
+        0.5279106858054227,
+        0.3692185007974481,
+        0.6578947368421053,
+        0.4976076555023924
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 147,
+      "visible_height_px": 145,
+      "pixels_alpha_above_16": 17826,
+      "alpha_component_label": 16,
+      "distance_to_cell_border_px": {
+        "left": 29,
+        "top": 33,
+        "right": 24,
+        "bottom": 25
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "descender",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 152.0,
+      "anchor": [
+        743.5,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 156.9026086956522,
+      "normalized_advance_px": 170.04678260869565,
+      "ascent_px": 119.0,
+      "descent_px": 26.0
+    },
+    {
+      "id": "lower-q",
+      "char": "q",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 4,
+      "cellrect": [
+        841,
+        597,
+        1052,
+        807
+      ],
+      "bbox_global": [
+        865,
+        635,
+        1026,
+        780
+      ],
+      "bbox_local": [
+        24,
+        38,
+        185,
+        183
+      ],
+      "paddedrect": [
+        857,
+        627,
+        1034,
+        788
+      ],
+      "uvrect": [
+        0.6834130781499203,
+        0.37161084529505584,
+        0.8245614035087719,
+        0.5
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 161,
+      "visible_height_px": 145,
+      "pixels_alpha_above_16": 19483,
+      "alpha_component_label": 17,
+      "distance_to_cell_border_px": {
+        "left": 24,
+        "top": 38,
+        "right": 26,
+        "bottom": 27
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "descender",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 160.0,
+      "anchor": [
+        945.5,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 156.9026086956522,
+      "normalized_advance_px": 185.196,
+      "ascent_px": 122.0,
+      "descent_px": 23.0
+    },
+    {
+      "id": "lower-r",
+      "char": "r",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 2,
+      "column": 5,
+      "cellrect": [
+        1052,
+        601,
+        1254,
+        795
+      ],
+      "bbox_global": [
+        1078,
+        643,
+        1208,
+        757
+      ],
+      "bbox_local": [
+        26,
+        42,
+        156,
+        156
+      ],
+      "paddedrect": [
+        1070,
+        635,
+        1216,
+        765
+      ],
+      "uvrect": [
+        0.8532695374800638,
+        0.38995215311004783,
+        0.9696969696969697,
+        0.4936204146730463
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 130,
+      "visible_height_px": 114,
+      "pixels_alpha_above_16": 11714,
+      "alpha_component_label": 18,
+      "distance_to_cell_border_px": {
+        "left": 26,
+        "top": 42,
+        "right": 46,
+        "bottom": 38
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 757.0,
+      "baseline_local_y": 156.0,
+      "anchor": [
+        1143.0,
+        757.0
+      ],
+      "render_scale": 1.0820869565217393,
+      "normalized_visible_height_px": 123.35791304347828,
+      "normalized_advance_px": 151.65130434782608,
+      "ascent_px": 114.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-s",
+      "char": "s",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 0,
+      "cellrect": [
+        0,
+        795,
+        238,
+        979
+      ],
+      "bbox_global": [
+        52,
+        833,
+        209,
+        952
+      ],
+      "bbox_local": [
+        52,
+        38,
+        209,
+        157
+      ],
+      "paddedrect": [
+        44,
+        825,
+        217,
+        960
+      ],
+      "uvrect": [
+        0.03508771929824561,
+        0.23444976076555024,
+        0.17304625199362042,
+        0.3421052631578947
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 157,
+      "visible_height_px": 119,
+      "pixels_alpha_above_16": 16803,
+      "alpha_component_label": 19,
+      "distance_to_cell_border_px": {
+        "left": 52,
+        "top": 38,
+        "right": 29,
+        "bottom": 27
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 157.0,
+      "anchor": [
+        130.5,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 125.49457627118646,
+      "normalized_advance_px": 176.5484745762712,
+      "ascent_px": 119.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-t",
+      "char": "t",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 1,
+      "cellrect": [
+        238,
+        781,
+        419,
+        979
+      ],
+      "bbox_global": [
+        268,
+        806,
+        384,
+        952
+      ],
+      "bbox_local": [
+        30,
+        25,
+        146,
+        171
+      ],
+      "paddedrect": [
+        260,
+        798,
+        392,
+        960
+      ],
+      "uvrect": [
+        0.20733652312599682,
+        0.23444976076555024,
+        0.31259968102073366,
+        0.36363636363636365
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 116,
+      "visible_height_px": 146,
+      "pixels_alpha_above_16": 12981,
+      "alpha_component_label": 20,
+      "distance_to_cell_border_px": {
+        "left": 30,
+        "top": 25,
+        "right": 35,
+        "bottom": 27
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "ascender",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 171.0,
+      "anchor": [
+        326.0,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 153.96813559322035,
+      "normalized_advance_px": 133.31084745762712,
+      "ascent_px": 146.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-u",
+      "char": "u",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 2,
+      "cellrect": [
+        419,
+        798,
+        626,
+        980
+      ],
+      "bbox_global": [
+        454,
+        834,
+        608,
+        952
+      ],
+      "bbox_local": [
+        35,
+        36,
+        189,
+        154
+      ],
+      "paddedrect": [
+        446,
+        826,
+        616,
+        960
+      ],
+      "uvrect": [
+        0.35566188197767146,
+        0.23444976076555024,
+        0.49122807017543857,
+        0.34130781499202556
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 154,
+      "visible_height_px": 118,
+      "pixels_alpha_above_16": 16654,
+      "alpha_component_label": 21,
+      "distance_to_cell_border_px": {
+        "left": 35,
+        "top": 36,
+        "right": 18,
+        "bottom": 28
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 154.0,
+      "anchor": [
+        531.0,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 173.38474576271187,
+      "ascent_px": 118.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-v",
+      "char": "v",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 3,
+      "cellrect": [
+        626,
+        808,
+        814,
+        980
+      ],
+      "bbox_global": [
+        644,
+        834,
+        800,
+        951
+      ],
+      "bbox_local": [
+        18,
+        26,
+        174,
+        143
+      ],
+      "paddedrect": [
+        636,
+        826,
+        808,
+        959
+      ],
+      "uvrect": [
+        0.507177033492823,
+        0.23524720893141948,
+        0.6443381180223285,
+        0.34130781499202556
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 156,
+      "visible_height_px": 117,
+      "pixels_alpha_above_16": 12012,
+      "alpha_component_label": 22,
+      "distance_to_cell_border_px": {
+        "left": 18,
+        "top": 26,
+        "right": 14,
+        "bottom": 29
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 144.0,
+      "anchor": [
+        722.0,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 123.38542372881358,
+      "normalized_advance_px": 175.49389830508477,
+      "ascent_px": 118.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-w",
+      "char": "w",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 4,
+      "cellrect": [
+        814,
+        807,
+        1038,
+        980
+      ],
+      "bbox_global": [
+        829,
+        834,
+        1029,
+        952
+      ],
+      "bbox_local": [
+        15,
+        27,
+        215,
+        145
+      ],
+      "paddedrect": [
+        821,
+        826,
+        1037,
+        960
+      ],
+      "uvrect": [
+        0.6547049441786283,
+        0.23444976076555024,
+        0.8269537480063796,
+        0.34130781499202556
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 200,
+      "visible_height_px": 118,
+      "pixels_alpha_above_16": 18442,
+      "alpha_component_label": 23,
+      "distance_to_cell_border_px": {
+        "left": 15,
+        "top": 27,
+        "right": 9,
+        "bottom": 28
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 145.0,
+      "anchor": [
+        929.0,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 221.89525423728816,
+      "ascent_px": 118.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-x",
+      "char": "x",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 3,
+      "column": 5,
+      "cellrect": [
+        1038,
+        795,
+        1254,
+        980
+      ],
+      "bbox_global": [
+        1047,
+        834,
+        1217,
+        952
+      ],
+      "bbox_local": [
+        9,
+        39,
+        179,
+        157
+      ],
+      "paddedrect": [
+        1039,
+        826,
+        1225,
+        960
+      ],
+      "uvrect": [
+        0.828548644338118,
+        0.23444976076555024,
+        0.9768740031897927,
+        0.34130781499202556
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 170,
+      "visible_height_px": 118,
+      "pixels_alpha_above_16": 15077,
+      "alpha_component_label": 24,
+      "distance_to_cell_border_px": {
+        "left": 9,
+        "top": 39,
+        "right": 37,
+        "bottom": 28
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 952.0,
+      "baseline_local_y": 157.0,
+      "anchor": [
+        1132.0,
+        952.0
+      ],
+      "render_scale": 1.0545762711864408,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 190.25796610169493,
+      "ascent_px": 118.0,
+      "descent_px": 0
+    },
+    {
+      "id": "lower-y",
+      "char": "y",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 4,
+      "column": 0,
+      "cellrect": [
+        0,
+        979,
+        234,
+        1254
+      ],
+      "bbox_global": [
+        51,
+        1007,
+        208,
+        1143
+      ],
+      "bbox_local": [
+        51,
+        28,
+        208,
+        164
+      ],
+      "paddedrect": [
+        43,
+        999,
+        216,
+        1151
+      ],
+      "uvrect": [
+        0.0342902711323764,
+        0.08213716108452951,
+        0.1722488038277512,
+        0.20334928229665072
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 157,
+      "visible_height_px": 136,
+      "pixels_alpha_above_16": 13617,
+      "alpha_component_label": 25,
+      "distance_to_cell_border_px": {
+        "left": 51,
+        "top": 28,
+        "right": 26,
+        "bottom": 111
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "descender",
+      "baseline_global_y": 1124,
+      "baseline_local_y": 145,
+      "anchor": [
+        129.5,
+        1124
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 144.64820512820515,
+      "normalized_advance_px": 177.96358974358975,
+      "ascent_px": 117,
+      "descent_px": 19
+    },
+    {
+      "id": "lower-z",
+      "char": "z",
+      "case": "lower",
+      "file": "lowercase-v2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "row": 4,
+      "column": 1,
+      "cellrect": [
+        234,
+        979,
+        430,
+        1254
+      ],
+      "bbox_global": [
+        261,
+        1007,
+        422,
+        1124
+      ],
+      "bbox_local": [
+        27,
+        28,
+        188,
+        145
+      ],
+      "paddedrect": [
+        253,
+        999,
+        430,
+        1132
+      ],
+      "uvrect": [
+        0.20175438596491227,
+        0.09728867623604465,
+        0.34290271132376393,
+        0.20334928229665072
+      ],
+      "uvrect_order": "u_min,v_min,u_max,v_max",
+      "padding_actual_px": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "visible_width_px": 161,
+      "visible_height_px": 117,
+      "pixels_alpha_above_16": 16229,
+      "alpha_component_label": 26,
+      "distance_to_cell_border_px": {
+        "left": 27,
+        "top": 28,
+        "right": 8,
+        "bottom": 130
+      },
+      "touching_cell_borders": [],
+      "foreign_alpha_pixels_in_uvrect": 0,
+      "foreign_alpha_pixels_in_tight_bbox": 0,
+      "rectangular_isolation_safe": true,
+      "metric_role": "x-height",
+      "baseline_global_y": 1124,
+      "baseline_local_y": 145,
+      "anchor": [
+        341.5,
+        1124
+      ],
+      "render_scale": 1.0635897435897437,
+      "normalized_visible_height_px": 124.44000000000001,
+      "normalized_advance_px": 182.21794871794873,
+      "ascent_px": 117,
+      "descent_px": 0
+    }
+  ]
+}''')
+OUT = '<ORIGINAL_PROJECT>/output/brat-ok-loading/alphabet-v1'
+NAME = 'BRAT_OK — библиотека латинских букв'
+if bpy.data.scenes.get(NAME) or len(bpy.data.scenes)!=11:
+    raise RuntimeError('Expected eleven source scenes without a letter library.')
+if len(layout['glyphs'])!=53:
+    raise RuntimeError('Expected A-Z, a-z and underscore.')
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+counts={s.name:len(s.objects) for s in bpy.data.scenes}
+frames={s.name:s.frame_current for s in bpy.data.scenes}
+source=bpy.context.scene
+library=bpy.data.scenes.new(NAME)
+bpy.context.window.scene=library
+library.render.engine=source.render.engine
+library.view_settings.view_transform=source.view_settings.view_transform
+library.render.resolution_x,library.render.resolution_y=1920,1320
+library.render.resolution_percentage=100
+library.render.fps=30
+library.frame_start=library.frame_end=1
+library['source_counts_json']=json.dumps(counts,ensure_ascii=False)
+library['source_frames_json']=json.dumps(frames,ensure_ascii=False)
+library['layout_json']=json.dumps(layout,ensure_ascii=False)
+library['scope']='Reusable painted A-Z/a-z/_ objects and transparent native PNG exports; no new font installation.'
+world=bpy.data.worlds.new('Буквы — тёмная среда')
+world.use_nodes=True
+bg=next(n for n in world.node_tree.nodes if n.type=='BACKGROUND')
+bg.inputs[0].default_value=(.01,.013,.017,1)
+bg.inputs[1].default_value=0
+library.world=world
+
+def col(scene,name):
+    c=bpy.data.collections.new(name)
+    scene.collection.children.link(c)
+    return c
+
+upper=col(library,'Буквы — A–Z и подчёркивание')
+lower=col(library,'Буквы — a–z')
+support=col(library,'Буквы — просмотр библиотеки')
+
+def camera(scene,name,width,xy,collection):
+    data=bpy.data.cameras.new(name)
+    data.type=next(e.identifier for e in data.bl_rna.properties['type'].enum_items if e.identifier=='ORTHO')
+    data.ortho_scale=width
+    data.clip_start=.01
+    data.clip_end=100
+    obj=bpy.data.objects.new(name,data)
+    obj.location=(xy[0],xy[1],30)
+    collection.objects.link(obj)
+    scene.camera=obj
+    return obj
+
+camera(library,'Буквы — камера образца',34,(0,.1),support)
+
+def flat(name,color):
+    mat=bpy.data.materials.new(name)
+    mat.use_nodes=True
+    nodes=mat.node_tree.nodes
+    nodes.clear()
+    em=nodes.new('ShaderNodeEmission')
+    em.inputs[0].default_value=color
+    output=nodes.new('ShaderNodeOutputMaterial')
+    mat.node_tree.links.new(em.outputs[0],output.inputs['Surface'])
+    return mat
+
+def quad(name,coords,collection,mat):
+    mesh=bpy.data.meshes.new(name+' — UV плоскость')
+    mesh.from_pydata(coords,[],[(0,1,2,3)])
+    obj=bpy.data.objects.new(name,mesh)
+    collection.objects.link(obj)
+    mesh.materials.append(mat)
+    return obj
+
+back=flat('Буквы — графитовый фон',(.018,.023,.03,1))
+quad('Буквы — нейтральный задник',[(-20,-14,-1),(20,-14,-1),(20,14,-1),(-20,14,-1)],support,back)
+labelmat=flat('Буквы — подписи',(.48,.56,.63,1))
+
+def label(scene,collection,text,x,y,size):
+    data=bpy.data.curves.new('Подпись '+text,'FONT')
+    data.body=text
+    data.size=size
+    obj=bpy.data.objects.new('Подпись '+text,data)
+    collection.objects.link(obj)
+    data.materials.append(labelmat)
+    obj.location=(x,y,1)
+    return obj
+
+label(library,support,'A — Z',-15,10.25,.6)
+label(library,support,'a — z',-15,-.35,.6)
+materials={}
+for filename in sorted({g['file'] for g in layout['glyphs']}):
+    image=bpy.data.images.load(OUT+'/assets/'+filename,check_existing=False)
+    image.pack()
+    image.filepath='//assets/'+filename
+    mat=bpy.data.materials.new('Буквы — неизменный атлас '+filename)
+    mat.use_nodes=True
+    mat.surface_render_method=next(e.identifier for e in mat.bl_rna.properties['surface_render_method'].enum_items if e.identifier=='BLENDED')
+    mat.use_transparent_shadow=False
+    nodes=mat.node_tree.nodes
+    nodes.clear()
+    tex=nodes.new('ShaderNodeTexImage')
+    tex.image=image
+    tex.extension=next(e.identifier for e in tex.bl_rna.properties['extension'].enum_items if e.identifier=='CLIP')
+    tex.interpolation=next(e.identifier for e in tex.bl_rna.properties['interpolation'].enum_items if e.identifier=='Linear')
+    em=nodes.new('ShaderNodeEmission')
+    transparent=nodes.new('ShaderNodeBsdfTransparent')
+    mix=nodes.new('ShaderNodeMixShader')
+    output=nodes.new('ShaderNodeOutputMaterial')
+    links=mat.node_tree.links
+    links.new(tex.outputs['Color'],em.inputs[0])
+    links.new(tex.outputs['Alpha'],mix.inputs[0])
+    links.new(transparent.outputs[0],mix.inputs[1])
+    links.new(em.outputs[0],mix.inputs[2])
+    links.new(mix.outputs[0],output.inputs['Surface'])
+    materials[filename]=mat
+
+pixel_base=2/layout['normalization']['capital_reference_px']
+glyphmap={}
+export_metrics=[]
+indices={'upper':0,'lower':0}
+for info in layout['glyphs']:
+    char=info['char']
+    case=info['case']
+    scale=pixel_base*info['render_scale']
+    x0,y0,x1,y1=info['paddedrect']
+    bx0,by0,bx1,by1=info['bbox_global']
+    baseline=info['baseline_global_y']
+    l,r=(x0-bx0)*scale,(x1-bx0)*scale
+    b,t=(baseline-y1)*scale,(baseline-y0)*scale
+    obj=quad('Latin '+info['id'],[(l,b,0),(r,b,0),(r,t,0),(l,t,0)],upper if case=='upper' else lower,materials[info['file']])
+    uv=obj.data.uv_layers.new(name='Только собственная буква')
+    w,h=info['size']
+    coords=[(x0/w,1-y1/h),(x1/w,1-y1/h),(x1/w,1-y0/h),(x0/w,1-y0/h)]
+    for item,value in zip(uv.data,coords):
+        item.uv=value
+    advance=(bx1-bx0)*scale+.15
+    obj['glyph_char']=char
+    obj['glyph_case']='symbol' if char=='_' else case
+    obj['glyph_id']=info['id']
+    obj['glyph_advance']=advance
+    obj['baseline_origin']='Left ink edge at x0, shared row baseline at y0; descenders extend below.'
+    obj['atlas_file']=info['file']
+    obj['atlas_rect']=[x0,y0,x1,y1]
+    obj['pixel_scale']=scale
+    obj['baseline_px']=baseline
+    obj['glyph_bounds_local']=[l,b,r,t]
+    obj.asset_mark()
+    obj.asset_data.description='BRAT_OK worn ivory metal glyph '+char+'; transparent painted sprite; baseline origin and glyph_advance supplied.'
+    for tag in ['BRAT_OK','Latin',obj['glyph_case']]:
+        obj.asset_data.tags.new(tag)
+    index=indices[case]
+    indices[case]+=1
+    obj.location=(-15+(index%9)*3.4,(7.6 if case=='upper' else -3.0)-(index//9)*3.0,0)
+    glyphmap[char]=obj
+    export_metrics.append({'char':char,'case':obj['glyph_case'],'object':obj.name,'file':info['id']+'.png','advance':advance,'bounds':[l,b,r,t],'baseline':0,'pixel_scale':scale})
+
+# Scene for native transparent exports: one unmarked instance, common vertical extent.
+export=bpy.data.scenes.new('BRAT_OK — экспорт отдельных букв')
+export.render.engine=library.render.engine
+export.view_settings.view_transform=library.view_settings.view_transform
+export.world=world
+export.render.film_transparent=True
+export.render.image_settings.file_format=next(e.identifier for e in export.render.image_settings.bl_rna.properties['file_format'].enum_items if e.identifier=='PNG')
+export.render.image_settings.color_mode=next(e.identifier for e in export.render.image_settings.bl_rna.properties['color_mode'].enum_items if e.identifier=='RGBA')
+export.render.resolution_percentage=100
+export.frame_start=export.frame_end=1
+exportcol=col(export,'Буквы — камера и экспортный экземпляр')
+camera(export,'Буквы — камера прозрачного PNG',3,(1,.8),exportcol)
+instance=bpy.data.objects.new('Буквы — экспортный экземпляр',next(iter(glyphmap.values())).data)
+exportcol.objects.link(instance)
+export['export_instance']=instance.name
+export['glyph_export_metrics_json']=json.dumps(export_metrics,ensure_ascii=False)
+export['library_scene']=library.name
+
+# Actual composed examples use instances of the glyph library, without new drawings.
+examples=bpy.data.scenes.new('BRAT_OK — примеры набора букв')
+examples.render.engine=library.render.engine
+examples.view_settings.view_transform=library.view_settings.view_transform
+examples.world=world
+examples.render.resolution_x,examples.render.resolution_y=1920,1080
+examples.render.resolution_percentage=100
+examples.frame_start=examples.frame_end=1
+examplescol=col(examples,'Буквы — собранные надписи')
+camera(examples,'Буквы — камера надписей',24,(0,0),examplescol)
+quad('Буквы — фон примеров',[(-14,-9,-1),(14,-9,-1),(14,9,-1),(-14,9,-1)],examplescol,back)
+
+def compose_word(text,baseline,scale):
+    root=bpy.data.objects.new('Надпись '+text,None)
+    examplescol.objects.link(root)
+    root['text']=text
+    root['assembly']='Independent instances of marked Latin glyph assets; shared immutable artwork.'
+    cursor=0
+    for index,char in enumerate(text):
+        if char==' ':
+            cursor+=.9*scale
+            continue
+        sourceletter=glyphmap[char]
+        obj=bpy.data.objects.new('Надпись '+text+' — '+str(index)+' '+char,sourceletter.data)
+        examplescol.objects.link(obj)
+        obj.parent=root
+        obj.location=(cursor,0,0)
+        obj.scale=(scale,scale,scale)
+        cursor+=sourceletter['glyph_advance']*scale
+    root.location=(-cursor/2,baseline,0)
+    return root
+
+compose_word('BRAT_OK',3.2,.72)
+compose_word('StarCraft',-.4,.72)
+compose_word('Loading',-4,.72)
+examples['glyph_library']=library.name
+library['export_scene']=export.name
+library['examples_scene']=examples.name
+library['export_metrics_json']=json.dumps(export_metrics,ensure_ascii=False)
+library.frame_set(1)
+bpy.context.window.scene=library
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type=='VIEW_3D':
+            area.spaces.active.region_3d.view_perspective='CAMERA'
+            area.spaces.active.overlay.show_overlays=False
+            area.spaces.active.shading.type=next(e.identifier for e in area.spaces.active.shading.bl_rna.properties['type'].enum_items if e.identifier=='MATERIAL')
+assert all(len(bpy.data.scenes[name].objects)==count for name,count in counts.items())
+assert all(bpy.data.scenes[name].frame_current==f for name,f in frames.items())
+library.render.image_settings.file_format=next(e.identifier for e in library.render.image_settings.bl_rna.properties['file_format'].enum_items if e.identifier=='PNG')
+library.render.filepath=OUT+'/alphabet-preview.png'
+bpy.ops.render.render(write_still=True)
+bpy.context.window.scene=examples
+examples.render.image_settings.file_format=library.render.image_settings.file_format
+examples.render.filepath=OUT+'/word-examples.png'
+bpy.ops.render.render(write_still=True)
+bpy.context.window.scene=library
+bpy.ops.wm.save_as_mainfile(filepath=OUT+'/BRAT_OK_letter_library_v1.blend',relative_remap=False)
+print(json.dumps({'file':bpy.data.filepath,'library':library.name,'assets':len(glyphmap),'source_counts':counts,'source_frames':frames,'export_metrics':export_metrics},ensure_ascii=False))

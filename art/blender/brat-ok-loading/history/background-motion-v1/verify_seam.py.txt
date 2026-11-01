@@ -1,0 +1,25 @@
+import bpy,math,json
+s=bpy.data.scenes["BRAT_OK — фон: город и щит"]
+bpy.context.window.scene=s
+trees=[]
+for obj in s.objects:
+    if obj.type in ["MESH","CURVE"]:
+        for material in obj.data.materials:
+            if material.use_nodes and material.node_tree not in trees: trees.append(material.node_tree)
+controls=[n for tree in trees for n in tree.nodes if n.type=="VALUE" and tree.animation_data]
+s.frame_set(1)
+first={n.name:n.outputs[0].default_value for n in controls}
+s.frame_set(385)
+last={n.name:n.outputs[0].default_value for n in controls}
+deltas={name:abs(value-last[name]) for name,value in first.items()}
+s.render.resolution_percentage=50
+format_items=[i.identifier for i in s.render.image_settings.bl_rna.properties["file_format"].enum_items]
+s.render.image_settings.file_format=format_items[format_items.index("PNG")]
+for f,name in [(1,"loop-start"),(385,"loop-end")]:
+    s.frame_set(f)
+    s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-background-motion-v1/"+name+".png"
+    bpy.ops.render.render(write_still=True)
+s.frame_set(53)
+s.render.resolution_percentage=100
+print(json.dumps({"controls":len(controls),"max_loop_value_delta":max(deltas.values()),"loop_value_deltas":deltas,"main_unit_count":len([o for o in bpy.data.scenes["BRAT_OK — масштаб ультралиска"].objects if o.get("unit")]),"source_scene_count":len(bpy.data.scenes["BRAT_OK — 2D"].objects),"no_new_drivers":all(not tree.animation_data or not tree.animation_data.drivers for tree in trees)},ensure_ascii=False))
+

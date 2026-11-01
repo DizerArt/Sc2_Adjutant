@@ -1,0 +1,234 @@
+import bpy, json, math
+layout = json.loads(r'''LAYOUT_HERE''')
+OUT = '<ORIGINAL_PROJECT>/output/brat-ok-loading/alphabet-v1'
+NAME = 'BRAT_OK — библиотека латинских букв'
+if bpy.data.scenes.get(NAME) or len(bpy.data.scenes)!=11:
+    raise RuntimeError('Expected eleven source scenes without a letter library.')
+if len(layout['glyphs'])!=53:
+    raise RuntimeError('Expected A-Z, a-z and underscore.')
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+counts={s.name:len(s.objects) for s in bpy.data.scenes}
+frames={s.name:s.frame_current for s in bpy.data.scenes}
+source=bpy.context.scene
+library=bpy.data.scenes.new(NAME)
+bpy.context.window.scene=library
+library.render.engine=source.render.engine
+library.view_settings.view_transform=source.view_settings.view_transform
+library.render.resolution_x,library.render.resolution_y=1920,1320
+library.render.resolution_percentage=100
+library.render.fps=30
+library.frame_start=library.frame_end=1
+library['source_counts_json']=json.dumps(counts,ensure_ascii=False)
+library['source_frames_json']=json.dumps(frames,ensure_ascii=False)
+library['layout_json']=json.dumps(layout,ensure_ascii=False)
+library['scope']='Reusable painted A-Z/a-z/_ objects and transparent native PNG exports; no new font installation.'
+world=bpy.data.worlds.new('Буквы — тёмная среда')
+world.use_nodes=True
+bg=next(n for n in world.node_tree.nodes if n.type=='BACKGROUND')
+bg.inputs[0].default_value=(.01,.013,.017,1)
+bg.inputs[1].default_value=0
+library.world=world
+
+def col(scene,name):
+    c=bpy.data.collections.new(name)
+    scene.collection.children.link(c)
+    return c
+
+upper=col(library,'Буквы — A–Z и подчёркивание')
+lower=col(library,'Буквы — a–z')
+support=col(library,'Буквы — просмотр библиотеки')
+
+def camera(scene,name,width,xy,collection):
+    data=bpy.data.cameras.new(name)
+    data.type=next(e.identifier for e in data.bl_rna.properties['type'].enum_items if e.identifier=='ORTHO')
+    data.ortho_scale=width
+    data.clip_start=.01
+    data.clip_end=100
+    obj=bpy.data.objects.new(name,data)
+    obj.location=(xy[0],xy[1],30)
+    collection.objects.link(obj)
+    scene.camera=obj
+    return obj
+
+camera(library,'Буквы — камера образца',34,(0,.1),support)
+
+def flat(name,color):
+    mat=bpy.data.materials.new(name)
+    mat.use_nodes=True
+    nodes=mat.node_tree.nodes
+    nodes.clear()
+    em=nodes.new('ShaderNodeEmission')
+    em.inputs[0].default_value=color
+    output=nodes.new('ShaderNodeOutputMaterial')
+    mat.node_tree.links.new(em.outputs[0],output.inputs['Surface'])
+    return mat
+
+def quad(name,coords,collection,mat):
+    mesh=bpy.data.meshes.new(name+' — UV плоскость')
+    mesh.from_pydata(coords,[],[(0,1,2,3)])
+    obj=bpy.data.objects.new(name,mesh)
+    collection.objects.link(obj)
+    mesh.materials.append(mat)
+    return obj
+
+back=flat('Буквы — графитовый фон',(.018,.023,.03,1))
+quad('Буквы — нейтральный задник',[(-20,-14,-1),(20,-14,-1),(20,14,-1),(-20,14,-1)],support,back)
+labelmat=flat('Буквы — подписи',(.48,.56,.63,1))
+
+def label(scene,collection,text,x,y,size):
+    data=bpy.data.curves.new('Подпись '+text,'FONT')
+    data.body=text
+    data.size=size
+    obj=bpy.data.objects.new('Подпись '+text,data)
+    collection.objects.link(obj)
+    data.materials.append(labelmat)
+    obj.location=(x,y,1)
+    return obj
+
+label(library,support,'A — Z',-15,10.25,.6)
+label(library,support,'a — z',-15,-.35,.6)
+materials={}
+for filename in sorted({g['file'] for g in layout['glyphs']}):
+    image=bpy.data.images.load(OUT+'/assets/'+filename,check_existing=False)
+    image.pack()
+    image.filepath='//assets/'+filename
+    mat=bpy.data.materials.new('Буквы — неизменный атлас '+filename)
+    mat.use_nodes=True
+    mat.surface_render_method=next(e.identifier for e in mat.bl_rna.properties['surface_render_method'].enum_items if e.identifier=='BLENDED')
+    mat.use_transparent_shadow=False
+    nodes=mat.node_tree.nodes
+    nodes.clear()
+    tex=nodes.new('ShaderNodeTexImage')
+    tex.image=image
+    tex.extension=next(e.identifier for e in tex.bl_rna.properties['extension'].enum_items if e.identifier=='CLIP')
+    tex.interpolation=next(e.identifier for e in tex.bl_rna.properties['interpolation'].enum_items if e.identifier=='Linear')
+    em=nodes.new('ShaderNodeEmission')
+    transparent=nodes.new('ShaderNodeBsdfTransparent')
+    mix=nodes.new('ShaderNodeMixShader')
+    output=nodes.new('ShaderNodeOutputMaterial')
+    links=mat.node_tree.links
+    links.new(tex.outputs['Color'],em.inputs[0])
+    links.new(tex.outputs['Alpha'],mix.inputs[0])
+    links.new(transparent.outputs[0],mix.inputs[1])
+    links.new(em.outputs[0],mix.inputs[2])
+    links.new(mix.outputs[0],output.inputs['Surface'])
+    materials[filename]=mat
+
+pixel_base=2/layout['normalization']['capital_reference_px']
+glyphmap={}
+export_metrics=[]
+indices={'upper':0,'lower':0}
+for info in layout['glyphs']:
+    char=info['char']
+    case=info['case']
+    scale=pixel_base*info['render_scale']
+    x0,y0,x1,y1=info['paddedrect']
+    bx0,by0,bx1,by1=info['bbox_global']
+    baseline=info['baseline_global_y']
+    l,r=(x0-bx0)*scale,(x1-bx0)*scale
+    b,t=(baseline-y1)*scale,(baseline-y0)*scale
+    obj=quad('Latin '+info['id'],[(l,b,0),(r,b,0),(r,t,0),(l,t,0)],upper if case=='upper' else lower,materials[info['file']])
+    uv=obj.data.uv_layers.new(name='Только собственная буква')
+    w,h=info['size']
+    coords=[(x0/w,1-y1/h),(x1/w,1-y1/h),(x1/w,1-y0/h),(x0/w,1-y0/h)]
+    for item,value in zip(uv.data,coords):
+        item.uv=value
+    advance=(bx1-bx0)*scale+.15
+    obj['glyph_char']=char
+    obj['glyph_case']='symbol' if char=='_' else case
+    obj['glyph_id']=info['id']
+    obj['glyph_advance']=advance
+    obj['baseline_origin']='Left ink edge at x0, shared row baseline at y0; descenders extend below.'
+    obj['atlas_file']=info['file']
+    obj['atlas_rect']=[x0,y0,x1,y1]
+    obj['pixel_scale']=scale
+    obj['baseline_px']=baseline
+    obj['glyph_bounds_local']=[l,b,r,t]
+    obj.asset_mark()
+    obj.asset_data.description='BRAT_OK worn ivory metal glyph '+char+'; transparent painted sprite; baseline origin and glyph_advance supplied.'
+    for tag in ['BRAT_OK','Latin',obj['glyph_case']]:
+        obj.asset_data.tags.new(tag)
+    index=indices[case]
+    indices[case]+=1
+    obj.location=(-15+(index%9)*3.4,(7.6 if case=='upper' else -3.0)-(index//9)*3.0,0)
+    glyphmap[char]=obj
+    export_metrics.append({'char':char,'case':obj['glyph_case'],'object':obj.name,'file':info['id']+'.png','advance':advance,'bounds':[l,b,r,t],'baseline':0,'pixel_scale':scale})
+
+# Scene for native transparent exports: one unmarked instance, common vertical extent.
+export=bpy.data.scenes.new('BRAT_OK — экспорт отдельных букв')
+export.render.engine=library.render.engine
+export.view_settings.view_transform=library.view_settings.view_transform
+export.world=world
+export.render.film_transparent=True
+export.render.image_settings.file_format=next(e.identifier for e in export.render.image_settings.bl_rna.properties['file_format'].enum_items if e.identifier=='PNG')
+export.render.image_settings.color_mode=next(e.identifier for e in export.render.image_settings.bl_rna.properties['color_mode'].enum_items if e.identifier=='RGBA')
+export.render.resolution_percentage=100
+export.frame_start=export.frame_end=1
+exportcol=col(export,'Буквы — камера и экспортный экземпляр')
+camera(export,'Буквы — камера прозрачного PNG',3,(1,.8),exportcol)
+instance=bpy.data.objects.new('Буквы — экспортный экземпляр',next(iter(glyphmap.values())).data)
+exportcol.objects.link(instance)
+export['export_instance']=instance.name
+export['glyph_export_metrics_json']=json.dumps(export_metrics,ensure_ascii=False)
+export['library_scene']=library.name
+
+# Actual composed examples use instances of the glyph library, without new drawings.
+examples=bpy.data.scenes.new('BRAT_OK — примеры набора букв')
+examples.render.engine=library.render.engine
+examples.view_settings.view_transform=library.view_settings.view_transform
+examples.world=world
+examples.render.resolution_x,examples.render.resolution_y=1920,1080
+examples.render.resolution_percentage=100
+examples.frame_start=examples.frame_end=1
+examplescol=col(examples,'Буквы — собранные надписи')
+camera(examples,'Буквы — камера надписей',24,(0,0),examplescol)
+quad('Буквы — фон примеров',[(-14,-9,-1),(14,-9,-1),(14,9,-1),(-14,9,-1)],examplescol,back)
+
+def compose_word(text,baseline,scale):
+    root=bpy.data.objects.new('Надпись '+text,None)
+    examplescol.objects.link(root)
+    root['text']=text
+    root['assembly']='Independent instances of marked Latin glyph assets; shared immutable artwork.'
+    cursor=0
+    for index,char in enumerate(text):
+        if char==' ':
+            cursor+=.9*scale
+            continue
+        sourceletter=glyphmap[char]
+        obj=bpy.data.objects.new('Надпись '+text+' — '+str(index)+' '+char,sourceletter.data)
+        examplescol.objects.link(obj)
+        obj.parent=root
+        obj.location=(cursor,0,0)
+        obj.scale=(scale,scale,scale)
+        cursor+=sourceletter['glyph_advance']*scale
+    root.location=(-cursor/2,baseline,0)
+    return root
+
+compose_word('BRAT_OK',3.2,.72)
+compose_word('StarCraft',-.4,.72)
+compose_word('Loading',-4,.72)
+examples['glyph_library']=library.name
+library['export_scene']=export.name
+library['examples_scene']=examples.name
+library['export_metrics_json']=json.dumps(export_metrics,ensure_ascii=False)
+library.frame_set(1)
+bpy.context.window.scene=library
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type=='VIEW_3D':
+            area.spaces.active.region_3d.view_perspective='CAMERA'
+            area.spaces.active.overlay.show_overlays=False
+            area.spaces.active.shading.type=next(e.identifier for e in area.spaces.active.shading.bl_rna.properties['type'].enum_items if e.identifier=='MATERIAL')
+assert all(len(bpy.data.scenes[name].objects)==count for name,count in counts.items())
+assert all(bpy.data.scenes[name].frame_current==f for name,f in frames.items())
+library.render.image_settings.file_format=next(e.identifier for e in library.render.image_settings.bl_rna.properties['file_format'].enum_items if e.identifier=='PNG')
+library.render.filepath=OUT+'/alphabet-preview.png'
+bpy.ops.render.render(write_still=True)
+bpy.context.window.scene=examples
+examples.render.image_settings.file_format=library.render.image_settings.file_format
+examples.render.filepath=OUT+'/word-examples.png'
+bpy.ops.render.render(write_still=True)
+bpy.context.window.scene=library
+bpy.ops.wm.save_as_mainfile(filepath=OUT+'/BRAT_OK_letter_library_v1.blend',relative_remap=False)
+print(json.dumps({'file':bpy.data.filepath,'library':library.name,'assets':len(glyphmap),'source_counts':counts,'source_frames':frames,'export_metrics':export_metrics},ensure_ascii=False))

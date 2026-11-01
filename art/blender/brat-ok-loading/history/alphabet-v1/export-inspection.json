@@ -1,0 +1,1188 @@
+{
+  "all_passed": true,
+  "checks": {
+    "53_exact_png_files": true,
+    "all_RGBA_with_alpha0": true,
+    "all_glyphs_nonempty": true,
+    "native_dimensions_match_metrics": true,
+    "transparent_outer_borders": true,
+    "53_distinct_glyph_renders": true,
+    "lower_descenders_visible_below_baseline": true,
+    "native_Q_tail_below_baseline": true,
+    "underscore_low_bar": true,
+    "source_atlas_bytes_unchanged": true
+  },
+  "source_copies_equal_generated": {
+    "uppercase.png": true,
+    "lowercase-v2.png": true
+  },
+  "renders": [
+    {
+      "char": "A",
+      "file": "upper-A.png",
+      "mode": "RGBA",
+      "size": [
+        511,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        49,
+        463,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "c059b7a503ee9d54773f08a6caca817012f9cfff5b1d5504566c384c9bc15df2"
+    },
+    {
+      "char": "B",
+      "file": "upper-B.png",
+      "mode": "RGBA",
+      "size": [
+        471,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        48,
+        422,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "f2422fb50ad0aa27add1a6eb25011ad1ce5f9736f0b36c2beda140837aac0539"
+    },
+    {
+      "char": "C",
+      "file": "upper-C.png",
+      "mode": "RGBA",
+      "size": [
+        479,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        47,
+        431,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "fdd54c225ad7d7d78adff8183185d2c66a9b084148f094dc08a98bdaa51f5773"
+    },
+    {
+      "char": "D",
+      "file": "upper-D.png",
+      "mode": "RGBA",
+      "size": [
+        475,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        48,
+        427,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "57ea93b960f6511fe505cd514d2481a8e8288905802501d6226c27a65c2279e7"
+    },
+    {
+      "char": "E",
+      "file": "upper-E.png",
+      "mode": "RGBA",
+      "size": [
+        479,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        47,
+        431,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "9f24ce46fa51d9f4d9ddd96a788aa8c88b906a99b5bdb2bdc3dd6713fe9faa57"
+    },
+    {
+      "char": "F",
+      "file": "upper-F.png",
+      "mode": "RGBA",
+      "size": [
+        448,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        47,
+        400,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "21ec6dbe3ccdc50d7f15b58faa6d98d2b81cabe48c412f7ec03b1e959a7f7778"
+    },
+    {
+      "char": "G",
+      "file": "upper-G.png",
+      "mode": "RGBA",
+      "size": [
+        453,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        48,
+        405,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "3bae24ee4d3701348d5930e254e3819e4325e4427a854def1a593ed7d0222c37"
+    },
+    {
+      "char": "H",
+      "file": "upper-H.png",
+      "mode": "RGBA",
+      "size": [
+        461,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        48,
+        414,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "edeffb81111dde6be5b58c0e5f23013dbde2ce74b5a386ead3267319f013677e"
+    },
+    {
+      "char": "I",
+      "file": "upper-I.png",
+      "mode": "RGBA",
+      "size": [
+        257,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        45,
+        209,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "c27b471ed60eb8fb13465c133a85ec28590807bf359bdc0ca65196ff985d4245"
+    },
+    {
+      "char": "J",
+      "file": "upper-J.png",
+      "mode": "RGBA",
+      "size": [
+        467,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        46,
+        418,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "63ef01cd1bb60d7e5c0046fa84db288169a4ed5df455154727284f5dc67d1c49"
+    },
+    {
+      "char": "K",
+      "file": "upper-K.png",
+      "mode": "RGBA",
+      "size": [
+        488,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        47,
+        440,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "02daa38f4d854e84dbb56987c228927280e647afcc2340540f98e70fa0f2bded"
+    },
+    {
+      "char": "L",
+      "file": "upper-L.png",
+      "mode": "RGBA",
+      "size": [
+        459,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        48,
+        410,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "2024966ae9c3635c8fd8b26ef29d88f612895cd85a6a9a951cc5644b6ca8bbc6"
+    },
+    {
+      "char": "M",
+      "file": "upper-M.png",
+      "mode": "RGBA",
+      "size": [
+        511,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        30,
+        50,
+        464,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "a12e25e4cddbffc493d516b518e363a5da2960b6374ac939765433f2d1a831c2"
+    },
+    {
+      "char": "N",
+      "file": "upper-N.png",
+      "mode": "RGBA",
+      "size": [
+        450,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        50,
+        403,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "bd9de60dd83c2c3f37ee50298f013abdb197b5a95457f3d50c8ed44b16dace1d"
+    },
+    {
+      "char": "O",
+      "file": "upper-O.png",
+      "mode": "RGBA",
+      "size": [
+        456,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        48,
+        409,
+        431
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "a8bf3ccb2c08c83acc01336b9f9b61281f8b9909d8f3dc1eec1f8c719bbe3382"
+    },
+    {
+      "char": "P",
+      "file": "upper-P.png",
+      "mode": "RGBA",
+      "size": [
+        464,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        49,
+        417,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "bc1d44f78072f461d3f8932e10198822794673e6f3d20f93545cbc839a597a0f"
+    },
+    {
+      "char": "Q",
+      "file": "upper-Q.png",
+      "mode": "RGBA",
+      "size": [
+        499,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        49,
+        451,
+        455
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "5f70f0ce17f0b6cc628518582f6ffbb53cb6ac6fa5285c327ae1cba9a856e8d3"
+    },
+    {
+      "char": "R",
+      "file": "upper-R.png",
+      "mode": "RGBA",
+      "size": [
+        495,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        31,
+        47,
+        447,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "4f4ac6a9cd1182350fea5dcb487793d47dd336d4bab35fd93f9d1a9dfbd6f5d7"
+    },
+    {
+      "char": "S",
+      "file": "upper-S.png",
+      "mode": "RGBA",
+      "size": [
+        505,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        48,
+        457,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "2dedaa7ca447058f875de63fbf167f7ffe0c2f8f2073e56cd06ad259f58d5c76"
+    },
+    {
+      "char": "T",
+      "file": "upper-T.png",
+      "mode": "RGBA",
+      "size": [
+        513,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        51,
+        466,
+        431
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "272a76a569bb408c4e3b9016042706854ade59338cf7a0313766a13e0a9af47c"
+    },
+    {
+      "char": "U",
+      "file": "upper-U.png",
+      "mode": "RGBA",
+      "size": [
+        487,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        49,
+        440,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "314ffeec23c81759d57e024566c9fed751c2f430b3f507ef85ebdf14232c4e43"
+    },
+    {
+      "char": "V",
+      "file": "upper-V.png",
+      "mode": "RGBA",
+      "size": [
+        524,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        49,
+        477,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "37ec10170565c34b0be8a56d42366c201fc0eaef3afa3e756b6e416337a30355"
+    },
+    {
+      "char": "W",
+      "file": "upper-W.png",
+      "mode": "RGBA",
+      "size": [
+        590,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        28,
+        48,
+        541,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "43102a3ec5374c2b7922ae3bc0ee535dad0bee53f06b5892a96552dfc1be33b1"
+    },
+    {
+      "char": "X",
+      "file": "upper-X.png",
+      "mode": "RGBA",
+      "size": [
+        525,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        28,
+        48,
+        477,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "dd889145be3304d8d9533ab99b1368041ea3f842c1534536aa783885fd9c9bfb"
+    },
+    {
+      "char": "Y",
+      "file": "upper-Y.png",
+      "mode": "RGBA",
+      "size": [
+        571,
+        557
+      ],
+      "alpha_range": [
+        0,
+        253
+      ],
+      "visible_bbox": [
+        34,
+        47,
+        523,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "c7c843c2730fefca591d3b1af6a0876b9933017bf6c9b28960eb4982afe18def"
+    },
+    {
+      "char": "Z",
+      "file": "upper-Z.png",
+      "mode": "RGBA",
+      "size": [
+        549,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        34,
+        48,
+        501,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "aa1794e7c2ec38ca3dcfc626c035945bf6ca8017198ac252125c3a69e13bea85"
+    },
+    {
+      "char": "_",
+      "file": "upper-_.png",
+      "mode": "RGBA",
+      "size": [
+        590,
+        557
+      ],
+      "alpha_range": [
+        0,
+        253
+      ],
+      "visible_bbox": [
+        35,
+        306,
+        543,
+        440
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "a63ea1b82b295b5a6322f3cb37036810c08b5894155b126330342f6b87868025"
+    },
+    {
+      "char": "a",
+      "file": "lower-a.png",
+      "mode": "RGBA",
+      "size": [
+        433,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        34,
+        170,
+        386,
+        431
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "06ea52a5872e986f114d67213a622377a07366fd443f3e570f3a6c458daf4ad4"
+    },
+    {
+      "char": "b",
+      "file": "lower-b.png",
+      "mode": "RGBA",
+      "size": [
+        421,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        78,
+        372,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "738e94ab860947e970c4856da8c07377f6c821717b958f5c40a677cd4a84a5fc"
+    },
+    {
+      "char": "c",
+      "file": "lower-c.png",
+      "mode": "RGBA",
+      "size": [
+        431,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        170,
+        383,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "09826d67d5875f201c85f057b337f078074dd151ed596c58986c438c14133307"
+    },
+    {
+      "char": "d",
+      "file": "lower-d.png",
+      "mode": "RGBA",
+      "size": [
+        410,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        78,
+        362,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "36d81d0eb043968b15a33e365a918feca2fe7b05bdfbdb1b0b3cf44b8a78f0f4"
+    },
+    {
+      "char": "e",
+      "file": "lower-e.png",
+      "mode": "RGBA",
+      "size": [
+        450,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        34,
+        168,
+        401,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "08580b9368e81d837c333f75eb217e89b64d72d298fd441abe19dd4942fe79b1"
+    },
+    {
+      "char": "f",
+      "file": "lower-f.png",
+      "mode": "RGBA",
+      "size": [
+        379,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        79,
+        331,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "07889c47277e578886277ff357f92beba64f25fd52c8e79b9c537b382fed1378"
+    },
+    {
+      "char": "g",
+      "file": "lower-g.png",
+      "mode": "RGBA",
+      "size": [
+        414,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        164,
+        366,
+        473
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "226f82189b205dd2a9169cf7a11cbf5f589e82f410b51edc391ddaf2f08eee74"
+    },
+    {
+      "char": "h",
+      "file": "lower-h.png",
+      "mode": "RGBA",
+      "size": [
+        394,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        88,
+        347,
+        430
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "ef484d9cba85ee3ce590a76ae212242b0eff93536ec87f3b3036c6ccb91a85dc"
+    },
+    {
+      "char": "i",
+      "file": "lower-i.png",
+      "mode": "RGBA",
+      "size": [
+        229,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        89,
+        181,
+        434
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "8d58d6bd4fcbf78919f9b3273776710345a10a4db85133e0524a8ef2c4569606"
+    },
+    {
+      "char": "j",
+      "file": "lower-j.png",
+      "mode": "RGBA",
+      "size": [
+        325,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        88,
+        277,
+        463
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "b17cc6b22a8bd9cd55a091563eed9c24d1b5b643aee83969cf158b95d21de654"
+    },
+    {
+      "char": "k",
+      "file": "lower-k.png",
+      "mode": "RGBA",
+      "size": [
+        416,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        88,
+        369,
+        432
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "e2f49c4a775f64f86a93bf3366ae45ea7e4267ed06f1f0dfbb5b8631cdfc0783"
+    },
+    {
+      "char": "l",
+      "file": "lower-l.png",
+      "mode": "RGBA",
+      "size": [
+        276,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        88,
+        229,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "5fa4c71f20d1efe8957187692a4b04168f582d8f00bc2fe9ead2d4292ec67708"
+    },
+    {
+      "char": "m",
+      "file": "lower-m.png",
+      "mode": "RGBA",
+      "size": [
+        495,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        170,
+        447,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "abe2a60c99dbe1aae02686790040b43780fc8b5e8b48f1dfbd027e79ed9e00e9"
+    },
+    {
+      "char": "n",
+      "file": "lower-n.png",
+      "mode": "RGBA",
+      "size": [
+        411,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        171,
+        364,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "babc12d539d8ee2a9e26aa4aadcb28a8318bd57c7a5e3f79f2db9a070a812c2d"
+    },
+    {
+      "char": "o",
+      "file": "lower-o.png",
+      "mode": "RGBA",
+      "size": [
+        423,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        170,
+        375,
+        444
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "4e03edfc25a16e81f5ea8696ee7555229c81b2045b32cb3aa75f120590e3bd6a"
+    },
+    {
+      "char": "p",
+      "file": "lower-p.png",
+      "mode": "RGBA",
+      "size": [
+        416,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        161,
+        369,
+        492
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "1a1c542d6024ed858e51fdd3cf801ce3b9cd5bdbb9dd6449ddab8313e919aedf"
+    },
+    {
+      "char": "q",
+      "file": "lower-q.png",
+      "mode": "RGBA",
+      "size": [
+        448,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        155,
+        400,
+        485
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "c92427b69232f2109b8b24b1ee4c1b601b2c54c0076b25e5a959504b3622b799"
+    },
+    {
+      "char": "r",
+      "file": "lower-r.png",
+      "mode": "RGBA",
+      "size": [
+        377,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        172,
+        330,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "dfd5df17d8274b7c35b8dddfaa33656d99da420cbb8c9efa516f5b6a2e64fde1"
+    },
+    {
+      "char": "s",
+      "file": "lower-s.png",
+      "mode": "RGBA",
+      "size": [
+        429,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        169,
+        382,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "467a5a759a708ffbef9714c6587a489811b00902b5259354eb488b64c9b51e5e"
+    },
+    {
+      "char": "t",
+      "file": "lower-t.png",
+      "mode": "RGBA",
+      "size": [
+        338,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        108,
+        291,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "5533922927d1e3cfc53adca58c5296f8f97f2141737ea892c77072a8f3625258"
+    },
+    {
+      "char": "u",
+      "file": "lower-u.png",
+      "mode": "RGBA",
+      "size": [
+        422,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        170,
+        373,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "ab04e84f4e68438e95fe03b11ad6fd9b0213561aad83d25105b30277db684de7"
+    },
+    {
+      "char": "v",
+      "file": "lower-v.png",
+      "mode": "RGBA",
+      "size": [
+        427,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        170,
+        380,
+        430
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "1d213cdef9ba20514a5c32edde27c6d76a295521be47838af83d5d7ea29a5d32"
+    },
+    {
+      "char": "w",
+      "file": "lower-w.png",
+      "mode": "RGBA",
+      "size": [
+        524,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        170,
+        477,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "ad660b70b064581ff01cf15a77e730aa8d43d7655cb10f92b2fd72d86d801721"
+    },
+    {
+      "char": "x",
+      "file": "lower-x.png",
+      "mode": "RGBA",
+      "size": [
+        458,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        34,
+        170,
+        410,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "41138976c66ff564d2e422f40ce53c3fff5e8cc21285492bc3f9e77abc95d1ab"
+    },
+    {
+      "char": "y",
+      "file": "lower-y.png",
+      "mode": "RGBA",
+      "size": [
+        432,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        33,
+        171,
+        385,
+        475
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "f440a4d868c3b49c340be81d383b0248ab171802371c85b42b2b9c647da4f0db"
+    },
+    {
+      "char": "z",
+      "file": "lower-z.png",
+      "mode": "RGBA",
+      "size": [
+        441,
+        557
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "visible_bbox": [
+        32,
+        172,
+        392,
+        433
+      ],
+      "border_alpha_max": 0,
+      "baseline_px": 432,
+      "rgba_hash": "aafdf54526bfd358eadded55879bfae9679aed328b5c117ba03c1733b7241828"
+    }
+  ],
+  "inspection_only_no_raster_writes": true
+}

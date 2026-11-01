@@ -1,0 +1,487 @@
+{
+  "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\marauder-run-v3\\BRAT_OK_marauder_run_v3.blend",
+  "scene": "BRAT_OK — мародёр: цельный цикл v3",
+  "checks": {
+    "expected_pose_count": true,
+    "48_native_frames_30fps": true,
+    "cycle_duration_1_6_seconds": true,
+    "unique_pose_render_and_viewport_all_49": true,
+    "correct_holds_and_phase_order": true,
+    "same_first_endpoint": true,
+    "constant_pose_keys": true,
+    "only_pose_visibility_animated": true,
+    "root_static": true,
+    "camera_static": true,
+    "packed_all_pngs": true,
+    "canonical_asset_paths": true,
+    "uv_matches_one_pose_crop": true,
+    "plane_geometry_matches_measured_anchors_scales": true,
+    "static_camera_contains_all_pose_crops": true,
+    "no_unit_drivers": true,
+    "six_source_scene_counts_preserved": true,
+    "all_source_frames_preserved": true,
+    "new_scene_count": true,
+    "new_objects_only_wholebody_and_support": true
+  },
+  "all_passed": true,
+  "visibility": [
+    {
+      "frame": 1,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 2,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 3,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 4,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 5,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 6,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    },
+    {
+      "frame": 7,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 8,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 9,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 10,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 11,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 12,
+      "render": [
+        1
+      ],
+      "viewport": [
+        1
+      ]
+    },
+    {
+      "frame": 13,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 14,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 15,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 16,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 17,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 18,
+      "render": [
+        2
+      ],
+      "viewport": [
+        2
+      ]
+    },
+    {
+      "frame": 19,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 20,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 21,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 22,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 23,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 24,
+      "render": [
+        3
+      ],
+      "viewport": [
+        3
+      ]
+    },
+    {
+      "frame": 25,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 26,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 27,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 28,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 29,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 30,
+      "render": [
+        4
+      ],
+      "viewport": [
+        4
+      ]
+    },
+    {
+      "frame": 31,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 32,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 33,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 34,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 35,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 36,
+      "render": [
+        5
+      ],
+      "viewport": [
+        5
+      ]
+    },
+    {
+      "frame": 37,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 38,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 39,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 40,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 41,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 42,
+      "render": [
+        6
+      ],
+      "viewport": [
+        6
+      ]
+    },
+    {
+      "frame": 43,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 44,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 45,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 46,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 47,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 48,
+      "render": [
+        7
+      ],
+      "viewport": [
+        7
+      ]
+    },
+    {
+      "frame": 49,
+      "render": [
+        0
+      ],
+      "viewport": [
+        0
+      ]
+    }
+  ],
+  "curve_count": 16,
+  "source_counts": {
+    "BRAT_OK — 2D": 106,
+    "BRAT_OK — зерглинг: галоп": 12,
+    "BRAT_OK — мародёр: бег": 12,
+    "BRAT_OK — мародёр: две ноги": 17,
+    "BRAT_OK — масштаб ультралиска": 29,
+    "BRAT_OK — фон: город и щит": 18
+  },
+  "source_frames": {
+    "BRAT_OK — 2D": 3,
+    "BRAT_OK — зерглинг: галоп": 0,
+    "BRAT_OK — мародёр: бег": 14,
+    "BRAT_OK — мародёр: две ноги": 26,
+    "BRAT_OK — масштаб ультралиска": 53,
+    "BRAT_OK — фон: город и щит": 118
+  }
+}

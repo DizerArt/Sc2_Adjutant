@@ -1,0 +1,10 @@
+Use case: stylized-concept. Asset type: ONE lowercase Latin alphabet transparent texture atlas for a Blender 2D reusable lettering library.
+Input image1 BRAT_OK and input image2 uppercase alphabet are STYLE REFERENCES ONLY. Match the exact same lettering finish and family: angular heavy science-fiction metal block lettering, pale weathered ivory-painted steel faces with cracks, chipped paint and grime, thin bronze/gold bevel highlights and close dark extrusion edge; consistent light upperleft, frontal lettering. Same density/weight, bevel and proportions as uppercase set. This time draw ACTUAL LOWERCASE letterforms, not smaller uppercase capitals.
+ONE finished high-resolution atlas, genuine transparent alpha (ideally3072x2560). Grid EXACTLY SIX columns and FIVE rows. Center each glyph in its cell, generous transparent gap from EVERY cell edge and between glyphs. SAME shared font scale: common x-height for a,c,e,m,n,o,r,s,u,v,w,x,z; taller ascenders b,d,f,h,k,l,t; descenders g,j,p,q,y BELOW a common baseline. Dots on i and j MUST included, isolated within their glyph cell. Natural glyph widths (i,l narrow; m,w wide). Do not normalize every lowercase letter to sameheight. All complete glyphs fullyinsidecells.
+EXACT cell contents, left-to-right/top-to-bottom:
+row1: a b c d e f
+row2: g h i j k l
+row3: m n o p q r
+row4: s t u v w x
+row5: y z [EMPTY] [EMPTY] [EMPTY] [EMPTY]
+Exactly26 DISTINCT LOWERCASE Latinletters a-z. The a can be readable double-storey angular a, g a readable single-storey g with descender; ensure p and q mirror their stem placement correctly and both descend, r vs n distinctlyreadable, lowerl has no uppercaseL foot. No uppercase capitals. No extra symbols or text. No atlas labels, headings, cell lines, borders, paper, opaque backdrop, haze, watermark, checkerboardpaintedintoimage. Transparent internal counters and all background.

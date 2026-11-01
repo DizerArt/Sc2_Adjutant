@@ -1,0 +1,26 @@
+from PIL import Image
+from collections import deque
+from pathlib import Path
+import json
+p=Path('work/brat-ok-zergling-run-v1/frames/frame-03.png')
+im=Image.open(p).convert('RGB')
+w,h=im.size
+pixels=im.tobytes();background=im.getpixel((0,0))
+seen=bytearray(w*h);components=[]
+for start in range(w*min(h,420)):
+    if seen[start]:continue
+    offset=start*3
+    if max(abs(pixels[offset+c]-background[c]) for c in range(3))<=12:continue
+    todo=deque([start]);seen[start]=1;area=0;x0,x1,y0,y1=w,0,h,0
+    while todo:
+        index=todo.popleft();y,x=divmod(index,w);area+=1;x0=min(x0,x);x1=max(x1,x);y0=min(y0,y);y1=max(y1,y)
+        for ny,nx in [(y,x-1),(y,x+1),(y-1,x),(y+1,x)]:
+            if 0<=nx<w and 0<=ny<420:
+                ni=ny*w+nx;offset=ni*3
+                if not seen[ni] and max(abs(pixels[offset+c]-background[c]) for c in range(3))>12:
+                    seen[ni]=1;todo.append(ni)
+    if area>=4:components.append({'area':area,'bbox':[x0,y0,x1+1,y1+1]})
+report={'file':str(p),'background_rgb':background,'components':sorted(components,key=lambda c:c['area'],reverse=True),'previous_orphan_region_clear':all(max(abs(im.getpixel((x,y))[c]-background[c]) for c in range(3))<=12 for y in range(182,196) for x in range(731,738))}
+Path('work/brat-ok-zergling-run-v1/phase2-final-inspection.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))
+

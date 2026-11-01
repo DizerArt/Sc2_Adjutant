@@ -1,0 +1,28 @@
+import bpy,json
+s=bpy.context.scene
+if s.name!="BRAT_OK — зерглинг: галоп": raise RuntimeError("Scene changed.")
+scale=5.4/469
+for phase,ax,ay,height in [(7,1115,724,138),(8,1546,730,140)]:
+    obj=s.objects["Зерглинг — фаза "+str(phase)]
+    points=json.loads(obj["source_polygon"])
+    points=[(x,710 if y==742 else y) for x,y in points]
+    mesh=bpy.data.meshes.new("Фаза "+str(phase)+" — чистая граница")
+    verts=[((x-ax)*scale,(ay-y+height)*scale,.1) for x,y in points]
+    mesh.from_pydata(verts,[],[tuple(range(len(verts)))])
+    layer=mesh.uv_layers.new(name="Точный контур")
+    for item,point in zip(layer.data,points):item.uv=(point[0]/1774,1-point[1]/887)
+    mesh.materials.append(obj.data.materials[0])
+    obj.data=mesh
+    obj["source_polygon"]=json.dumps(points)
+s.render.resolution_percentage=50
+for frame in range(19,25):
+    s.frame_set(frame)
+    s.render.filepath="<ORIGINAL_PROJECT>/work/brat-ok-zergling-run-v1/frames/frame-"+str(frame-1).zfill(2)+".png"
+    bpy.ops.render.render(write_still=True)
+s.frame_set(19)
+s.render.filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/zergling-run-v1/preview-phase7.png"
+bpy.ops.render.render(write_still=True)
+s.render.resolution_percentage=100
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/zergling-run-v1/BRAT_OK_zergling_gallop_v3.blend",relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"boundary_y":710,"rerendered_frames":[19,24]}))
+

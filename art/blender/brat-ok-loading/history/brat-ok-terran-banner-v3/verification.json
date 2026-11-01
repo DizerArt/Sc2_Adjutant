@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "all_objects_and_transforms_preserved": true,
+    "frame_preserved": true,
+    "five_units_preserved": true,
+    "new_background_packed": true,
+    "seven_used_images_packed": true,
+    "foreground_title_preserved": true,
+    "historical_scene_preserved": true,
+    "versioned_file_saved": true
+  },
+  "all_passed": true,
+  "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\BRAT_OK_giant_unit_v4.blend",
+  "background": "//assets/environment-banner-v3.png",
+  "frame": 0
+}

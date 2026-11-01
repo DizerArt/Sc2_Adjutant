@@ -1,0 +1,9 @@
+Use case: precise-object-edit. Input image1 is the EDIT TARGET: the complete lowercase metallic Latin alphabet atlas. Keep the EXACT same26 lowercase letter identities and design family, ivory chipped painted metal texture, bronze-gold beveled outlines and close black extrusion, lighting, genuine transparentbackground. Change the LAYOUT/SPACING: reposition and uniformly shrink the glyphs inside their slots so absolutely no letters or shadows overlap and no ascender, dot or descender intrudes into another cell. Do not redraw asuppercase.
+Output ONE spacious atlas, SIX equal columns, FIVE equal rows, preferably a square2048x2048 canvas with generous margins. Each glyph fits within the CENTRAL60% of its allotted cell horizontally and vertically, with wide genuinelytransparentgutters around EVERY cell. Each row has a sharedbaseline and fontscale; ascendersanddescendersretainnatural relative height, dots stay withi/j. All letteroutlines/shadows insidecell. In particular w and x MUST have a broad transparentgap; lowerp/q descendersandthe t in nextrow MUST NOT touch oroverlap. Do not crowd the edges. Smallermetalletterswithmoreemptyspaceare intentional.
+Exact text inventory/positionsleft-to-right:
+row1: a b c d e f
+row2: g h i j k l
+row3: m n o p q r
+row4: s t u v w x
+row5: y z [EMPTY] [EMPTY] [EMPTY] [EMPTY]
+No capitalletters,noextracharacters,noheadings,labels,gridlines,watermark,backdrop,haze,checkers. Keep transparentinternalcounters. The entirepointofthiseditis toenable clean rectangularindividualglyphimportswith nopixelsfromneighbors.

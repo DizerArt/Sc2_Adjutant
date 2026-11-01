@@ -1,0 +1,31 @@
+from PIL import Image
+from pathlib import Path
+from collections import deque
+import json,hashlib
+p=Path('output/brat-ok-loading/zergling-run-v1/assets/zergling-gallop.png')
+im=Image.open(p)
+alpha=im.getchannel('A')
+w,h=im.size
+data=alpha.tobytes()
+seen=bytearray(w*h)
+components=[]
+for start in range(w*h):
+    if seen[start] or data[start]<=128: continue
+    todo=deque([start]); seen[start]=1
+    x0,x1,y0,y1=w,0,h,0
+    area=0
+    while todo:
+        index=todo.popleft(); y,x=divmod(index,w)
+        area+=1
+        x0=min(x0,x); x1=max(x1,x); y0=min(y0,y); y1=max(y1,y)
+        for ny,nx in [(y,x-1),(y,x+1),(y-1,x),(y+1,x)]:
+            if 0<=nx<w and 0<=ny<h:
+                ni=ny*w+nx
+                if not seen[ni] and data[ni]>128:
+                    seen[ni]=1;todo.append(ni)
+    if area>50: components.append({'area':area,'bbox':[x0,y0,x1+1,y1+1]})
+components.sort(key=lambda c:c['area'],reverse=True)
+report={'size':[w,h],'mode':im.mode,'components':components[:35],'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+Path('work/brat-ok-zergling-run-v1/atlas-inspection.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))
+

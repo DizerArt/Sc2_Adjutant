@@ -1,0 +1,57 @@
+{
+  "mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 960,
+        "height": 540,
+        "r_frame_rate": "20/1",
+        "nb_frames": "256"
+      }
+    ],
+    "format": {
+      "duration": "12.800000"
+    }
+  },
+  "gif": {
+    "size": [
+      768,
+      432
+    ],
+    "frames": 128,
+    "frame_duration_ms": 100,
+    "loop": 0
+  },
+  "loop": {
+    "pixel_identical": true,
+    "max_channel_delta": 0
+  },
+  "sample_regions": {
+    "ground": {
+      "changed": false,
+      "max_channel_delta": 0
+    },
+    "antenna": {
+      "changed": false,
+      "max_channel_delta": 0
+    },
+    "fire": {
+      "changed": true,
+      "max_channel_delta": 164
+    },
+    "smoke": {
+      "changed": true,
+      "max_channel_delta": 57
+    },
+    "clouds": {
+      "changed": true,
+      "max_channel_delta": 154
+    },
+    "shield": {
+      "changed": true,
+      "max_channel_delta": 84
+    }
+  },
+  "environment_sha256": "4abd99bd18ed73495c55373ef9c17974e052794cb7a7f9a9bf03f7dc38144252"
+}

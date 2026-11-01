@@ -1,0 +1,76 @@
+from pathlib import Path
+root = Path('<ORIGINAL_PROJECT>')
+old = root/'work/brat-ok-full-scene-v1'
+new = root/'work/brat-ok-full-scene-v2'
+code = (old/'build_scene.py').read_text(encoding='utf-8-sig')
+code = code.replace('BRAT_OK — вся сцена: общий проход', 'BRAT_OK — хоровод: четверка и ультралиск')
+code = code.replace('full-scene-v1', 'full-scene-v2').replace('!= 9:', '!= 10:').replace('nine preserved scenes', 'ten preserved scenes')
+code = code.replace('s.frame_start, s.frame_end = 1, 384', 's.frame_start, s.frame_end = 1, 576')
+code = code.replace("s['cycle_seconds'] = 12.8", "s['cycle_seconds'] = 19.2")
+code = code.replace('range(1, 386)', 'range(1, 578)').replace('f == 385', 'f == 577')
+code = code.replace('startx - .15 * min(f - 1, 310)', 'startx - .12 * (f - 1)')
+code = code.replace("'speed': .15, 'last_travel_frame': 311", "'speed': .12, 'last_travel_frame': 576")
+code = code.replace('x = 14 - .20 * max(0, min(f - 31, 270))', 'x = 39 - .12 * (f - 1)')
+code = code.replace('giant.location = (14, -3.9, .9)', 'giant.location = (39, -3.9, .9)')
+code = code.replace("'startx':14", "'startx':39").replace("'speed':.2,'wait_start':31,'last_travel_frame':301", "'speed':.12,'wait_start':1,'last_travel_frame':576")
+code = code.replace('for emit in range(41, 302, 13):', 'for emit in range(1, 577, 13):')
+code = code.replace('age = f - emit', 'age = (f - 1 - (emit - 1)) % 576')
+code = code.replace("title = clone(bpy.data.objects['BRAT_OK — поверх юнитов'], titlecol)", '''# Tail of the preceding giant pass stays visible across the loop boundary.
+previous = clone(srcgiant, giantcol, False)
+previous.animation_data_clear()
+previous.parent = None
+previous.name = 'Хоровод — ультралиск предыдущего прохода'
+previous['unit'] = 'Ультралиск — предыдущий проход'
+for src in srcgiant.children:
+    obj = clone(src, giantcol)
+    obj.parent = previous
+for f in range(1, 578):
+    phase = (f - 1) % 576
+    theta = 2 * math.pi * phase / 48
+    previous.location = (39 - .12 * (phase + 576), -3.90 + .055 * math.sin(theta), .9)
+    previous.keyframe_insert(data_path='location', frame=f)
+interpolation(previous, 'LINEAR')
+for fc in curves(previous.animation_data.action):
+    fc.keyframe_points[-2].interpolation = next(e.identifier for e in fc.keyframe_points[-2].bl_rna.properties['interpolation'].enum_items if e.identifier == 'CONSTANT')
+s['previous_giant_root'] = previous.name
+
+# Preserve source PNGs; bring the painted bodies to full opacity in their shaders.
+for mat in material_copies.values():
+    if mat in [m for o in unitcol.objects if o.type == 'MESH' for m in o.data.materials] or mat in [m for o in giantcol.objects if o.type == 'MESH' for m in o.data.materials]:
+        tex = next(n for n in mat.node_tree.nodes if n.type == 'TEX_IMAGE')
+        mix = next(n for n in mat.node_tree.nodes if n.type == 'MIX_SHADER')
+        solid = mat.node_tree.nodes.new('ShaderNodeMath')
+        solid.name = 'Плотный силуэт без просвечивания'
+        solid.operation = next(e.identifier for e in solid.bl_rna.properties['operation'].enum_items if e.identifier == 'MULTIPLY')
+        solid.inputs[1].default_value = 16
+        solid.use_clamp = True
+        mat.node_tree.links.new(tex.outputs['Alpha'], solid.inputs[0])
+        mat.node_tree.links.new(solid.outputs[0], mix.inputs[0])
+        mat['body_alpha_multiplier'] = 16
+
+# Retime copied background controls to the longer 576-frame queue loop.
+retimed = []
+for o in bgcol.objects:
+    if o.type not in ['MESH', 'CURVE']:
+        continue
+    for mat in o.data.materials:
+        if not mat.use_nodes or mat.name in retimed:
+            continue
+        retimed.append(mat.name)
+        if mat.node_tree.animation_data and mat.node_tree.animation_data.action:
+            for fc in curves(mat.node_tree.animation_data.action):
+                for kp in fc.keyframe_points:
+                    kp.co.x = 1 + (kp.co.x - 1) * 1.5
+                    kp.handle_left.x = 1 + (kp.handle_left.x - 1) * 1.5
+                    kp.handle_right.x = 1 + (kp.handle_right.x - 1) * 1.5
+                fc.update()
+
+title = clone(bpy.data.objects['BRAT_OK — поверх юнитов'], titlecol)''')
+code = code.replace('BRAT_OK_full_scene_v1.blend', 'BRAT_OK_full_scene_v2.blend')
+code = code.replace('s.frame_set(140)', 's.frame_set(180)')
+(new/'build_scene.py').write_text(code,encoding='utf-8')
+render = (old/'render_frames.py').read_text(encoding='utf-8-sig').replace('BRAT_OK — вся сцена: общий проход','BRAT_OK — хоровод: четверка и ультралиск').replace('full-scene-v1','full-scene-v2').replace('385','577')
+(new/'render_frames.py').write_text(render,encoding='utf-8')
+export = (old/'export_preview.py').read_text(encoding='utf-8-sig').replace('full-scene-v1','full-scene-v2').replace('384','576').replace('0384','0576').replace('385','577').replace('12800','19200').replace('12_8','19_2').replace('12.8','19.2')
+(new/'export_preview.py').write_text(export,encoding='utf-8')
+print('Prepared v2 assembly, render and export helpers.')

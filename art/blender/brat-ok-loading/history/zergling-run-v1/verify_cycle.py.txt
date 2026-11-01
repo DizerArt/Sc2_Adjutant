@@ -1,0 +1,32 @@
+import bpy,json
+s=bpy.data.scenes["BRAT_OK — зерглинг: галоп"]
+poses=[o for o in s.objects if o.get("phase_index") is not None]
+visibility=[]
+curve_count=0
+all_constant=True
+for o in poses:
+    curves=[fc for layer in o.animation_data.action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+    curve_count+=len(curves)
+    all_constant=all_constant and all(key.interpolation=="CONSTANT" for fc in curves for key in fc.keyframe_points)
+for frame in range(1,26):
+    row=[]
+    for o in poses:
+        curves=[fc for layer in o.animation_data.action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves if fc.data_path=="hide_render"]
+        if round(curves[0].evaluate(frame))==0:row.append(o["phase_index"])
+    visibility.append(row)
+checks={
+"eight_poses":len(poses)==8,
+"unique_pose_all_native_frames":all(len(v)==1 for v in visibility),
+"correct_order":[v[0] for v in visibility[:24]]==[i//3 for i in range(24)],
+"same_first_and_endpoint_pose":visibility[0]==visibility[24],
+"constant_pose_keys":all_constant,
+"root_static":not s.objects["Зерглинг — опорная точка"].animation_data,
+"camera_static":not s.camera.animation_data,
+"packed_atlas":all(n.image.packed_file for m in poses[0].data.materials for n in m.node_tree.nodes if n.type=="TEX_IMAGE"),
+"no_unit_drivers":all(not o.animation_data or not o.animation_data.drivers for o in s.objects),
+"prior_scenes_counts_preserved":len(bpy.data.scenes["BRAT_OK — 2D"].objects)==106 and len(bpy.data.scenes["BRAT_OK — масштаб ультралиска"].objects)==29 and len(bpy.data.scenes["BRAT_OK — фон: город и щит"].objects)==18,
+"prior_background_frame_preserved":bpy.data.scenes["BRAT_OK — фон: город и щит"].frame_current==118,
+"phase_overlap_polygons_present":bool(s.objects["Зерглинг — фаза 7"].get("source_polygon")) and bool(s.objects["Зерглинг — фаза 8"].get("source_polygon"))
+}
+print(json.dumps({"file":bpy.data.filepath,"checks":checks,"all_passed":all(checks.values()),"unit_scene_objects":len(s.objects),"visibility_curve_count":curve_count,"cycle_frames":24,"cycle_seconds":.8},ensure_ascii=False))
+

@@ -1,0 +1,53 @@
+import bpy, json, math
+OUT='<ORIGINAL_PROJECT>/output/brat-ok-loading/alphabet-v1'
+start=INDEX_START
+end=INDEX_END
+library=bpy.data.scenes['BRAT_OK — библиотека латинских букв']
+export=bpy.data.scenes[library['export_scene']]
+export.camera.data.sensor_fit=next(e.identifier for e in export.camera.data.bl_rna.properties['sensor_fit'].enum_items if e.identifier=='HORIZONTAL')
+metrics=json.loads(library['export_metrics_json'])
+if not (0<=start<=end<53 and end-start<8):
+    raise RuntimeError('Export at most eight glyphs.')
+instance=export.objects[export['export_instance']]
+oldscene=bpy.context.window.scene
+bottom=min(-.65,min(g['bounds'][1] for g in metrics)-.10)
+top=max(2.25,max(g['bounds'][3] for g in metrics)+.10)
+pixels=192
+height=math.ceil((top-bottom)*pixels)
+bottom=top-height/pixels
+reports=[]
+try:
+    bpy.context.window.scene=export
+    for i in range(start,end+1):
+        info=metrics[i]
+        source=library.objects[info['object']]
+        instance.data=source.data
+        instance.location=(0,0,0)
+        left=min(-.15,info['bounds'][0]-.08)
+        right=max(info['advance']+.10,info['bounds'][2]+.08)
+        width=math.ceil((right-left)*pixels)
+        right=left+width/pixels
+        export.render.resolution_x=width
+        export.render.resolution_y=height
+        export.camera.data.ortho_scale=width/pixels
+        export.camera.location=((left+right)/2,(top+bottom)/2,30)
+        export.render.filepath=OUT+'/glyphs/'+info['file']
+        bpy.ops.render.render(write_still=True)
+        info['png_size']=[width,height]
+        info['png_origin_from_top_left']=[-left*pixels,top*pixels]
+        info['png_advance_px']=info['advance']*pixels
+        info['png_units_per_pixel']=1/pixels
+        info['png_camera_sensor_fit']='HORIZONTAL'
+        try:
+            with bpy.context.temp_override(id=source):
+                bpy.ops.ed.lib_id_load_custom_preview(filepath=export.render.filepath)
+            info['custom_asset_preview_loaded']=True
+        except Exception as err:
+            info['custom_asset_preview_loaded']=False
+            info['custom_preview_error']=str(err)
+        reports.append({'glyph':info['char'],'file':info['file'],'size':[width,height],'preview_loaded':info['custom_asset_preview_loaded']})
+    library['export_metrics_json']=json.dumps(metrics,ensure_ascii=False)
+    export['glyph_export_metrics_json']=library['export_metrics_json']
+finally:
+    bpy.context.window.scene=oldscene
+print(json.dumps({'exported':reports,'through_index':end},ensure_ascii=False))

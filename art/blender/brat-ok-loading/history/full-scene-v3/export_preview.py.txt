@@ -1,0 +1,29 @@
+from pathlib import Path
+import subprocess, json, hashlib
+from PIL import Image
+
+root=Path('<ORIGINAL_PROJECT>')
+work=root/'work/brat-ok-full-scene-v3'
+out=root/'output/brat-ok-loading/full-scene-v3'
+ffmpeg=Path('<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe')
+paths=[work/'frames'/f'frame-{f:04d}.png' for f in range(1,577)]
+if sorted((work/'frames').glob('frame-*.png'))!=paths:
+    raise RuntimeError('All 576 consecutive preview samples required.')
+hashes=[]
+for path in paths:
+    with Image.open(path) as im:
+        if im.size!=(960,540):
+            raise RuntimeError('Expected 960x540 preview frames.')
+        hashes.append(hashlib.sha256(im.convert('RGBA').tobytes()).hexdigest())
+with Image.open(work/'loop-end.png') as im:
+    seam=hashes[0]==hashlib.sha256(im.convert('RGBA').tobytes()).hexdigest()
+subprocess.run([str(ffmpeg),'-y','-hide_banner','-loglevel','error','-framerate','30','-start_number','1','-i',str(work/'frames/frame-%04d.png'),'-frames:v','576','-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',str(out/'full-scene.mp4')],check=True,timeout=120)
+probe=subprocess.run([str(ffmpeg.with_name('ffprobe.exe')),'-v','error','-count_frames','-show_entries','stream=width,height,r_frame_rate,nb_frames,nb_read_frames:format=duration','-of','json',str(out/'full-scene.mp4')],check=True,capture_output=True,text=True,timeout=20)
+info=json.loads(probe.stdout)
+stream=info['streams'][0]
+checks={'576_unique_render_states':len(set(hashes))==576,'native_loop_seam_equal':seam,'all_frames_encoded':int(stream['nb_frames'])==int(stream['nb_read_frames'])==576,'fps_30':stream['r_frame_rate']=='30/1','duration_19_2':abs(float(info['format']['duration'])-19.2)<.01,'dimensions_960x540':(stream['width'],stream['height'])==(960,540)}
+report={'all_passed':all(checks.values()),'checks':checks,'mp4':info,'fresh_native_frames':[1,288],'reused_offscreen_frames':[289,576],'reuse_actual_native_samples_identical':json.loads((work/'reuse-verification.json').read_text(encoding='utf-8')),'changed_gait_cycles':{'marauder':32,'zealot':32},'gait_speed_ratio':1.5}
+(work/'export-inspection.json').write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding='utf-8')
+print(json.dumps(report,ensure_ascii=False))
+if not report['all_passed']:
+    raise RuntimeError('Export verification failed.')

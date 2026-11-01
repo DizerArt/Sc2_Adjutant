@@ -1,0 +1,25 @@
+import bpy,json
+from mathutils import Vector
+s=bpy.context.scene
+roots=[o for o in s.objects if o.get("unit")]
+u=next(o for o in roots if o["unit"]=="Ультралиск")
+children=list(u.children)
+bounds=[u.children[0].matrix_world @ Vector(p) for p in u.children[0].bound_box]
+title=s.objects.get("BRAT_OK — поверх юнитов")
+planes=[o for o in s.objects if o.type=="MESH"]
+image_nodes=[n for o in planes for mat in o.data.materials for n in mat.node_tree.nodes if n.type=="TEX_IMAGE"]
+checks={
+"five_independent_units":len(roots)==5 and all(len(list(o.children))==1 for o in roots),
+"ultralisk_single_separate_plane":len(children)==1 and children[0].type=="MESH",
+"giant_taller_than_camera":u["visible_height"]>10.8,
+"ultralisk_exits_top_and_right":max(p.y for p in bounds)>5.4 and max(p.x for p in bounds)>9.6,
+"full_uv_source_preserved":sorted(tuple(round(c,6) for c in item.uv) for item in u.children[0].data.uv_layers.active.data)==sorted([(0,0),(1,0),(1,1),(0,1)]),
+"separate_title_in_front":title is not None and title.location.z>max(o.matrix_world.translation.z for o in planes if o!=title),
+"background_is_clean_environment":next(n for n in s.objects["Фон — без неподвижной ноги"].data.materials[0].node_tree.nodes if n.type=="TEX_IMAGE").image.filepath=="//assets/environment.png",
+"seven_scene_images_packed":len(image_nodes)==7 and all(n.image.packed_file for n in image_nodes),
+"old_scene_preserved":len(bpy.data.scenes["BRAT_OK — 2D"].objects)==106,
+"new_units_static_no_drivers":all(not o.animation_data for root in roots for o in [root]+list(root.children)),
+"versioned_final_saved":bpy.data.filepath.replace("\\","/").endswith("/BRAT_OK_giant_unit_v2.blend")
+}
+print(json.dumps({"checks":checks,"all_passed":all(checks.values()),"file":bpy.data.filepath,"scene":s.name,"unit_count":len(roots),"ultralisk_height":u["visible_height"],"frame":s.frame_current},ensure_ascii=False))
+

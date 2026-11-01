@@ -1,0 +1,39 @@
+import bpy,json
+ROOT="<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1"
+EXPECTED=ROOT+"/BRAT_OK_giant_unit_v3.blend"
+if bpy.data.filepath.replace("\\","/")!=EXPECTED:
+    raise RuntimeError("Connected file changed; inspect it.")
+scene=bpy.context.scene
+if scene.name!="BRAT_OK — масштаб ультралиска":
+    raise RuntimeError("Active scene changed; inspect it.")
+before_objects={o.name:tuple(c for row in o.matrix_world for c in row) for o in scene.objects}
+before_frame=scene.frame_current
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/work/brat-ok-terran-banner-v3/before-background-update.blend",copy=True,relative_remap=False)
+background=scene.objects["Фон — без неподвижной ноги"]
+texture=next(n for n in background.data.materials[0].node_tree.nodes if n.type=="TEX_IMAGE")
+new_image=bpy.data.images.load(ROOT+"/assets/environment-banner-v3.png",check_existing=False)
+new_image.pack()
+new_image.filepath="//assets/environment-banner-v3.png"
+texture.image=new_image
+scene["terran_environment_revision"]="Battle-worn painted metallic-thread Terran standards with frayed edges and faded colors; battle fires preserved, no production strips or signal beacons."
+scene["environment_fire_animation"]="Fire is painted into a static environment image; no flame animation yet."
+scene.render.filepath=ROOT+"/preview-banner-v4.png"
+original_percentage=scene.render.resolution_percentage
+scene.render.resolution_percentage=50
+bpy.ops.render.render(write_still=True)
+scene.render.resolution_percentage=original_percentage
+bpy.ops.wm.save_as_mainfile(filepath=ROOT+"/BRAT_OK_giant_unit_v4.blend",relative_remap=False)
+after_objects={o.name:tuple(c for row in o.matrix_world for c in row) for o in scene.objects}
+roots=[o for o in scene.objects if o.get("unit")]
+used_images=[n.image for o in scene.objects if o.type=="MESH" for m in o.data.materials for n in m.node_tree.nodes if n.type=="TEX_IMAGE"]
+checks={
+"all_objects_and_transforms_preserved":before_objects==after_objects,
+"frame_preserved":scene.frame_current==before_frame,
+"five_units_preserved":len(roots)==5,
+"new_background_packed":bool(new_image.packed_file) and texture.image==new_image,
+"seven_used_images_packed":len(used_images)==7 and all(i.packed_file for i in used_images),
+"foreground_title_preserved":"BRAT_OK — поверх юнитов" in scene.objects,
+"historical_scene_preserved":len(bpy.data.scenes["BRAT_OK — 2D"].objects)==106,
+"versioned_file_saved":bpy.data.filepath.replace("\\","/").endswith("BRAT_OK_giant_unit_v4.blend")
+}
+print(json.dumps({"checks":checks,"all_passed":all(checks.values()),"file":bpy.data.filepath,"background":new_image.filepath,"frame":scene.frame_current},ensure_ascii=False))

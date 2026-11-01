@@ -1,0 +1,87 @@
+[
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\background-clean.png",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "bbox128": null,
+    "sha256": "66193fd1eca6c972e838738911a54567e1ae64d603161e834b0d2be39dab6571"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\ultralisk-v1\\ultralisk.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      43,
+      12,
+      1498,
+      1003
+    ],
+    "sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\units-v1\\marauder-left-v2.png",
+    "size": [
+      1295,
+      1215
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      61,
+      54,
+      1230,
+      1181
+    ],
+    "sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\units-v1\\zergling.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      100,
+      30,
+      1512,
+      1005
+    ],
+    "sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\units-v1\\zealot.png",
+    "size": [
+      1188,
+      1324
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      13,
+      18,
+      1176,
+      1302
+    ],
+    "sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50"
+  },
+  {
+    "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\units-v1\\hydralisk.png",
+    "size": [
+      1536,
+      1024
+    ],
+    "mode": "RGBA",
+    "bbox128": [
+      75,
+      8,
+      1502,
+      1010
+    ],
+    "sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448"
+  }
+]

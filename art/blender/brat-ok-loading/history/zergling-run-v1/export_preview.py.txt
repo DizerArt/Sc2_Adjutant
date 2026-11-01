@@ -1,0 +1,26 @@
+from pathlib import Path
+from PIL import Image,ImageChops,ImageStat
+import subprocess,json
+ROOT=Path(r'<ORIGINAL_PROJECT>')
+work=ROOT/'work/brat-ok-zergling-run-v1'
+out=ROOT/'output/brat-ok-loading/zergling-run-v1'
+ffmpeg=Path(r'<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe')
+ffprobe=ffmpeg.with_name('ffprobe.exe')
+def run(args):return subprocess.run([str(ffmpeg),'-y','-hide_banner','-loglevel','error']+args,check=True,timeout=120)
+for speed,fps in [('normal',30),('slow',10)]:
+    cycle=work/(speed+'-cycle.mp4')
+    run(['-framerate',str(fps),'-i',str(work/'frames/frame-%02d.png'),'-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-movflags','+faststart',str(cycle)])
+    run(['-stream_loop','5' if speed=='normal' else '1','-i',str(cycle),'-t','4.8','-c','copy','-movflags','+faststart',str(out/(speed+'.mp4'))])
+    run(['-i',str(cycle),'-filter_complex','fps=10,scale=768:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=192[p];[b][p]paletteuse=dither=sierra2_4a','-loop','0',str(out/(speed+'.gif'))])
+report={'normal_cycle_seconds':.8,'slow_cycle_seconds':2.4}
+for speed in ['normal','slow']:
+    probe=subprocess.run([str(ffprobe),'-v','error','-show_entries','stream=width,height,r_frame_rate,nb_frames:format=duration','-of','json',str(out/(speed+'.mp4'))],capture_output=True,text=True,check=True,timeout=20)
+    report[speed]=json.loads(probe.stdout)
+with Image.open(work/'frames/frame-00.png') as a,Image.open(work/'loop-end.png') as b:
+    diff=ImageChops.difference(a.convert('RGB'),b.convert('RGB'))
+    report['loop_endpoints_identical']=diff.getbbox() is None
+images=[Image.open(work/('frames/frame-'+str(i*3).zfill(2)+'.png')).convert('RGB') for i in range(8)]
+report['pose_change_means']=[round(sum(ImageStat.Stat(ImageChops.difference(images[i],images[(i+1)%8])).mean)/3,4) for i in range(8)]
+(work/'export-inspection.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))
+

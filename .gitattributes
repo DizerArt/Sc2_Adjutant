@@ -1,3 +1,8 @@
 # This file is verified byte-for-byte against compose-runtime.lock.json.
 # Preserve upstream LF on Windows checkouts with core.autocrlf=true.
 02_application/resources/compose-node-LICENSE.txt text eol=lf -whitespace
+art/blender/brat-ok-loading/** text eol=lf
+art/blender/brat-ok-loading/**/*.blend binary
+art/blender/brat-ok-loading/**/*.png binary
+art/blender/brat-ok-loading/history/** -whitespace
+art/blender/brat-ok-loading/scenes/*/HISTORY.md -whitespace

@@ -1,0 +1,27 @@
+import bpy,json
+s=bpy.context.scene
+bg=s.objects["Фон — без неподвижной ноги"]
+mat=bg.data.materials[0]
+tree=mat.node_tree
+smoke_center=next(n for n in tree.nodes if n.type=="MATH" and n.operation=="SUBTRACT" and abs(n.inputs[1].default_value-228/1672)<1e-7)
+smoke_center.inputs[1].default_value=2
+smoke_center.label="Отключено: защита неподвижной антенны"
+emission=next(n for n in tree.nodes if n.type=="EMISSION")
+brightness=emission.inputs["Strength"].links[0].from_node
+gain=brightness.inputs[1].links[0].from_node
+firewarm=gain.inputs[0].links[0].from_node
+firemask=firewarm.inputs[0].links[0].from_node
+changes=0
+for link in list(firemask.outputs[0].links):
+    if link.to_node!=firewarm:
+        destination=link.to_socket
+        tree.links.new(firewarm.outputs[0],destination)
+        changes+=1
+s["rigid_protection"]="Left smoke UV warp disabled around antenna; flame UV deformation gated by warm fire colors."
+s.render.resolution_percentage=50
+s.render.filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/background-motion-v1/preview-protected.png"
+bpy.ops.render.render(write_still=True)
+s.render.resolution_percentage=100
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/output/brat-ok-loading/background-motion-v1/BRAT_OK_background_motion_v2.blend",relative_remap=False)
+print(json.dumps({"fire_warp_links_gated":changes,"file":bpy.data.filepath,"frame":s.frame_current},ensure_ascii=False))
+

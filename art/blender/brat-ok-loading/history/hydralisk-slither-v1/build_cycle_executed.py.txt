@@ -1,0 +1,216 @@
+import bpy, math, json
+
+ROOT = "<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/zealot-run-v1/BRAT_OK_zealot_run_v1.blend"
+NAME = "BRAT_OK — гидралиск: ползучая волна"
+spec = json.loads(r'''{"size":[1536,1024],"grid":[96,64],"pixel_scale":0.0034,"ground_y":-1.65,"anchor_x":650,"contact_y":1009,"tail_x_start":820,"tail_x_full":1536,"tail_y_start":790,"tail_y_full":830,"tail_y_release_start":1180,"tail_y_release_full":1250,"tail_amp_y":45,"tail_amp_x":14,"tail_waves":1.1,"body_amp_x":10,"body_amp_y":2.5,"body_y_pin":700,"body_y_full":180,"body_x_window":[230,330,800,900],"claw_center":[1090,766],"claw_radii":[70,65],"claw_fade_ratio":0.3,"belly_y_start":950,"belly_y_full":990,"belly_x_pin_end":920,"belly_x_release_end":1040}''')
+if bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("Connected file changed; inspect before building.")
+if bpy.data.scenes.get(NAME):
+    raise RuntimeError("Slither scene already exists; do not repeat build.")
+if len(bpy.data.scenes) != 8:
+    raise RuntimeError("Expected eight preserved source scenes.")
+defaults = {"size":[1536,1024],"grid":[96,64],"pixel_scale":.0034,"ground_y":-1.65,"anchor_x":650,"contact_y":1007,"tail_x_start":820,"tail_x_full":1536,"tail_y_start":790,"tail_y_full":830,"tail_y_release_start":1180,"tail_y_release_full":1250,"tail_amp_y":45,"tail_amp_x":14,"tail_waves":1.1,"body_amp_x":10,"body_amp_y":2.5,"body_y_pin":700,"body_y_full":180,"body_x_window":[230,330,800,900],"claw_center":[1090,766],"claw_radii":[70,65],"claw_fade_ratio":.3,"belly_y_start":950,"belly_y_full":990,"belly_x_pin_end":920,"belly_x_release_end":1040}
+for name, value in defaults.items():
+    if name not in spec:
+        spec[name] = value
+W, H = spec["size"]
+cols, rows = spec["grid"]
+scale = spec["pixel_scale"]
+ground = spec["ground_y"]
+ax, contact = spec["anchor_x"], spec["contact_y"]
+if [W,H] != [1536,1024] or [cols,rows] != [96,64] or scale <= 0:
+    raise RuntimeError("Expected unchanged 1536x1024 PNG and 96x64 native mesh.")
+for low, high in [("tail_x_start","tail_x_full"),("tail_y_start","tail_y_full"),("tail_y_release_start","tail_y_release_full"),("body_y_full","body_y_pin"),("belly_y_start","belly_y_full"),("belly_x_pin_end","belly_x_release_end")]:
+    if spec[low] >= spec[high]:
+        raise RuntimeError("Invalid smooth mask boundaries.")
+if min(spec["tail_amp_y"],spec["tail_amp_x"],spec["body_amp_x"],spec["body_amp_y"]) < 0:
+    raise RuntimeError("Motion amplitudes must be nonnegative.")
+if min(spec["claw_radii"]) <= 0 or spec["claw_fade_ratio"] <= 0 or not (spec["body_x_window"][0] < spec["body_x_window"][1] <= spec["body_x_window"][2] < spec["body_x_window"][3]):
+    raise RuntimeError("Invalid claw exclusion or body window.")
+
+def smooth(value):
+    t = min(1.0, max(0.0, value))
+    return t*t*(3-2*t)
+
+def offsets(x, y):
+    progress = min(1.0,max(0.0,(x-spec["tail_x_start"])/(spec["tail_x_full"]-spec["tail_x_start"])))
+    release = smooth((x-spec["tail_y_release_start"])/(spec["tail_y_release_full"]-spec["tail_y_release_start"]))
+    below = smooth((y-spec["tail_y_start"])/(spec["tail_y_full"]-spec["tail_y_start"]))
+    weight = smooth(progress)*(below*(1-release)+release)
+    cx,cy = spec["claw_center"]
+    rx,ry = spec["claw_radii"]
+    claw_distance = math.sqrt(((x-cx)/rx)**2+((y-cy)/ry)**2)
+    weight *= smooth((claw_distance-1)/spec["claw_fade_ratio"])
+    belly_pin = (1-smooth((x-spec["belly_x_pin_end"])/(spec["belly_x_release_end"]-spec["belly_x_pin_end"])))*smooth((y-spec["belly_y_start"])/(spec["belly_y_full"]-spec["belly_y_start"]))
+    weight *= 1-belly_pin
+    phase = 2*math.pi*spec["tail_waves"]*progress
+    # The lowermost row cannot move through the fixed ground contact.
+    amp_y = min(spec["tail_amp_y"], max(0.0,contact-y-2))*weight
+    amp_x = spec["tail_amp_x"]*weight
+    body_y = smooth((spec["body_y_pin"]-y)/(spec["body_y_pin"]-spec["body_y_full"]))
+    lx0,lx1,rx0,rx1 = spec["body_x_window"]
+    body_x = smooth((x-lx0)/(lx1-lx0))*smooth((rx1-x)/(rx1-rx0))
+    body = body_y*body_x
+    return [(amp_x*math.cos(phase),amp_y*math.sin(phase)),(-amp_x*math.sin(phase),amp_y*math.cos(phase)),(spec["body_amp_x"]*body,0),(0,spec["body_amp_y"]*body)]
+
+source = bpy.context.scene
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+counts = {s.name:len(s.objects) for s in bpy.data.scenes}
+frames = {s.name:s.frame_current for s in bpy.data.scenes}
+img = bpy.data.images.load(ROOT+"/assets/hydralisk-source.png", check_existing=False)
+if list(img.size) != [W,H] or img.channels != 4:
+    raise RuntimeError("Source dimensions/RGBA changed.")
+img.pack()
+img.filepath = "//assets/hydralisk-source.png"
+s = bpy.data.scenes.new(NAME)
+bpy.context.window.scene = s
+s.render.engine = source.render.engine
+s.view_settings.view_transform = source.view_settings.view_transform
+s.render.resolution_x = 1920
+s.render.resolution_y = 1080
+s.render.resolution_percentage = 100
+s.render.fps = 30
+s.render.fps_base = 1
+s.frame_start = 1
+s.frame_end = 48
+s["unit"] = "Гидралиск"
+s["source_counts_json"] = json.dumps(counts,ensure_ascii=False)
+s["source_frames_json"] = json.dumps(frames,ensure_ascii=False)
+s["spec_json"] = json.dumps(spec,ensure_ascii=False)
+s["cycle_seconds"] = 1.6
+s["motion_kind"] = "Continuous native relative shape keys: traveling root-to-tip tail wave plus gentle head sway; unchanged approved source texture."
+s["review_stage"] = "Isolated native slither, pending user review; traversal integration separate."
+s["mask_contract"] = "Tail: lower-body window, right-claw elliptical exclusion, belly contact attenuation; central head sway taper; single flat illustration cannot reconstruct hidden anatomy."
+world = bpy.data.worlds.new("Гидралиск — нейтральная среда")
+world.use_nodes = True
+bg = next(n for n in world.node_tree.nodes if n.type == "BACKGROUND")
+bg.inputs[0].default_value = (.015,.019,.024,1)
+bg.inputs[1].default_value = .25
+s.world = world
+extra_x = (spec["tail_amp_x"]+spec["body_amp_x"])*scale
+extra_y = (spec["tail_amp_y"]+spec["body_amp_y"])*scale
+left, right = -ax*scale-extra_x,(W-ax)*scale+extra_x
+bottom, top = ground+(contact-H)*scale-extra_y,ground+contact*scale+extra_y
+view_width = max(7.8,(top-bottom+.65)*1920/1080,2*max(abs(left),abs(right))+.7)
+camera_data = bpy.data.cameras.new("Гидралиск — камера")
+camera_data.type = next(i.identifier for i in camera_data.bl_rna.properties["type"].enum_items if i.identifier == "ORTHO")
+camera_data.ortho_scale = view_width
+camera_data.clip_start = .01
+camera_data.clip_end = 100
+camera = bpy.data.objects.new("Гидралиск — неподвижная камера",camera_data)
+camera.location = (0,(top+bottom)/2,30)
+s.collection.objects.link(camera)
+s.camera = camera
+
+def flat(name,color):
+    mat = bpy.data.materials.new(name)
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+    nodes.clear()
+    em = nodes.new("ShaderNodeEmission")
+    em.inputs["Color"].default_value = color
+    out = nodes.new("ShaderNodeOutputMaterial")
+    mat.node_tree.links.new(em.outputs[0],out.inputs["Surface"])
+    return mat
+
+def quad(name,coords,material):
+    mesh = bpy.data.meshes.new(name+" — плоскость")
+    mesh.from_pydata(coords,[],[(0,1,2,3)])
+    obj = bpy.data.objects.new(name,mesh)
+    s.collection.objects.link(obj)
+    mesh.materials.append(material)
+    return obj
+
+half_w = view_width/2+.1
+half_h = view_width*1080/1920/2+.1
+cy = camera.location.y
+quad("Гидралиск — нейтральный задник",[(-half_w,cy-half_h,-.6),(half_w,cy-half_h,-.6),(half_w,cy+half_h,-.6),(-half_w,cy+half_h,-.6)],flat("Гидралиск — фон",(.025,.032,.041,1)))
+quad("Гидралиск — линия земли",[(-half_w,ground-.012,-.4),(half_w,ground-.012,-.4),(half_w,ground+.012,-.4),(-half_w,ground+.012,-.4)],flat("Гидралиск — опора",(.14,.18,.22,1)))
+root = bpy.data.objects.new("Гидралиск — опорная точка",None)
+s.collection.objects.link(root)
+root.location = (0,ground,0)
+pixels = [(W*i/cols,H*j/rows) for j in range(rows+1) for i in range(cols+1)]
+verts = [((x-ax)*scale,(contact-y)*scale,.1) for x,y in pixels]
+faces = []
+for j in range(rows):
+    for i in range(cols):
+        a = j*(cols+1)+i
+        faces.append((a,a+cols+1,a+cols+2,a+1))
+mesh = bpy.data.meshes.new("Гидралиск — непрерывная сетка")
+mesh.from_pydata(verts,[],faces)
+obj = bpy.data.objects.new("Гидралиск — цельный деформируемый рисунок",mesh)
+s.collection.objects.link(obj)
+obj.parent = root
+obj["source_png"] = "hydralisk-source.png"
+uv = mesh.uv_layers.new(name="Неизменные координаты исходного рисунка")
+for loop in mesh.loops:
+    x,y = pixels[loop.vertex_index]
+    uv.data[loop.index].uv = (x/W,1-y/H)
+mat = bpy.data.materials.new("Гидралиск — неизменный RGBA рисунок")
+mat.use_nodes = True
+methods = [i.identifier for i in mat.bl_rna.properties["surface_render_method"].enum_items]
+if "BLENDED" in methods:
+    mat.surface_render_method = methods[methods.index("BLENDED")]
+mat.use_transparent_shadow = False
+nodes = mat.node_tree.nodes
+nodes.clear()
+tex = nodes.new("ShaderNodeTexImage")
+tex.image = img
+tex.extension = next(i.identifier for i in tex.bl_rna.properties["extension"].enum_items if i.identifier == "CLIP")
+tex.interpolation = next(i.identifier for i in tex.bl_rna.properties["interpolation"].enum_items if i.identifier == "Linear")
+em = nodes.new("ShaderNodeEmission")
+trans = nodes.new("ShaderNodeBsdfTransparent")
+mix = nodes.new("ShaderNodeMixShader")
+out = nodes.new("ShaderNodeOutputMaterial")
+mat.node_tree.links.new(tex.outputs["Color"],em.inputs["Color"])
+mat.node_tree.links.new(tex.outputs["Alpha"],mix.inputs[0])
+mat.node_tree.links.new(trans.outputs[0],mix.inputs[1])
+mat.node_tree.links.new(em.outputs[0],mix.inputs[2])
+mat.node_tree.links.new(mix.outputs[0],out.inputs["Surface"])
+mesh.materials.append(mat)
+basis = obj.shape_key_add(name="Basis",from_mix=False)
+names = ["Хвост — синус пространства","Хвост — косинус пространства","Голова — плавный наклон","Голова — вертикальное покачивание"]
+keys = []
+for name in names:
+    key = obj.shape_key_add(name=name,from_mix=False)
+    if key.bl_rna.properties["slider_min"].hard_min > -1 or key.bl_rna.properties["slider_max"].hard_max < 1:
+        raise RuntimeError("Native shape-key bounds cannot expose negative coefficients.")
+    key.slider_min = -1
+    key.slider_max = 1
+    keys.append(key)
+for index,(x,y) in enumerate(pixels):
+    displacements = offsets(x,y)
+    for key,(dx,dy) in zip(keys,displacements):
+        key.data[index].co = (verts[index][0]+dx*scale,verts[index][1]+dy*scale,.1)
+for frame in range(1,50):
+    theta = 2*math.pi*((frame-1)%48)/48
+    coefficients = [math.cos(theta),-math.sin(theta),math.sin(theta),math.cos(theta)]
+    for key,value in zip(keys,coefficients):
+        key.value = value
+        key.keyframe_insert(data_path="value",frame=frame)
+for layer in mesh.shape_keys.animation_data.action.layers:
+    for strip in layer.strips:
+        for bag in strip.channelbags:
+            for curve in bag.fcurves:
+                for key in curve.keyframe_points:
+                    key.interpolation = next(e.identifier for e in key.bl_rna.properties["interpolation"].enum_items if e.identifier == "LINEAR")
+assert all(len(bpy.data.scenes[name].objects) == count for name,count in counts.items())
+assert all(bpy.data.scenes[name].frame_current == frame for name,frame in frames.items())
+s.frame_set(1)
+if bpy.context.screen:
+    for area in bpy.context.screen.areas:
+        if area.type == "VIEW_3D":
+            area.spaces.active.region_3d.view_perspective = "CAMERA"
+            area.spaces.active.overlay.show_overlays = False
+            area.spaces.active.shading.type = next(i.identifier for i in area.spaces.active.shading.bl_rna.properties["type"].enum_items if i.identifier == "MATERIAL")
+s.render.image_settings.file_format = next(e.identifier for e in s.render.image_settings.bl_rna.properties["file_format"].enum_items if e.identifier == "PNG")
+s.render.filepath = ROOT+"/preview.png"
+s.render.resolution_percentage = 50
+bpy.ops.render.render(write_still=True)
+s.render.resolution_percentage = 100
+bpy.ops.wm.save_as_mainfile(filepath=ROOT+"/BRAT_OK_hydralisk_slither_v1.blend",relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"scene":s.name,"vertices":len(mesh.vertices),"quads":len(mesh.polygons),"shape_keys":len(mesh.shape_keys.key_blocks),"native_frames":48,"fps":30,"cycle_seconds":1.6,"packed_source":bool(img.packed_file),"eight_source_scenes_preserved":True},ensure_ascii=False))
+
+

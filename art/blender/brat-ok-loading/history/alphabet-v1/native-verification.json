@@ -1,0 +1,52 @@
+{
+  "all_passed": true,
+  "checks": {
+    "53_exact_glyph_characters": true,
+    "all53_marked_as_assets": true,
+    "all53_asset_previews_loaded": true,
+    "windows_filenames_unique": true,
+    "all53_png_metrics_present": true,
+    "common_png_height_and_baseline": true,
+    "natural_variable_widths": true,
+    "underscore_not_fullheight": true,
+    "lowercase_descenders_below_baseline": true,
+    "Q_tail_below_baseline": true,
+    "no_glyph_parent_or_object_scale": true,
+    "source11_counts_preserved": true,
+    "source11_frames_preserved": true,
+    "two_final_packed_atlases": true,
+    "source_alpha_preserved_in_shader": true,
+    "53_correct_UV_rects": true,
+    "three_actual_composed_word_groups": true,
+    "example_instances_are_unmarked": true,
+    "three_new_scenes_only": true,
+    "export_camera_horizontal_projection": true
+  },
+  "assets": 53,
+  "source_counts": {
+    "BRAT_OK — 2D": 106,
+    "BRAT_OK — вся сцена: общий проход": 98,
+    "BRAT_OK — гидралиск: ползучая волна": 5,
+    "BRAT_OK — зерглинг: галоп": 12,
+    "BRAT_OK — зилот: бег на носках": 12,
+    "BRAT_OK — мародёр: бег": 12,
+    "BRAT_OK — мародёр: две ноги": 17,
+    "BRAT_OK — мародёр: цельный цикл v3": 12,
+    "BRAT_OK — масштаб ультралиска": 29,
+    "BRAT_OK — фон: город и щит": 18,
+    "BRAT_OK — хоровод: четверка и ультралиск": 118
+  },
+  "source_frames": {
+    "BRAT_OK — 2D": 3,
+    "BRAT_OK — вся сцена: общий проход": 404,
+    "BRAT_OK — гидралиск: ползучая волна": 26,
+    "BRAT_OK — зерглинг: галоп": 0,
+    "BRAT_OK — зилот: бег на носках": 35,
+    "BRAT_OK — мародёр: бег": 14,
+    "BRAT_OK — мародёр: две ноги": 26,
+    "BRAT_OK — мародёр: цельный цикл v3": 6,
+    "BRAT_OK — масштаб ультралиска": 53,
+    "BRAT_OK — фон: город и щит": 118,
+    "BRAT_OK — хоровод: четверка и ультралиск": 25
+  }
+}

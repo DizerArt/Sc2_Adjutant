@@ -1,0 +1,188 @@
+import bpy, math, json
+
+ROOT = "<ORIGINAL_PROJECT>/output/brat-ok-loading/marauder-run-v3"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/marauder-run-v2/BRAT_OK_marauder_run_v2.blend"
+NAME = "BRAT_OK — мародёр: цельный цикл v3"
+layout = json.loads(r'''LAYOUT_HERE''')
+if bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("Connected file changed; inspect before building.")
+if bpy.data.scenes.get(NAME):
+    raise RuntimeError("Cycle already exists; inspect it instead of repeating.")
+if len(bpy.data.scenes) != 6:
+    raise RuntimeError("Expected six preserved source scenes.")
+cycle = layout["cycle_frames"]
+infos = layout["poses"]
+scale = layout["pixel_scale"]
+ground = layout["ground_y"]
+if cycle != 48 or len(infos) not in (8, 16) or scale <= 0:
+    raise RuntimeError("Expected eight or sixteen poses in a 48-frame cycle.")
+if any(not isinstance(p["hold"], int) or p["hold"] < 1 for p in infos):
+    raise RuntimeError("Each hold must be a positive integer.")
+if sum(p["hold"] for p in infos) != cycle:
+    raise RuntimeError("Pose holds must sum to 48 frames.")
+for p in infos:
+    if "/" in p["file"] or "\\" in p["file"] or ".." in p["file"]:
+        raise RuntimeError("Asset names must be plain local PNG basenames.")
+    w, h = p["size"]
+    x0, y0, x1, y1 = p["rect"]
+    ax, ay = p["anchor"]
+    if not (0 <= x0 < x1 <= w and 0 <= y0 < y1 <= h and x0 <= ax <= x1 and y0 <= ay <= y1 and p["height"] > 0 and p.get("pixel_scale", scale) > 0):
+        raise RuntimeError("Invalid crop, pelvis anchor, or contact offset.")
+source = bpy.context.scene
+counts = {s.name: len(s.objects) for s in bpy.data.scenes}
+frames = {s.name: s.frame_current for s in bpy.data.scenes}
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+s = bpy.data.scenes.new(NAME)
+bpy.context.window.scene = s
+s.render.engine = source.render.engine
+s.view_settings.view_transform = source.view_settings.view_transform
+s.render.resolution_x = 1920
+s.render.resolution_y = 1080
+s.render.resolution_percentage = 100
+s.render.fps = 30
+s.render.fps_base = 1
+s.frame_start = 1
+s.frame_end = cycle
+s["unit"] = "Мародёр"
+s["source_counts_json"] = json.dumps(counts, ensure_ascii=False)
+s["source_frames_json"] = json.dumps(frames, ensure_ascii=False)
+s["layout_json"] = json.dumps(layout, ensure_ascii=False)
+s["cycle_seconds"] = cycle / 30
+s["motion_kind"] = "Whole-body painted poses; constant exposure; approved knee-v3 anatomy; no skeletal cutout."
+s["review_stage"] = "Isolated cycle, pending user visual review; traversal integration is separate."
+world = bpy.data.worlds.new("Мародёр v3 — нейтральная среда")
+world.use_nodes = True
+bg = next(n for n in world.node_tree.nodes if n.type == "BACKGROUND")
+bg.inputs[0].default_value = (.015, .019, .024, 1)
+bg.inputs[1].default_value = .25
+s.world = world
+bottom = min(ground + (p["anchor"][1] - p["rect"][3] + p["height"]) * p.get("pixel_scale", scale) for p in infos)
+top = max(ground + (p["anchor"][1] - p["rect"][1] + p["height"]) * p.get("pixel_scale", scale) for p in infos)
+left = min((p["rect"][0] - p["anchor"][0]) * p.get("pixel_scale", scale) for p in infos)
+right = max((p["rect"][2] - p["anchor"][0]) * p.get("pixel_scale", scale) for p in infos)
+view_width = max(7.8, (top - bottom + .65) * 1920 / 1080, 2 * max(abs(left), abs(right)) + .7)
+camera_data = bpy.data.cameras.new("Мародёр v3 — камера")
+camera_data.type = next(i.identifier for i in camera_data.bl_rna.properties["type"].enum_items if i.identifier == "ORTHO")
+camera_data.ortho_scale = view_width
+camera_data.clip_start = .01
+camera_data.clip_end = 100
+camera = bpy.data.objects.new("Мародёр v3 — неподвижная камера", camera_data)
+camera.location = (0, (top + bottom) / 2, 30)
+s.collection.objects.link(camera)
+s.camera = camera
+palette = bpy.data.collections.new("Мародёр v3 — опора")
+s.collection.children.link(palette)
+poses = bpy.data.collections.new("Мародёр v3 — цельные фазы")
+s.collection.children.link(poses)
+
+def quad(name, coords, material, collection):
+    mesh = bpy.data.meshes.new(name + " — плоскость")
+    mesh.from_pydata(coords, [], [(0, 1, 2, 3)])
+    obj = bpy.data.objects.new(name, mesh)
+    collection.objects.link(obj)
+    obj.data.materials.append(material)
+    return obj
+
+def flat(name, color):
+    mat = bpy.data.materials.new(name)
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+    nodes.clear()
+    emission = nodes.new("ShaderNodeEmission")
+    emission.inputs["Color"].default_value = color
+    output = nodes.new("ShaderNodeOutputMaterial")
+    mat.node_tree.links.new(emission.outputs[0], output.inputs["Surface"])
+    return mat
+
+half_w = view_width / 2 + .1
+half_h = view_width * 1080 / 1920 / 2 + .1
+center_y = camera.location.y
+quad("Мародёр v3 — нейтральный задник", [(-half_w, center_y-half_h, -.6), (half_w, center_y-half_h, -.6), (half_w, center_y+half_h, -.6), (-half_w, center_y+half_h, -.6)], flat("Мародёр v3 — фон", (.025, .032, .041, 1)), palette)
+quad("Мародёр v3 — линия земли", [(-half_w, ground-.012, -.4), (half_w, ground-.012, -.4), (half_w, ground+.012, -.4), (-half_w, ground+.012, -.4)], flat("Мародёр v3 — опора", (.14, .18, .22, 1)), palette)
+root = bpy.data.objects.new("Мародёр v3 — опорная точка", None)
+s.collection.objects.link(root)
+root.location = (0, ground, 0)
+materials = {}
+for info in infos:
+    filename = info["file"]
+    if filename in materials:
+        continue
+    img = bpy.data.images.load(ROOT + "/assets/" + filename, check_existing=False)
+    if list(img.size) != info["size"]:
+        raise RuntimeError("Actual PNG dimensions differ from measured layout.")
+    img.pack()
+    img.filepath = "//assets/" + filename
+    mat = bpy.data.materials.new("Мародёр v3 — " + filename)
+    mat.use_nodes = True
+    methods = [i.identifier for i in mat.bl_rna.properties["surface_render_method"].enum_items]
+    if "BLENDED" in methods:
+        mat.surface_render_method = methods[methods.index("BLENDED")]
+    mat.use_transparent_shadow = False
+    nodes = mat.node_tree.nodes
+    nodes.clear()
+    tex = nodes.new("ShaderNodeTexImage")
+    tex.image = img
+    tex.extension = next(i.identifier for i in tex.bl_rna.properties["extension"].enum_items if i.identifier == "CLIP")
+    tex.interpolation = next(i.identifier for i in tex.bl_rna.properties["interpolation"].enum_items if i.identifier == "Linear")
+    em = nodes.new("ShaderNodeEmission")
+    trans = nodes.new("ShaderNodeBsdfTransparent")
+    mix = nodes.new("ShaderNodeMixShader")
+    output = nodes.new("ShaderNodeOutputMaterial")
+    mat.node_tree.links.new(tex.outputs["Color"], em.inputs["Color"])
+    mat.node_tree.links.new(tex.outputs["Alpha"], mix.inputs[0])
+    mat.node_tree.links.new(trans.outputs[0], mix.inputs[1])
+    mat.node_tree.links.new(em.outputs[0], mix.inputs[2])
+    mat.node_tree.links.new(mix.outputs[0], output.inputs["Surface"])
+    materials[filename] = mat
+sequence = [i for i, p in enumerate(infos) for _ in range(p["hold"])]
+sequence.append(sequence[0])
+for i, info in enumerate(infos):
+    w, h = info["size"]
+    x0, y0, x1, y1 = info["rect"]
+    ax, ay = info["anchor"]
+    height = info["height"]
+    pose_scale = info.get("pixel_scale", scale)
+    l, r = (x0-ax)*pose_scale, (x1-ax)*pose_scale
+    b, t = (ay-y1+height)*pose_scale, (ay-y0+height)*pose_scale
+    obj = quad("Мародёр v3 — фаза " + str(i+1), [(l,b,.1),(r,b,.1),(r,t,.1),(l,t,.1)], materials[info["file"]], poses)
+    obj.parent = root
+    uv = obj.data.uv_layers.new(name="Только область одной фазы")
+    coords = [(x0/w,1-y1/h),(x1/w,1-y1/h),(x1/w,1-y0/h),(x0/w,1-y0/h)]
+    for item, coord in zip(uv.data, coords):
+        item.uv = coord
+    obj["phase_index"] = i
+    obj["phase_description"] = info["phase"]
+    obj["source_file"] = info["file"]
+    obj["source_rect"] = info["rect"]
+    obj["anatomical_anchor"] = info["anchor"]
+    obj["contact_offset"] = height
+    obj["hold_frames"] = info["hold"]
+    obj["pixel_scale"] = pose_scale
+    for frame, active in enumerate(sequence, 1):
+        obj.hide_render = active != i
+        obj.hide_viewport = active != i
+        obj.keyframe_insert(data_path="hide_render", frame=frame)
+        obj.keyframe_insert(data_path="hide_viewport", frame=frame)
+    for layer in obj.animation_data.action.layers:
+        for strip in layer.strips:
+            for bag in strip.channelbags:
+                for curve in bag.fcurves:
+                    for key in curve.keyframe_points:
+                        key.interpolation = next(e.identifier for e in key.bl_rna.properties["interpolation"].enum_items if e.identifier == "CONSTANT")
+assert all(len(bpy.data.scenes[name].objects) == count for name, count in counts.items())
+assert all(bpy.data.scenes[name].frame_current == frame for name, frame in frames.items())
+s.frame_set(1)
+if bpy.context.screen:
+    for area in bpy.context.screen.areas:
+        if area.type == "VIEW_3D":
+            area.spaces.active.region_3d.view_perspective = "CAMERA"
+            area.spaces.active.overlay.show_overlays = False
+            area.spaces.active.shading.type = next(i.identifier for i in area.spaces.active.shading.bl_rna.properties["type"].enum_items if i.identifier == "MATERIAL")
+s.render.image_settings.file_format = next(e.identifier for e in s.render.image_settings.bl_rna.properties["file_format"].enum_items if e.identifier == "PNG")
+s.render.filepath = ROOT + "/preview.png"
+s.render.resolution_percentage = 50
+bpy.ops.render.render(write_still=True)
+s.render.resolution_percentage = 100
+bpy.ops.wm.save_as_mainfile(filepath=ROOT + "/BRAT_OK_marauder_run_v3.blend", relative_remap=False)
+print(json.dumps({"file": bpy.data.filepath, "scene": s.name, "poses": len(infos), "frames": cycle, "fps": 30, "cycle_seconds": cycle/30, "source_scenes_preserved": True, "packed_pngs": len(materials), "camera_width": view_width}, ensure_ascii=False))

@@ -1,0 +1,46 @@
+{
+  "size": [
+    1536,
+    1024
+  ],
+  "grid": [
+    96,
+    64
+  ],
+  "pixel_scale": 0.0034,
+  "ground_y": -1.65,
+  "anchor_x": 650,
+  "contact_y": 1009,
+  "tail_x_start": 820,
+  "tail_x_full": 1536,
+  "tail_y_start": 770,
+  "tail_y_full": 910,
+  "tail_y_release_start": 1180,
+  "tail_y_release_full": 1250,
+  "tail_amp_y": 45,
+  "tail_amp_x": 14,
+  "tail_waves": 1.1,
+  "body_amp_x": 10,
+  "body_amp_y": 2.5,
+  "body_y_pin": 700,
+  "body_y_full": 180,
+  "body_x_window": [
+    230,
+    330,
+    800,
+    900
+  ],
+  "claw_center": [
+    1090,
+    766
+  ],
+  "claw_radii": [
+    70,
+    65
+  ],
+  "claw_fade_ratio": 0.8,
+  "belly_y_start": 950,
+  "belly_y_full": 990,
+  "belly_x_pin_end": 920,
+  "belly_x_release_end": 1040
+}

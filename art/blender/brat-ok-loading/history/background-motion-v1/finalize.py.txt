@@ -1,0 +1,18 @@
+import bpy,json
+ROOT="<ORIGINAL_PROJECT>/output/brat-ok-loading/background-motion-v1"
+study=bpy.data.scenes["BRAT_OK — фон: город и щит"]
+main=bpy.data.scenes["BRAT_OK — масштаб ультралиска"]
+study.frame_set(53)
+study.render.resolution_percentage=100
+study.render.filepath=ROOT+"/preview-protected.png"
+bpy.context.window.scene=main
+main.frame_set(53)
+main.render.resolution_percentage=50
+main.render.filepath=ROOT+"/composition.png"
+bpy.ops.render.render(write_still=True)
+main.render.resolution_percentage=100
+bpy.context.window.scene=study
+study.frame_set(53)
+bpy.ops.wm.save_as_mainfile(filepath=ROOT+"/BRAT_OK_background_motion_v2.blend",relative_remap=False)
+print(json.dumps({"saved":bpy.data.filepath,"active_scene":study.name,"frame":study.frame_current,"resolution":[study.render.resolution_x,study.render.resolution_y],"scene_names":[s.name for s in bpy.data.scenes]},ensure_ascii=False))
+

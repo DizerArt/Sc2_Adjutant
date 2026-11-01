@@ -1,0 +1,10 @@
+Use case: stylized-concept. Asset type: ONE reusable uppercase Latin alphabet texture atlas for a Blender 2D letter library.
+Input image 1 is STYLE REFERENCE ONLY: BRAT_OK wordmark. Match precisely its heavy angular sci-fi block lettering, pale worn ivory/painted steel front faces with hairline cracks/chipped paint/soot, restrained warm bronze-gold beveled edges, black recessed extrusion edges, strong compact readable silhouettes. Same frontal/very slightly raised bevel view; same light from upper left. No surrounding scene. Do not copy the entire wordmark into the output.
+Generate ONE finished sprite atlas on genuine transparent alpha, ideally 3072x2560 or similarly high resolution. EXACT regular grid SIX equal columns and FIVE equal rows, with very generous empty transparent space inside EVERY cell: each glyph isolated, no contact between glyphs/shadows/cell edges. Equal uppercase cap heights, level baselines within rows, natural letter widths; center each glyph in its cell. Strong clean angular Latin shapes. B/R/A/T/O/K should look like the reference. Each glyph and close bevel/shadow fully inside its cell.
+Required cell contents, left-to-right and top-to-bottom, EXACTLY:
+row1: A B C D E F
+row2: G H I J K L
+row3: M N O P Q R
+row4: S T U V W X
+row5: Y Z _ [EMPTY] [EMPTY] [EMPTY]
+Draw the underscore as a low horizontal metal bar with the same finish. Exactly 26 different uppercase letters plus one underscore, nothing else. M and W distinct, O closed oval/angular-loop distinct from Q with a tail, I upright readable block bar, J with hook. Preserve internal transparent counters in A B D O P Q R. No labels, no cell outlines, no checkerboard painted into image, no headings, no border, no extra letters, no watermark, no merged glyphs, no atmospheric haze. Fully transparent background and gaps. This is a single designed alphabet atlas, not a scene or a font specimen on a paper background.

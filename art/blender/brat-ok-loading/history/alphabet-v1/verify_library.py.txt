@@ -1,0 +1,50 @@
+import bpy, json
+library=bpy.data.scenes['BRAT_OK — библиотека латинских букв']
+glyphs=[o for o in library.objects if o.get('glyph_char')]
+metrics=json.loads(library['export_metrics_json'])
+counts=json.loads(library['source_counts_json'])
+frames=json.loads(library['source_frames_json'])
+expected=set('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_')
+lookup={o['glyph_char']:o for o in glyphs}
+checks={
+    '53_exact_glyph_characters':len(glyphs)==53 and set(lookup)==expected,
+    'all53_marked_as_assets':all(o.asset_data is not None for o in glyphs),
+    'all53_asset_previews_loaded':all(g.get('custom_asset_preview_loaded') for g in metrics),
+    'windows_filenames_unique':len({g['file'].casefold() for g in metrics})==53,
+    'all53_png_metrics_present':all('png_size' in g and 'png_origin_from_top_left' in g for g in metrics),
+    'common_png_height_and_baseline':len({g['png_size'][1] for g in metrics})==1 and len({g['png_origin_from_top_left'][1] for g in metrics})==1,
+    'natural_variable_widths':lookup['I']['glyph_advance']<lookup['M']['glyph_advance'] and lookup['i']['glyph_advance']<lookup['m']['glyph_advance'],
+    'underscore_not_fullheight':max(v.co.y for v in lookup['_'].data.vertices)<.8,
+    'lowercase_descenders_below_baseline':all(min(v.co.y for v in lookup[c].data.vertices)<-.05 for c in 'gjpqy'),
+    'Q_tail_below_baseline':min(v.co.y for v in lookup['Q'].data.vertices)<-.05,
+    'no_glyph_parent_or_object_scale':all(o.parent is None and tuple(o.scale)==(1,1,1) for o in glyphs),
+    'source11_counts_preserved':all(len(bpy.data.scenes[n].objects)==c for n,c in counts.items()),
+    'source11_frames_preserved':all(bpy.data.scenes[n].frame_current==f for n,f in frames.items()),
+}
+images=set()
+alpha_direct=True
+for o in glyphs:
+    for mat in o.data.materials:
+        tex=next(n for n in mat.node_tree.nodes if n.type=='TEX_IMAGE')
+        images.add(tex.image)
+        mix=next(n for n in mat.node_tree.nodes if n.type=='MIX_SHADER')
+        alpha_direct=alpha_direct and any(link.from_node==tex and link.from_socket==tex.outputs['Alpha'] and link.to_node==mix and link.to_socket==mix.inputs[0] for link in mat.node_tree.links)
+checks['two_final_packed_atlases']=len(images)==2 and all(im.packed_file for im in images) and {im.filepath.split('/')[-1] for im in images}=={'uppercase.png','lowercase-v2.png'}
+checks['source_alpha_preserved_in_shader']=alpha_direct
+uv_ok=True
+for o in glyphs:
+    tex=next(n for n in o.data.materials[0].node_tree.nodes if n.type=='TEX_IMAGE')
+    width,height=tex.image.size
+    x0,y0,x1,y1=o['atlas_rect']
+    wanted=[(x0/width,1-y1/height),(x1/width,1-y1/height),(x1/width,1-y0/height),(x0/width,1-y0/height)]
+    uv_ok=uv_ok and all(abs(item.uv.x-uv[0])<.000001 and abs(item.uv.y-uv[1])<.000001 for item,uv in zip(o.data.uv_layers.active.data,wanted))
+checks['53_correct_UV_rects']=uv_ok
+examples=bpy.data.scenes[library['examples_scene']]
+checks['three_actual_composed_word_groups']={o.get('text') for o in examples.objects if o.type=='EMPTY'}=={'BRAT_OK','StarCraft','Loading'}
+checks['example_instances_are_unmarked']=all(o.asset_data is None for o in examples.objects)
+checks['three_new_scenes_only']=len(bpy.data.scenes)==len(counts)+3
+checks['export_camera_horizontal_projection']=bpy.data.scenes[library['export_scene']].camera.data.sensor_fit=='HORIZONTAL'
+library['verification_checks_json']=json.dumps(checks,ensure_ascii=False)
+bpy.context.window.scene=library
+bpy.ops.wm.save_as_mainfile(filepath='<ORIGINAL_PROJECT>/output/brat-ok-loading/alphabet-v1/BRAT_OK_letter_library_v1.blend',relative_remap=False)
+print(json.dumps({'all_passed':all(checks.values()),'checks':checks,'assets':len(glyphs),'glyph_metrics':metrics,'source_counts':counts,'source_frames':frames},ensure_ascii=False))

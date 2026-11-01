@@ -1,0 +1,226 @@
+"""Read-only alpha geometry analysis; fixed identities, no OCR/raster output."""
+from pathlib import Path
+from statistics import median
+import json
+
+import numpy as np
+from PIL import Image
+
+ROOT = Path("<ORIGINAL_PROJECT>")
+WORK = ROOT / "work/brat-ok-alphabet-v1"
+ASSETS = ROOT / "output/brat-ok-loading/alphabet-v1/assets"
+THRESHOLD = 16
+PADDING = 8
+XHEIGHT_RATIO = .68
+DESCENDERS = set("gjpqy")
+ASCENDERS = set("bdfhklt")
+XHEIGHT = set("acemnorsuvwxz")
+CONTRACTS = [("upper", "uppercase.png", ["ABCDEF", "GHIJKL", "MNOPQR", "STUVWX", "YZ_"]), ("lower", "lowercase-v2.png", ["abcdef", "ghijkl", "mnopqr", "stuvwx", "yz"])]
+
+# Preserve the already measured original atlas rejection before final re-analysis.
+old_report_path = WORK / "analyze-inspection.json"
+rejected_report_path = WORK / "analyze-inspection-original-lowercase-rejected.json"
+if old_report_path.is_file() and not rejected_report_path.is_file():
+    old_report = json.loads(old_report_path.read_text(encoding="utf-8"))
+    if not old_report.get("all_passed") and any(atlas.get("file") == "lowercase.png" for atlas in old_report.get("atlases", [])):
+        rejected_report_path.write_text(json.dumps(old_report,indent=2,ensure_ascii=False),encoding="utf-8")
+
+def components(mask):
+    """Eight-connected alpha runs; detached marks are associated geometrically later."""
+    parents, runs, previous = [], [], []
+    def find(index):
+        while parents[index] != index:
+            parents[index] = parents[parents[index]]
+            index = parents[index]
+        return index
+    for y, row in enumerate(mask):
+        edges = np.flatnonzero(np.diff(np.r_[False, row, False]))
+        current = []
+        for left, right in zip(edges[::2], edges[1::2]):
+            index = len(parents)
+            parents.append(index)
+            runs.append((int(left), y, int(right), y + 1))
+            current.append(index)
+            for other in previous:
+                old_left, _, old_right, _ = runs[other]
+                if old_left <= right and old_right >= left:
+                    a, b = find(index), find(other)
+                    if a != b:
+                        parents[a] = b
+        previous = current
+    groups = {}
+    for index, run in enumerate(runs):
+        key = find(index)
+        if key not in groups:
+            groups[key] = {"bbox": list(run), "area": 0, "runs": []}
+        group = groups[key]
+        left, top, right, bottom = run
+        box = group["bbox"]
+        group["bbox"] = [min(box[0], left), min(box[1], top), max(box[2], right), max(box[3], bottom)]
+        group["area"] += right - left
+        group["runs"].append(run)
+    return list(groups.values())
+
+def active_runs(projection):
+    edges = np.flatnonzero(np.diff(np.r_[False, projection > 0, False]))
+    return [[int(a), int(b)] for a, b in zip(edges[::2], edges[1::2])]
+
+def center(group):
+    box = group["bbox"]
+    return [(box[0] + box[2]) / 2, (box[1] + box[3]) / 2]
+
+def component_distance(a, b):
+    aa, bb = a["bbox"], b["bbox"]
+    dx = max(0, aa[0] - bb[2], bb[0] - aa[2])
+    dy = max(0, aa[1] - bb[3], bb[1] - aa[3])
+    return dx * dx + dy * dy
+
+glyphs, reports, row_baselines, row_scales = [], [], {}, {}
+for case, filename, expected_rows in CONTRACTS:
+    path = ASSETS / filename
+    if not path.is_file():
+        raise RuntimeError("Both generated atlases are required before analysis.")
+    with Image.open(path) as image:
+        if image.mode != "RGBA":
+            raise RuntimeError(f"Expected RGBA: {filename}")
+        width, height = image.size
+        alpha = np.asarray(image.getchannel("A"))
+    mask = alpha > THRESHOLD
+    y_runs = active_runs(mask.sum(axis=1))
+    x_runs_by_row = [active_runs(mask[y0:y1].sum(axis=0)) for y0,y1 in y_runs]
+    projection_complete = len(y_runs) == 5 and [len(row) for row in x_runs_by_row] == list(map(len,expected_rows))
+    if projection_complete:
+        # Full transparent row/column gutters keep disconnected i/j dots with their bodies.
+        groups = []
+        for (y0,y1),x_runs in zip(y_runs,x_runs_by_row):
+            for x0,x1 in x_runs:
+                runs = []
+                for y in range(y0,y1):
+                    edges = np.flatnonzero(np.diff(np.r_[False,mask[y,x0:x1],False]))
+                    runs.extend((int(a+x0),y,int(b+x0),y+1) for a,b in zip(edges[::2],edges[1::2]))
+                groups.append({"bbox":[x0,y0,x1,y1],"area":int(np.count_nonzero(mask[y0:y1,x0:x1])),"runs":runs})
+                # Trim only empty top/bottom pixels for the glyph's metrics, not its identity group.
+                yy,xx = np.nonzero(mask[y0:y1,x0:x1])
+                groups[-1]["bbox"] = [int(xx.min()+x0),int(yy.min()+y0),int(xx.max()+x0+1),int(yy.max()+y0+1)]
+    else:
+        groups = components(mask)
+    major = [group for group in groups if group["area"] > 150]
+    expected_count = sum(map(len, expected_rows))
+    if len(major) != expected_count:
+        raise RuntimeError(f"{filename}: expected {expected_count} substantial geometric groups, found {len(major)}; visual grouping needed.")
+    minimum_center = min(center(group)[1] for group in major)
+    maximum_center = max(center(group)[1] for group in major)
+    centers = [minimum_center+(maximum_center-minimum_center)*index/4 for index in range(5)]
+    for _ in range(20):
+        clusters = [[] for _ in range(5)]
+        for group in major:
+            cy = center(group)[1]
+            row = min(range(5), key=lambda index: abs(cy - centers[index]))
+            clusters[row].append(group)
+        new_centers = [median(center(group)[1] for group in row) if row else centers[index] for index, row in enumerate(clusters)]
+        if new_centers == centers:
+            break
+        centers = new_centers
+    if [len(row) for row in clusters] != list(map(len, expected_rows)):
+        raise RuntimeError(f"{filename}: actual row group counts do not match fixed requested order.")
+    ordered = [sorted(row, key=lambda group: center(group)[0]) for row in clusters]
+    for group in groups:
+        if group["area"] <= 150:
+            target = min(major, key=lambda candidate: component_distance(group, candidate))
+            box, extra = target["bbox"], group["bbox"]
+            target["bbox"] = [min(box[0], extra[0]), min(box[1], extra[1]), max(box[2], extra[2]), max(box[3], extra[3])]
+            target["area"] += group["area"]
+            target["runs"].extend(group["runs"])
+    labels = np.zeros((height, width), dtype=np.int16)
+    row_boundaries = [0] + [int(round((max(group["bbox"][3] for group in ordered[row-1]) + min(group["bbox"][1] for group in ordered[row])) / 2)) for row in range(1, 5)] + [height]
+    column_boundaries = []
+    gutters = []
+    conflicts = []
+    for row, items in enumerate(ordered):
+        bounds = [0]
+        for col in range(1, len(items)):
+            left, right = items[col-1]["bbox"], items[col]["bbox"]
+            gap = right[0] - left[2]
+            bound = (left[2] + right[0]) // 2
+            bounds.append(bound)
+            gutters.append({"row": row, "between_columns": [col-1, col], "transparent_x_gap_px": gap, "boundary_x": bound})
+            if gap < 0:
+                conflicts.append({"row": row, "letters": [expected_rows[row][col-1], expected_rows[row][col]], "bbox_overlap_x_px": -gap, "left_bbox": left, "right_bbox": right, "reason": "No single vertical transparent separator; rectangular UV crops would contain neighbour pixels."})
+        bounds.append(width if len(items) == 6 else max(items[-1]["bbox"][2] + PADDING, len(items) * width // 6))
+        while len(bounds) < 7:
+            bounds.append(max(bounds[-1], len(bounds) * width // 6))
+        bounds[-1] = width
+        column_boundaries.append(bounds)
+    atlas_glyphs = []
+    label = 0
+    for row, items in enumerate(ordered):
+        for col, group in enumerate(items):
+            label += 1
+            char = expected_rows[row][col]
+            box = group["bbox"]
+            for left, top, right, _ in group["runs"]:
+                labels[top, left:right] = label
+            top = 0 if row == 0 else ((ordered[row-1][col]["bbox"][3] + box[1]) // 2 if col < len(ordered[row-1]) else row_boundaries[row])
+            bottom = height if row == 4 else ((box[3] + ordered[row+1][col]["bbox"][1]) // 2 if col < len(ordered[row+1]) else row_boundaries[row+1])
+            cell = [min(column_boundaries[row][col], box[0]), min(top, box[1]), max(column_boundaries[row][col+1], box[2]), max(bottom, box[3])]
+            padded = [max(cell[0], box[0]-PADDING), max(cell[1], box[1]-PADDING), min(cell[2], box[2]+PADDING), min(cell[3], box[3]+PADDING)]
+            glyph = {"id": f"{case}-{char}", "char": char, "case": case, "file": filename, "size": [width, height], "row": row, "column": col, "cellrect": cell, "bbox_global": box, "bbox_local": [box[0]-cell[0], box[1]-cell[1], box[2]-cell[0], box[3]-cell[1]], "paddedrect": padded, "uvrect": [padded[0]/width, 1-padded[3]/height, padded[2]/width, 1-padded[1]/height], "uvrect_order": "u_min,v_min,u_max,v_max", "padding_actual_px": [box[0]-padded[0], box[1]-padded[1], padded[2]-box[2], padded[3]-box[3]], "visible_width_px": box[2]-box[0], "visible_height_px": box[3]-box[1], "pixels_alpha_above_16": group["area"], "alpha_component_label": label}
+            glyphs.append(glyph)
+            atlas_glyphs.append(glyph)
+            distances = {"left": box[0]-cell[0],"top": box[1]-cell[1],"right": cell[2]-box[2],"bottom": cell[3]-box[3]}
+            glyph["distance_to_cell_border_px"] = distances
+            glyph["touching_cell_borders"] = [side for side,distance in distances.items() if distance == 0]
+    for glyph in atlas_glyphs:
+        x0,y0,x1,y1 = glyph["paddedrect"]
+        selection = labels[y0:y1,x0:x1]
+        foreign = int(np.count_nonzero((selection != 0) & (selection != glyph["alpha_component_label"])))
+        bx0,by0,bx1,by1 = glyph["bbox_global"]
+        own_box = labels[by0:by1,bx0:bx1]
+        foreign_tight = int(np.count_nonzero((own_box != 0) & (own_box != glyph["alpha_component_label"])))
+        glyph["foreign_alpha_pixels_in_uvrect"] = foreign
+        glyph["foreign_alpha_pixels_in_tight_bbox"] = foreign_tight
+        glyph["rectangular_isolation_safe"] = foreign == 0
+    expected_mask = np.zeros_like(mask)
+    for glyph in atlas_glyphs:
+        x0,y0,x1,y1 = glyph["cellrect"]
+        expected_mask[y0:y1,x0:x1] = True
+    outside = alpha[~expected_mask]
+    unused_slots = []
+    for row,items in enumerate(ordered):
+        for col in range(len(items),6):
+            cell = [column_boundaries[row][col],row_boundaries[row],column_boundaries[row][col+1],row_boundaries[row+1]]
+            unused_alpha = alpha[cell[1]:cell[3],cell[0]:cell[2]]
+            unused_slots.append({"row":row,"column":col,"cellrect":cell,"alpha_max":int(unused_alpha.max()) if unused_alpha.size else 0,"pixels_alpha_above_16":int(np.count_nonzero(unused_alpha > THRESHOLD))})
+    reports.append({"case": case, "file": filename, "size": [width,height], "mode": "RGBA", "alpha_range": [int(alpha.min()),int(alpha.max())], "identity_source": "fixed requested left-to-right group order, not OCR", "expected_glyphs": expected_count, "actual_groups": len(atlas_glyphs), "global_y_projection_active_runs": active_runs(mask.sum(axis=1)), "adaptive_row_envelopes": [[min(group["bbox"][1] for group in row),max(group["bbox"][3] for group in row)] for row in ordered], "nominal_row_boundaries": row_boundaries, "column_boundaries_by_row": column_boundaries, "minimum_horizontal_gutter_px": min(item["transparent_x_gap_px"] for item in gutters), "gutters": gutters, "rectangular_separator_conflicts": conflicts, "max_alpha_outside_expected_areas": int(outside.max()) if outside.size else 0, "pixels_alpha_above_16_outside_expected_areas": int(np.count_nonzero(outside > THRESHOLD)), "foreign_pixels_in_uv": [{"id": glyph["id"], "padded_foreign_pixels": glyph["foreign_alpha_pixels_in_uvrect"], "tight_foreign_pixels": glyph["foreign_alpha_pixels_in_tight_bbox"]} for glyph in atlas_glyphs if not glyph["rectangular_isolation_safe"]]})
+    reports[-1]["expected_empty_slots"] = 30-expected_count
+    reports[-1]["unused_slots"] = unused_slots
+    reports[-1]["boundary_contacts"] = [{"id":glyph["id"],"sides":glyph["touching_cell_borders"]} for glyph in atlas_glyphs if glyph["touching_cell_borders"]]
+    reports[-1]["minimum_vertical_row_gutter_px"] = min(min(group["bbox"][1] for group in ordered[row])-max(group["bbox"][3] for group in ordered[row-1]) for row in range(1,5))
+
+cap_samples = [glyph["visible_height_px"] for glyph in glyphs if glyph["case"] == "upper" and glyph["char"] not in "Q_"]
+cap_reference = median(cap_samples)
+lower_x_reference = median(glyph["visible_height_px"] for glyph in glyphs if glyph["case"] == "lower" and glyph["char"] in XHEIGHT)
+for case, _, _ in CONTRACTS:
+    for row in range(5):
+        group = [glyph for glyph in glyphs if glyph["case"] == case and glyph["row"] == row]
+        candidates = [glyph["bbox_global"][3] for glyph in group if glyph["char"] not in (set("Q_") if case == "upper" else DESCENDERS)]
+        baseline = median(candidates)
+        heights = [glyph["visible_height_px"] for glyph in group if glyph["char"] not in "Q_"] if case == "upper" else [glyph["visible_height_px"] for glyph in group if glyph["char"] in XHEIGHT]
+        fallback = not heights
+        reference = median(heights) if heights else lower_x_reference
+        scale = cap_reference / reference if case == "upper" else XHEIGHT_RATIO * cap_reference / reference
+        row_baselines[f"{case}-row-{row}"] = baseline
+        row_scales[f"{case}-row-{row}"] = {"scale": scale, "reference_height_px": reference, "xheight_fallback_to_atlas": fallback}
+        for glyph in group:
+            box = glyph["bbox_global"]
+            role = "underscore" if glyph["char"] == "_" else ("capital-descender" if glyph["case"] == "upper" and glyph["char"] == "Q" else ("capital" if case == "upper" else ("descender" if glyph["char"] in DESCENDERS else ("ascender" if glyph["char"] in ASCENDERS else ("x-height" if glyph["char"] in XHEIGHT else "dotted-letter")))))
+            glyph.update({"metric_role": role, "baseline_global_y": baseline, "baseline_local_y": baseline-glyph["cellrect"][1], "anchor": [(box[0]+box[2])/2,baseline], "render_scale": scale, "normalized_visible_height_px": glyph["visible_height_px"]*scale, "normalized_advance_px": glyph["visible_width_px"]*scale+cap_reference*.06, "ascent_px": max(0,baseline-box[1]), "descent_px": max(0,box[3]-baseline)})
+checks = {"53_distinct_fixed_ids": len(glyphs) == 53 and len({glyph["id"] for glyph in glyphs}) == 53, "all_expected_groups_nonempty": all(glyph["pixels_alpha_above_16"] > 0 for glyph in glyphs), "transparent_sources": all(report["alpha_range"][0] == 0 for report in reports), "nothing_visible_outside_expected_areas": all(report["pixels_alpha_above_16_outside_expected_areas"] == 0 for report in reports), "all_glyphs_rectangularly_isolated": all(glyph["rectangular_isolation_safe"] for glyph in glyphs), "padding_at_most8_inside_own_cells": all(all(0 <= value <= PADDING for value in glyph["padding_actual_px"]) for glyph in glyphs), "same_scale_within_each_row": all(len({glyph["render_scale"] for glyph in glyphs if glyph["case"] == case and glyph["row"] == row}) == 1 for case in ["upper","lower"] for row in range(5)), "Q_descender_preserved": next(glyph for glyph in glyphs if glyph["id"] == "upper-Q")["descent_px"] > 0}
+checks.update({"expected_unused_cells_empty": all(len(report["unused_slots"]) == report["expected_empty_slots"] and all(slot["pixels_alpha_above_16"] == 0 for slot in report["unused_slots"]) for report in reports),"glyph_alpha_not_touching_cell_boundaries": all(not report["boundary_contacts"] for report in reports),"positive_adaptive_column_gutters": all(report["minimum_horizontal_gutter_px"] > 0 for report in reports)})
+layout = {"version": 2, "grid": [6,5], "adaptive_geometry": True, "alpha_threshold": THRESHOLD, "padding_max_px": PADDING, "identity_source": "fixed requested position order; parent visual review is independent; no OCR", "normalization": {"capital_reference_px": cap_reference, "lowercase_x_height_reference_px": lower_x_reference, "lowercase_target_x_height_ratio": XHEIGHT_RATIO, "method": "common geometry scale per row; retain natural widths/heights, Q and lowercase descenders; no raster modifications", "baseline_rows_global_y": row_baselines, "row_scales": row_scales}, "glyphs": glyphs}
+inspection = {"all_passed": all(checks.values()), "checks": checks, "raster_outputs_written": 0, "original_pngs_modified": False, "visual_glyph_identity_verified_by_this_script": False, "atlases": reports, "manual_fix_scope": [item for report in reports for item in report["rectangular_separator_conflicts"]]}
+(WORK/"layout.json").write_text(json.dumps(layout,indent=2,ensure_ascii=False),encoding="utf-8")
+(WORK/"analyze-inspection.json").write_text(json.dumps(inspection,indent=2,ensure_ascii=False),encoding="utf-8")
+print(json.dumps({"all_passed": inspection["all_passed"], "glyphs": len(glyphs), "manual_fix_scope": inspection["manual_fix_scope"], "foreign_pixels_in_uv": [item for report in reports for item in report["foreign_pixels_in_uv"]], "layout": str(WORK/"layout.json"), "report": str(WORK/"analyze-inspection.json")},ensure_ascii=False))
+if not inspection["all_passed"]:
+    raise RuntimeError("Some glyphs require separate source assets or native geometry isolation; inspect report before rectangular import.")

@@ -1,0 +1,45 @@
+{
+  "all_passed": true,
+  "checks": {
+    "576_unique_render_states": true,
+    "native_loop_seam_equal": true,
+    "all_frames_encoded": true,
+    "fps_30": true,
+    "duration_19_2": true,
+    "dimensions_960x540": true
+  },
+  "mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 960,
+        "height": 540,
+        "r_frame_rate": "30/1",
+        "nb_frames": "576",
+        "nb_read_frames": "576"
+      }
+    ],
+    "format": {
+      "duration": "19.200000"
+    }
+  },
+  "fresh_native_frames": [
+    1,
+    288
+  ],
+  "reused_offscreen_frames": [
+    289,
+    576
+  ],
+  "reuse_actual_native_samples_identical": {
+    "289": true,
+    "400": true,
+    "576": true
+  },
+  "changed_gait_cycles": {
+    "marauder": 32,
+    "zealot": 32
+  },
+  "gait_speed_ratio": 1.5
+}

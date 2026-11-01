@@ -1,0 +1,22 @@
+{
+  "file": "<ORIGINAL_PROJECT>\\output\\brat-ok-loading\\zergling-run-v1\\BRAT_OK_zergling_gallop_v4.blend",
+  "checks": {
+    "eight_poses": true,
+    "unique_pose_all_native_frames": true,
+    "correct_order": true,
+    "same_first_and_endpoint_pose": true,
+    "constant_pose_keys": true,
+    "root_static": true,
+    "camera_static": true,
+    "packed_atlas": true,
+    "no_unit_drivers": true,
+    "prior_scenes_counts_preserved": true,
+    "prior_background_frame_preserved": true,
+    "phase_overlap_polygons_present": true
+  },
+  "all_passed": true,
+  "unit_scene_objects": 12,
+  "visibility_curve_count": 16,
+  "cycle_frames": 24,
+  "cycle_seconds": 0.8
+}

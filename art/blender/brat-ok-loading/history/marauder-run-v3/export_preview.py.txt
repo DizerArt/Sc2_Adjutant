@@ -1,0 +1,82 @@
+from pathlib import Path
+import json
+import subprocess
+
+from PIL import Image, ImageChops, ImageStat
+
+ROOT = Path("<ORIGINAL_PROJECT>")
+WORK = ROOT / "work/brat-ok-marauder-run-v3"
+OUT = ROOT / "output/brat-ok-loading/marauder-run-v3"
+FFMPEG = Path("<LOCAL_USER>/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1.1-full_build/bin/ffmpeg.exe")
+FFPROBE = FFMPEG.with_name("ffprobe.exe")
+frame_paths = sorted((WORK / "frames").glob("frame-*.png"))
+expected_paths = [WORK / "frames" / f"frame-{i:02d}.png" for i in range(48)]
+if frame_paths != expected_paths:
+    raise RuntimeError("Exactly 48 consecutively rendered PNGs are required.")
+if not (WORK / "loop-end.png").is_file():
+    raise RuntimeError("Frame 49 must be rendered separately for loop verification.")
+layout = json.loads((WORK / "layout.json").read_text(encoding="utf-8"))
+if sum(p["hold"] for p in layout["poses"]) != 48:
+    raise RuntimeError("Pose holds must total 48 frames.")
+
+def encode(args):
+    subprocess.run([str(FFMPEG), "-y", "-hide_banner", "-loglevel", "error", *args], check=True, timeout=120)
+
+report = {"rendered_png_count": len(frame_paths), "normal_cycle_seconds": 1.6, "slow_cycle_seconds": 4.8, "poses": len(layout["poses"]), "held_frames_are_expected": True}
+for speed, fps in [("normal", 30), ("slow", 10)]:
+    cycle = WORK / f"{speed}-cycle.mp4"
+    encode(["-framerate", str(fps), "-i", str(WORK / "frames/frame-%02d.png"), "-frames:v", "48", "-c:v", "libx264", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(cycle)])
+    encode(["-stream_loop", "2" if speed == "normal" else "0", "-i", str(cycle), "-t", "4.8", "-c", "copy", "-movflags", "+faststart", str(OUT / f"{speed}.mp4")])
+    # Keep every source sample; GIF timestamps quantize 30 fps to centiseconds.
+    encode(["-framerate", str(fps), "-i", str(WORK / "frames/frame-%02d.png"), "-frames:v", "48", "-filter_complex", "scale=768:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=192[p];[b][p]paletteuse=dither=sierra2_4a", "-fps_mode", "passthrough", "-loop", "0", str(OUT / f"{speed}.gif")])
+    probe = subprocess.run([str(FFPROBE), "-v", "error", "-show_entries", "stream=width,height,r_frame_rate,nb_frames:format=duration", "-of", "json", str(OUT / f"{speed}.mp4")], capture_output=True, text=True, check=True, timeout=20)
+    report[speed] = json.loads(probe.stdout)
+    with Image.open(OUT / f"{speed}.gif") as gif:
+        durations = []
+        for index in range(gif.n_frames):
+            gif.seek(index)
+            durations.append(gif.info.get("duration", 0))
+        report[f"{speed}_gif"] = {"encoded_frames": gif.n_frames, "duration_ms": sum(durations), "frame_durations_ms": durations}
+        if gif.n_frames < len(layout["poses"]):
+            raise RuntimeError("GIF dropped one or more painted phases.")
+        expected_ms = 1600 if speed == "normal" else 4800
+        if abs(sum(durations)-expected_ms) > 60:
+            raise RuntimeError("GIF cycle timing differs from the native cycle.")
+with Image.open(frame_paths[0]) as first, Image.open(WORK / "loop-end.png") as last:
+    report["loop_endpoints_identical"] = ImageChops.difference(first.convert("RGB"), last.convert("RGB")).getbbox() is None
+phase_starts = []
+cursor = 0
+for pose in layout["poses"]:
+    phase_starts.append(cursor)
+    cursor += pose["hold"]
+images = []
+for index in phase_starts:
+    with Image.open(frame_paths[index]) as image:
+        images.append(image.convert("RGB"))
+report["pose_change_means"] = [round(sum(ImageStat.Stat(ImageChops.difference(images[i], images[(i+1) % len(images)])).mean)/3, 4) for i in range(len(images))]
+report["all_phase_drawings_distinct"] = all(value > 0 for value in report["pose_change_means"])
+references = [image.resize((256,144), Image.Resampling.LANCZOS) for image in images]
+for speed, fps in [("normal",30),("slow",10)]:
+    phase_durations = [0 for _ in references]
+    phase_order = []
+    with Image.open(OUT / f"{speed}.gif") as gif:
+        for index in range(gif.n_frames):
+            gif.seek(index)
+            # Analysis only: compare decoded GIF frames to the rendered phase drawings.
+            sample = gif.convert("RGB").resize((256,144), Image.Resampling.LANCZOS)
+            distances = [sum(ImageStat.Stat(ImageChops.difference(sample, reference)).mean)/3 for reference in references]
+            phase = min(range(len(distances)), key=lambda item: distances[item])
+            phase_durations[phase] += gif.info.get("duration",0)
+            if not phase_order or phase_order[-1] != phase:
+                phase_order.append(phase)
+    wanted = [p["hold"] * 1000/fps for p in layout["poses"]]
+    report[f"{speed}_gif"]["phase_order"] = phase_order
+    report[f"{speed}_gif"]["phase_duration_ms"] = phase_durations
+    report[f"{speed}_gif"]["expected_phase_duration_ms"] = wanted
+    report[f"{speed}_gif"]["all_phases_and_holds_preserved"] = phase_order == list(range(len(references))) and all(abs(actual-expected) <= 60 for actual,expected in zip(phase_durations,wanted))
+report["normal_mp4_144_frames"] = int(report["normal"]["streams"][0]["nb_frames"]) == 144
+report["slow_mp4_48_frames"] = int(report["slow"]["streams"][0]["nb_frames"]) == 48
+(WORK / "export-inspection.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+print(json.dumps(report, ensure_ascii=False))
+if not all(report[key] for key in ["loop_endpoints_identical", "all_phase_drawings_distinct", "normal_mp4_144_frames", "slow_mp4_48_frames"]) or not all(report[f"{speed}_gif"]["all_phases_and_holds_preserved"] for speed in ["normal","slow"]):
+    raise RuntimeError("Export inspection failed; inspect the report before claiming success.")

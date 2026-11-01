@@ -1,0 +1,1659 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "source": "output/brat-ok-loading/full-scene-v3/BRAT_OK_full_scene_v3.blend",
+      "file": "scenes/full-scene-v3/BRAT_OK_full_scene_v3.blend",
+      "source_sha256": "11efd62f78b9dd600809c666fc815839328a7e9e9a12ccb9ed12109dd11f7f18",
+      "sha256": "2d448746318d25efef97c605032b97448adac6f4586b3a3da80678252f185b9e",
+      "bytes": 50873260,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/full-scene-v3/README.md",
+      "file": "scenes/full-scene-v3/HISTORY.md",
+      "source_sha256": "2906934367effd8bf2b2b062f06d5c9bbe6a357a9e1bd293978b53e21a8cfca2",
+      "sha256": "2906934367effd8bf2b2b062f06d5c9bbe6a357a9e1bd293978b53e21a8cfca2",
+      "bytes": 3652
+    },
+    {
+      "source": "output/brat-ok-loading/full-scene-v3/preview.png",
+      "file": "scenes/full-scene-v3/preview.png",
+      "source_sha256": "e4dd14474d38c120db7801d4de7ebd7f05b7614fd276c215f8a229fa3f29c94b",
+      "sha256": "e4dd14474d38c120db7801d4de7ebd7f05b7614fd276c215f8a229fa3f29c94b",
+      "bytes": 1135801
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/export-inspection.json",
+      "file": "history/full-scene-v3/export-inspection.json",
+      "source_sha256": "4ad52a378f3dee905b26187d9e932ddc033941775a00b77ac3163fa29d25e685",
+      "sha256": "3108ca76ef17ecb4cc4afff36ad3b8b1d8dd9b328eb9e487a32c18645d475354",
+      "bytes": 813,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/export_preview.py",
+      "file": "history/full-scene-v3/export_preview.py.txt",
+      "source_sha256": "7ecea2f4a7ad52f008e68d2b33008c67bbccb6bd08e692a05836ba3826f95ef4",
+      "sha256": "60912ac5755cfee48b5df1261a29946244fbe87c1a9f2d41befc6e277973bd8d",
+      "bytes": 2427,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/native-verification.json",
+      "file": "history/full-scene-v3/native-verification.json",
+      "source_sha256": "b9844abca9c9f00f4bc90505874a61607571319922fd83650b80ea4990969c16",
+      "sha256": "b9844abca9c9f00f4bc90505874a61607571319922fd83650b80ea4990969c16",
+      "bytes": 3880,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/prepare_preview.py",
+      "file": "history/full-scene-v3/prepare_preview.py.txt",
+      "source_sha256": "bbb423111f7689d782424e9657590460e2d319fe95ad9137508e90d9de4266ba",
+      "sha256": "df9589e31770f10b0a3ab186ec9be1f3ca68fd05d2ce1b17df2cfd5bde3b8421",
+      "bytes": 551,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/render_frames.py",
+      "file": "history/full-scene-v3/render_frames.py.txt",
+      "source_sha256": "4ec4d7b84ac6859260269c8ae30c5fcf878212a708d6a08872d4d2ccf1617607",
+      "sha256": "d581def061b298fdaabdd74c20b8efd026cdc64b38b728da39483be41e57cb08",
+      "bytes": 881,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/reuse-verification.json",
+      "file": "history/full-scene-v3/reuse-verification.json",
+      "source_sha256": "966b9c9078d49205bdd63c065021bca08b68d9ee922891176406ecbc73026f20",
+      "sha256": "966b9c9078d49205bdd63c065021bca08b68d9ee922891176406ecbc73026f20",
+      "bytes": 39,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/speed-verification.json",
+      "file": "history/full-scene-v3/speed-verification.json",
+      "source_sha256": "80d1f1112d1f470337fad1e48bc1d39bda626249e161a6f10237028e1916f15b",
+      "sha256": "80d1f1112d1f470337fad1e48bc1d39bda626249e161a6f10237028e1916f15b",
+      "bytes": 1537,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/speed_up.py",
+      "file": "history/full-scene-v3/speed_up.py.txt",
+      "source_sha256": "2f1ae24f62a9c6631c57067e05d5d324b0f5cbbe40818f78349cab9dc65e6b17",
+      "sha256": "801cd6992fba5242d6612ee67e4480259b39cdcebf6b4e9c557606d04f6f4561",
+      "bytes": 5403,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v3/verify_scene.py",
+      "file": "history/full-scene-v3/verify_scene.py.txt",
+      "source_sha256": "8880dfa37da5a5ca2cebef29c7ebf6e006c563b93fd80cec3017e0ad358d64d3",
+      "sha256": "5f1241f609bf7fced4e9638ca0a65530134d4c7033cfcef8cad88def26b72447",
+      "bytes": 6081,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/BRAT_OK_letter_library_v1.blend",
+      "file": "scenes/alphabet-v1/BRAT_OK_letter_library_v1.blend",
+      "source_sha256": "44e3bbe6bccc464fc88f90a0115bded5a93dfff6e543b0792d87ab19766f5655",
+      "sha256": "0a10733b09885f5554f8f98d2233a4f5f080d2afbe1b1c9e4bf782b794c8c709",
+      "bytes": 57121718,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/README.md",
+      "file": "scenes/alphabet-v1/HISTORY.md",
+      "source_sha256": "7643296028259ac56f68f25cd14e406a161f914a86ec8eca20475aa49d5b9d88",
+      "sha256": "7643296028259ac56f68f25cd14e406a161f914a86ec8eca20475aa49d5b9d88",
+      "bytes": 5696
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/alphabet-preview.png",
+      "file": "scenes/alphabet-v1/alphabet-preview.png",
+      "source_sha256": "c227661ced346f1a71f6f3c7dd985cddc11e7d51bc2b3fca8e994c43d7cab281",
+      "sha256": "c227661ced346f1a71f6f3c7dd985cddc11e7d51bc2b3fca8e994c43d7cab281",
+      "bytes": 3174387
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/word-examples.png",
+      "file": "scenes/alphabet-v1/word-examples.png",
+      "source_sha256": "6f62b430384f53da7a4f234daa257bb24a626d9357d94443373db5c55617d7dc",
+      "sha256": "6f62b430384f53da7a4f234daa257bb24a626d9357d94443373db5c55617d7dc",
+      "bytes": 2255159
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/compose_lettering.py",
+      "file": "scenes/alphabet-v1/compose_lettering.py",
+      "source_sha256": "2b93bd44ca42f0bbb07c36da919c57218f0824c75cb75b85ccfd72b41a8e5b83",
+      "sha256": "2b93bd44ca42f0bbb07c36da919c57218f0824c75cb75b85ccfd72b41a8e5b83",
+      "bytes": 1842
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyph-metrics.json",
+      "file": "scenes/alphabet-v1/glyph-metrics.json",
+      "source_sha256": "6ac13c0013024ecd1e1a26da4fb57d2c7aacf312f95f904d31c9aa7d42452bf2",
+      "sha256": "6ac13c0013024ecd1e1a26da4fb57d2c7aacf312f95f904d31c9aa7d42452bf2",
+      "bytes": 35941
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/assets/lowercase-v2.png",
+      "file": "scenes/alphabet-v1/assets/lowercase-v2.png",
+      "source_sha256": "d4e04a0c78bc9344e04ac6b8722214017bb52e9321fe5fc21e4205959747c59c",
+      "sha256": "d4e04a0c78bc9344e04ac6b8722214017bb52e9321fe5fc21e4205959747c59c",
+      "bytes": 977655
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/assets/uppercase.png",
+      "file": "scenes/alphabet-v1/assets/uppercase.png",
+      "source_sha256": "5e118fafb293d5f074758bf9aa63db1692d37049bdd489e11736eb0a24b6af8f",
+      "sha256": "5e118fafb293d5f074758bf9aa63db1692d37049bdd489e11736eb0a24b6af8f",
+      "bytes": 1756832
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-a.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-a.png",
+      "source_sha256": "6e654d6312423dc2820b2b795cd6855ed622c85bb8e4c714471aa151dc407659",
+      "sha256": "6e654d6312423dc2820b2b795cd6855ed622c85bb8e4c714471aa151dc407659",
+      "bytes": 217250
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-b.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-b.png",
+      "source_sha256": "21ed2b3dc521e543b5de6bc868a621fa2524d4c8a37700c64577fe4cefbd38ee",
+      "sha256": "21ed2b3dc521e543b5de6bc868a621fa2524d4c8a37700c64577fe4cefbd38ee",
+      "bytes": 242905
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-c.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-c.png",
+      "source_sha256": "025f3632e7ab112437b7d066e9f005e2d39b00322a48546f1f5499c6da1dfb81",
+      "sha256": "025f3632e7ab112437b7d066e9f005e2d39b00322a48546f1f5499c6da1dfb81",
+      "bytes": 215880
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-d.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-d.png",
+      "source_sha256": "d4edf68ff36bf3aa8fc1e8507a4f34d52883f82ce5018ad276be50e7b9bcc7e8",
+      "sha256": "d4edf68ff36bf3aa8fc1e8507a4f34d52883f82ce5018ad276be50e7b9bcc7e8",
+      "bytes": 238460
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-e.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-e.png",
+      "source_sha256": "ce8642b1b4fcabb3c7139e42049d45f494a81a47be8a58471426eaaabdf5d10a",
+      "sha256": "ce8642b1b4fcabb3c7139e42049d45f494a81a47be8a58471426eaaabdf5d10a",
+      "bytes": 221986
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-f.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-f.png",
+      "source_sha256": "c9ae3806c824636a52b812b5928fd72368f5f8031a7995ce2e4d8ddd76ea3274",
+      "sha256": "c9ae3806c824636a52b812b5928fd72368f5f8031a7995ce2e4d8ddd76ea3274",
+      "bytes": 203328
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-g.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-g.png",
+      "source_sha256": "fb6b0475f90132c1b1abfc4577f19aa92d5b8b4c11e63beef5684456c1b8e09e",
+      "sha256": "fb6b0475f90132c1b1abfc4577f19aa92d5b8b4c11e63beef5684456c1b8e09e",
+      "bytes": 230568
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-h.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-h.png",
+      "source_sha256": "3a70a95d13cd57678f0aa9fe4023eba6a9586b68dcd3521f0fcae10c21ee09fe",
+      "sha256": "3a70a95d13cd57678f0aa9fe4023eba6a9586b68dcd3521f0fcae10c21ee09fe",
+      "bytes": 221835
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-i.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-i.png",
+      "source_sha256": "8a7cd736179a91d89e05f421a17d5a489dbebfd02cdb00c54e0ea8235be46001",
+      "sha256": "8a7cd736179a91d89e05f421a17d5a489dbebfd02cdb00c54e0ea8235be46001",
+      "bytes": 125240
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-j.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-j.png",
+      "source_sha256": "315dac7ead02aea7d1472f74aaf87c8053052b9cec15f470d3bba6f7f61849a6",
+      "sha256": "315dac7ead02aea7d1472f74aaf87c8053052b9cec15f470d3bba6f7f61849a6",
+      "bytes": 178157
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-k.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-k.png",
+      "source_sha256": "4d5d3a6048ba0aa52b1d90e07e66739e13140e6e39c2279294cbf1091e1ab501",
+      "sha256": "4d5d3a6048ba0aa52b1d90e07e66739e13140e6e39c2279294cbf1091e1ab501",
+      "bytes": 243509
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-l.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-l.png",
+      "source_sha256": "9a773f573ba6d8f66e16adf1331aa3f17839bf1678e145f09ccb6e329dc6c4c7",
+      "sha256": "9a773f573ba6d8f66e16adf1331aa3f17839bf1678e145f09ccb6e329dc6c4c7",
+      "bytes": 148919
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-m.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-m.png",
+      "source_sha256": "9f67ad83e062faeb08f8b2306a4354e0c9a656eee8d678f6e21f38dcae39033e",
+      "sha256": "9f67ad83e062faeb08f8b2306a4354e0c9a656eee8d678f6e21f38dcae39033e",
+      "bytes": 243209
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-n.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-n.png",
+      "source_sha256": "6210fc79b63a75fb2afb8e788a61d7a23649a5d92e1abeb66b5b01cf37fbc768",
+      "sha256": "6210fc79b63a75fb2afb8e788a61d7a23649a5d92e1abeb66b5b01cf37fbc768",
+      "bytes": 200687
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-o.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-o.png",
+      "source_sha256": "d326c90594377c5f8964488574678e82c6bdb3989486a7ee904531ba23959169",
+      "sha256": "d326c90594377c5f8964488574678e82c6bdb3989486a7ee904531ba23959169",
+      "bytes": 213329
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-p.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-p.png",
+      "source_sha256": "92dce414682784919cfe1f48a409d4d02d5f719a812e3f1562089a10a2cdf93c",
+      "sha256": "92dce414682784919cfe1f48a409d4d02d5f719a812e3f1562089a10a2cdf93c",
+      "bytes": 229926
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-q.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-q.png",
+      "source_sha256": "8826246e9fc4c3984b579a48bbefa75ff450210b35bd5b779e720380fb968a76",
+      "sha256": "8826246e9fc4c3984b579a48bbefa75ff450210b35bd5b779e720380fb968a76",
+      "bytes": 250996
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-r.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-r.png",
+      "source_sha256": "7ec71a8d203c4f390fd14af69a599ba407c4bcea43a959c5b96f4cde49f17428",
+      "sha256": "7ec71a8d203c4f390fd14af69a599ba407c4bcea43a959c5b96f4cde49f17428",
+      "bytes": 164277
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-s.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-s.png",
+      "source_sha256": "ea1fc4e917faf370e972f92de1ef90be5a225e4a15234141961ed9e13b9fa946",
+      "sha256": "ea1fc4e917faf370e972f92de1ef90be5a225e4a15234141961ed9e13b9fa946",
+      "bytes": 212032
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-t.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-t.png",
+      "source_sha256": "297d0ce231ff92309151f596bbdc12e19acf2d901e7835f739825d5f9efb0766",
+      "sha256": "297d0ce231ff92309151f596bbdc12e19acf2d901e7835f739825d5f9efb0766",
+      "bytes": 177707
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-u.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-u.png",
+      "source_sha256": "0e296da98cd46ae3cf716f1115e386dd5e26bbb59a0bab0623d194c9e067d2ce",
+      "sha256": "0e296da98cd46ae3cf716f1115e386dd5e26bbb59a0bab0623d194c9e067d2ce",
+      "bytes": 201430
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-v.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-v.png",
+      "source_sha256": "f849f02956673c600149c9261100b1edcc091a88fe6de40748bbad0b1e23afc0",
+      "sha256": "f849f02956673c600149c9261100b1edcc091a88fe6de40748bbad0b1e23afc0",
+      "bytes": 194357
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-w.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-w.png",
+      "source_sha256": "be5acf7d6ae685eb537e8d9d147530ad756901008c1189f930b581d7e17ec8e4",
+      "sha256": "be5acf7d6ae685eb537e8d9d147530ad756901008c1189f930b581d7e17ec8e4",
+      "bytes": 262680
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-x.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-x.png",
+      "source_sha256": "fc40e94b540374966552447971b24b0e2df524a03756a2ee94e6a8365bfa9ec9",
+      "sha256": "fc40e94b540374966552447971b24b0e2df524a03756a2ee94e6a8365bfa9ec9",
+      "bytes": 223229
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-y.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-y.png",
+      "source_sha256": "05d410c70c601f72af97623009b0439a6857e323dd6240496aa1fbeec521b2b5",
+      "sha256": "05d410c70c601f72af97623009b0439a6857e323dd6240496aa1fbeec521b2b5",
+      "bytes": 210406
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/lower-z.png",
+      "file": "scenes/alphabet-v1/glyphs/lower-z.png",
+      "source_sha256": "54a322ce24e5650a17dc76e7884ef13a0de2a554558d12cb53ad19816990b454",
+      "sha256": "54a322ce24e5650a17dc76e7884ef13a0de2a554558d12cb53ad19816990b454",
+      "bytes": 215523
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-_.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-_.png",
+      "source_sha256": "289b4bea2f75d0c034514e74b1b2f57160571bf9a516e2d76ec873c6aefa3c35",
+      "sha256": "289b4bea2f75d0c034514e74b1b2f57160571bf9a516e2d76ec873c6aefa3c35",
+      "bytes": 184886
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-A.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-A.png",
+      "source_sha256": "6f766cc9dbe9fbeecc124d8016c989cec50960b170fb623dc58f8c268ecb4397",
+      "sha256": "6f766cc9dbe9fbeecc124d8016c989cec50960b170fb623dc58f8c268ecb4397",
+      "bytes": 307520
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-B.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-B.png",
+      "source_sha256": "edba2167ac0ff41216d069f79fd01faeb68d6ed5e0490311761799a29abdb37d",
+      "sha256": "edba2167ac0ff41216d069f79fd01faeb68d6ed5e0490311761799a29abdb37d",
+      "bytes": 312208
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-C.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-C.png",
+      "source_sha256": "9d32662c4af85c683f56d8a0ef9b7a51724c745aa5c85f3ce60cade54d0f77a6",
+      "sha256": "9d32662c4af85c683f56d8a0ef9b7a51724c745aa5c85f3ce60cade54d0f77a6",
+      "bytes": 310097
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-D.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-D.png",
+      "source_sha256": "d79c1cd93c88092720f75462d452ae64813f7cf1f564d13d3f24dcc08fba2bc5",
+      "sha256": "d79c1cd93c88092720f75462d452ae64813f7cf1f564d13d3f24dcc08fba2bc5",
+      "bytes": 310565
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-E.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-E.png",
+      "source_sha256": "39b8e8ebbcf2b9beb16d215b3827a9c71f712486643d4174d98cd21f30fd5285",
+      "sha256": "39b8e8ebbcf2b9beb16d215b3827a9c71f712486643d4174d98cd21f30fd5285",
+      "bytes": 310275
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-F.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-F.png",
+      "source_sha256": "009058ca9932aeda7847e3182e3ad54c3e79f976b2774515841b10d5abcae299",
+      "sha256": "009058ca9932aeda7847e3182e3ad54c3e79f976b2774515841b10d5abcae299",
+      "bytes": 252542
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-G.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-G.png",
+      "source_sha256": "49081457da305c8a687ccbfba861b410a7b7ca7ebae12f1fcf2d3f71d2db24b5",
+      "sha256": "49081457da305c8a687ccbfba861b410a7b7ca7ebae12f1fcf2d3f71d2db24b5",
+      "bytes": 307667
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-H.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-H.png",
+      "source_sha256": "cb89d07c0d099a144b4dc7f00c942fd1b965576eb20791371afe4e67a1dd8ebb",
+      "sha256": "cb89d07c0d099a144b4dc7f00c942fd1b965576eb20791371afe4e67a1dd8ebb",
+      "bytes": 306096
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-I.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-I.png",
+      "source_sha256": "b477b6b39d95e011a019cd60611e5bdc5cfbc7c5b707baa919901157ab99336c",
+      "sha256": "b477b6b39d95e011a019cd60611e5bdc5cfbc7c5b707baa919901157ab99336c",
+      "bytes": 167707
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-J.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-J.png",
+      "source_sha256": "d670d340530aaa98c86245e3595fc49b73e2a97cfcc09e1c30abee509b816906",
+      "sha256": "d670d340530aaa98c86245e3595fc49b73e2a97cfcc09e1c30abee509b816906",
+      "bytes": 268008
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-K.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-K.png",
+      "source_sha256": "91830612d248777daba1396e068aecd0d1bf20c51b08c97ea91f89fcc28f9ae3",
+      "sha256": "91830612d248777daba1396e068aecd0d1bf20c51b08c97ea91f89fcc28f9ae3",
+      "bytes": 332962
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-L.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-L.png",
+      "source_sha256": "31249fe26a7a46eb8d778a878ec40aecd8cc517c85a68902f7e85cfc4d741f63",
+      "sha256": "31249fe26a7a46eb8d778a878ec40aecd8cc517c85a68902f7e85cfc4d741f63",
+      "bytes": 236057
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-M.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-M.png",
+      "source_sha256": "5035739f0a4f75f5afe501ae05aad74a0044ff8216b5dc4fa5dbb1aff96c795e",
+      "sha256": "5035739f0a4f75f5afe501ae05aad74a0044ff8216b5dc4fa5dbb1aff96c795e",
+      "bytes": 348415
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-N.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-N.png",
+      "source_sha256": "a6d660cbff2e7f4684ae0937955b8cf30224b04b3d380ea5d854ff7a8d0606ec",
+      "sha256": "a6d660cbff2e7f4684ae0937955b8cf30224b04b3d380ea5d854ff7a8d0606ec",
+      "bytes": 315441
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-O.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-O.png",
+      "source_sha256": "feeeae795f0ab51991085c88906349eabde7f32a4e37798b2e4fdd73eb6e3359",
+      "sha256": "feeeae795f0ab51991085c88906349eabde7f32a4e37798b2e4fdd73eb6e3359",
+      "bytes": 304267
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-P.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-P.png",
+      "source_sha256": "d16538d214276e182a02f32c95c8129d4610609d0d92e13f47a45605e8f4f7b9",
+      "sha256": "d16538d214276e182a02f32c95c8129d4610609d0d92e13f47a45605e8f4f7b9",
+      "bytes": 276401
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-Q.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-Q.png",
+      "source_sha256": "ad9fcc870502a32150b122ae997288e1b53600fe3fa2f5426d72dad503ea71c7",
+      "sha256": "ad9fcc870502a32150b122ae997288e1b53600fe3fa2f5426d72dad503ea71c7",
+      "bytes": 340761
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-R.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-R.png",
+      "source_sha256": "ad949c14b7996ada6c395710eb84b2e27ba31e2713b2456a00f90d326acc46e9",
+      "sha256": "ad949c14b7996ada6c395710eb84b2e27ba31e2713b2456a00f90d326acc46e9",
+      "bytes": 329681
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-S.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-S.png",
+      "source_sha256": "26c04b697cda9badaf86dda2b4623632c7ce4cfc597089383e34cd988099a986",
+      "sha256": "26c04b697cda9badaf86dda2b4623632c7ce4cfc597089383e34cd988099a986",
+      "bytes": 327005
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-T.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-T.png",
+      "source_sha256": "23df422058ae7f0c90b8f6738eb7a90a0e4f2f3f9ba111418e32a4a8ceb2c140",
+      "sha256": "23df422058ae7f0c90b8f6738eb7a90a0e4f2f3f9ba111418e32a4a8ceb2c140",
+      "bytes": 258248
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-U.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-U.png",
+      "source_sha256": "b0eac5bb62c767049ad98ea585273098e19780daa51aee5d6ae505f0e82464f3",
+      "sha256": "b0eac5bb62c767049ad98ea585273098e19780daa51aee5d6ae505f0e82464f3",
+      "bytes": 308928
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-V.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-V.png",
+      "source_sha256": "a092853f1931b702df209827d05e06ac50bea27b3a3331fd8056685525ca052c",
+      "sha256": "a092853f1931b702df209827d05e06ac50bea27b3a3331fd8056685525ca052c",
+      "bytes": 312711
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-W.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-W.png",
+      "source_sha256": "ca35712c1a9f05361008e8b64696a8ef11073a6eadb7c9fea2828622a8d1aea9",
+      "sha256": "ca35712c1a9f05361008e8b64696a8ef11073a6eadb7c9fea2828622a8d1aea9",
+      "bytes": 398203
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-X.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-X.png",
+      "source_sha256": "f6c27146c8394c33f04a3a803e5bd39e9afd5ab1d793df666c1a21823ce09887",
+      "sha256": "f6c27146c8394c33f04a3a803e5bd39e9afd5ab1d793df666c1a21823ce09887",
+      "bytes": 337914
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-Y.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-Y.png",
+      "source_sha256": "3c21feffdd5a3b859e16fdd6be6cadc2a522b1bb73503e06bf29ed2e71111511",
+      "sha256": "3c21feffdd5a3b859e16fdd6be6cadc2a522b1bb73503e06bf29ed2e71111511",
+      "bytes": 306765
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/glyphs/upper-Z.png",
+      "file": "scenes/alphabet-v1/glyphs/upper-Z.png",
+      "source_sha256": "f3d591571272f8c466b05262859685597f97c794393d5f10ca0e717cbdcaa7ad",
+      "sha256": "f3d591571272f8c466b05262859685597f97c794393d5f10ca0e717cbdcaa7ad",
+      "bytes": 352180
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/prompts/lowercase-prompt.txt",
+      "file": "scenes/alphabet-v1/prompts/lowercase-prompt.txt",
+      "source_sha256": "460ce8175c292d1724b24e4fe8841af0c697ec280aeb0a25aecba5a3ba33df01",
+      "sha256": "460ce8175c292d1724b24e4fe8841af0c697ec280aeb0a25aecba5a3ba33df01",
+      "bytes": 1877
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/prompts/lowercase-spacing-v2-prompt.txt",
+      "file": "scenes/alphabet-v1/prompts/lowercase-spacing-v2-prompt.txt",
+      "source_sha256": "447202c29619a84add9c1dbe424e8ee88b529353c0028dffb6053a20086e83e1",
+      "sha256": "447202c29619a84add9c1dbe424e8ee88b529353c0028dffb6053a20086e83e1",
+      "bytes": 1560
+    },
+    {
+      "source": "output/brat-ok-loading/alphabet-v1/prompts/uppercase-prompt.txt",
+      "file": "scenes/alphabet-v1/prompts/uppercase-prompt.txt",
+      "source_sha256": "5ab8767cbfb319cbc1bc2efdce94f1e50ebb0de69dfb828984954b7f3fe5139f",
+      "sha256": "5ab8767cbfb319cbc1bc2efdce94f1e50ebb0de69dfb828984954b7f3fe5139f",
+      "bytes": 1917
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/analyze-inspection.json",
+      "file": "history/alphabet-v1/analyze-inspection.json",
+      "source_sha256": "4fead25040db1978e900201020ebbe743d3ee8b9c1565c556c929945feb52138",
+      "sha256": "023032b1b543f4be451f2f20e26fb3f94d3b597e22779792c504ebca8a15fb99",
+      "bytes": 14269,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/analyze_atlases.py",
+      "file": "history/alphabet-v1/analyze_atlases.py.txt",
+      "source_sha256": "e41d45f63a947a6d6d5702a6757c8e9d3a17609d8a68645413035bc92e677ce8",
+      "sha256": "feeac71b7573f246f76813a49c83987e8462ae3f9483891fae2d9549e15bc812",
+      "bytes": 17497,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/build_library.py",
+      "file": "history/alphabet-v1/build_library.py.txt",
+      "source_sha256": "0ca5bee208c9ff12ac56061f9419c69ba56f7475578d0c9e7d74441bb9802549",
+      "sha256": "9e92c1ae9b1515db7919562514938eb2942b6ef769d913c3e35aef98367a0acf",
+      "bytes": 11277,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/build_library_executed.py",
+      "file": "history/alphabet-v1/build_library_executed.py.txt",
+      "source_sha256": "b90490600879f6ce939f7944e28409d3ab004fd7beace0d8a608fa40e1e8427b",
+      "sha256": "7b1bdfafe1fc1878b3482378658404bd8efd545d72a3bccca2c2972eaf0c55bc",
+      "bytes": 96764,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/export-inspection.json",
+      "file": "history/alphabet-v1/export-inspection.json",
+      "source_sha256": "27ffaaf93f0c6cccf6fe08459466aa22057204afdf79aa38f9b6611b6f108931",
+      "sha256": "e028510c0ea2c4f191b6e8a6fdd2f4e6ae1606ac50d79688b493078b2317bf9a",
+      "bytes": 22396,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/export_glyphs.py",
+      "file": "history/alphabet-v1/export_glyphs.py.txt",
+      "source_sha256": "f3d59143f091bb53f97deabbde1a3632af1f9868f5e68014feae2ea7c71a4d16",
+      "sha256": "e1f4d56378d77f79bcd16363bafcdce12f6f22280f53207198cd22fe0a9b9551",
+      "bytes": 2552,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/inspect_exports.py",
+      "file": "history/alphabet-v1/inspect_exports.py.txt",
+      "source_sha256": "48dd7b6d616a4b2e80efcf6643e241bad8e61df8693547fcfd03b254a79b49e9",
+      "sha256": "9e9d31a4f47a27465f9bd5d8b60a4400dfdbd259527220f2d89fd8fe7533acd6",
+      "bytes": 2915,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/layout.json",
+      "file": "history/alphabet-v1/layout.json",
+      "source_sha256": "e90a07591d6f6e82fab5db59bdeabbab6f197e709b803ba3a23992c8020f5a66",
+      "sha256": "1473503861e70203169b7f56a46c30e2c7bd92540f6c8f6484f6a14ac872d466",
+      "bytes": 85498,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/native-verification.json",
+      "file": "history/alphabet-v1/native-verification.json",
+      "source_sha256": "2f12ae9f867a5f88bf766a82391ae81064d94c33555bf174c1b09c320f47a91c",
+      "sha256": "2f12ae9f867a5f88bf766a82391ae81064d94c33555bf174c1b09c320f47a91c",
+      "bytes": 2191,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/package-inspection.json",
+      "file": "history/alphabet-v1/package-inspection.json",
+      "source_sha256": "170d0b1db6d7ec6eaa9bad570dda68191064c44fd5783ba3e5c1d5179bd1970e",
+      "sha256": "726fb0326704f285815584dad1238d7a316b08908282f9c28adb3e22b97e1e3e",
+      "bytes": 203,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/package_letters.py",
+      "file": "history/alphabet-v1/package_letters.py.txt",
+      "source_sha256": "bd552849ccb8ba7bcb6056f7948882688c52bb16476ff7ed3773c7feb2285789",
+      "sha256": "769344e0340bcedb71990e9dfedffdabd56d35d7bb483cf160d6a53f6d7685e1",
+      "bytes": 1186,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/review.md",
+      "file": "history/alphabet-v1/review.md",
+      "source_sha256": "ed2453ab0671b17062c6108df1f1d55d73529cdaaff8af28bfe6ba03b01e4989",
+      "sha256": "ed2453ab0671b17062c6108df1f1d55d73529cdaaff8af28bfe6ba03b01e4989",
+      "bytes": 1277,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-alphabet-v1/verify_library.py",
+      "file": "history/alphabet-v1/verify_library.py.txt",
+      "source_sha256": "6a660113c554ab296b7c114cc17b25575c0d425a8be12df3a76097189f9df195",
+      "sha256": "f0ca9b2b9306cd2f67d5c3b4a1c3ba2f0491d63cbdb2eb8cc32e4179aa6bad55",
+      "bytes": 3807,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/BRAT_OK_background_motion_v2.blend",
+      "file": "scenes/background-motion-v1/BRAT_OK_background_motion_v2.blend",
+      "source_sha256": "bfc002748eab2cc6e350b456ee8ec1a66ae198b417869e229734fb0452a19045",
+      "sha256": "71825bb8d426fde825a45ab1682f4d7b1c6f39885b6c9361f2a5046ebc8fb30f",
+      "bytes": 23127160,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/README.md",
+      "file": "scenes/background-motion-v1/HISTORY.md",
+      "source_sha256": "9ca20737a77069726db6ee5ad2472d0845a4dceb68c35dcdc51d91faf1532b2a",
+      "sha256": "9ca20737a77069726db6ee5ad2472d0845a4dceb68c35dcdc51d91faf1532b2a",
+      "bytes": 5793
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/preview.png",
+      "file": "scenes/background-motion-v1/preview.png",
+      "source_sha256": "3c0a9f71fd729f817eab5071340e8e4070d47626188c52413a998fd953ab216e",
+      "sha256": "3c0a9f71fd729f817eab5071340e8e4070d47626188c52413a998fd953ab216e",
+      "bytes": 1087420
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/background.png",
+      "file": "scenes/background-motion-v1/assets/background.png",
+      "source_sha256": "299d4f8334fd0ff4bde8a6a5b5d697f15ad2f3fb0a4317079c7ba7289c534ee3",
+      "sha256": "299d4f8334fd0ff4bde8a6a5b5d697f15ad2f3fb0a4317079c7ba7289c534ee3",
+      "bytes": 2140109
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/dust.png",
+      "file": "scenes/background-motion-v1/assets/dust.png",
+      "source_sha256": "4a7dc6bee8f196a255ac35ee94457ec3a5ad826fa7640dd9fd7521cccded1e7b",
+      "sha256": "4a7dc6bee8f196a255ac35ee94457ec3a5ad826fa7640dd9fd7521cccded1e7b",
+      "bytes": 1060204
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/environment-protoss.png",
+      "file": "scenes/background-motion-v1/assets/environment-protoss.png",
+      "source_sha256": "4abd99bd18ed73495c55373ef9c17974e052794cb7a7f9a9bf03f7dc38144252",
+      "sha256": "4abd99bd18ed73495c55373ef9c17974e052794cb7a7f9a9bf03f7dc38144252",
+      "bytes": 2654178
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/hydralisk.png",
+      "file": "scenes/background-motion-v1/assets/hydralisk.png",
+      "source_sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "bytes": 2204365
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/marauder-left-v2.png",
+      "file": "scenes/background-motion-v1/assets/marauder-left-v2.png",
+      "source_sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "bytes": 1613373
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/runners.png",
+      "file": "scenes/background-motion-v1/assets/runners.png",
+      "source_sha256": "e55ab8b6b16122c1739f9ea6da9a78bc178e05e549a610e54458439b39acfaef",
+      "sha256": "e55ab8b6b16122c1739f9ea6da9a78bc178e05e549a610e54458439b39acfaef",
+      "bytes": 2114151
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/title.png",
+      "file": "scenes/background-motion-v1/assets/title.png",
+      "source_sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "bytes": 1282055
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/ultralisk.png",
+      "file": "scenes/background-motion-v1/assets/ultralisk.png",
+      "source_sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "bytes": 2743177
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/zealot.png",
+      "file": "scenes/background-motion-v1/assets/zealot.png",
+      "source_sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "bytes": 1638810
+    },
+    {
+      "source": "output/brat-ok-loading/background-motion-v1/assets/zergling.png",
+      "file": "scenes/background-motion-v1/assets/zergling.png",
+      "source_sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "bytes": 2375565
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/build_motion.py",
+      "file": "history/background-motion-v1/build_motion.py.txt",
+      "source_sha256": "bd437dc238aa1d2407bb64a84a4c4b302cd7a27119f13fdb6ac75fe7fe5f4514",
+      "sha256": "fd640e1f98867e338e6c7f55ca932c58f31b14c0327f4d528d121a9d8b2520e4",
+      "bytes": 13880,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/export-inspection.json",
+      "file": "history/background-motion-v1/export-inspection.json",
+      "source_sha256": "57411f8bb5d0b38a43b6547e0973d9b2c88d2e29fe7f56b198ae1673620e128f",
+      "sha256": "d3b821e9a042b24d55a576968935e39a59128198982a1f88ef19a220d3425846",
+      "bytes": 1027,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/export_preview.py",
+      "file": "history/background-motion-v1/export_preview.py.txt",
+      "source_sha256": "c16e2d428163beb60eeb5fede4255de187217b6f1a3a051037be10fde3e44251",
+      "sha256": "31992752e4abd9d4216ba8900c7388779b0321967518ccc25a5247dc6ed2c318",
+      "bytes": 2526,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/fetch_references.py",
+      "file": "history/background-motion-v1/fetch_references.py.txt",
+      "source_sha256": "40895414c2b357836342e8752e0c71f0accac3b584e2b10086ec22b6364b8498",
+      "sha256": "40895414c2b357836342e8752e0c71f0accac3b584e2b10086ec22b6364b8498",
+      "bytes": 1623,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/finalize.py",
+      "file": "history/background-motion-v1/finalize.py.txt",
+      "source_sha256": "68186cb15908c1d0386937ddb26d12ee83fff3b41df39e55f623d0d527abdb9a",
+      "sha256": "24bc720ae5bc5aab467f3ee12b275e0e0a89e28485a6b22bb8003e235e23c0f0",
+      "bytes": 935,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/native-loop-verification.json",
+      "file": "history/background-motion-v1/native-loop-verification.json",
+      "source_sha256": "444982cab6ff0dbfa8749bfedb5258f6e9086f93b19bfd3dd93c3da069d3e875",
+      "sha256": "444982cab6ff0dbfa8749bfedb5258f6e9086f93b19bfd3dd93c3da069d3e875",
+      "bytes": 1002,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/protect_rigid.py",
+      "file": "history/background-motion-v1/protect_rigid.py.txt",
+      "source_sha256": "df09943b140e8462aa2967351ede54a5a13c6a5c4d0b8e0211a2fe92078da037",
+      "sha256": "bf6d8f5e9bc20a13ab30edb70c480211e351b77b293da69977a2494546a86eb4",
+      "bytes": 1472,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-background-motion-v1/verify_seam.py",
+      "file": "history/background-motion-v1/verify_seam.py.txt",
+      "source_sha256": "88b628fa4462978513d7194b652b620d655032a3aac85d1101cd835b61bad89e",
+      "sha256": "7fc033ad8b45627a93bf739e37b1c5dc3b08b830cf2e997959f7b958804978fb",
+      "bytes": 1543,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/BRAT_OK_marauder_run_v3.blend",
+      "file": "scenes/marauder-run-v3/BRAT_OK_marauder_run_v3.blend",
+      "source_sha256": "ba0a14602030adc402199de8ce701c09ed1482e99196b8e872405136ed65e49d",
+      "sha256": "52ae56099685930ec35dcc877b9fa33a510bbff8771510960570be8c0e791ea0",
+      "bytes": 35425263,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/README.md",
+      "file": "scenes/marauder-run-v3/HISTORY.md",
+      "source_sha256": "b18202c63d663d5d46ef4e9e955daabd5db8d55ebb82606e974caa45c5733c4a",
+      "sha256": "b18202c63d663d5d46ef4e9e955daabd5db8d55ebb82606e974caa45c5733c4a",
+      "bytes": 3412
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/preview.png",
+      "file": "scenes/marauder-run-v3/preview.png",
+      "source_sha256": "1d48c251235705fa4452b42f88b14beccea3a99307c8986ba3828fec9a3f947c",
+      "sha256": "1d48c251235705fa4452b42f88b14beccea3a99307c8986ba3828fec9a3f947c",
+      "bytes": 638443
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/assets/approved-reference.png",
+      "file": "scenes/marauder-run-v3/assets/approved-reference.png",
+      "source_sha256": "d28576a3497f2ec8e246c98c4bf298f86d91dff54ee11fdbc4d905d83f95c66a",
+      "sha256": "d28576a3497f2ec8e246c98c4bf298f86d91dff54ee11fdbc4d905d83f95c66a",
+      "bytes": 1601476
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/assets/pair-1.png",
+      "file": "scenes/marauder-run-v3/assets/pair-1.png",
+      "source_sha256": "9655a3ae8c41daccd7b710ec8a52dfb5a550fd3371221e6ee18e196d8007f6da",
+      "sha256": "9655a3ae8c41daccd7b710ec8a52dfb5a550fd3371221e6ee18e196d8007f6da",
+      "bytes": 1830555
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/assets/pair-2.png",
+      "file": "scenes/marauder-run-v3/assets/pair-2.png",
+      "source_sha256": "9903706e6403dca6093a55ac70050e8efa4bb043ce9e40a3bc80c08996300df4",
+      "sha256": "9903706e6403dca6093a55ac70050e8efa4bb043ce9e40a3bc80c08996300df4",
+      "bytes": 1805864
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/assets/pair-3.png",
+      "file": "scenes/marauder-run-v3/assets/pair-3.png",
+      "source_sha256": "170131fe56a13850de252d15a96283bdacfa2ffe8adb05f3ca04c7396bcce59c",
+      "sha256": "170131fe56a13850de252d15a96283bdacfa2ffe8adb05f3ca04c7396bcce59c",
+      "bytes": 1906805
+    },
+    {
+      "source": "output/brat-ok-loading/marauder-run-v3/assets/pair-4.png",
+      "file": "scenes/marauder-run-v3/assets/pair-4.png",
+      "source_sha256": "ba8bc848e73975c4ec43cec30c3584f68d43a3582ddc48c00e8f2e2b6b4fe35d",
+      "sha256": "ba8bc848e73975c4ec43cec30c3584f68d43a3582ddc48c00e8f2e2b6b4fe35d",
+      "bytes": 1822457
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/asset-inspection.json",
+      "file": "history/marauder-run-v3/asset-inspection.json",
+      "source_sha256": "39e76b54880c60f93b82643535335b85d52a547ae5d92c5e6f88aa28801993d9",
+      "sha256": "cb24b4343329887f919af14e9b42775e80ecf21b3d0355f002b609be2f5b912a",
+      "bytes": 1623,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/build_cycle.py",
+      "file": "history/marauder-run-v3/build_cycle.py.txt",
+      "source_sha256": "54ee84eeab788c6eddf5215dbc3b7ff4524cc61f3b4b09fe91f9e2eb746130a6",
+      "sha256": "23262f2850671a4302c33e7f930d0965b2e083ff82fb455648571884751f58e1",
+      "bytes": 10163,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/build_cycle_executed.py",
+      "file": "history/marauder-run-v3/build_cycle_executed.py.txt",
+      "source_sha256": "3f29fcf7775f9bc35fdd51d2c7c1c195a980c6585500367735ed0568b11d573d",
+      "sha256": "d03618c0f0519bb8347a56c6e14225f6c6fb66f504e4d59263676f04a87133b5",
+      "bytes": 12157,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/export-inspection.json",
+      "file": "history/marauder-run-v3/export-inspection.json",
+      "source_sha256": "18c79a30aa207aa799844516644561182b10c4cfc41d97b7e72dfb4ea46a5b67",
+      "sha256": "daef7f5293c451940c6346ebcba00f31f08f188f15df68885197c765bcf50aac",
+      "bytes": 2964,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/export_preview.py",
+      "file": "history/marauder-run-v3/export_preview.py.txt",
+      "source_sha256": "ea9a121f7dd91e537007e8e7bf908541d071d516795d0b207cc4994f7c6302eb",
+      "sha256": "739528e502fe328cc19e691b3086ba5c2ea6ae42e04f7c7b3707401752f726aa",
+      "bytes": 5733,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/inspect_assets.py",
+      "file": "history/marauder-run-v3/inspect_assets.py.txt",
+      "source_sha256": "9dc581304d1f4787316c87b17d6c040cbb7f7ff44c764a318a8e6de6be85fceb",
+      "sha256": "9dc581304d1f4787316c87b17d6c040cbb7f7ff44c764a318a8e6de6be85fceb",
+      "bytes": 1460,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/layout.json",
+      "file": "history/marauder-run-v3/layout.json",
+      "source_sha256": "a33c60a0904253bebfab2a5ae30535771e9639785a12cc14e4acf1bd995f2951",
+      "sha256": "a33c60a0904253bebfab2a5ae30535771e9639785a12cc14e4acf1bd995f2951",
+      "bytes": 3371,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/render_cycle.py",
+      "file": "history/marauder-run-v3/render_cycle.py.txt",
+      "source_sha256": "8385d987d044d795926e8f257ef9d05aee35e4e41f625616ee80854aa44c23f9",
+      "sha256": "383a264587da95209bac96acb8ecb4718ea68762adbdd284d0c51d183b0bb102",
+      "bytes": 1506,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/verification.json",
+      "file": "history/marauder-run-v3/verification.json",
+      "source_sha256": "dbed0446f44caa1e666c742981d492afb3e54d051d84b10309d619a8b2c7d3f0",
+      "sha256": "1e06e60deeda2ed92270c332f57b30de6cf05f5f1e5fc802cf4acb00a984246e",
+      "bytes": 6903,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-marauder-run-v3/verify_cycle.py",
+      "file": "history/marauder-run-v3/verify_cycle.py.txt",
+      "source_sha256": "f015c0eba29118ef7e9aafba090890151eb69a94d8dba7a5d5f53cd55486fa4d",
+      "sha256": "6df7b7213ff3131398fd9396b00c32dc42489f03a87cc50a8f0fcaa0cd1dc537",
+      "bytes": 5808,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/BRAT_OK_zealot_run_v1.blend",
+      "file": "scenes/zealot-run-v1/BRAT_OK_zealot_run_v1.blend",
+      "source_sha256": "e9c9d34431c96dd8752ce4c710536cf48faefbfd5bcd457fc75a82007bfaad4e",
+      "sha256": "bb71d3548ba0afa3df66ec49144439254f882ffd8a3038708ee1988c84b00546",
+      "bytes": 45621876,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/README.md",
+      "file": "scenes/zealot-run-v1/HISTORY.md",
+      "source_sha256": "2574d1ece65749009353a076ffe3ca7e69eed746ff38148ec19b0ad2d44776ea",
+      "sha256": "2574d1ece65749009353a076ffe3ca7e69eed746ff38148ec19b0ad2d44776ea",
+      "bytes": 4629
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/preview.png",
+      "file": "scenes/zealot-run-v1/preview.png",
+      "source_sha256": "c3f65bb50d453eafae858bff5cdf4c39001b09a5d54633e652a91f48a1bd772f",
+      "sha256": "c3f65bb50d453eafae858bff5cdf4c39001b09a5d54633e652a91f48a1bd772f",
+      "bytes": 596591
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/approved-reference.png",
+      "file": "scenes/zealot-run-v1/assets/approved-reference.png",
+      "source_sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "bytes": 1638810
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-01.png",
+      "file": "scenes/zealot-run-v1/assets/pose-01.png",
+      "source_sha256": "002a782c7b409fc5090ebb0f596e83b1922129b7ac1abcaf1b3829c2ccfe95d4",
+      "sha256": "002a782c7b409fc5090ebb0f596e83b1922129b7ac1abcaf1b3829c2ccfe95d4",
+      "bytes": 1361134
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-02.png",
+      "file": "scenes/zealot-run-v1/assets/pose-02.png",
+      "source_sha256": "71475089a6d228f686b5d61a8e1cfd516f1525a9641cf45eb353362ed687e170",
+      "sha256": "71475089a6d228f686b5d61a8e1cfd516f1525a9641cf45eb353362ed687e170",
+      "bytes": 1324541
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-03.png",
+      "file": "scenes/zealot-run-v1/assets/pose-03.png",
+      "source_sha256": "72be4ddb265e6761a7866c9e390dc3e35611abffe40eb42a6519d2ae9eb6bb20",
+      "sha256": "72be4ddb265e6761a7866c9e390dc3e35611abffe40eb42a6519d2ae9eb6bb20",
+      "bytes": 1188699
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-04.png",
+      "file": "scenes/zealot-run-v1/assets/pose-04.png",
+      "source_sha256": "6fd33e76d61959f66367a471673f9976953ed65d6c11f50dead6840ac00a387f",
+      "sha256": "6fd33e76d61959f66367a471673f9976953ed65d6c11f50dead6840ac00a387f",
+      "bytes": 1298125
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-05.png",
+      "file": "scenes/zealot-run-v1/assets/pose-05.png",
+      "source_sha256": "31576f87657dab4b0ed3abfa8c30679a561b793cf8f9f78e65a27df178b6d94c",
+      "sha256": "31576f87657dab4b0ed3abfa8c30679a561b793cf8f9f78e65a27df178b6d94c",
+      "bytes": 1347763
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-06.png",
+      "file": "scenes/zealot-run-v1/assets/pose-06.png",
+      "source_sha256": "0b18c3406550f61b5b79ae78fbe49518a3b445be3ca9431a14588bbd6957c3cb",
+      "sha256": "0b18c3406550f61b5b79ae78fbe49518a3b445be3ca9431a14588bbd6957c3cb",
+      "bytes": 1286661
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-07.png",
+      "file": "scenes/zealot-run-v1/assets/pose-07.png",
+      "source_sha256": "6f75ab8718114e9720a61aee4625f31a369b0f092b10500ae6f1666258b6b16d",
+      "sha256": "6f75ab8718114e9720a61aee4625f31a369b0f092b10500ae6f1666258b6b16d",
+      "bytes": 1277208
+    },
+    {
+      "source": "output/brat-ok-loading/zealot-run-v1/assets/pose-08.png",
+      "file": "scenes/zealot-run-v1/assets/pose-08.png",
+      "source_sha256": "df1688bcddeff3a9ab19d6cbf28ac4e45f6cff4b40a739fca62cd576169cb06c",
+      "sha256": "df1688bcddeff3a9ab19d6cbf28ac4e45f6cff4b40a739fca62cd576169cb06c",
+      "bytes": 1260595
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/asset-inspection.json",
+      "file": "history/zealot-run-v1/asset-inspection.json",
+      "source_sha256": "c1627114cbd7e264aa9bea663304bc9592993aa1c113dde2ebcf4a014936bf09",
+      "sha256": "3f68d1dae5fb7ffdbf82ea1eb0855441610cba4c36aae4bc502920a073336fa8",
+      "bytes": 2814,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/build_cycle.py",
+      "file": "history/zealot-run-v1/build_cycle.py.txt",
+      "source_sha256": "7321e92ea9ba0129c53b970a646a865ea8273408daac9daa78b3c172793966f8",
+      "sha256": "bfb3b61561fbba561bd455b3dfe184c8f4754e6a065c5b22c55c10ed207f2ab1",
+      "bytes": 10141,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/build_cycle_executed.py",
+      "file": "history/zealot-run-v1/build_cycle_executed.py.txt",
+      "source_sha256": "337acc3b272f3814438d772b991dead7e30a6314733e90b6d6fa046f353efc7b",
+      "sha256": "3ae84e789d929d82001f4560e5eec4531abc56a19fb6e2137f16417e2496079c",
+      "bytes": 12863,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/export-inspection.json",
+      "file": "history/zealot-run-v1/export-inspection.json",
+      "source_sha256": "1d4b6cbb7d1fe3c561bae48d62b7cf667b862908548de1ffe9d33b533e7521ab",
+      "sha256": "76862f10a70b9a8251773fd4bbd4a28ad6c9e14afff574d767d755de81458f52",
+      "bytes": 2958,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/export_preview.py",
+      "file": "history/zealot-run-v1/export_preview.py.txt",
+      "source_sha256": "d0cf8554bd5aa437c3ad9ecc78bffefeaab205cbe7bebc9ebad48317f9334909",
+      "sha256": "b863a418d6f10fba595b16ceed40c9130fa7b27649a383f963ef09093bfa3fd6",
+      "bytes": 5729,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/inspect_assets.py",
+      "file": "history/zealot-run-v1/inspect_assets.py.txt",
+      "source_sha256": "d855cf9b96fc380c402d3b5c8724faa60b3ad01c1d2517da886786db49eaa113",
+      "sha256": "d855cf9b96fc380c402d3b5c8724faa60b3ad01c1d2517da886786db49eaa113",
+      "bytes": 763,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/layout.json",
+      "file": "history/zealot-run-v1/layout.json",
+      "source_sha256": "1422ff4935052694047f67aab2bfe2992cbd757ce06306f5fa2b2503facc332f",
+      "sha256": "1422ff4935052694047f67aab2bfe2992cbd757ce06306f5fa2b2503facc332f",
+      "bytes": 4632,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/render_cycle.py",
+      "file": "history/zealot-run-v1/render_cycle.py.txt",
+      "source_sha256": "400464dd19bcb64be3f6aa7af50e0a6b04cd61e0ad66b92d11c30d1de4020c74",
+      "sha256": "7ec9be1fe89ff2bf8281e9d43b2e49a0bf6aa6ac0278861b03cc667842ddb9f9",
+      "bytes": 1494,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/verification.json",
+      "file": "history/zealot-run-v1/verification.json",
+      "source_sha256": "df23873b8f88dba0382f598f543e3841e42c78383cbe5eea54b57d3bc69e4e58",
+      "sha256": "018e2085de3df8efca7533b459d7392d8c100a96084d96eef3caad78eda2f845",
+      "bytes": 7026,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zealot-run-v1/verify_cycle.py",
+      "file": "history/zealot-run-v1/verify_cycle.py.txt",
+      "source_sha256": "12dfed0c8ed3ee32945cff61cc2259026def4d2a46443cd5973eb93a335084b9",
+      "sha256": "3442c47fa73fc29fbb40c85c16093b8263ebec2c44308d7ee8d8ac75dd258d9f",
+      "bytes": 5785,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend",
+      "file": "scenes/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend",
+      "source_sha256": "a15bb22afe87ffb46aac272975e9613940088df0779e7fe0a85bd9ab8a7b9be6",
+      "sha256": "c67512687a06d0c176cfc33842d93748d4289aee5a2b70475a5760655d3e958d",
+      "bytes": 48037130,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/hydralisk-slither-v1/README.md",
+      "file": "scenes/hydralisk-slither-v1/HISTORY.md",
+      "source_sha256": "8cbb3916983bf09078820a01fb7f1fd0bc094e5136a2ddb9f1904791fabd52e5",
+      "sha256": "8cbb3916983bf09078820a01fb7f1fd0bc094e5136a2ddb9f1904791fabd52e5",
+      "bytes": 4310
+    },
+    {
+      "source": "output/brat-ok-loading/hydralisk-slither-v1/preview.png",
+      "file": "scenes/hydralisk-slither-v1/preview.png",
+      "source_sha256": "23d6354387581ce294e69d5ec9f704d69c57ea7de0e19be68b694afa2f088569",
+      "sha256": "23d6354387581ce294e69d5ec9f704d69c57ea7de0e19be68b694afa2f088569",
+      "bytes": 626107
+    },
+    {
+      "source": "output/brat-ok-loading/hydralisk-slither-v1/assets/hydralisk-source.png",
+      "file": "scenes/hydralisk-slither-v1/assets/hydralisk-source.png",
+      "source_sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "bytes": 2204365
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/build_cycle.py",
+      "file": "history/hydralisk-slither-v1/build_cycle.py.txt",
+      "source_sha256": "dd0884e570ce0f30d647a05c0996930989e89bfc57ba6293f7290d9188d1078a",
+      "sha256": "9e6f8fec63f868594228c51b72b0abc267f8da4d33e566acb5aa6018e1b31c1b",
+      "bytes": 12438,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/build_cycle_executed.py",
+      "file": "history/hydralisk-slither-v1/build_cycle_executed.py.txt",
+      "source_sha256": "e63822c93c1e9f6550e84a67fd8459aa9edf42f3839e0c628e82b3e010d3ce88",
+      "sha256": "f5bdfe4c8687304bbb8964c6ce6711d5f2f8d9cfef0ac99e6f0711226e15a986",
+      "bytes": 12973,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/export-inspection.json",
+      "file": "history/hydralisk-slither-v1/export-inspection.json",
+      "source_sha256": "7c633ad2ec6271f6fdfcca1b7b98760bd68a1027dfe418dfa2dd14f8c52fa577",
+      "sha256": "cf6d522300caf3a406764f2651aca5ed0ac52d39168d7cec6b56434de1ae7c69",
+      "bytes": 3061,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/export_preview.py",
+      "file": "history/hydralisk-slither-v1/export_preview.py.txt",
+      "source_sha256": "42b78cafbd23567aeba71c1741459753709f42af6a0404b468721fc9f3e6127b",
+      "sha256": "46c2930384deca102df3947fcf7f1e39c6d66e2174cec3e7b469c2f239481bce",
+      "bytes": 4650,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/render_cycle.py",
+      "file": "history/hydralisk-slither-v1/render_cycle.py.txt",
+      "source_sha256": "e49df134830f3bbb1476de4e27825d654420bc936e807d848d4cce72018d2465",
+      "sha256": "22ece22cb7d6f8c985322e2266a4fe561fc0e7b0ae50f95275956d636ebd5197",
+      "bytes": 1563,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/spec.json",
+      "file": "history/hydralisk-slither-v1/spec.json",
+      "source_sha256": "d3335c1c43821b395d37ad079f1167fa1b089097c7e2b568cf096f8434812e7c",
+      "sha256": "d3335c1c43821b395d37ad079f1167fa1b089097c7e2b568cf096f8434812e7c",
+      "bytes": 727,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/update_motion_executed.py",
+      "file": "history/hydralisk-slither-v1/update_motion_executed.py.txt",
+      "source_sha256": "a6ae775bfa2d4ec061f89bd95d9069f28c86355051ca0244c6e3ca5253c8780b",
+      "sha256": "2a91562f97c55f6a9e6d4b39d2839b60bfc353a645700949a1ed57870c6bb6b1",
+      "bytes": 3657,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/verification.json",
+      "file": "history/hydralisk-slither-v1/verification.json",
+      "source_sha256": "2fdeb0794a8ff66f06240755d901eb5e2371a66a3aba0a03f3bb22b12a6ccfb4",
+      "sha256": "9bd4b6b3192c45277529f51bb72916a6c1f81a201a08551a4ece1d2e5ee346d3",
+      "bytes": 17035,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-hydralisk-slither-v1/verify_cycle.py",
+      "file": "history/hydralisk-slither-v1/verify_cycle.py.txt",
+      "source_sha256": "de0d748d6a21a84d64a1ae0231ccf0c7e23bb37bf491f957b92671ef1183bbec",
+      "sha256": "e78a3566e61bc39a2b4db9b11fe02f41f7f797de4811095c9ff054787eede199",
+      "bytes": 12134,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/BRAT_OK_zergling_gallop_v4.blend",
+      "file": "scenes/zergling-run-v1/BRAT_OK_zergling_gallop_v4.blend",
+      "source_sha256": "b27a6a289df448a7664de9b0027210e0b9f596a70bb5b68409ed364665f0b16e",
+      "sha256": "7e3227e2a8cb6228f40f0f0ca10c3c83d0ab09c212734c6bd75a55afb7a58b00",
+      "bytes": 24846441,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/README.md",
+      "file": "scenes/zergling-run-v1/HISTORY.md",
+      "source_sha256": "62e949c638eb87feff50f5c2c29dbd2541b1f7963fe7487e34571ff7f7291267",
+      "sha256": "62e949c638eb87feff50f5c2c29dbd2541b1f7963fe7487e34571ff7f7291267",
+      "bytes": 5863
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/preview.png",
+      "file": "scenes/zergling-run-v1/preview.png",
+      "source_sha256": "42e8edb4e8ade38a516fc1ff44dfbbf97f1beb21a510955800d1b601865c8295",
+      "sha256": "42e8edb4e8ade38a516fc1ff44dfbbf97f1beb21a510955800d1b601865c8295",
+      "bytes": 613821
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/background.png",
+      "file": "scenes/zergling-run-v1/assets/background.png",
+      "source_sha256": "299d4f8334fd0ff4bde8a6a5b5d697f15ad2f3fb0a4317079c7ba7289c534ee3",
+      "sha256": "299d4f8334fd0ff4bde8a6a5b5d697f15ad2f3fb0a4317079c7ba7289c534ee3",
+      "bytes": 2140109
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/dust.png",
+      "file": "scenes/zergling-run-v1/assets/dust.png",
+      "source_sha256": "4a7dc6bee8f196a255ac35ee94457ec3a5ad826fa7640dd9fd7521cccded1e7b",
+      "sha256": "4a7dc6bee8f196a255ac35ee94457ec3a5ad826fa7640dd9fd7521cccded1e7b",
+      "bytes": 1060204
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/environment-protoss.png",
+      "file": "scenes/zergling-run-v1/assets/environment-protoss.png",
+      "source_sha256": "4abd99bd18ed73495c55373ef9c17974e052794cb7a7f9a9bf03f7dc38144252",
+      "sha256": "4abd99bd18ed73495c55373ef9c17974e052794cb7a7f9a9bf03f7dc38144252",
+      "bytes": 2654178
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/hydralisk.png",
+      "file": "scenes/zergling-run-v1/assets/hydralisk.png",
+      "source_sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "bytes": 2204365
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/marauder-left-v2.png",
+      "file": "scenes/zergling-run-v1/assets/marauder-left-v2.png",
+      "source_sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "bytes": 1613373
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/runners.png",
+      "file": "scenes/zergling-run-v1/assets/runners.png",
+      "source_sha256": "e55ab8b6b16122c1739f9ea6da9a78bc178e05e549a610e54458439b39acfaef",
+      "sha256": "e55ab8b6b16122c1739f9ea6da9a78bc178e05e549a610e54458439b39acfaef",
+      "bytes": 2114151
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/title.png",
+      "file": "scenes/zergling-run-v1/assets/title.png",
+      "source_sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "bytes": 1282055
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/ultralisk.png",
+      "file": "scenes/zergling-run-v1/assets/ultralisk.png",
+      "source_sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "bytes": 2743177
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/zealot.png",
+      "file": "scenes/zergling-run-v1/assets/zealot.png",
+      "source_sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "bytes": 1638810
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/zergling-gallop.png",
+      "file": "scenes/zergling-run-v1/assets/zergling-gallop.png",
+      "source_sha256": "21e3b9b598849f98af2aefe89ca3422bd3777220f5c2146d7c0ddf087838d114",
+      "sha256": "21e3b9b598849f98af2aefe89ca3422bd3777220f5c2146d7c0ddf087838d114",
+      "bytes": 1773975
+    },
+    {
+      "source": "output/brat-ok-loading/zergling-run-v1/assets/zergling.png",
+      "file": "scenes/zergling-run-v1/assets/zergling.png",
+      "source_sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "bytes": 2375565
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/atlas-inspection.json",
+      "file": "history/zergling-run-v1/atlas-inspection.json",
+      "source_sha256": "834e05c0951c4ee0727ca520b2f3888addea21e7cb6fface8266e08061c71a3d",
+      "sha256": "7eb56bb46128a5c49ad5f41fba52b01c5ca9ad659de91b4f077a8c58786e7f37",
+      "bytes": 1029,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/build_cycle.py",
+      "file": "history/zergling-run-v1/build_cycle.py.txt",
+      "source_sha256": "eeefb7bda74331ba17640b21e5aeef7c7048a3607d1f439a94e8397fa9f58e7c",
+      "sha256": "0f26ca1f7d54abf85168b0d2bae3d758d7e948cf31c5fe032fb1535f40d7f3fe",
+      "bytes": 8364,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/export-inspection.json",
+      "file": "history/zergling-run-v1/export-inspection.json",
+      "source_sha256": "2eb0268a30a997c789ed7d86947e7f664f4b55059dff2b2c43dffd1713ba5185",
+      "sha256": "5ccaabc5a0591eae62e99073649ee7a360165489a7f5be4fca8a37a60a69cf6c",
+      "bytes": 736,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/export_preview.py",
+      "file": "history/zergling-run-v1/export_preview.py.txt",
+      "source_sha256": "28964b7349dfcf804c3897ffd06ca84167e4eed75ce4c0077cc3a2f2cf15023d",
+      "sha256": "6591561b1318fed98c8084f2c00cf4d443027676ffd0bf7c0d8dbc3e270a7644",
+      "bytes": 2036,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/fix_overlap.py",
+      "file": "history/zergling-run-v1/fix_overlap.py.txt",
+      "source_sha256": "e17e76699076cd6841a677f37b16e2da32f1a1368ae44ca24b02639b2d099fa1",
+      "sha256": "fc9fa34f2c474a9c82825671ad0e190e588efeed9c982fc0eb597ac0a315e1bb",
+      "bytes": 1517,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/fix_phase2_edge.py",
+      "file": "history/zergling-run-v1/fix_phase2_edge.py.txt",
+      "source_sha256": "6e23e5fde583ec25651c651a1cd8fca1eda8b721aa6b42fcb472b740b7e7338d",
+      "sha256": "e0d3024e595ee5716b0f8add0de49ec839a5d22852ae5520d3762bbeaf6c0150",
+      "bytes": 874,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/inspect_atlas.py",
+      "file": "history/zergling-run-v1/inspect_atlas.py.txt",
+      "source_sha256": "db508cf31382b599e928f997a2944bae80d6e980c5190d3676e131811cdb1a41",
+      "sha256": "db508cf31382b599e928f997a2944bae80d6e980c5190d3676e131811cdb1a41",
+      "bytes": 1179,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/inspect_overlap.py",
+      "file": "history/zergling-run-v1/inspect_overlap.py.txt",
+      "source_sha256": "46e3486ec8f6eb6132be4e0033346069ebbc8419845c9293760d0640f28914b6",
+      "sha256": "46e3486ec8f6eb6132be4e0033346069ebbc8419845c9293760d0640f28914b6",
+      "bytes": 968,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/inspect_phase2_final.py",
+      "file": "history/zergling-run-v1/inspect_phase2_final.py.txt",
+      "source_sha256": "b69edf636c390991381cc11b5834e4c760a1459b378a74a60cbe630957247715",
+      "sha256": "b69edf636c390991381cc11b5834e4c760a1459b378a74a60cbe630957247715",
+      "bytes": 1399,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/phase2-final-inspection.json",
+      "file": "history/zergling-run-v1/phase2-final-inspection.json",
+      "source_sha256": "78bc182e3d241983821823804af50439918ccff7510699f97b277776dd750eb6",
+      "sha256": "886597eb4c248e9c5479d9359b4fe5d0173fb69aaa0c1a32f657dd850ddd12eb",
+      "bytes": 287,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/pose-layout.json",
+      "file": "history/zergling-run-v1/pose-layout.json",
+      "source_sha256": "fd51bc930d00aebd64013ac07aba5ee008f6d0713850a09e8d1210905f28af2e",
+      "sha256": "fd51bc930d00aebd64013ac07aba5ee008f6d0713850a09e8d1210905f28af2e",
+      "bytes": 1744,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/protect_phase_edges.py",
+      "file": "history/zergling-run-v1/protect_phase_edges.py.txt",
+      "source_sha256": "e324a522c8f18c7109e9fe8514b0a49d2193904db24533281e71268db3f93b45",
+      "sha256": "87642805c033fb7d094c59db2f79a0dcd2705f4f7dc58431bb2c96fd93f5e251",
+      "bytes": 1435,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/render_cycle.py",
+      "file": "history/zergling-run-v1/render_cycle.py.txt",
+      "source_sha256": "444d07b918f57694d972338f9eaabf61f8f481cf6705a6f07877236b33e55681",
+      "sha256": "051a357ec4c433765e5638f80dd9026c7c0c8467594cd9702b5ec9e6c528e1fd",
+      "bytes": 965,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/verification.json",
+      "file": "history/zergling-run-v1/verification.json",
+      "source_sha256": "400be353095a17bbf48d80732b342581a15aa591818e992e393161cd19e72cec",
+      "sha256": "8906c4773e1eed5113947117e93bccbdb9a510f13a791eea755c01027986b1a1",
+      "bytes": 666,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-zergling-run-v1/verify_cycle.py",
+      "file": "history/zergling-run-v1/verify_cycle.py.txt",
+      "source_sha256": "59c2a61f68877dcc0dc80d4137ae5498661fc3461fd9427726e0d42d77910ab3",
+      "sha256": "59c2a61f68877dcc0dc80d4137ae5498661fc3461fd9427726e0d42d77910ab3",
+      "bytes": 2239,
+      "historical": true
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/BRAT_OK_giant_unit_v4.blend",
+      "file": "scenes/ultralisk-v1/BRAT_OK_giant_unit_v4.blend",
+      "source_sha256": "af97d76afdaa68dc0e6b4fd0e9643f541bd329bb5cae949bf1a1c45c22a5ffef",
+      "sha256": "6238f58da503aa1f104cdefc0dd1be7ecaea0078e1f36dffa916dcbe96f859b7",
+      "bytes": 20390399,
+      "adaptation": "Packed images/fonts retained; fallback and render paths relative; orphan editable datablocks retained with fake users; scene and animation signatures preserved"
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/README.md",
+      "file": "scenes/ultralisk-v1/HISTORY.md",
+      "source_sha256": "db0f1ede4160a2057267dbb5005b7efa4a422a36eb3d6224018fa1bba2482062",
+      "sha256": "db0f1ede4160a2057267dbb5005b7efa4a422a36eb3d6224018fa1bba2482062",
+      "bytes": 7943
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/preview.png",
+      "file": "scenes/ultralisk-v1/preview.png",
+      "source_sha256": "ff98844f8cbf161e4f3b516bc9848d8a91017dfc76abb2ce2d3407c3981be042",
+      "sha256": "ff98844f8cbf161e4f3b516bc9848d8a91017dfc76abb2ce2d3407c3981be042",
+      "bytes": 1155501
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/background-clean.png",
+      "file": "scenes/ultralisk-v1/assets/background-clean.png",
+      "source_sha256": "66193fd1eca6c972e838738911a54567e1ae64d603161e834b0d2be39dab6571",
+      "sha256": "66193fd1eca6c972e838738911a54567e1ae64d603161e834b0d2be39dab6571",
+      "bytes": 2813896
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/environment-banner-v3.png",
+      "file": "scenes/ultralisk-v1/assets/environment-banner-v3.png",
+      "source_sha256": "fe65e20c6cb46e1e98a487a3745e7181e050d65ffd0a1b22c644066401ab78e3",
+      "sha256": "fe65e20c6cb46e1e98a487a3745e7181e050d65ffd0a1b22c644066401ab78e3",
+      "bytes": 2603943
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/environment-fire-v2.png",
+      "file": "scenes/ultralisk-v1/assets/environment-fire-v2.png",
+      "source_sha256": "305b6ae8ac61639600be34942ade23b84273eb72f64c1f578894918e234652c1",
+      "sha256": "305b6ae8ac61639600be34942ade23b84273eb72f64c1f578894918e234652c1",
+      "bytes": 2694748
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/environment.png",
+      "file": "scenes/ultralisk-v1/assets/environment.png",
+      "source_sha256": "33c1c73655de4c6d8635e525cc273312ca6cbfbc2e46463e23e86919e9324930",
+      "sha256": "33c1c73655de4c6d8635e525cc273312ca6cbfbc2e46463e23e86919e9324930",
+      "bytes": 2698953
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/hydralisk.png",
+      "file": "scenes/ultralisk-v1/assets/hydralisk.png",
+      "source_sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "sha256": "f3f61162eb57c62010bba83b74d6cd08a37a5f613f9fff880ff5869454303448",
+      "bytes": 2204365
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/marauder-left-v2.png",
+      "file": "scenes/ultralisk-v1/assets/marauder-left-v2.png",
+      "source_sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "sha256": "1ccf1ffb580f0cec683f5c262ec71a404fa74a29908814f2bf50ea6015a29c7d",
+      "bytes": 1613373
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/title.png",
+      "file": "scenes/ultralisk-v1/assets/title.png",
+      "source_sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "sha256": "87d891e36ec95d766376f256162ca14023766f12be09f5246bd58070f89e1349",
+      "bytes": 1282055
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/ultralisk.png",
+      "file": "scenes/ultralisk-v1/assets/ultralisk.png",
+      "source_sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "sha256": "f7d240aece2d9fa98df7e11a783747b2d0ff7e91c288d52102dc1a972b3d873f",
+      "bytes": 2743177
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/zealot.png",
+      "file": "scenes/ultralisk-v1/assets/zealot.png",
+      "source_sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "sha256": "ccb6734d99e6da50ce0cf06cf187ff038d4b494c24a83c2b367ea0df01077a50",
+      "bytes": 1638810
+    },
+    {
+      "source": "output/brat-ok-loading/ultralisk-v1/assets/zergling.png",
+      "file": "scenes/ultralisk-v1/assets/zergling.png",
+      "source_sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "sha256": "dd43fae55faea58a3b2c2a695935d8219e5f99348847a21bf8f4f24c967e6126",
+      "bytes": 2375565
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/add_title_layer.py",
+      "file": "history/ultralisk-v1/add_title_layer.py.txt",
+      "source_sha256": "a43f59fba37596edac78e9a771e5eb4f56f0b5c8e574add3be26dc76cd8b2d8a",
+      "sha256": "2c58d3052edfe5b7fe47798439fd5901969246a99e3bcec2acccad8e570ba8e4",
+      "bytes": 3098,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/assets.json",
+      "file": "history/ultralisk-v1/assets.json",
+      "source_sha256": "d8c963de1cc9ca25acd46ae36cd1ac2bfc85dd28fe262eeca29c0bee1022b8da",
+      "sha256": "d7d458572012b477b1ba70afc802e7a93d4f905e69db85a29a89e0eba69cf5b0",
+      "bytes": 1802,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/build_layout.py",
+      "file": "history/ultralisk-v1/build_layout.py.txt",
+      "source_sha256": "d3ffe662d9601fa32e2cb46889c7da151475a60e9d24b26151071655a5f3ba4f",
+      "sha256": "8617d99ab699da022cf03163b9b6b87d516887a42d3784e6583011415be3e960",
+      "bytes": 7944,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/copy_assets.py",
+      "file": "history/ultralisk-v1/copy_assets.py.txt",
+      "source_sha256": "9e50f00752669fc930d667d215e9d25aecfc24e149bcb7c155ae7b8deb52e16b",
+      "sha256": "cbaa1eefb7ffd1831dc59469f829192463023a9a51bb5ef1720abfbb3dcefe98",
+      "bytes": 986,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/title-environment-inspection.json",
+      "file": "history/ultralisk-v1/title-environment-inspection.json",
+      "source_sha256": "8c26c3ef34fcf06e160e6564b7a5890067ec79633ccf35ace9aff3887f57eab5",
+      "sha256": "570a49d093c4628b58b686caa8ffe41a235ecd8931b961490befb016b97cb1d1",
+      "bytes": 585,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/verification.json",
+      "file": "history/ultralisk-v1/verification.json",
+      "source_sha256": "26c0b70d0977c062c5a74fbfe99d09b8df6d0c26366e803771b5192626962485",
+      "sha256": "24a98e59c0c3e0586a6a9aeb57d7290210c93da037023164053a86fc9178e740",
+      "bytes": 696,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-ultralisk-v1/verify_layout.py",
+      "file": "history/ultralisk-v1/verify_layout.py.txt",
+      "source_sha256": "847997b39a4ae48ed8feaba935fa6a01f19b3edb583d1aa2bae58cbac931832e",
+      "sha256": "847997b39a4ae48ed8feaba935fa6a01f19b3edb583d1aa2bae58cbac931832e",
+      "bytes": 1936,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/build_scene.py",
+      "file": "history/brat-ok-full-scene-v2/build_scene.py.txt",
+      "source_sha256": "c744b6df601cc687695f14aadcaf2307691abc1c2670a145abf2cac8cb564bfd",
+      "sha256": "8f14cebd83044506c94998e686f88ab9da69cacd20e22e1b6faa1eaf9b4b190c",
+      "bytes": 14665,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/export_preview.py",
+      "file": "history/brat-ok-full-scene-v2/export_preview.py.txt",
+      "source_sha256": "347a8b8e78ba5061d4fec7cfb9f9a734006bb0a89b871a20d5041edd1cbeca5a",
+      "sha256": "bb013c87073e3cb4ecbc7a14e83c23103df0c232c5b625991d2487f212c2ff0e",
+      "bytes": 6113,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/native-verification.json",
+      "file": "history/brat-ok-full-scene-v2/native-verification.json",
+      "source_sha256": "49711eb5cb8529064cfef347706e096855879a1a4c72060d5ea0fd895aba2096",
+      "sha256": "49711eb5cb8529064cfef347706e096855879a1a4c72060d5ea0fd895aba2096",
+      "bytes": 3881,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/prepare_helpers.py",
+      "file": "history/brat-ok-full-scene-v2/prepare_helpers.py.txt",
+      "source_sha256": "a200054d967853956c067feb7dc49f037101224ab34e8196e83170762e7eabe3",
+      "sha256": "3b8e53731f1b18ece7824e70112375ff14a397409194d8a5fa6d8de68e6f4059",
+      "bytes": 5201,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/render_frames.py",
+      "file": "history/brat-ok-full-scene-v2/render_frames.py.txt",
+      "source_sha256": "940ca57697b075e655797407b71b8fbb41b02a45fa314160ff8ab4d3476e3433",
+      "sha256": "6d5f2f48e6aeced3fd2dca33938fe0510b3239e35f0652c0e37fdb5ea283d658",
+      "bytes": 881,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/review.md",
+      "file": "history/brat-ok-full-scene-v2/review.md",
+      "source_sha256": "c23d73ffac9968a89d44f83071f5c268aa6545c1b2d799094c194cdb180e4bff",
+      "sha256": "c23d73ffac9968a89d44f83071f5c268aa6545c1b2d799094c194cdb180e4bff",
+      "bytes": 1959,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-full-scene-v2/verify_scene.py",
+      "file": "history/brat-ok-full-scene-v2/verify_scene.py.txt",
+      "source_sha256": "5f1241f609bf7fced4e9638ca0a65530134d4c7033cfcef8cad88def26b72447",
+      "sha256": "5f1241f609bf7fced4e9638ca0a65530134d4c7033cfcef8cad88def26b72447",
+      "bytes": 6081,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-terran-banner-v3/prompt.txt",
+      "file": "history/brat-ok-terran-banner-v3/prompt.txt",
+      "source_sha256": "50090d8f9b10bf2f264b14a47fef041e8eea3c25ae324f5166fc79566b6bb029",
+      "sha256": "50090d8f9b10bf2f264b14a47fef041e8eea3c25ae324f5166fc79566b6bb029",
+      "bytes": 2202,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-terran-banner-v3/update_background.py",
+      "file": "history/brat-ok-terran-banner-v3/update_background.py.txt",
+      "source_sha256": "c5a9aad69e4b04f84cd623f50e149c2330dd839eb0555a62eaae85559c9e0f6a",
+      "sha256": "965a108f74aaf834304364965baec674c43e2961d256d36fcbe395befd264057",
+      "bytes": 2738,
+      "historical": true
+    },
+    {
+      "source": "work/brat-ok-terran-banner-v3/verification.json",
+      "file": "history/brat-ok-terran-banner-v3/verification.json",
+      "source_sha256": "c7cf1cad2f6789fb35a050a0f89ec5f3f44c72ba9994ece88da3ef28410e96f1",
+      "sha256": "f8e56d27b0697c7bdb6c37e8f5d639105f3dba3800597d42f796404650e4c41e",
+      "bytes": 511,
+      "historical": true
+    }
+  ],
+  "originals_unchanged": true
+}

@@ -1,0 +1,19 @@
+from PIL import Image
+from collections import deque
+import json
+im=Image.open('output/brat-ok-loading/zergling-run-v1/assets/zergling-gallop.png')
+a=im.getchannel('A');w,h=im.size;data=a.tobytes();seen=bytearray(w*h);rows=[]
+for start in range(w*h):
+    if seen[start] or data[start]<=128:continue
+    todo=deque([start]);seen[start]=1;x0,x1,y0,y1=w,0,h,0;area=0;edge=[]
+    while todo:
+        index=todo.popleft();y,x=divmod(index,w);area+=1;x0=min(x0,x);x1=max(x1,x);y0=min(y0,y);y1=max(y1,y)
+        if 1332<=x<=1342:edge.append([x,y])
+        for ny,nx in [(y,x-1),(y,x+1),(y-1,x),(y+1,x)]:
+            if 0<=nx<w and 0<=ny<h:
+                ni=ny*w+nx
+                if not seen[ni] and data[ni]>128:seen[ni]=1;todo.append(ni)
+    if area>40000 and y0>490:
+        rows.append({'bbox':[x0,y0,x1,y1],'edge_y_range':[min(p[1] for p in edge),max(p[1] for p in edge)] if edge else None,'edge_points':edge if len(edge)<400 else len(edge)})
+print(json.dumps(rows))
+

@@ -1,0 +1,143 @@
+import bpy,math,json
+ROOT="<ORIGINAL_PROJECT>/output/brat-ok-loading/zergling-run-v1"
+EXPECTED="<ORIGINAL_PROJECT>/output/brat-ok-loading/background-motion-v1/BRAT_OK_background_motion_v2.blend"
+if bpy.data.filepath.replace("\\","/")!=EXPECTED:
+    raise RuntimeError("Connected file changed; inspect first.")
+if bpy.data.scenes.get("BRAT_OK — зерглинг: галоп"):
+    raise RuntimeError("Cycle scene already exists; do not repeat.")
+source_scene=bpy.context.scene
+source_frame=source_scene.frame_current
+source_counts={s.name:len(s.objects) for s in bpy.data.scenes}
+bpy.ops.wm.save_as_mainfile(filepath="<ORIGINAL_PROJECT>/work/brat-ok-zergling-run-v1/before-unit-cycle.blend",copy=True,relative_remap=False)
+if bpy.context.screen and bpy.context.screen.is_animation_playing:
+    bpy.ops.screen.animation_cancel(restore_frame=False)
+scene=bpy.data.scenes.new("BRAT_OK — зерглинг: галоп")
+bpy.context.window.scene=scene
+scene.render.engine=source_scene.render.engine
+scene.view_settings.view_transform=source_scene.view_settings.view_transform
+scene.render.resolution_x=1920
+scene.render.resolution_y=1080
+scene.render.resolution_percentage=100
+scene.render.fps=30
+scene.frame_start=1
+scene.frame_end=24
+scene["unit"]="Зерглинг"
+scene["cycle_seconds"]=.8
+scene["motion_kind"]="Eight painted quadrupedal gallop poses; frame3hold; no skeletal rig."
+scene["review_stage"]="Isolated unit cycle; no integration with full right-to-left group traversal yet."
+world=bpy.data.worlds.new("Зерглинг — нейтральная среда")
+world.use_nodes=True
+background=next(n for n in world.node_tree.nodes if n.type=="BACKGROUND")
+background.inputs[0].default_value=(.015,.019,.024,1)
+background.inputs[1].default_value=.25
+scene.world=world
+camera_data=bpy.data.cameras.new("Зерглинг — камера цикла")
+camera_data.type=next(i.identifier for i in camera_data.bl_rna.properties["type"].enum_items if i.identifier=="ORTHO")
+camera_data.ortho_scale=9.6
+camera_data.clip_start=.01
+camera_data.clip_end=100
+camera=bpy.data.objects.new("Зерглинг — неподвижная камера",camera_data)
+camera.location=(0,0,30)
+scene.collection.objects.link(camera)
+scene.camera=camera
+palette=bpy.data.collections.new("00 Проверка опоры")
+scene.collection.children.link(palette)
+poses=bpy.data.collections.new("01 Зерглинг — восемь фаз")
+scene.collection.children.link(poses)
+def flat_material(name,color):
+    m=bpy.data.materials.new(name)
+    m.use_nodes=True
+    ns=m.node_tree.nodes
+    ns.clear()
+    e=ns.new("ShaderNodeEmission")
+    e.inputs["Color"].default_value=color
+    out=ns.new("ShaderNodeOutputMaterial")
+    m.node_tree.links.new(e.outputs[0],out.inputs["Surface"])
+    return m
+def quad(name,coords,material,col):
+    mesh=bpy.data.meshes.new(name+" — плоскость")
+    mesh.from_pydata(coords,[],[(0,1,2,3)])
+    obj=bpy.data.objects.new(name,mesh)
+    col.objects.link(obj)
+    obj.data.materials.append(material)
+    return obj
+quad("Нейтральный задник",[(-4.8,-2.7,-.6),(4.8,-2.7,-.6),(4.8,2.7,-.6),(-4.8,2.7,-.6)],flat_material("Сине-серый задник",(.025,.032,.041,1)),palette)
+ground=-1.55
+quad("Неподвижная линия земли",[(-4.8,ground-.016,-.4),(4.8,ground-.016,-.4),(4.8,ground+.016,-.4),(-4.8,ground+.016,-.4)],flat_material("Линия опоры",(.14,.18,.22,1)),palette)
+root=bpy.data.objects.new("Зерглинг — опорная точка",None)
+scene.collection.objects.link(root)
+root.location=(0,ground,0)
+img=bpy.data.images.load(ROOT+"/assets/zergling-gallop.png",check_existing=False)
+img.pack()
+img.filepath="//assets/zergling-gallop.png"
+mat=bpy.data.materials.new("Зерглинг — покадровые рисунки")
+mat.use_nodes=True
+methods=[i.identifier for i in mat.bl_rna.properties["surface_render_method"].enum_items]
+if "BLENDED" in methods: mat.surface_render_method=methods[methods.index("BLENDED")]
+mat.use_transparent_shadow=False
+ns=mat.node_tree.nodes
+ns.clear()
+tex=ns.new("ShaderNodeTexImage")
+tex.image=img
+extensions=[i.identifier for i in tex.bl_rna.properties["extension"].enum_items]
+tex.extension=extensions[extensions.index("CLIP")]
+em=ns.new("ShaderNodeEmission")
+transparent=ns.new("ShaderNodeBsdfTransparent")
+mix=ns.new("ShaderNodeMixShader")
+out=ns.new("ShaderNodeOutputMaterial")
+mat.node_tree.links.new(tex.outputs["Color"],em.inputs["Color"])
+mat.node_tree.links.new(tex.outputs["Alpha"],mix.inputs[0])
+mat.node_tree.links.new(transparent.outputs[0],mix.inputs[1])
+mat.node_tree.links.new(em.outputs[0],mix.inputs[2])
+mat.node_tree.links.new(mix.outputs[0],out.inputs["Surface"])
+layout=json.loads("{\"size\":[1774,887],\"pixel_scale\":0.011513859275053306,\"ground_y\":-1.55,\"cycle_frames\":24,\"poses\":[{\"rect\":[5,82,484,409],\"anchor\":[264,260],\"body_height\":140,\"phase\":\"extended flight\"},{\"rect\":[484,82,917,410],\"anchor\":[696,292],\"body_height\":102,\"phase\":\"front landing\"},{\"rect\":[917,80,1350,412],\"anchor\":[1122,294],\"body_height\":106,\"phase\":\"front support\"},{\"rect\":[1350,80,1774,411],\"anchor\":[1550,284],\"body_height\":105,\"phase\":\"gathered compression\"},{\"rect\":[20,495,467,820],\"anchor\":[255,702],\"body_height\":100,\"phase\":\"hind push\"},{\"rect\":[467,495,897,820],\"anchor\":[686,714],\"body_height\":134,\"phase\":\"gathered flight\"},{\"rect\":[897,495,1334,820],\"anchor\":[1115,724],\"body_height\":138,\"phase\":\"reach forward\"},{\"rect\":[1334,495,1774,822],\"anchor\":[1546,730],\"body_height\":140,\"phase\":\"extended flight transition\"}]}")
+W,H=layout["size"]
+scale=layout["pixel_scale"]
+for i,info in enumerate(layout["poses"]):
+    x0,y0,x1,y1=info["rect"]
+    ax,ay=info["anchor"]
+    body_height=info["body_height"]
+    left=(x0-ax)*scale
+    right=(x1-ax)*scale
+    bottom=(ay-y1+body_height)*scale
+    top=(ay-y0+body_height)*scale
+    obj=quad("Зерглинг — фаза "+str(i+1),[(left,bottom,.1),(right,bottom,.1),(right,top,.1),(left,top,.1)],mat,poses)
+    obj.parent=root
+    layer=obj.data.uv_layers.new(name="Фаза из атласа")
+    uvcoords=[(x0/W,1-y1/H),(x1/W,1-y1/H),(x1/W,1-y0/H),(x0/W,1-y0/H)]
+    for item,coord in zip(layer.data,uvcoords): item.uv=coord
+    obj["phase_index"]=i
+    obj["phase_description"]=info["phase"]
+    obj["source_rect"]=info["rect"]
+    obj["anatomical_anchor"]=info["anchor"]
+    for frame in range(1,26):
+        visible=((frame-1)//3)%8==i
+        obj.hide_render=not visible
+        obj.hide_viewport=not visible
+        obj.keyframe_insert(data_path="hide_render",frame=frame)
+        obj.keyframe_insert(data_path="hide_viewport",frame=frame)
+    action=obj.animation_data.action
+    for layer in action.layers:
+        for strip in layer.strips:
+            for bag in strip.channelbags:
+                for fc in bag.fcurves:
+                    for key in fc.keyframe_points:
+                        key.interpolation=next(e.identifier for e in key.bl_rna.properties["interpolation"].enum_items if e.identifier=="CONSTANT")
+scene.frame_set(7)
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type=="VIEW_3D":
+            area.spaces.active.region_3d.view_perspective="CAMERA"
+            area.spaces.active.overlay.show_overlays=False
+            modes=[i.identifier for i in area.spaces.active.shading.bl_rna.properties["type"].enum_items]
+            if "MATERIAL" in modes: area.spaces.active.shading.type=modes[modes.index("MATERIAL")]
+scene.render.image_settings.file_format=next(e.identifier for e in scene.render.image_settings.bl_rna.properties["file_format"].enum_items if e.identifier=="PNG")
+scene.render.filepath=ROOT+"/preview.png"
+scene.render.resolution_percentage=50
+bpy.ops.render.render(write_still=True)
+scene.render.resolution_percentage=100
+assert all(len(bpy.data.scenes[name].objects)==count for name,count in source_counts.items())
+assert source_scene.frame_current==source_frame
+bpy.ops.wm.save_as_mainfile(filepath=ROOT+"/BRAT_OK_zergling_gallop_v1.blend",relative_remap=False)
+print(json.dumps({"file":bpy.data.filepath,"scene":scene.name,"native_frames":24,"fps":30,"cycle_seconds":.8,"sprite_count":8,"source_scenes_preserved":True,"previous_frame":source_frame,"packed_atlas":bool(img.packed_file)},ensure_ascii=False))
+

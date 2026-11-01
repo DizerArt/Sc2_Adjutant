@@ -2,6 +2,11 @@
 
 Источник требований: [SCOPE.md](SCOPE.md). Сначала M1, затем M2/M3. M4 на паузе.
 
+01.11 DONE: перенос редактируемого Blender loading-проекта и библиотеки букв
+в art/blender/brat-ok-loading. Оригиналы сохранены; Unicode-relocation/native
+audit/animation signatures/sample frame/glyph PASS. Это исходники оформления,
+без новой runtime-зависимости и без возобновления генератора шортсов.
+
 28.10 DONE: карта потерь использует portable editor bank и fallback на точную
 локальную миникарту. Native EXE editor/minimap/restart/HTTP/SHA PASS; browser PASS.
 Открыто: независимая геометрическая калибровка, подтверждение версий экспортов

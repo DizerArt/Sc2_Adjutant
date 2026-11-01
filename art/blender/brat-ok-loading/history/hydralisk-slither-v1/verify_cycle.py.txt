@@ -1,0 +1,168 @@
+import bpy, math, json
+
+NAME = "BRAT_OK — гидралиск: ползучая волна"
+EXPECTED = "<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/BRAT_OK_hydralisk_slither_v1.blend"
+if bpy.data.filepath.replace("\\", "/") != EXPECTED:
+    raise RuntimeError("Unexpected connected file.")
+s = bpy.data.scenes[NAME]
+spec = json.loads(s["spec_json"])
+obj = s.objects["Гидралиск — цельный деформируемый рисунок"]
+mesh = obj.data
+W,H = spec["size"]
+cols,rows = spec["grid"]
+scale = spec["pixel_scale"]
+keys = list(mesh.shape_keys.key_blocks)
+basis = keys[0]
+images = [node.image for mat in mesh.materials for node in mat.node_tree.nodes if node.type == "TEX_IMAGE"]
+if len(images) != 1 or list(images[0].size) != [W,H] or images[0].channels != 4:
+    raise RuntimeError("One unchanged RGBA source is required for visible-cell inspection.")
+
+def signed_triangle_cross(coordinates, indices):
+    a,b,c = [coordinates[index] for index in indices]
+    return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
+
+# Independent distortion measurement uses actual evaluated triangles, not the wave formula.
+basis_coordinates = [(vertex.co.x,vertex.co.y) for vertex in basis.data]
+source_pixels = images[0].pixels
+cell_triangles = []
+visible_cell_count = 0
+for face in mesh.polygons:
+    indices = list(face.vertices)
+    if len(indices) != 4:
+        raise RuntimeError("Triangle-area inspection requires the expected quad grid.")
+    col = indices[0]%(cols+1)
+    row = indices[0]//(cols+1)
+    source_x = min(W-1,max(0,round((col+.5)*W/cols)))
+    source_y = min(H-1,max(0,round((row+.5)*H/rows)))
+    alpha = source_pixels[((H-1-source_y)*W+source_x)*4+3]
+    visible = alpha >= .05
+    visible_cell_count += int(visible)
+    triangles = [(indices[0],indices[1],indices[2]),(indices[0],indices[2],indices[3])]
+    areas = [signed_triangle_cross(basis_coordinates,triangle) for triangle in triangles]
+    if any(abs(area) < .000000000001 for area in areas):
+        raise RuntimeError("Degenerate basis triangle; ratios cannot be defined.")
+    cell_triangles.append({"cell":[col,row],"source_center_pixel":[source_x,source_y],"alpha":round(alpha,6),"visible":visible,"triangles":triangles,"basis_areas":areas})
+area_inspection = {"measurement":"signed XY triangle area / corresponding Basis triangle area on evaluated native mesh; two triangles per quad","visibility_mask":"source RGBA alpha >= 0.05 at original quad centroid; sampled once before animation","visible_cell_count":visible_cell_count,"all_cell_count":len(cell_triangles),"checked_frames":49,"all_triangle_minimum":None,"all_triangle_maximum":None,"visible_triangle_minimum":None,"visible_triangle_maximum":None,"flipped_triangle_samples":0}
+curves = [fc for layer in mesh.shape_keys.animation_data.action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+linear = all(key.interpolation == "LINEAR" for fc in curves for key in fc.keyframe_points)
+keyframes = len(curves) == 4 and all(len(fc.keyframe_points) == 49 and [round(k.co[0]) for k in fc.keyframe_points] == list(range(1,50)) for fc in curves)
+uv_correct = True
+base_correct = True
+for loop in mesh.loops:
+    i = loop.vertex_index%(cols+1)
+    j = loop.vertex_index//(cols+1)
+    uv = mesh.uv_layers.active.data[loop.index].uv
+    uv_correct = uv_correct and abs(uv[0]-i/cols) < .000001 and abs(uv[1]-(1-j/rows)) < .000001
+for index,vertex in enumerate(basis.data):
+    x = W*(index%(cols+1))/cols
+    y = H*(index//(cols+1))/rows
+    wanted = ((x-spec["anchor_x"])*scale,(spec["contact_y"]-y)*scale,.1)
+    base_correct = base_correct and all(abs(vertex.co[axis]-wanted[axis]) < .000001 for axis in range(3))
+
+def nearest_index(x,y):
+    return round(y/H*rows)*(cols+1)+round(x/W*cols)
+
+controls = {"belly_contact":nearest_index(650,1007),"lower_belly_edge":nearest_index(832,1007),"right_claw":nearest_index(1100,760),"claw_tip_overlap":nearest_index(1080,796),"right_upper_arm":nearest_index(928,464),"head":nearest_index(640,192),"tail_tip":nearest_index(1440,832)}
+pins = ["belly_contact","lower_belly_edge","right_claw","claw_tip_overlap","right_upper_arm"]
+pinned = all(all((key.data[controls[name]].co-basis.data[controls[name]].co).length < .000001 for key in keys[1:]) for name in pins)
+key_displacement_bounds = []
+for key in keys[1:]:
+    key_displacement_bounds.append({"name":key.name,"max_dx_pixels":max(abs(vertex.co.x-basis.data[index].co.x)/scale for index,vertex in enumerate(key.data)),"max_dy_pixels":max(abs(vertex.co.y-basis.data[index].co.y)/scale for index,vertex in enumerate(key.data)),"max_dz":max(abs(vertex.co.z-basis.data[index].co.z) for index,vertex in enumerate(key.data))})
+displacements_bounded = all(item["max_dx_pixels"] <= spec["tail_amp_x"]+.001 and item["max_dy_pixels"] <= spec["tail_amp_y"]+.001 for item in key_displacement_bounds[:2]) and key_displacement_bounds[2]["max_dx_pixels"] <= spec["body_amp_x"]+.001 and key_displacement_bounds[2]["max_dy_pixels"] < .001 and key_displacement_bounds[3]["max_dx_pixels"] < .001 and key_displacement_bounds[3]["max_dy_pixels"] <= spec["body_amp_y"]+.001 and all(item["max_dz"] < .000001 for item in key_displacement_bounds)
+states = []
+fingerprints = []
+samples = []
+coefficients_correct = True
+evaluated_correct = True
+controls_pinned = True
+in_camera = True
+all_visible = True
+half_w = s.camera.data.ortho_scale/2
+half_h = half_w*s.render.resolution_y/s.render.resolution_x
+saved_frame = s.frame_current
+try:
+    for frame in range(1,50):
+        s.frame_set(frame)
+        theta = 2*math.pi*((frame-1)%48)/48
+        wanted = [math.cos(theta),-math.sin(theta),math.sin(theta),math.cos(theta)]
+        actual = [key.value for key in keys[1:]]
+        coefficients_correct = coefficients_correct and all(abs(a-b) < .000002 for a,b in zip(actual,wanted))
+        depsgraph = bpy.context.evaluated_depsgraph_get()
+        evaluated = obj.evaluated_get(depsgraph).data
+        coordinates = [(vertex.co.x,vertex.co.y) for vertex in evaluated.vertices]
+        for cell in cell_triangles:
+            for triangle_index in range(2):
+                ratio = signed_triangle_cross(coordinates,cell["triangles"][triangle_index])/cell["basis_areas"][triangle_index]
+                record = {"ratio":ratio,"frame":frame,"cell":cell["cell"],"triangle":triangle_index,"source_center_pixel":cell["source_center_pixel"],"source_alpha":cell["alpha"]}
+                minimum = area_inspection["all_triangle_minimum"]
+                maximum = area_inspection["all_triangle_maximum"]
+                if minimum is None or ratio < minimum["ratio"]:
+                    area_inspection["all_triangle_minimum"] = record
+                if maximum is None or ratio > maximum["ratio"]:
+                    area_inspection["all_triangle_maximum"] = record
+                if ratio <= 0:
+                    area_inspection["flipped_triangle_samples"] += 1
+                if cell["visible"]:
+                    minimum = area_inspection["visible_triangle_minimum"]
+                    maximum = area_inspection["visible_triangle_maximum"]
+                    if minimum is None or ratio < minimum["ratio"]:
+                        area_inspection["visible_triangle_minimum"] = record
+                    if maximum is None or ratio > maximum["ratio"]:
+                        area_inspection["visible_triangle_maximum"] = record
+        fingerprint = []
+        for name,index in controls.items():
+            vertex = evaluated.vertices[index].co
+            reconstructed = [basis.data[index].co[axis]+sum(actual[k]*(keys[k+1].data[index].co[axis]-basis.data[index].co[axis]) for k in range(4)) for axis in range(3)]
+            evaluated_correct = evaluated_correct and all(abs(vertex[axis]-reconstructed[axis]) < .000002 for axis in range(3))
+            fingerprint.extend(round(vertex[axis],7) for axis in range(3))
+            if name in pins:
+                controls_pinned = controls_pinned and (vertex-basis.data[index].co).length < .000002
+        for vertex in evaluated.vertices:
+            x,y = vertex.co.x,vertex.co.y+spec["ground_y"]
+            in_camera = in_camera and s.camera.location.x-half_w < x < s.camera.location.x+half_w and s.camera.location.y-half_h < y < s.camera.location.y+half_h
+        all_visible = all_visible and not obj.hide_render and not obj.hide_viewport
+        fingerprints.append(tuple(fingerprint))
+        states.append({"frame":frame,"theta":round(theta,8),"shape_values":[round(value,8) for value in actual]})
+        if frame in (1,13,25,37,49):
+            samples.append({"frame":frame,"controls":{name:[round(component,7) for component in evaluated.vertices[index].co] for name,index in controls.items()}})
+finally:
+    s.frame_set(saved_frame)
+counts = json.loads(s["source_counts_json"])
+frames = json.loads(s["source_frames_json"])
+checks = {
+    "grid_6305_vertices_6144_quads":len(mesh.vertices) == 6305 and len(mesh.polygons) == 6144 and all(len(face.vertices) == 4 for face in mesh.polygons),
+    "basis_plus_four_native_keys":len(keys) == 5,
+    "unaltered_uv_coordinates":uv_correct,
+    "basis_matches_approved_source_plane":base_correct,
+    "native_negative_slider_bounds":all(key.slider_min <= -1 and key.slider_max >= 1 for key in keys[1:]),
+    "all49_sampled_linear_keyframes":linear and keyframes,
+    "correct_traveling_wave_and_sway_coefficients":coefficients_correct,
+    "evaluated_mesh_matches_shape_key_values":evaluated_correct,
+    "48_distinct_continuous_native_states":len(set(fingerprints[:48])) == 48,
+    "endpoint49_equals_frame1":fingerprints[0] == fingerprints[48],
+    "claw_arm_and_belly_controls_pinned":pinned and controls_pinned,
+    "native_deformation_stays_in_pixel_amplitude_bounds":displacements_bounded,
+    "visible_triangles_keep_at_least_40_percent_basis_area":area_inspection["visible_triangle_minimum"] is not None and area_inspection["visible_triangle_minimum"]["ratio"] >= .4,
+    "visible_triangles_stretch_at_most_200_percent_basis_area":area_inspection["visible_triangle_maximum"] is not None and area_inspection["visible_triangle_maximum"]["ratio"] <= 2.0,
+    "no_triangle_flips_on_any_of_49_native_states":area_inspection["flipped_triangle_samples"] == 0,
+    "mesh_visible_every_frame":all_visible,
+    "camera_contains_all_deformed_vertices":in_camera,
+    "root_static":not s.objects["Гидралиск — опорная точка"].animation_data,
+    "camera_static":not s.camera.animation_data,
+    "only_shape_keys_animated":all(not item.animation_data for item in s.objects),
+    "no_key_drivers":not mesh.shape_keys.animation_data.drivers,
+    "one_packed_canonical_rgba_texture":len(images) == 1 and bool(images[0].packed_file) and images[0].filepath == "//assets/hydralisk-source.png" and list(images[0].size) == [1536,1024] and images[0].channels == 4,
+    "48frames_30fps_1_6seconds":s.frame_start == 1 and s.frame_end == 48 and s.render.fps == 30 and s.render.fps_base == 1 and abs(s["cycle_seconds"]-1.6) < .000001,
+    "eight_prior_scene_counts_preserved":len(counts) == 8 and all(len(bpy.data.scenes[name].objects) == count for name,count in counts.items()),
+    "all_source_frames_preserved":all(bpy.data.scenes[name].frame_current == frame for name,frame in frames.items()),
+    "nine_total_scenes_five_new_objects":len(bpy.data.scenes) == 9 and len(s.objects) == 5,
+}
+report = {"file":bpy.data.filepath,"scene":NAME,"checks":checks,"all_passed":all(checks.values()),"states":states,"control_indices":controls,"control_samples":samples,"key_displacement_bounds":key_displacement_bounds,"evaluated_triangle_area_inspection":area_inspection,"source_counts":counts,"source_frames":frames,"spec":spec}
+if not report["all_passed"]:
+    print(json.dumps(report,ensure_ascii=False))
+    raise RuntimeError("Native checks failed; inspect evidence before claiming success.")
+s.frame_set(1)
+s.render.resolution_percentage = 100
+s.render.filepath = "<ORIGINAL_PROJECT>/output/brat-ok-loading/hydralisk-slither-v1/preview.png"
+bpy.ops.wm.save_as_mainfile(filepath=EXPECTED,relative_remap=False)
+print(json.dumps(report,ensure_ascii=False))

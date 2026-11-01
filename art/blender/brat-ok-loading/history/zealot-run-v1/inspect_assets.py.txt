@@ -1,0 +1,17 @@
+from pathlib import Path
+from PIL import Image
+import json, hashlib
+
+root = Path('output/brat-ok-loading/zealot-run-v1/assets')
+report = {}
+for p in sorted(root.glob('pose-*.png')):
+    im = Image.open(p)
+    alpha = im.getchannel('A')
+    bounds = alpha.point(lambda v: 255 if v > 128 else 0).getbbox()
+    w, h = im.size
+    margin = [bounds[0], bounds[1], w-bounds[2], h-bounds[3]]
+    report[p.name] = {'size': [w,h], 'mode': im.mode, 'alpha': alpha.getextrema(),
+                      'body_bbox': list(bounds), 'clear_margins_px': margin,
+                      'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+Path('work/brat-ok-zealot-run-v1/asset-inspection.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+print(json.dumps(report))

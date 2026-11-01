@@ -1,0 +1,10 @@
+from pathlib import Path
+import shutil, json
+root=Path('output/brat-ok-loading/ultralisk-v1/assets')
+root.mkdir(exist_ok=True)
+for row in json.loads("[{\"file\":\"background-clean.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1/background-clean.png\"},{\"file\":\"ultralisk.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/ultralisk-v1/ultralisk.png\"},{\"file\":\"zergling.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/units-v1/zergling.png\"},{\"file\":\"marauder-left-v2.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/units-v1/marauder-left-v2.png\"},{\"file\":\"zealot.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/units-v1/zealot.png\"},{\"file\":\"hydralisk.png\",\"src\":\"<ORIGINAL_PROJECT>/output/brat-ok-loading/units-v1/hydralisk.png\"}]"):
+    dest=root/row['file']
+    if dest.exists(): raise FileExistsError(dest)
+    shutil.copy2(row['src'],dest)
+print('Six project assets copied without re-encoding.')
+

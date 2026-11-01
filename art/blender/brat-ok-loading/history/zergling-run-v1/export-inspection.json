@@ -1,0 +1,45 @@
+{
+  "normal_cycle_seconds": 0.8,
+  "slow_cycle_seconds": 2.4,
+  "normal": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 960,
+        "height": 540,
+        "r_frame_rate": "30/1",
+        "nb_frames": "144"
+      }
+    ],
+    "format": {
+      "duration": "4.800000"
+    }
+  },
+  "slow": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 960,
+        "height": 540,
+        "r_frame_rate": "10/1",
+        "nb_frames": "48"
+      }
+    ],
+    "format": {
+      "duration": "4.800000"
+    }
+  },
+  "loop_endpoints_identical": true,
+  "pose_change_means": [
+    9.281,
+    6.2962,
+    7.9539,
+    8.883,
+    8.7821,
+    7.4198,
+    7.5613,
+    9.4284
+  ]
+}

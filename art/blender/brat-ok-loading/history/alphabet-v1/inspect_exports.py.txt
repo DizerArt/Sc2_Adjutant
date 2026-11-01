@@ -1,0 +1,43 @@
+from pathlib import Path
+import hashlib, json
+from PIL import Image
+
+root=Path('<ORIGINAL_PROJECT>')
+out=root/'output/brat-ok-loading/alphabet-v1'
+work=root/'work/brat-ok-alphabet-v1'
+metrics=json.loads((out/'glyph-metrics.json').read_text(encoding='utf-8'))['glyphs']
+wanted=sorted(g['file'] for g in metrics)
+actual=sorted(p.name for p in (out/'glyphs').glob('*.png'))
+records=[]
+for g in metrics:
+    p=out/'glyphs'/g['file']
+    with Image.open(p) as im:
+        alpha=im.getchannel('A')
+        visible=alpha.point([0 if a<=16 else 255 for a in range(256)]).getbbox()
+        w,h=im.size
+        borders=[alpha.crop((0,0,w,1)).getextrema()[1],alpha.crop((0,h-1,w,h)).getextrema()[1],alpha.crop((0,0,1,h)).getextrema()[1],alpha.crop((w-1,0,w,h)).getextrema()[1]]
+        records.append({'char':g['char'],'file':g['file'],'mode':im.mode,'size':list(im.size),'alpha_range':list(alpha.getextrema()),'visible_bbox':visible,'border_alpha_max':max(borders),'baseline_px':g['png_origin_from_top_left'][1],'rgba_hash':hashlib.sha256(im.tobytes()).hexdigest()})
+lookup={g['char']:g for g in records}
+originals={
+    'uppercase.png':'exec-517e1d3c-93af-42de-9bc1-fac3f0991215.png',
+    'lowercase-v2.png':'exec-712f9b7e-4d7b-473c-a2b1-875cbbb66609.png'
+}
+generated=Path('<LOCAL_USER>/.codex/generated_images/01a13585-76d6-7f83-ab9e-f6b2e004eded')
+source_equal={name:hashlib.sha256((out/'assets'/name).read_bytes()).digest()==hashlib.sha256((generated/original).read_bytes()).digest() for name,original in originals.items()}
+checks={
+    '53_exact_png_files':actual==wanted and len(actual)==53,
+    'all_RGBA_with_alpha0':all(r['mode']=='RGBA' and r['alpha_range'][0]==0 and r['alpha_range'][1]>128 for r in records),
+    'all_glyphs_nonempty':all(r['visible_bbox'] for r in records),
+    'native_dimensions_match_metrics':all(r['size']==g['png_size'] for r,g in zip(records,metrics)),
+    'transparent_outer_borders':all(r['border_alpha_max']==0 for r in records),
+    '53_distinct_glyph_renders':len({r['rgba_hash'] for r in records})==53,
+    'lower_descenders_visible_below_baseline':all(lookup[c]['visible_bbox'][3]>lookup[c]['baseline_px']+5 for c in 'gjpqy'),
+    'native_Q_tail_below_baseline':lookup['Q']['visible_bbox'][3]>lookup['Q']['baseline_px']+5,
+    'underscore_low_bar':lookup['_']['visible_bbox'][3]-lookup['_']['visible_bbox'][1]<lookup['A']['visible_bbox'][3]-lookup['A']['visible_bbox'][1],
+    'source_atlas_bytes_unchanged':all(source_equal.values()),
+}
+report={'all_passed':all(checks.values()),'checks':checks,'source_copies_equal_generated':source_equal,'renders':records,'inspection_only_no_raster_writes':True}
+(work/'export-inspection.json').write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding='utf-8')
+print(json.dumps({'all_passed':report['all_passed'],'checks':checks,'png_count':len(records)}))
+if not report['all_passed']:
+    raise RuntimeError('PNG inspection failed.')

@@ -1,0 +1,275 @@
+import bpy, math, json
+
+NAME = 'BRAT_OK — хоровод: четверка и ультралиск'
+OUT = '<ORIGINAL_PROJECT>/output/brat-ok-loading/full-scene-v2'
+if bpy.data.scenes.get(NAME):
+    raise RuntimeError('Assembly exists; inspect instead of recreating.')
+if len(bpy.data.scenes) != 10:
+    raise RuntimeError('Expected ten preserved scenes.')
+counts = {s.name: len(s.objects) for s in bpy.data.scenes}
+frames = {s.name: s.frame_current for s in bpy.data.scenes}
+source = bpy.data.scenes['BRAT_OK — фон: город и щит']
+s = bpy.data.scenes.new(NAME)
+bpy.context.window.scene = s
+s.render.engine = source.render.engine
+s.view_settings.view_transform = source.view_settings.view_transform
+s.world = source.world.copy()
+s.render.resolution_x, s.render.resolution_y = 1920, 1080
+s.render.resolution_percentage = 100
+s.render.fps, s.render.fps_base = 30, 1
+s.frame_start, s.frame_end = 1, 576
+s['source_counts_json'] = json.dumps(counts, ensure_ascii=False)
+s['source_frames_json'] = json.dumps(frames, ensure_ascii=False)
+s['ultralisk_motion'] = 'Whole painted silhouette translation with restrained body bob; no articulated leg cycle yet.'
+s['cycle_seconds'] = 19.2
+s['motion_contract'] = 'Right-to-left traversal, offscreen reset, delayed re-entry; persistent world-space dust.'
+
+def collection(name):
+    col = bpy.data.collections.new('Сборка — ' + name)
+    s.collection.children.link(col)
+    return col
+
+bgcol = collection('01 фон и силовой купол')
+giantcol = collection('02 гигант')
+unitcol = collection('03 отдельные циклы')
+dustcol = collection('04 остающаяся пыль')
+titlecol = collection('05 BRAT_OK')
+material_copies = {}
+
+def clone(src, col, copy_mesh=True):
+    obj = src.copy()
+    obj.name = 'Сборка — ' + src.name
+    if src.data and copy_mesh:
+        obj.data = src.data.copy()
+        if obj.type in ['MESH', 'CURVE']:
+            for idx, mat in enumerate(src.data.materials):
+                if mat.name not in material_copies:
+                    cp = mat.copy()
+                    cp.name = 'Сборка — ' + mat.name
+                    if cp.node_tree.animation_data and cp.node_tree.animation_data.action:
+                        cp.node_tree.animation_data.action = cp.node_tree.animation_data.action.copy()
+                    material_copies[mat.name] = cp
+                obj.data.materials[idx] = material_copies[mat.name]
+        if obj.type == 'MESH' and obj.data.shape_keys:
+            keys = obj.data.shape_keys
+            if keys == src.data.shape_keys:
+                raise RuntimeError('Shape keys were not independently copied.')
+            if keys.animation_data and keys.animation_data.action:
+                keys.animation_data.action = keys.animation_data.action.copy()
+    if obj.animation_data and obj.animation_data.action:
+        obj.animation_data.action = obj.animation_data.action.copy()
+    col.objects.link(obj)
+    obj['source_object'] = src.name
+    return obj
+
+def curves(action):
+    return [fc for layer in action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+
+def interpolation(obj, kind):
+    for fc in curves(obj.animation_data.action):
+        for kp in fc.keyframe_points:
+            kp.interpolation = next(e.identifier for e in kp.bl_rna.properties['interpolation'].enum_items if e.identifier == kind)
+
+for src in source.objects:
+    ob = clone(src, bgcol)
+    if src == source.camera:
+        s.camera = ob
+
+specs = [
+    ('Мародёр', 'BRAT_OK — мародёр: цельный цикл v3', 'Мародёр v3 — опорная точка', .88, 13, -3.70, 1.5, 48, 0),
+    ('Зерглинг', 'BRAT_OK — зерглинг: галоп', 'Зерглинг — опорная точка', .52, 17, -3.72, 1.7, 24, 3),
+    ('Зилот', 'BRAT_OK — зилот: бег на носках', 'Зилот v1 — опорная точка', .82, 21, -3.64, 1.6, 48, 12),
+    ('Гидралиск', 'BRAT_OK — гидралиск: ползучая волна', 'Гидралиск — опорная точка', .98, 26, -3.68, 1.8, 48, 18),
+]
+roots = []
+routes = []
+for name, source_scene, root_name, scale, startx, ground, depth, period, offset in specs:
+    srcroot = bpy.data.scenes[source_scene].objects[root_name]
+    root = clone(srcroot, unitcol, False)
+    root.animation_data_clear()
+    root.parent = None
+    root.scale = (scale, scale, scale)
+    root['unit'] = name
+    root['native_cycle_frames'] = period
+    root['cycle_phase_offset'] = offset
+    children = []
+    for src in srcroot.children:
+        obj = clone(src, unitcol)
+        obj.parent = root
+        if 'phase_index' in obj:
+            idx = int(obj['phase_index'])
+            obj.animation_data_clear()
+            hold = period // 8
+            for f in range(1, 578):
+                phase = ((f - 1 + offset) % period) // hold
+                obj.hide_render = phase != idx
+                obj.hide_viewport = phase != idx
+                obj.keyframe_insert(data_path='hide_render', frame=f)
+                obj.keyframe_insert(data_path='hide_viewport', frame=f)
+            interpolation(obj, 'CONSTANT')
+        elif obj.data.shape_keys:
+            keys = obj.data.shape_keys
+            keys.animation_data_clear()
+            for f in range(1, 578):
+                theta = 2 * math.pi * ((f - 1 + offset) % period) / period
+                vals = [math.cos(theta), -math.sin(theta), math.sin(theta), math.cos(theta)]
+                for key, val in zip(list(keys.key_blocks)[1:], vals):
+                    key.value = val
+                    key.keyframe_insert(data_path='value', frame=f)
+            for fc in curves(keys.animation_data.action):
+                for kp in fc.keyframe_points:
+                    kp.interpolation = next(e.identifier for e in kp.bl_rna.properties['interpolation'].enum_items if e.identifier == 'LINEAR')
+        children.append(obj)
+    for f in range(1, 578):
+        x = startx - .12 * (f - 1)
+        if f == 577:
+            x = startx
+        root.location = (x, ground, depth)
+        root.keyframe_insert(data_path='location', frame=f)
+    interpolation(root, 'LINEAR')
+    for fc in curves(root.animation_data.action):
+        fc.keyframe_points[-2].interpolation = next(e.identifier for e in fc.keyframe_points[-2].bl_rna.properties['interpolation'].enum_items if e.identifier == 'CONSTANT')
+    roots.append(root)
+    routes.append({'unit': name, 'root': root.name, 'startx': startx, 'ground': ground, 'depth': depth, 'speed': .12, 'last_travel_frame': 576, 'cycle': period, 'offset': offset})
+
+srcgiant = bpy.data.objects['Ультралиск — отдельный юнит']
+giant = clone(srcgiant, giantcol, False)
+giant.animation_data_clear()
+giant.parent = None
+giant['unit'] = 'Ультралиск'
+giant['motion_scope'] = s['ultralisk_motion']
+for src in srcgiant.children:
+    obj = clone(src, giantcol)
+    obj.parent = giant
+for f in range(1, 578):
+    x = 39 - .12 * (f - 1)
+    theta = 2 * math.pi * (f - 1) / 48
+    giant.location = (x, -3.90 + .055 * math.sin(theta), .9)
+    giant.keyframe_insert(data_path='location', frame=f)
+    if f == 577:
+        giant.location = (39, -3.9, .9)
+        giant.keyframe_insert(data_path='location', frame=f)
+interpolation(giant, 'LINEAR')
+for fc in curves(giant.animation_data.action):
+    if fc.array_index == 0:
+        fc.keyframe_points[-2].interpolation = next(e.identifier for e in fc.keyframe_points[-2].bl_rna.properties['interpolation'].enum_items if e.identifier == 'CONSTANT')
+roots.append(giant)
+routes.append({'unit':'Ультралиск','root':giant.name,'startx':39,'ground':-3.9,'depth':.9,'speed':.12,'wait_start':1,'last_travel_frame':576,'width':21.7})
+
+# Tail of the preceding giant pass stays visible across the loop boundary.
+previous = clone(srcgiant, giantcol, False)
+previous.animation_data_clear()
+previous.parent = None
+previous.name = 'Хоровод — ультралиск предыдущего прохода'
+previous['unit'] = 'Ультралиск — предыдущий проход'
+for src in srcgiant.children:
+    obj = clone(src, giantcol)
+    obj.parent = previous
+for f in range(1, 578):
+    phase = (f - 1) % 576
+    theta = 2 * math.pi * phase / 48
+    previous.location = (39 - .12 * (phase + 576), -3.90 + .055 * math.sin(theta), .9)
+    previous.keyframe_insert(data_path='location', frame=f)
+interpolation(previous, 'LINEAR')
+for fc in curves(previous.animation_data.action):
+    fc.keyframe_points[-2].interpolation = next(e.identifier for e in fc.keyframe_points[-2].bl_rna.properties['interpolation'].enum_items if e.identifier == 'CONSTANT')
+s['previous_giant_root'] = previous.name
+
+# Preserve source PNGs; bring the painted bodies to full opacity in their shaders.
+for mat in material_copies.values():
+    if mat in [m for o in unitcol.objects if o.type == 'MESH' for m in o.data.materials] or mat in [m for o in giantcol.objects if o.type == 'MESH' for m in o.data.materials]:
+        tex = next(n for n in mat.node_tree.nodes if n.type == 'TEX_IMAGE')
+        mix = next(n for n in mat.node_tree.nodes if n.type == 'MIX_SHADER')
+        solid = mat.node_tree.nodes.new('ShaderNodeMath')
+        solid.name = 'Плотный силуэт без просвечивания'
+        solid.operation = next(e.identifier for e in solid.bl_rna.properties['operation'].enum_items if e.identifier == 'MULTIPLY')
+        solid.inputs[1].default_value = 16
+        solid.use_clamp = True
+        mat.node_tree.links.new(tex.outputs['Alpha'], solid.inputs[0])
+        mat.node_tree.links.new(solid.outputs[0], mix.inputs[0])
+        mat['body_alpha_multiplier'] = 16
+
+# Retime copied background controls to the longer 576-frame queue loop.
+retimed = []
+for o in bgcol.objects:
+    if o.type not in ['MESH', 'CURVE']:
+        continue
+    for mat in o.data.materials:
+        if not mat.use_nodes or mat.name in retimed:
+            continue
+        retimed.append(mat.name)
+        if mat.node_tree.animation_data and mat.node_tree.animation_data.action:
+            for fc in curves(mat.node_tree.animation_data.action):
+                for kp in fc.keyframe_points:
+                    kp.co.x = 1 + (kp.co.x - 1) * 1.5
+                    kp.handle_left.x = 1 + (kp.handle_left.x - 1) * 1.5
+                    kp.handle_right.x = 1 + (kp.handle_right.x - 1) * 1.5
+                fc.update()
+
+title = clone(bpy.data.objects['BRAT_OK — поверх юнитов'], titlecol)
+title.location.z = 4
+
+dustsource = bpy.data.objects['Пыль — 01']
+dust_events = []
+for route in routes:
+    for emit in range(1, 577, 13):
+        unitx = route['startx'] - route['speed'] * max(0, emit - route.get('wait_start', 1))
+        if route['unit'] == 'Ультралиск':
+            unitx += 16
+        if not -10.2 < unitx < 10.7:
+            continue
+        obj = clone(dustsource, dustcol)
+        obj.name = 'Сборка — пыль ' + route['unit'] + ' ' + str(emit)
+        obj.animation_data_clear()
+        obj.parent = None
+        mat = obj.data.materials[0].copy()
+        mat.name = obj.name + ' — затухание'
+        obj.data.materials[0] = mat
+        mat.node_tree.animation_data_clear()
+        tex = next(n for n in mat.node_tree.nodes if n.type == 'TEX_IMAGE')
+        mix = next(n for n in mat.node_tree.nodes if n.type == 'MIX_SHADER')
+        fade = mat.node_tree.nodes.new('ShaderNodeValue')
+        fade.name = 'Плотность остающейся пыли'
+        mul = mat.node_tree.nodes.new('ShaderNodeMath')
+        mul.operation = next(e.identifier for e in mul.bl_rna.properties['operation'].enum_items if e.identifier == 'MULTIPLY')
+        mat.node_tree.links.new(tex.outputs['Alpha'], mul.inputs[0])
+        mat.node_tree.links.new(fade.outputs[0], mul.inputs[1])
+        mat.node_tree.links.new(mul.outputs[0], mix.inputs[0])
+        life = 62 if route['unit'] == 'Ультралиск' else 52
+        base = .85 if route['unit'] == 'Ультралиск' else .58
+        for f in range(1, 578):
+            age = (f - 1 - (emit - 1)) % 576
+            active = 0 <= age < life
+            growth = 1 + max(0, age) / life * .8
+            obj.location = (unitx + .48 + max(0, age) * .009, route['ground'] + .26 + max(0, age) * .004, route['depth'] + .25)
+            obj.scale = (base * growth, base * growth, 1)
+            obj.hide_render = not active
+            obj.hide_viewport = not active
+            obj.keyframe_insert(data_path='location', frame=f)
+            obj.keyframe_insert(data_path='scale', frame=f)
+            obj.keyframe_insert(data_path='hide_render', frame=f)
+            obj.keyframe_insert(data_path='hide_viewport', frame=f)
+            value = .33 * min(1, max(0, age) / 5) * max(0, 1 - max(0, age) / life) if active else 0
+            fade.outputs[0].default_value = value
+            fade.outputs[0].keyframe_insert(data_path='default_value', frame=f)
+        interpolation(obj, 'LINEAR')
+        for fc in curves(obj.animation_data.action):
+            if fc.data_path.startswith('hide_'):
+                for kp in fc.keyframe_points:
+                    kp.interpolation = next(e.identifier for e in kp.bl_rna.properties['interpolation'].enum_items if e.identifier == 'CONSTANT')
+        dust_events.append({'object':obj.name,'unit':route['unit'],'emit':emit,'expires':emit+life,'x':unitx})
+s['routes_json'] = json.dumps(routes, ensure_ascii=False)
+s['dust_events_json'] = json.dumps(dust_events, ensure_ascii=False)
+s['review_stage'] = 'First assembled loading-scene prototype; user visual review pending.'
+s.frame_set(180)
+for screen in bpy.data.screens:
+    for area in screen.areas:
+        if area.type == 'VIEW_3D':
+            area.spaces.active.region_3d.view_perspective = 'CAMERA'
+            area.spaces.active.overlay.show_overlays = False
+            area.spaces.active.shading.type = next(e.identifier for e in area.spaces.active.shading.bl_rna.properties['type'].enum_items if e.identifier == 'MATERIAL')
+assert all(len(bpy.data.scenes[name].objects) == count for name, count in counts.items())
+assert all(bpy.data.scenes[name].frame_current == f for name, f in frames.items())
+s.render.image_settings.file_format = next(e.identifier for e in s.render.image_settings.bl_rna.properties['file_format'].enum_items if e.identifier == 'PNG')
+bpy.ops.wm.save_as_mainfile(filepath=OUT + '/BRAT_OK_full_scene_v2.blend',relative_remap=False)
+print(json.dumps({'scene':s.name,'objects':len(s.objects),'dust_events':len(dust_events),'routes':routes,'source_counts':counts,'source_frames':frames},ensure_ascii=False))

@@ -1,0 +1,18 @@
+from pathlib import Path
+import zipfile, json, ast
+root=Path('<ORIGINAL_PROJECT>')
+out=root/'output/brat-ok-loading/alphabet-v1'
+work=root/'work/brat-ok-alphabet-v1'
+for p in list(work.glob('*.py'))+[out/'compose_lettering.py']:
+    ast.parse(p.read_text(encoding='utf-8-sig'))
+destination=out/'BRAT_OK_latin_letters_png.zip'
+paths=sorted((out/'glyphs').glob('*.png'))+[out/'glyph-metrics.json',out/'README.md',out/'compose_lettering.py',out/'alphabet-preview.png',out/'word-examples.png']+sorted((out/'prompts').glob('*.txt'))
+with zipfile.ZipFile(destination,'w',compression=zipfile.ZIP_DEFLATED) as z:
+    for path in paths:
+        z.write(path,path.relative_to(out))
+with zipfile.ZipFile(destination) as z:
+    report={'zip':str(destination),'png_glyph_count':len([n for n in z.namelist() if n.startswith('glyphs/') and n.endswith('.png')]),'crc_all_pass':z.testzip() is None,'helper_syntax_valid':True,'bytes':destination.stat().st_size}
+(work/'package-inspection.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))
+if report['png_glyph_count']!=53 or not report['crc_all_pass']:
+    raise RuntimeError('Letter package verification failed.')

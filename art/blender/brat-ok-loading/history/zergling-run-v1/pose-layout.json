@@ -1,0 +1,123 @@
+{
+  "size": [
+    1774,
+    887
+  ],
+  "pixel_scale": 0.011513859275053306,
+  "ground_y": -1.55,
+  "cycle_frames": 24,
+  "poses": [
+    {
+      "rect": [
+        5,
+        82,
+        484,
+        409
+      ],
+      "anchor": [
+        264,
+        260
+      ],
+      "body_height": 140,
+      "phase": "extended flight"
+    },
+    {
+      "rect": [
+        484,
+        82,
+        917,
+        410
+      ],
+      "anchor": [
+        696,
+        292
+      ],
+      "body_height": 102,
+      "phase": "front landing"
+    },
+    {
+      "rect": [
+        917,
+        80,
+        1350,
+        412
+      ],
+      "anchor": [
+        1122,
+        294
+      ],
+      "body_height": 106,
+      "phase": "front support"
+    },
+    {
+      "rect": [
+        1350,
+        80,
+        1774,
+        411
+      ],
+      "anchor": [
+        1550,
+        284
+      ],
+      "body_height": 105,
+      "phase": "gathered compression"
+    },
+    {
+      "rect": [
+        20,
+        495,
+        467,
+        820
+      ],
+      "anchor": [
+        255,
+        702
+      ],
+      "body_height": 100,
+      "phase": "hind push"
+    },
+    {
+      "rect": [
+        467,
+        495,
+        897,
+        820
+      ],
+      "anchor": [
+        686,
+        714
+      ],
+      "body_height": 134,
+      "phase": "gathered flight"
+    },
+    {
+      "rect": [
+        897,
+        495,
+        1334,
+        820
+      ],
+      "anchor": [
+        1115,
+        724
+      ],
+      "body_height": 138,
+      "phase": "reach forward"
+    },
+    {
+      "rect": [
+        1334,
+        495,
+        1774,
+        822
+      ],
+      "anchor": [
+        1546,
+        730
+      ],
+      "body_height": 140,
+      "phase": "extended flight transition"
+    }
+  ]
+}
